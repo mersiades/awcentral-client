@@ -22,14 +22,7 @@ const LandingPage = () => {
     <Box fill background={background}>
       <ButtonsContainer>
         <Box gap="medium">
-          <Button
-            label="LOG IN"
-            primary
-            size="large"
-            alignSelf="center"
-            fill
-            color="brand"
-          />
+          <Button label="LOG IN" primary size="large" alignSelf="center" fill />
           <Button
             label="SIGN UP"
             secondary
