@@ -1,12 +1,45 @@
 import React from "react";
-import { Button } from "grommet";
+import { Button, Box } from "grommet";
+import styled from "styled-components";
+
+const background = {
+  color: "black",
+  dark: true,
+  size: "contain",
+  image: "url(/images/cover-background.jpg)",
+};
+
+const ButtonsContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 295px;
+  left: calc((100vw / 2) - 368px);
+  padding-bottom: 16px;
+`;
 
 const LandingPage = () => {
   return (
-    <div>
-      <p>Landing Page</p>
-      <Button label="click me" primary size="large" />
-    </div>
+    <Box fill background={background}>
+      <ButtonsContainer>
+        <Box gap="medium">
+          <Button
+            label="LOG IN"
+            primary
+            size="large"
+            alignSelf="center"
+            fill
+            color="brand"
+          />
+          <Button
+            label="SIGN UP"
+            secondary
+            alignSelf="center"
+            fill
+            size="large"
+          />
+        </Box>
+      </ButtonsContainer>
+    </Box>
   );
 };
 

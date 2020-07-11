@@ -55,8 +55,8 @@ const colors = {
   },
   brand: brandColor,
   control: {
-    dark: "accent-1",
-    light: "brand",
+    dark: "white",
+    light: "black",
   },
   focus: focusColor,
   "graph-0": "accent-1",
@@ -67,8 +67,8 @@ const colors = {
   placeholder: "#AAAAAA",
   selected: "brand",
   text: {
-    dark: "#f8f8f8",
-    light: "#444444",
+    dark: "white",
+    light: "black",
   },
   "text-strong": {
     dark: "#FFFFFF",
@@ -116,6 +116,11 @@ export const theme = deepMerge(grommet, {
     colors,
   },
   button: {
+    text: {
+      medium: {
+        size: 36,
+      },
+    },
     size: {
       small: {
         border: {
@@ -135,7 +140,37 @@ export const theme = deepMerge(grommet, {
     },
     border: {
       width: "0px",
+      radius: 0,
     },
+    color: {
+      dark: "black",
+      light: "white",
+    },
+    secondary: {
+      color: {
+        dark: "brand",
+        light: brandColor,
+      },
+      // background: {
+      //   color: "none",
+      //   opacity: 0,
+      // },
+    },
+
+    primary: {
+      color: {
+        dark: brandColor,
+        light: brandColor,
+      },
+      // background: {
+      //   color: {
+      //     dark: brandColor,
+      //     light: brandColor,
+      //   },
+      //   opacity: 100,
+      // },
+    },
+
     extend: "font-family: 'Vtks good luck for you', sans-serif;",
   },
 });

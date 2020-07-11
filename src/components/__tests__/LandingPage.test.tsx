@@ -5,9 +5,10 @@ import LandingPage from "../LandingPage";
 
 describe("Rendering Landing Page", () => {
   test("should render LandingPage in initial state", () => {
-    const titleText = "Landing Page";
     const container = render(<LandingPage />);
-    const element = screen.getByText(titleText);
-    expect(element).toBeInTheDocument();
+    const loginButton = screen.getByText("LOG IN");
+    const signUpButton = screen.getByText("SIGN UP");
+    expect(loginButton).toBeInTheDocument();
+    expect(signUpButton).toBeInTheDocument();
   });
 });
