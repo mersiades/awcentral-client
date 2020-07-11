@@ -1,9 +1,9 @@
 import React from "react";
+import { Grommet } from "grommet";
 import { render, RenderOptions } from "@testing-library/react";
 
 const AllTheProviders = ({ children }: any) => {
-  /* add root context providers here */
-  return children;
+  return <Grommet plain>{children}</Grommet>;
 };
 
 const customRender = (
