@@ -117,7 +117,7 @@ export const theme = deepMerge(grommet, {
   },
   button: {
     text: {
-      medium: {
+      large: {
         size: 36,
       },
     },
@@ -146,31 +146,55 @@ export const theme = deepMerge(grommet, {
       dark: "black",
       light: "white",
     },
+    default: {
+      color: {
+        dark: "white",
+        light: "black",
+      },
+    },
+    primary: {
+      color: {
+        dark: "black",
+        light: "white",
+      },
+      background: {
+        color: {
+          dark: brandColor,
+          light: brandColor,
+        },
+        opacity: 100,
+      },
+      border: {
+        color: "brand",
+        width: "2px",
+      },
+    },
     secondary: {
       color: {
         dark: "brand",
-        light: brandColor,
+        light: "brand",
       },
-      // background: {
-      //   color: "none",
-      //   opacity: 0,
-      // },
+      border: {
+        color: "brand",
+        width: "2px",
+      },
     },
-
-    primary: {
+    hover: {
+      border: {
+        color: {
+          dark: "white",
+          light: "black",
+        },
+        width: "2px",
+      },
       color: {
-        dark: brandColor,
-        light: brandColor,
+        dark: "white",
+        light: "black",
       },
-      // background: {
-      //   color: {
-      //     dark: brandColor,
-      //     light: brandColor,
-      //   },
-      //   opacity: 100,
-      // },
+      extend: "font-weight: 900; font-size: 40px;",
     },
 
-    extend: "font-family: 'Vtks good luck for you', sans-serif;",
+    extend:
+      "font-family: 'Vtks good luck for you', sans-serif; font-size: 36px; line-height: 36px;",
   },
 });
