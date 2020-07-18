@@ -4,12 +4,13 @@
   "private": true,
   "dependencies": {
     "@types/styled-components": "^5.1.1",
+    "axios": "^0.19.2",
     "grommet": "^2.14.0",
     "grommet-icons": "^4.4.0",
     "polished": "^3.6.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^3.4.1",
     "styled-components": "^5.1.1"
   },
   "scripts": {
@@ -34,13 +35,18 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.0",
-    "@testing-library/react": "^10.4.5",
+    "@testing-library/jest-dom": "^5.11.1",
+    "@testing-library/react": "^10.4.7",
     "@testing-library/user-event": "^12.0.11",
     "@types/jest": "^26.0.4",
-    "@types/node": "^14.0.22",
-    "@types/react": "^16.9.42",
+    "@types/node": "^14.0.23",
+    "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.7"
+  },
+  "prettier": {
+    "printWidth": 125,
+    "singleQuote": true,
+    "arrowParens": "always"
   }
 }
