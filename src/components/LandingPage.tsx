@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Box } from "grommet";
+import { Button, Box, Image } from "grommet";
 import styled from "styled-components";
 
 const background = {
@@ -11,10 +11,18 @@ const background = {
 
 const ButtonsContainer = styled.div`
   position: absolute;
-  bottom: 0;
-  width: 295px;
+  bottom: calc(4vh + 2px);
+  width: 25vw;
+  max-width: 300px;
   left: calc((100vw / 2) - 368px);
-  padding-bottom: 16px;
+`;
+
+const TitleContainer = styled.div`
+  position: absolute;
+  bottom: 4vh;
+  width: 25vw;
+  max-width: 300px;
+  right: calc((100vw / 2) - 368px);
 `;
 
 const LandingPage = () => {
@@ -32,6 +40,11 @@ const LandingPage = () => {
           />
         </Box>
       </ButtonsContainer>
+      <TitleContainer>
+        <Box>
+          <Image fit="contain" fill={true} src="images/cover-title.png" />
+        </Box>
+      </TitleContainer>
     </Box>
   );
 };
