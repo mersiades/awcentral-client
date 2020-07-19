@@ -79,7 +79,7 @@ const LandingPage = () => {
     <Box fill background={background}>
       <ButtonsContainer>
         <Box>
-          <Heading level={3} margin={{ vertical: 'small' }}>
+          <Heading level={1} margin={{ vertical: 'small' }} size="small">
             Log in with Discord
           </Heading>
           <Button label="LOG IN" primary size="large" alignSelf="center" fill href={getDiscordUrl()} />

@@ -1,0 +1,24 @@
+@font-face {
+  font-family: 'crust_clean';
+  src: url('/public/fonts/crustype_clean.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'crust_clean';
+  src: local('crust_clean'), url('/public/fonts/crustype_clean.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'crustype_crust';
+  src: local('crustype_crust'), url('/public/fonts/crustype.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Vtks good luck for you';
+  src: local('Vtks good luck for you'), url('/public/fonts/Vtks good luck for you.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Vtks good luck for you';
+  src: local('Vtks good luck for you'), url('/public/fonts/Vtks good luck for you.tff') format('truetype');
+}
