@@ -1,17 +1,8 @@
-import React, { FC } from "react";
-import { Grommet, Box } from "grommet";
-
-import { theme } from "../config/grommetConfig";
-import LandingPage from "./LandingPage";
+import React, { FC } from 'react';
+import AppRouter from '../routers/AppRouter';
 
 const App: FC = () => {
-  return (
-    <Grommet theme={theme} full>
-      <Box fill>
-        <LandingPage />
-      </Box>
-    </Grommet>
-  );
+  return <AppRouter />;
 };
 
 export default App;
