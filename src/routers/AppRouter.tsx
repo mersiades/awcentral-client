@@ -1,13 +1,17 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import LandingPage from '../components/LandingPage';
 import { Box } from 'grommet';
+import PrivateRoute from './PrivateRoute';
+import MenuPage from '../components/MenuPage';
+import PublicRoute from './PublicRoute';
 
 const AppRouter = () => {
   return (
     <Box fill>
       <Switch>
-        <Route path="/" component={LandingPage} />
+        <PrivateRoute path="/games" component={MenuPage} />
+        <PublicRoute exact path="/" component={LandingPage} />
       </Switch>
     </Box>
   );

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { Button, Box, Image, Heading, Text } from 'grommet';
 import styled from 'styled-components';
 import generateRandomString from '../utils/generateRandomString';
 import { DISCORD_CLIENT_ID } from '../config/discordConfig';
 import { requestToken } from '../services/discordService';
+import { useAuth } from '../contexts/auth';
 
 const background = {
   color: 'black',
@@ -40,6 +41,28 @@ export const getDiscordUrl = () => {
 };
 
 const LandingPage = () => {
+  // --------------------------------------- Hooking into contexts ---------------------------------------------- //
+  const { setAuthTokens } = useAuth();
+
+  // ---------------------------------------- Component functions ----------------------------------------------- //
+  const getDiscordToken = useCallback(
+    async (code: string) => {
+      const response = await requestToken(code);
+      if (!!response && response.status === 200) {
+        setAuthTokens({
+          accessToken: response.data.access_token,
+          refreshToken: response.data.refresh_token,
+          expiresIn: response.data.expires_in,
+        });
+        // localStorage.setItem('access_token', response.data.access_token);
+        // localStorage.setItem('refresh_token', response.data.refresh_token);
+        // localStorage.setItem('expires_in', response.data.expires_in);
+      }
+    },
+    [setAuthTokens]
+  );
+
+  // ---------------------------------------- Lifecycle functions ----------------------------------------------- //
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
@@ -55,7 +78,7 @@ const LandingPage = () => {
     if (!!code && !!returnedState && !accessToken) {
       getDiscordToken(code);
     }
-  }, []);
+  }, [getDiscordToken]);
 
   // TODO: use a session id rather than a random string for the state parameter
   useEffect(() => {
@@ -66,20 +89,12 @@ const LandingPage = () => {
     }
   }, []);
 
-  const getDiscordToken = async (code: string) => {
-    const response = await requestToken(code);
-    if (!!response && response.status === 200) {
-      localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('refresh_token', response.data.refresh_token);
-      localStorage.setItem('expires_in', response.data.expires_in);
-    }
-  };
-
+  // ----------------------------------------- Render component  ------------------------------------------------ //
   return (
     <Box fill background={background}>
       <ButtonsContainer>
         <Box>
-          <Heading level={1} margin={{ vertical: 'small' }} size="small">
+          <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="center">
             Log in with Discord
           </Heading>
           <Button label="LOG IN" primary size="large" alignSelf="center" fill href={getDiscordUrl()} />
