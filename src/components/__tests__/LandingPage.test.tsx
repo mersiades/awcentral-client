@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '../../utils/test-utils';
-import { fireEvent } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import LandingPage, { getDiscordUrl } from '../LandingPage';
 import generateRandomString from '../../utils/__mocks__/generateRandomString';
 import { DISCORD_CLIENT_ID } from '../../config/discordConfig';
@@ -19,12 +19,12 @@ describe('Rendering Landing Page', () => {
   const setItemSpy = jest.spyOn(Object.getPrototypeOf(window.localStorage), 'setItem');
   const getItemSpy = jest.spyOn(Object.getPrototypeOf(window.localStorage), 'getItem');
 
-  test('should render LandingPage in initial state', () => {
-    const { getByText, getByAltText } = render(<LandingPage />);
-    const loginButton = getByText('LOG IN');
-    const heading = getByText('Log in with Discord');
-    const helperText = getByText("You'll need a Discord account to rock the apocalypse with us");
-    const coverTitle = getByAltText('D. Vincent Baker & Meguey Baker Apocalypse World');
+  test('should render LandingPage in initial state', async () => {
+    const rerender = render(<LandingPage />);
+    const loginButton = screen.getByRole('link', { name: /log in/i });
+    const heading = screen.getByRole('heading', { name: /Log in with Discord/i });
+    const helperText = screen.getByText("You'll need a Discord account to rock the apocalypse with us");
+    const coverTitle = screen.getByRole('img', { name: /D. Vincent Baker & Meguey Baker Apocalypse World/i });
     expect(loginButton).toBeInTheDocument();
     expect(coverTitle).toBeInTheDocument();
     expect(heading).toBeInTheDocument();
@@ -32,12 +32,6 @@ describe('Rendering Landing Page', () => {
     expect(setItemSpy).toHaveBeenCalledWith('stateParameter', generateRandomString());
     expect(getItemSpy).toHaveBeenCalledWith('stateParameter');
     expect(getItemSpy).toHaveBeenCalledWith('access_token');
-    expect(loginButton).toBeInTheDocument();
     jest.clearAllMocks();
-  });
-
-  test('should navigate to Discord on click', () => {
-    const { getByText } = render(<LandingPage />);
-    fireEvent.click(getByText('LOG IN'));
   });
 });
