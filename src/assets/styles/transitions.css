@@ -1,0 +1,29 @@
+.buttons-container-enter {
+  transform: translateY(40vh);
+  bottom: calc(4vh + 2px);
+  position: absolute;
+}
+.buttons-container-enter-active {
+  transform: translateY(calc(4vh + 2px));
+  transition: transform 500ms;
+  transition-delay: 500ms;
+}
+.buttons-container-exit {
+  transform: translateY(calc(4vh + 2px));
+  bottom: calc(4vh + 2px);
+  position: absolute;
+}
+.buttons-container-exit-active {
+  transform: translateY(40vh);
+  transition: transform 500ms;
+}
+
+.buttons-container-appear {
+  transform: translateY(25vh);
+  bottom: calc(4vh + 2px);
+  position: absolute;
+}
+.buttons-container-appear-active {
+  transform: translateY(calc(4vh + 2px));
+  transition: transform 500ms;
+}
