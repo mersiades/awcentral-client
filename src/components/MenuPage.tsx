@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/auth';
 import styled from 'styled-components';
 import '../assets/styles/transitions.css';
 import { useHistory } from 'react-router-dom';
+import CreateGameForm from './CreateGameForm';
 
 const background = {
   color: 'black',
@@ -85,9 +86,8 @@ const MenuPage: FC = () => {
             <div>
               <ButtonsContainer>
                 <Grid
-                  // fill
                   rows={['xsmall']}
-                  columns={['small', 'xxsmall']}
+                  columns={['xxsmall', 'small']}
                   justifyContent="between"
                   align="center"
                   areas={[
@@ -95,13 +95,13 @@ const MenuPage: FC = () => {
                     { name: 'header-right', start: [1, 0], end: [1, 0] },
                   ]}
                 >
-                  <Box gridArea="header-left">
-                    <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="start">
+                  <Box gridArea="header-left" align="start" alignContent="center">
+                    <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
+                  </Box>
+                  <Box gridArea="header-right">
+                    <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                       JOIN GAME
                     </Heading>
-                  </Box>
-                  <Box gridArea="header-right" align="end" alignContent="center">
-                    <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
                   </Box>
                 </Grid>
                 <Box gap="small">
@@ -123,7 +123,7 @@ const MenuPage: FC = () => {
               <ButtonsContainer>
                 <Grid
                   rows={['xsmall']}
-                  columns={['small', 'xxsmall']}
+                  columns={['xxsmall', 'small']}
                   justifyContent="between"
                   align="center"
                   areas={[
@@ -131,24 +131,16 @@ const MenuPage: FC = () => {
                     { name: 'header-right', start: [1, 0], end: [1, 0] },
                   ]}
                 >
-                  <Box gridArea="header-left">
-                    <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="start">
+                  <Box gridArea="header-left" align="start" alignContent="center">
+                    <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
+                  </Box>
+                  <Box gridArea="header-right">
+                    <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                       CREATE GAME
                     </Heading>
                   </Box>
-                  <Box gridArea="header-right" align="end" alignContent="center">
-                    <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
-                  </Box>
                 </Grid>
-                <Box gap="small">
-                  <FormField label="Game name">
-                    <TextInput placeholder="Enter name" />
-                  </FormField>
-                  <Text color="accent-1" margin={{ top: 'xsmall' }}>
-                    Create a game with you as the MC. Then invite your players
-                  </Text>
-                  <Button label="SUBMIT" primary size="large" alignSelf="center" fill />
-                </Box>
+                <CreateGameForm />
               </ButtonsContainer>
             </div>
           </CSSTransition>

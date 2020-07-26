@@ -33,4 +33,8 @@ export const getGuild = () => {
   console.log('guild', guild);
 };
 
+export const createChannel = (gameName: string) => {
+  client.guilds.cache.get(AWCENTRAL_GUILD_ID)?.channels.create(gameName, { reason: 'New channel for a new awcentral game' });
+};
+
 client.login(DISCORD_BOT_TOKEN);
