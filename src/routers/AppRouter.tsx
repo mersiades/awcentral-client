@@ -5,12 +5,14 @@ import { Box } from 'grommet';
 import PrivateRoute from './PrivateRoute';
 import MenuPage from '../components/MenuPage';
 import PublicRoute from './PublicRoute';
+import GamePage from '../components/GamePage';
 
 const AppRouter = () => {
   return (
     <Box fill>
       <Switch>
-        <PrivateRoute path="/games" component={MenuPage} />
+        <PrivateRoute path="/menu" component={MenuPage} />
+        <PrivateRoute path="/game" component={GamePage} />
         <PublicRoute exact path="/" component={LandingPage} />
       </Switch>
     </Box>

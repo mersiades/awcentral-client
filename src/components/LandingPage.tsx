@@ -33,10 +33,10 @@ const TitleContainer = styled.div`
 
 export const getDiscordUrl = () => {
   let url = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code&scope=identify`;
-  const state = localStorage.getItem('stateParameter');
-  if (!!state) {
-    url += `&state=${btoa(state)}`;
-  }
+  // const state = localStorage.getItem('stateParameter');
+  // if (!!state) {
+  //   url += `&state=${btoa(state)}`;
+  // }
   return url;
 };
 
@@ -66,16 +66,21 @@ const LandingPage = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
-    let returnedState = params.get('state') || '';
-    returnedState = atob(decodeURIComponent(returnedState));
-    const localState = localStorage.getItem('stateParameter');
+    // let returnedState = params.get('state');
+    // if (!!returnedState) {
+    //   returnedState = atob(decodeURIComponent(returnedState));
+    // }
+    // const localState = localStorage.getItem('stateParameter');
     const accessToken = localStorage.getItem('access_token');
-    if (!!returnedState && returnedState !== localState) {
-      console.warn('You may have been click-jacked');
-      // Handle secrity breach here
-      return;
-    }
-    if (!!code && !!returnedState && !accessToken) {
+    // if (!!returnedState && returnedState !== localState) {
+    //   console.warn('You may have been click-jacked');
+    //   // Handle secrity breach here
+    //   return;
+    // }
+    console.log('code', code);
+    // console.log('returnedState', returnedState);
+    console.log('accessToken', accessToken);
+    if (!!code && !accessToken) {
       getDiscordToken(code);
     }
   }, [getDiscordToken]);

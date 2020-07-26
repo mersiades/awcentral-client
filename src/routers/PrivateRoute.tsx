@@ -1,16 +1,18 @@
 import React, { FC } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useAuth } from '../contexts/auth';
 
 interface PrivateRootProps {
   component: any;
   path: string;
+  exact?: boolean;
 }
 
 const PrivateRoute: FC<PrivateRootProps> = ({ component: Component, ...rest }) => {
-  const { authTokens } = useAuth();
-
-  return <Route {...rest} render={(props) => (authTokens ? <Component {...props} /> : <Redirect to="/" />)} />;
+  const accessToken = localStorage.getItem('access_token');
+  const expiresIn = localStorage.getItem('expires_in');
+  const isLoggedIn = accessToken?.length === 30 && !!expiresIn && parseInt(expiresIn) > 0;
+  console.log('accessToken length', accessToken?.length);
+  return <Route {...rest} render={(props) => (isLoggedIn ? <Component {...props} /> : <Redirect to="/" />)} />;
 };
 
 export default PrivateRoute;

@@ -5,6 +5,7 @@ import { Close } from 'grommet-icons';
 import { useAuth } from '../contexts/auth';
 import styled from 'styled-components';
 import '../assets/styles/transitions.css';
+import { useHistory } from 'react-router-dom';
 
 const background = {
   color: 'black',
@@ -36,6 +37,8 @@ const MenuPage: FC = () => {
   const [buttonsContainer, setButtonsContainer] = useState(0);
   const { logOut } = useAuth();
 
+  const history = useHistory();
+
   const handleLogout = () => {
     logOut();
   };
@@ -47,7 +50,14 @@ const MenuPage: FC = () => {
             <div>
               <ButtonsContainer>
                 <Box gap="small">
-                  <Button label="RETURN TO GAME" primary size="large" alignSelf="center" fill />
+                  <Button
+                    label="RETURN TO GAME"
+                    primary
+                    size="large"
+                    alignSelf="center"
+                    fill
+                    onClick={() => history.push('/game')}
+                  />
                   <Button
                     label="JOIN GAME"
                     secondary
