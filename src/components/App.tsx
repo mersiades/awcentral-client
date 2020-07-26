@@ -1,13 +1,15 @@
 import React, { FC, useState, useEffect } from 'react';
 import AppRouter from '../routers/AppRouter';
 import { AuthContext } from '../contexts/authContext';
-import { Tokens, User } from '../@types';
+import { Tokens, User, Game } from '../@types';
 import { getDiscordUser } from '../services/discordService';
 import { UserContext } from '../contexts/userContext';
+import { GameContext } from '../contexts/gameContext';
 
 const App: FC = () => {
   const [authTokens, setAuthTokens] = useState<Tokens | undefined>();
   const [user, setUser] = useState<User | undefined>();
+  const [game, setGame] = useState<Game | undefined>();
 
   useEffect(() => {
     const existingAccessToken = localStorage.getItem('access_token');
@@ -51,7 +53,9 @@ const App: FC = () => {
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens, logOut }}>
       <UserContext.Provider value={{ ...user }}>
-        <AppRouter />
+        <GameContext.Provider value={{ game, setGame }}>
+          <AppRouter />
+        </GameContext.Provider>
       </UserContext.Provider>
     </AuthContext.Provider>
   );

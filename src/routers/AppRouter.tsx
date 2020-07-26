@@ -12,7 +12,7 @@ const AppRouter = () => {
     <Box fill>
       <Switch>
         <PrivateRoute path="/menu" component={MenuPage} />
-        <PrivateRoute path="/game" component={GamePage} />
+        <PrivateRoute path="/game/:gameID" component={GamePage} />
         <PublicRoute exact path="/" component={LandingPage} />
       </Switch>
     </Box>
