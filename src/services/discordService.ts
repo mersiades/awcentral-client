@@ -1,8 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from '../config/discordConfig';
-import { getAuthHeader } from '../helpers/getAuthHeader';
+import Discord, { Client } from 'discord.js';
+import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_BOT_TOKEN } from '../config/discordConfig';
 
-const AWCENTRAL_GUILD_ID = 736768552161509406;
+const AWCENTRAL_GUILD_ID = '736768552161509406';
 
 export const requestToken = async (code: string) => {
   const config: AxiosRequestConfig = {
@@ -22,12 +22,15 @@ export const requestToken = async (code: string) => {
   return await axios.post('https://discordapp.com/api/oauth2/token', formData, config);
 };
 
-export const getGuild = async () => {
-  const config: AxiosRequestConfig = {
-    headers: {
-      Authorization: getAuthHeader(),
-    },
-  };
-  const response = await axios.get(`https://discordapp.com/api/guilds/${AWCENTRAL_GUILD_ID}`, config);
-  console.log('response', response);
+const client: Client = new Discord.Client();
+
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user?.tag}!`);
+});
+
+export const getGuild = () => {
+  const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID);
+  console.log('guild', guild);
 };
+
+client.login(DISCORD_BOT_TOKEN);
