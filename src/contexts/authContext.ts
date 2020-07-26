@@ -11,6 +11,4 @@ interface AuthContext {
 
 export const AuthContext = createContext<AuthContext>({} as AuthContext);
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);

@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { Button, Box, Image, Heading, FormField, TextInput, Text, Grid } from 'grommet';
 import { Close } from 'grommet-icons';
-import { useAuth } from '../contexts/auth';
+import { useAuth } from '../contexts/authContext';
 import styled from 'styled-components';
 import '../assets/styles/transitions.css';
 import { useHistory } from 'react-router-dom';

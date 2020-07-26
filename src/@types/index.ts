@@ -3,3 +3,8 @@ export interface Tokens {
   refreshToken: string;
   expiresIn: string;
 }
+
+export interface User {
+  id?: string;
+  username?: string;
+}

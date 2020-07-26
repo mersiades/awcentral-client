@@ -1,10 +1,13 @@
 import React, { FC, useState, useEffect } from 'react';
 import AppRouter from '../routers/AppRouter';
-import { AuthContext } from '../contexts/auth';
-import { Tokens } from '../@types';
+import { AuthContext } from '../contexts/authContext';
+import { Tokens, User } from '../@types';
+import { getDiscordUser } from '../services/discordService';
+import { UserContext } from '../contexts/userContext';
 
 const App: FC = () => {
   const [authTokens, setAuthTokens] = useState<Tokens | undefined>();
+  const [user, setUser] = useState<User | undefined>();
 
   useEffect(() => {
     const existingAccessToken = localStorage.getItem('access_token');
@@ -20,6 +23,17 @@ const App: FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (!!authTokens?.accessToken) {
+      getUser();
+    }
+  }, [authTokens]);
+
+  const getUser = async () => {
+    const response = await getDiscordUser();
+    setUser({ id: response.data.id, username: response.data.username });
+  };
+
   const setTokens = (tokens: Tokens) => {
     localStorage.setItem('access_token', tokens.accessToken);
     localStorage.setItem('refresh_token', tokens.refreshToken);
@@ -32,9 +46,13 @@ const App: FC = () => {
     setAuthTokens(undefined);
   };
 
+  console.log('user', user);
+
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens, logOut }}>
-      <AppRouter />
+      <UserContext.Provider value={{ ...user }}>
+        <AppRouter />
+      </UserContext.Provider>
     </AuthContext.Provider>
   );
 };

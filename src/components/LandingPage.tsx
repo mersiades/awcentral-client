@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import generateRandomString from '../utils/generateRandomString';
 import { DISCORD_CLIENT_ID } from '../config/discordConfig';
 import { requestToken } from '../services/discordService';
-import { useAuth } from '../contexts/auth';
+import { useAuth } from '../contexts/authContext';
 
 const background = {
   color: 'black',
