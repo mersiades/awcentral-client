@@ -1,31 +1,23 @@
 import React from 'react';
 import { AWCENTRAL_GUILD_ID } from '../services/discordService';
 import { useGame } from '../contexts/gameContext';
+import { Roles } from '../@types/enums';
+import PlayerPage from './PlayerPage';
+import MCPage from './MCPage';
 
 const GamePage = () => {
   const { game } = useGame();
-  return (
-    <div>
-      <h4>Game Page</h4>
-      <p>{`Game id: ${game?.id}`}</p>
-      <p>{`Game name: ${game?.name}`}</p>
-      <a
-        href={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelID}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Discord text chat
-      </a>
-      <br />
-      <a
-        href={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.voiceChannelID}`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Discord voice chat
-      </a>
-    </div>
-  );
+  const userRole = Roles.mc;
+  console.log(`Game id: ${game?.id}`);
+  console.log(`Game name: ${game?.name}`);
+  console.log(`Discord text chat: https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelID}`);
+  console.log(`Discord voice chat: https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.voiceChannelID}`);
+
+  if (userRole === Roles.mc) {
+    return <MCPage />;
+  } else {
+    return <PlayerPage />;
+  }
 };
 
 export default GamePage;
