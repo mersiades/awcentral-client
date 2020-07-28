@@ -260,4 +260,32 @@ export const theme = deepMerge(grommet, {
       },
     },
   },
+  tab: {
+    active: {
+      color: 'neutral-1',
+      // background: undefined,
+    },
+    border: {
+      side: 'bottom',
+      size: 'medium',
+      color: {
+        dark: 'accent-1',
+        light: 'black',
+      },
+      active: {
+        color: {
+          dark: 'white',
+          light: 'neutral-1',
+        },
+      },
+    },
+
+    margin: {
+      vertical: 'small',
+      horizontal: 'medium',
+    },
+    pad: {
+      bottom: 'xsmall',
+    },
+  },
 });

@@ -1,45 +1,85 @@
 import React, { useState } from 'react';
-import { Box, Header, Menu, BoxProps, MenuProps, Button, ButtonProps, Grid, Tabs, Tab } from 'grommet';
+import { Box, Header, Menu, BoxProps, Button, Grid, Tabs, Tab, grommet, ThemeContext } from 'grommet';
 import styled from 'styled-components';
 import { neutralColors, accentColors } from '../config/grommetConfig';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
 import { AWCENTRAL_GUILD_ID } from '../services/discordService';
 import { useGame } from '../contexts/gameContext';
-
-const NavMenu = styled(Menu as React.FC<MenuProps & JSX.IntrinsicElements['div']>)`
-  background-color: ${neutralColors[0]};
-  color: white;
-  border: none;
-  &:hover {
-    border: none;
-    font-weight: 500;
-    background-color: ${accentColors[0]};
-  }
-`;
-
-const NavButton = styled(Button as React.FC<ButtonProps & JSX.IntrinsicElements['div']>)`
-  background-color: ${neutralColors[0]};
-  color: white;
-  border: none;
-  font-size: 18px;
-  line-height: 24px;
-  &:hover {
-    border: none;
-    font-weight: 500;
-    background-color: ${accentColors[0]};
-    font-size: 18px;
-    line-height: 24px;
-  }
-`;
+import { deepMerge } from 'grommet/utils';
 
 const SidePanel = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
   background-color: pink;
 `;
 
 const MainContainer = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
-  height: calc(100vh - 60px);
+  height: calc(100vh - 89px);
 `;
+
+const Footer = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
+  border-top: 8px solid transparent;
+  border-image-source: url(/images/black-line.png);
+  border-image-slice: 25 15;
+`;
+
+const customDefaultButtonStyles = deepMerge(grommet, {
+  button: {
+    default: {
+      color: {
+        dark: 'white',
+        light: 'black',
+      },
+      background: {
+        color: {
+          dark: neutralColors[0],
+          light: neutralColors[0],
+        },
+        opacity: 100,
+      },
+      border: 'none',
+    },
+    hover: {
+      border: 'none',
+      backgroundColor: `${accentColors[0]}`,
+      extend: 'font-weight: 500; font-size: 18px;',
+    },
+    extend: `
+    font-family: 'Vtks good luck for you', sans-serif;
+    font-size: 18px;
+    line-height: 24px;
+    color: #fff;
+    &:hover {
+      background-color: ${accentColors[0]};
+      color: #fff;
+    };
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+      background-color: ${accentColors[0]};
+    }
+    `,
+  },
+});
+
+const customTabStyles = deepMerge(grommet, {
+  text: {
+    medium: '36px',
+  },
+  tab: {
+    extend: `
+    font-size: 36px;
+    font-family: 'Vtks good luck for you', sans-serif;
+    `,
+  },
+  button: {
+    extend: `
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+    }
+    `,
+  },
+});
 
 const dummyData = {
   players: [{ name: 'Abe' }, { name: 'Snow' }, { name: 'Joyette' }, { name: 'Hammer' }],
@@ -54,28 +94,30 @@ const MCPage = () => {
   return (
     <>
       <Header background="neutral-1">
-        <NavMenu
-          dropBackground="accent-1"
-          label="AW Central"
-          items={[
-            { label: 'Main menu', onClick: () => history.push('/menu') },
-            { label: 'Log out', onClick: () => logOut() },
-          ]}
-        />
-        {dummyData.players.map((player) => (
-          <NavButton key={player.name} label={player.name} />
-        ))}
-        <NavButton label="Threat map" />
-        <NavButton
-          label="Discord channel"
-          href={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelID}`}
-          target="_blank"
-        />
+        <ThemeContext.Extend value={customDefaultButtonStyles}>
+          <Menu
+            dropBackground="neutral-1"
+            label="AW Central"
+            items={[
+              { label: 'Main menu', onClick: () => history.push('/menu') },
+              { label: 'Log out', onClick: () => logOut() },
+            ]}
+          />
+          {dummyData.players.map((player) => (
+            <Button key={player.name} label={player.name} />
+          ))}
+          <Button label="Threat map" />
+          <Button
+            label="Discord channel"
+            href={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelID}`}
+            target="_blank"
+          />
+        </ThemeContext.Extend>
       </Header>
       <Grid
         fill
         rows={['full']}
-        columns={showSidePanel ? ['1/3'] : ['full']}
+        columns={showSidePanel ? ['1/4'] : ['full']}
         areas={
           showSidePanel
             ? [
@@ -107,33 +149,37 @@ const MCPage = () => {
             <Box gridArea="main-center">
               <p>center</p>
             </Box>
-            <Box gridArea="main-right" background="accent-3">
-              <p onClick={() => setSplitPanes(false)}>right</p>
-            </Box>
+            {splitPanes && (
+              <Box gridArea="main-right" background="accent-3">
+                <p onClick={() => setSplitPanes(false)}>right</p>
+              </Box>
+            )}
           </Grid>
         </MainContainer>
       </Grid>
-      <Box direction="row" justify="between">
-        <Tabs
-          onActive={(tab) => {
-            console.log('clicked', tab);
-            setShowSidePanel(true);
-          }}
-        >
-          <Tab title="Game" />
-          <Tab title="Moves" />
-          <Tab title="MC Moves" />
-        </Tabs>
-        <Tabs
-          onActive={(tab) => {
-            console.log('clicked', tab);
-            setSplitPanes(true);
-          }}
-        >
-          <Tab title="Threats" />
-          <Tab title="NPCs" />
-        </Tabs>
-      </Box>
+      <ThemeContext.Extend value={customTabStyles}>
+        <Footer direction="row" justify="between">
+          <Tabs
+            onActive={(tab) => {
+              console.log('clicked', tab);
+              setShowSidePanel(true);
+            }}
+          >
+            <Tab title="Game" />
+            <Tab title="Moves" />
+            <Tab title="MC Moves" />
+          </Tabs>
+          <Tabs
+            onActive={(tab) => {
+              console.log('clicked', tab);
+              setSplitPanes(true);
+            }}
+          >
+            <Tab title="Threats" />
+            <Tab title="NPCs" />
+          </Tabs>
+        </Footer>
+      </ThemeContext.Extend>
     </>
   );
 };
