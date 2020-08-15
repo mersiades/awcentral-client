@@ -10,7 +10,6 @@ export interface User {
 }
 
 export interface Game {
-  id: string;
   name: string;
   textChannelID: string;
   voiceChannelID: string;

@@ -1,25 +1,99 @@
 import React, { useState } from 'react';
-import { Box, Header, Menu, BoxProps, Button, Grid, Tabs, Tab, grommet, ThemeContext } from 'grommet';
-import styled from 'styled-components';
+import { Box, Header, Menu, BoxProps, Button, Tabs, Tab, grommet, ThemeContext } from 'grommet';
+import styled, { css } from 'styled-components';
 import { neutralColors, accentColors } from '../config/grommetConfig';
 import { useHistory } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
 import { AWCENTRAL_GUILD_ID } from '../services/discordService';
 import { useGame } from '../contexts/gameContext';
 import { deepMerge } from 'grommet/utils';
+import '../assets/styles/transitions.css';
 
-const SidePanel = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
-  background-color: pink;
-`;
+interface SidePanelProps {
+  readonly sidePanel: number;
+}
 
-const MainContainer = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
-  height: calc(100vh - 89px);
-`;
+const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.IntrinsicElements['div']>)(({ sidePanel }) => {
+  return css`
+    border-right: 1px solid transparent;
+    border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), black, rgba(0, 0, 0, 0)) 1 100%;
+    position: absolute;
+    height: calc(100vh - 95px);
+    width: 25vw;
+    transform: translateX(-25vw);
+    transition: transform 200ms ease-in-out;
+    ${sidePanel !== 3 &&
+    css`
+      transform: translateX(0vw);
+    `};
+  `;
+});
+
+interface MainContainerProps {
+  readonly sidePanel: number;
+}
+
+const MainContainer = styled(Box as React.FC<MainContainerProps & BoxProps & JSX.IntrinsicElements['div']>)(
+  ({ sidePanel }) => {
+    return css`
+      height: calc(100vh - 95px);
+      width: 100vw;
+      transition: width 200ms ease-in-out, transform 200ms ease-in-out;
+      ${sidePanel !== 3 &&
+      css`
+        transform: translateX(25vw);
+        width: 75vw;
+      `};
+    `;
+  }
+);
+
+interface LeftMainProps {
+  readonly rightPanel: number;
+}
+
+const LeftMainContainer = styled(Box as React.FC<LeftMainProps & BoxProps & JSX.IntrinsicElements['div']>)(
+  ({ rightPanel }) => {
+    return css`
+      height: calc(100vh - 95px);
+      width: 100%;
+      transition: width 200ms ease-in-out;
+      ${rightPanel !== 2 &&
+      css`
+        width: 50%;
+      `};
+    `;
+  }
+);
+
+interface RightMainProps {
+  readonly rightPanel: number;
+}
+const RightMainContainer = styled(Box as React.FC<RightMainProps & BoxProps & JSX.IntrinsicElements['div']>)(
+  ({ rightPanel }) => {
+    return css`
+      border-left: 1px solid transparent;
+      border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), black, rgba(0, 0, 0, 0)) 1 100%;
+      position: absolute;
+      height: calc(100vh - 95px);
+      opacity: 0;
+      transform: translateX(200%);
+      transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+      ${rightPanel !== 2 &&
+      css`
+        transform: translateX(100%);
+        width: 50%;
+        opacity: 1;
+      `};
+    `;
+  }
+);
 
 const Footer = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
-  border-top: 8px solid transparent;
-  border-image-source: url(/images/black-line.png);
-  border-image-slice: 25 15;
+  border-top: 6px solid transparent;
+  border-image-source: url(/images/black-line-short.png);
+  border-image-slice: 17 0;
+  border-image-repeat: round;
 `;
 
 const customDefaultButtonStyles = deepMerge(grommet, {
@@ -86,8 +160,23 @@ const dummyData = {
 };
 
 const MCPage = () => {
-  const [showSidePanel, setShowSidePanel] = useState(false);
-  const [splitPanes, setSplitPanes] = useState(false);
+  /**
+   * Number that indicates what should be shown in the right panel
+   * 0 - ThreatsPanel
+   * 1 - NpcPanel
+   * 2 - None, right panel is closed
+   */
+
+  const [rightPanel, setRightPanel] = useState<number>(2);
+
+  /**
+   * Number that indicates what should be shown in the side panel
+   * 0 - GamePanel
+   * 1 - MovesPanel
+   * 2 - MCMovesPanel
+   * 3 - None, side panel is closed
+   */
+  const [sidePanel, setSidePanel] = useState<number>(3);
   const history = useHistory();
   const { logOut } = useAuth();
   const { game } = useGame();
@@ -114,55 +203,29 @@ const MCPage = () => {
           />
         </ThemeContext.Extend>
       </Header>
-      <Grid
-        fill
-        rows={['full']}
-        columns={showSidePanel ? ['1/4'] : ['full']}
-        areas={
-          showSidePanel
-            ? [
-                { name: 'side-panel', start: [0, 0], end: [0, 0] },
-                { name: 'main', start: [1, 0], end: [2, 0] },
-              ]
-            : [{ name: 'main', start: [0, 0], end: [0, 0] }]
-        }
-      >
-        {showSidePanel && (
-          <SidePanel gridArea="side-panel">
-            <p onClick={() => setShowSidePanel(false)}>Side Panel</p>
-          </SidePanel>
-        )}
-        <MainContainer gridArea="main">
-          <Grid
-            fill
-            rows={['full']}
-            columns={splitPanes ? ['1/2'] : ['full']}
-            areas={
-              splitPanes
-                ? [
-                    { name: 'main-center', start: [0, 0], end: [0, 0] },
-                    { name: 'main-right', start: [1, 0], end: [1, 0] },
-                  ]
-                : [{ name: 'main-center', start: [0, 0], end: [0, 0] }]
-            }
-          >
-            <Box gridArea="main-center">
-              <p>center</p>
-            </Box>
-            {splitPanes && (
-              <Box gridArea="main-right" background="accent-3">
-                <p onClick={() => setSplitPanes(false)}>right</p>
-              </Box>
-            )}
-          </Grid>
+      <div>
+        <SidePanel sidePanel={sidePanel}>
+          {sidePanel === 0 && <p onClick={() => setSidePanel(3)}>GamePanel</p>}
+          {sidePanel === 1 && <p onClick={() => setSidePanel(3)}>MovesPanel</p>}
+          {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
+        </SidePanel>
+        <MainContainer sidePanel={sidePanel}>
+          <LeftMainContainer rightPanel={rightPanel}>
+            <p>Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre</p>
+          </LeftMainContainer>
+          <RightMainContainer rightPanel={rightPanel}>
+            {rightPanel === 0 && <p>Threats</p>}
+            {rightPanel === 1 && <p>NPCs</p>}
+          </RightMainContainer>
         </MainContainer>
-      </Grid>
+      </div>
       <ThemeContext.Extend value={customTabStyles}>
         <Footer direction="row" justify="between">
           <Tabs
+            activeIndex={sidePanel}
             onActive={(tab) => {
               console.log('clicked', tab);
-              setShowSidePanel(true);
+              tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
             }}
           >
             <Tab title="Game" />
@@ -170,9 +233,10 @@ const MCPage = () => {
             <Tab title="MC Moves" />
           </Tabs>
           <Tabs
+            activeIndex={rightPanel}
             onActive={(tab) => {
               console.log('clicked', tab);
-              setSplitPanes(true);
+              tab === rightPanel ? setRightPanel(2) : setRightPanel(tab);
             }}
           >
             <Tab title="Threats" />

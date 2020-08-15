@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { uuid } from 'uuidv4';
 import { FormField, TextInput, Text, Button, Box, Form } from 'grommet';
 import {
   createTextChannel,
@@ -34,14 +33,13 @@ const CreateGameForm: FC = () => {
             setTextChannelPermissions(textChannel, id);
             setVoiceChannelPermissions(voiceChannel, id);
             const game: Game = {
-              id: uuid(),
               name: value.name,
               textChannelID: textChannel.id,
               voiceChannelID: voiceChannel.id,
             };
 
             setGame(game);
-            history.push(`/game/${game.id}`);
+            history.push(`/game/${game.textChannelID}`);
           }
           // Create a Discord channel for the game
           // Add this game creator to the Discord channel
