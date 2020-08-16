@@ -149,10 +149,6 @@ export const theme = deepMerge(grommet, {
       light: 'white',
     },
     default: {
-      // color: {
-      //   dark: 'white',
-      //   light: 'black',
-      // },
       color: {
         dark: 'accent-1',
         light: 'neutral-1',
@@ -171,7 +167,7 @@ export const theme = deepMerge(grommet, {
     },
     primary: {
       color: {
-        dark: 'black',
+        dark: 'white',
         light: 'white',
       },
       background: {
@@ -200,13 +196,13 @@ export const theme = deepMerge(grommet, {
       border: {
         color: {
           dark: 'white',
-          light: 'black',
+          light: 'accent-3',
         },
         width: '2px',
       },
       color: {
         dark: 'white',
-        light: 'black',
+        light: 'white',
       },
       extend: 'font-weight: 900; font-size: 40px;',
     },

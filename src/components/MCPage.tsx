@@ -8,6 +8,7 @@ import { AWCENTRAL_GUILD_ID } from '../services/discordService';
 import { useGame } from '../contexts/gameContext';
 import { deepMerge } from 'grommet/utils';
 import '../assets/styles/transitions.css';
+import GamePanel from './GamePanel';
 
 interface SidePanelProps {
   readonly sidePanel: number;
@@ -205,7 +206,7 @@ const MCPage = () => {
       </Header>
       <div>
         <SidePanel sidePanel={sidePanel}>
-          {sidePanel === 0 && <p onClick={() => setSidePanel(3)}>GamePanel</p>}
+          {sidePanel === 0 && <GamePanel closePanel={setSidePanel} />}
           {sidePanel === 1 && <p onClick={() => setSidePanel(3)}>MovesPanel</p>}
           {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
         </SidePanel>
