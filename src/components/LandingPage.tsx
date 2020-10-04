@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Button, Box, Image, Heading, Text } from 'grommet';
+import { Button, Box, Image, Heading, Text, Anchor } from 'grommet';
 import styled from 'styled-components';
 import generateRandomString from '../utils/generateRandomString';
 import { DISCORD_CLIENT_ID } from '../config/discordConfig';
@@ -99,13 +99,14 @@ const LandingPage = () => {
     <Box fill background={background}>
       <ButtonsContainer>
         <Box>
-          <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="center">
+          <Heading level={3} margin={{ vertical: 'small' }} size="small" textAlign="center">
             Log in with Discord
           </Heading>
           <Button label="LOG IN" primary size="large" alignSelf="center" fill href={getDiscordUrl()} />
           <Text color="accent-1" margin={{ top: 'xsmall' }}>
-            You'll need a Discord account to rock the apocalypse with us
+            You'll need a Discord account to rock the apocalypse with us{' '}
           </Text>
+          <Anchor href="https://discord.com/register" label="Create Discord account" />
         </Box>
       </ButtonsContainer>
       <TitleContainer>
