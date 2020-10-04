@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import '../assets/styles/transitions.css';
 import { useHistory } from 'react-router-dom';
 import CreateGameForm from './CreateGameForm';
+import { useUser } from '../contexts/userContext';
 
 const background = {
   color: 'black',
@@ -37,6 +38,7 @@ const TitleContainer = styled.div`
 const MenuPage: FC = () => {
   const [buttonsContainer, setButtonsContainer] = useState(0);
   const { logOut } = useAuth();
+  const { username } = useUser();
 
   const history = useHistory();
 
@@ -45,6 +47,9 @@ const MenuPage: FC = () => {
   };
   return (
     <Box fill background={background}>
+      <Text margin="medium" size="medium">
+        {username && `Welcome, ${username}`}
+      </Text>
       <TransitionGroup>
         {buttonsContainer === 0 && (
           <CSSTransition in={buttonsContainer === 0} timeout={1000} classNames="buttons-container">

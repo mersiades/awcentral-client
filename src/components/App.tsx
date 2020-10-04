@@ -32,8 +32,18 @@ const App: FC = () => {
   }, [authTokens]);
 
   const getUser = async () => {
-    const response = await getDiscordUser();
-    setUser({ id: response.data.id, username: response.data.username });
+    const {
+      data: { id, username, avatar, discriminator },
+    } = await getDiscordUser();
+
+    // Cors policy is blocking my efforts to get avatar from Discord from localhost
+    // let avatarImage;
+    // if (!!avatar) {
+    //   avatarImage = await getUserAvatar(id, avatar);
+    // } elseif (!!discriminator) {
+    //   avatarImage = await getDefaultAvatar(discriminator);
+    // }
+    setUser({ id, username, avatarHash: avatar });
   };
 
   const setTokens = (tokens: Tokens) => {

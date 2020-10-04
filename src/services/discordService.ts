@@ -88,4 +88,23 @@ export const getDiscordUser = () => {
   return axios.get('https://discordapp.com/api/users/@me', config);
 };
 
+export const getUserAvatar = (userId: string, hash: string) => {
+  const config: AxiosRequestConfig = {
+    headers: {
+      Authorization: getAuthHeader(),
+    },
+  };
+
+  return axios.get(`https://cdn.discordapp.com/${userId}/${hash}.png`, config);
+};
+
+export const getDefaultAvatar = (discriminator: number) => {
+  const config: AxiosRequestConfig = {
+    headers: {
+      Authorization: getAuthHeader(),
+    },
+  };
+  return axios.get(`https://cdn.discordapp.com/embed/avatars/${discriminator % 5}.png`, config);
+};
+
 client.login(DISCORD_BOT_TOKEN);

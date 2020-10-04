@@ -7,6 +7,7 @@ export interface Tokens {
 export interface User {
   id?: string;
   username?: string;
+  avatarHash?: string;
 }
 
 export interface Game {
