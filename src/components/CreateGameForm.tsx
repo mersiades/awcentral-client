@@ -8,13 +8,13 @@ import {
 } from '../services/discordService';
 import { useGame } from '../contexts/gameContext';
 import { Game } from '../@types';
-import { useUser } from '../contexts/userContext';
+import { useDiscordUser } from '../contexts/discordUserContext';
 import { useHistory } from 'react-router-dom';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
   const { setGame } = useGame();
-  const { id } = useUser();
+  const { discordId } = useDiscordUser();
   const history = useHistory();
   return (
     <Form
@@ -23,23 +23,24 @@ const CreateGameForm: FC = () => {
       onReset={() => setGameName({ name: '' })}
       onSubmit={async ({ value }: any) => {
         console.log('value', value);
-        if (!!id) {
+        if (!!discordId) {
           // Create game on server, save returned data to GameContext
           const textChannel = await createTextChannel(value.name);
           const voiceChannel = await createVoiceChannel(value.name);
 
           console.log('textChannel', textChannel);
           if (!!textChannel && !!voiceChannel) {
-            setTextChannelPermissions(textChannel, id);
-            setVoiceChannelPermissions(voiceChannel, id);
-            const game: Game = {
-              name: value.name,
-              textChannelID: textChannel.id,
-              voiceChannelID: voiceChannel.id,
-            };
+            setTextChannelPermissions(textChannel, discordId);
+            setVoiceChannelPermissions(voiceChannel, discordId);
+            // TODO: add mutation to create games
+            // const game: Game = {
+            //   name: value.name,
+            //   textChannelID: textChannel.id,
+            //   voiceChannelID: voiceChannel.id,
+            // };
 
-            setGame(game);
-            history.push(`/game/${game.textChannelID}`);
+            // setGame(game);
+            // history.push(`/game/${game.textChannelID}`);
           }
           // Create a Discord channel for the game
           // Add this game creator to the Discord channel

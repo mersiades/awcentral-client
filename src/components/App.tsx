@@ -1,14 +1,14 @@
 import React, { FC, useState, useEffect } from 'react';
 import AppRouter from '../routers/AppRouter';
 import { AuthContext } from '../contexts/authContext';
-import { Tokens, User, Game } from '../@types';
+import { Tokens, DiscordUser, Game } from '../@types';
 import { getDiscordUser } from '../services/discordService';
-import { UserContext } from '../contexts/userContext';
+import { DiscordUserContext } from '../contexts/discordUserContext';
 import { GameContext } from '../contexts/gameContext';
 
 const App: FC = () => {
   const [authTokens, setAuthTokens] = useState<Tokens | undefined>();
-  const [user, setUser] = useState<User | undefined>();
+  const [user, setUser] = useState<DiscordUser | undefined>();
   const [game, setGame] = useState<Game | undefined>();
 
   useEffect(() => {
@@ -40,10 +40,10 @@ const App: FC = () => {
     // let avatarImage;
     // if (!!avatar) {
     //   avatarImage = await getUserAvatar(id, avatar);
-    // } elseif (!!discriminator) {
+    // } else if (!!discriminator) {
     //   avatarImage = await getDefaultAvatar(discriminator);
     // }
-    setUser({ id, username, avatarHash: avatar });
+    setUser({ discordId: id, username, avatarHash: avatar });
   };
 
   const setTokens = (tokens: Tokens) => {
@@ -62,11 +62,11 @@ const App: FC = () => {
 
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens, logOut }}>
-      <UserContext.Provider value={{ ...user }}>
+      <DiscordUserContext.Provider value={{ ...user }}>
         <GameContext.Provider value={{ game, setGame }}>
           <AppRouter />
         </GameContext.Provider>
-      </UserContext.Provider>
+      </DiscordUserContext.Provider>
     </AuthContext.Provider>
   );
 };
