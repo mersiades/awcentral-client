@@ -31,52 +31,141 @@ client.on('ready', () => {
 
 export const getGuild = () => {
   const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID);
-  console.log('guild', guild);
+  return guild
 };
 
-export const createTextChannel = (gameName: string) => {
-  return client.guilds.cache.get(AWCENTRAL_GUILD_ID)?.channels.create(gameName);
-};
-
-export const setTextChannelPermissions = (textChannel: GuildChannel, memberID: string) => {
-  const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID) as Guild;
-  const member = guild.members.cache.get(memberID) as GuildMember;
-  textChannel.updateOverwrite(textChannel.guild.roles.everyone, {
-    VIEW_CHANNEL: false,
-    SEND_MESSAGES: false,
-    SEND_TTS_MESSAGES: false,
+// Creates a text channel on Discord, with no permissions for 
+export const createTextChannelWithMC = (gameName: string, mcDiscordId: string) => {
+  console.log('mcDiscordId', mcDiscordId)
+  const guild = getGuild()
+  return guild?.channels.create(gameName, {
+    type: 'text',
+    permissionOverwrites: [
+      {
+        id: guild.roles.everyone,
+        deny: [
+          'ADD_REACTIONS',
+          'ATTACH_FILES',
+          'CONNECT',
+          'CREATE_INSTANT_INVITE',
+          'EMBED_LINKS',
+          'MENTION_EVERYONE',
+          'READ_MESSAGE_HISTORY',
+          'SEND_MESSAGES',
+          'SEND_TTS_MESSAGES',
+          'SPEAK',
+          'STREAM',
+          'USE_EXTERNAL_EMOJIS',
+          "USE_VAD",
+          'VIEW_CHANNEL',
+        ]
+      },
+      {
+        id: mcDiscordId,
+        allow: [
+          'ADD_REACTIONS',
+          'ATTACH_FILES',
+          'CONNECT',
+          'CREATE_INSTANT_INVITE',
+          'EMBED_LINKS',
+          'MENTION_EVERYONE',
+          'READ_MESSAGE_HISTORY',
+          'SEND_MESSAGES',
+          'SEND_TTS_MESSAGES',
+          'SPEAK',
+          'STREAM',
+          'USE_EXTERNAL_EMOJIS',
+          "USE_VAD",
+          'VIEW_CHANNEL',
+        ]
+      }
+    ]
   });
-  textChannel.updateOverwrite(member.user.id, { VIEW_CHANNEL: true, SEND_MESSAGES: true });
 };
 
-export const setVoiceChannelPermissions = (voiceChannel: GuildChannel, memberID: string) => {
-  const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID) as Guild;
-  const member = guild.members.cache.get(memberID) as GuildMember;
-  voiceChannel.updateOverwrite(voiceChannel.guild.roles.everyone, {
-    VIEW_CHANNEL: false,
-    SEND_MESSAGES: false,
-    SEND_TTS_MESSAGES: false,
-    CONNECT: false,
-    SPEAK: false,
-  });
-  voiceChannel.updateOverwrite(member.user.id, {
-    VIEW_CHANNEL: true,
-    SEND_MESSAGES: true,
-    PRIORITY_SPEAKER: true,
-    CONNECT: true,
-    SPEAK: true,
-    MUTE_MEMBERS: true,
-  });
-};
-
-export const createVoiceChannel = (gameName: string) => {
-  const options: GuildCreateChannelOptions = {
+export const createVoiceChannelWithMC = (gameName: string, mcDiscordId: string) => {
+  const guild = getGuild()
+  return guild?.channels.create(`${gameName}-voice`, {
     type: 'voice',
     bitrate: 64000, // 64kbps
     userLimit: 9,
-  };
-  return client.guilds.cache.get(AWCENTRAL_GUILD_ID)?.channels.create(`${gameName}-voice`, options);
+    permissionOverwrites: [
+      {
+        id: guild.roles.everyone,
+        deny: [
+          'ADD_REACTIONS',
+          'ATTACH_FILES',
+          'CHANGE_NICKNAME',
+          'CONNECT',
+          'CREATE_INSTANT_INVITE',
+          'EMBED_LINKS',
+          'MENTION_EVERYONE',
+          'READ_MESSAGE_HISTORY',
+          'SEND_MESSAGES',
+          'SEND_TTS_MESSAGES',
+          'SPEAK',
+          'STREAM',
+          'USE_EXTERNAL_EMOJIS',
+          "USE_VAD",
+          'VIEW_CHANNEL',
+        ]
+      },
+      {
+        id: mcDiscordId,
+        allow: [
+          'ADD_REACTIONS',
+          'ATTACH_FILES',
+          'CHANGE_NICKNAME',
+          'CONNECT',
+          'CREATE_INSTANT_INVITE',
+          'EMBED_LINKS',
+          'MENTION_EVERYONE',
+          'READ_MESSAGE_HISTORY',
+          'SEND_MESSAGES',
+          'SEND_TTS_MESSAGES',
+          'SPEAK',
+          'STREAM',
+          'USE_EXTERNAL_EMOJIS',
+          "USE_VAD",
+          'VIEW_CHANNEL',
+        ]
+      },
+    ]
+  });
 };
+
+// export const setTextChannelPermissions = (textChannel: GuildChannel, memberID: string) => {
+//   const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID) as Guild;
+//   const member = guild.members.cache.get(memberID) as GuildMember;
+//   // textChannel.updateOverwrite(textChannel.guild.roles.everyone, {
+//   //   VIEW_CHANNEL: false,
+//   //   SEND_MESSAGES: false,
+//   //   SEND_TTS_MESSAGES: false,
+//   // }).then(channel => channel.permissionOverwrites.forEach(perm => console.log(perm))).catch(e => console.log('e', e));
+//   textChannel.updateOverwrite(member.user.id, { VIEW_CHANNEL: true, SEND_MESSAGES: true });
+// };
+
+// export const setVoiceChannelPermissions = (voiceChannel: GuildChannel, memberID: string) => {
+//   const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID) as Guild;
+//   const member = guild.members.cache.get(memberID) as GuildMember;
+//   voiceChannel.updateOverwrite(voiceChannel.guild.roles.everyone, {
+//     VIEW_CHANNEL: false,
+//     SEND_MESSAGES: false,
+//     SEND_TTS_MESSAGES: false,
+//     CONNECT: false,
+//     SPEAK: false,
+//   });
+//   voiceChannel.updateOverwrite(member.user.id, {
+//     VIEW_CHANNEL: true,
+//     SEND_MESSAGES: true,
+//     PRIORITY_SPEAKER: true,
+//     CONNECT: true,
+//     SPEAK: true,
+//     MUTE_MEMBERS: true,
+//   });
+// };
+
+
 
 export const getDiscordUser = () => {
   const config: AxiosRequestConfig = {

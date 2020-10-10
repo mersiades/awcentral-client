@@ -1,10 +1,8 @@
 import React, { FC, useState } from 'react';
 import { FormField, TextInput, Text, Button, Box, Form } from 'grommet';
 import {
-  createTextChannel,
-  setTextChannelPermissions,
-  createVoiceChannel,
-  setVoiceChannelPermissions,
+  createTextChannelWithMC,
+  createVoiceChannelWithMC,
 } from '../services/discordService';
 import { useGame } from '../contexts/gameContext';
 import { Game } from '../@types';
@@ -16,6 +14,7 @@ const CreateGameForm: FC = () => {
   const { setGame } = useGame();
   const { discordId } = useDiscordUser();
   const history = useHistory();
+  
   return (
     <Form
       value={gameName}
@@ -25,13 +24,10 @@ const CreateGameForm: FC = () => {
         console.log('value', value);
         if (!!discordId) {
           // Create game on server, save returned data to GameContext
-          const textChannel = await createTextChannel(value.name);
-          const voiceChannel = await createVoiceChannel(value.name);
-
-          console.log('textChannel', textChannel);
+          const textChannel = await createTextChannelWithMC(value.name, discordId);
+          const voiceChannel = await createVoiceChannelWithMC(value.name, discordId);
+          
           if (!!textChannel && !!voiceChannel) {
-            setTextChannelPermissions(textChannel, discordId);
-            setVoiceChannelPermissions(voiceChannel, discordId);
             // TODO: add mutation to create games
             // const game: Game = {
             //   name: value.name,
@@ -50,7 +46,7 @@ const CreateGameForm: FC = () => {
     >
       <Box gap="small">
         <FormField name="name" label="Game name" htmlFor="text-input-id">
-          <TextInput id="text-input-id" placeholder="Enter name" name="name" />
+          <TextInput id="text-input-id" name="name" />
         </FormField>
         <Text color="accent-1" margin={{ top: 'xsmall' }}>
           Create a game with you as the MC. Then invite your players
