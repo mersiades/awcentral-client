@@ -8,11 +8,13 @@ import { useGame } from '../contexts/gameContext';
 import { Game } from '../@types';
 import { useDiscordUser } from '../contexts/discordUserContext';
 import { useHistory } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
+import CREATE_GAME from '../mutations/createGame';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
-  const { setGame } = useGame();
   const { discordId } = useDiscordUser();
+  const [createGame ] = useMutation(CREATE_GAME)
   const history = useHistory();
   
   return (
@@ -28,19 +30,10 @@ const CreateGameForm: FC = () => {
           const voiceChannel = await createVoiceChannelWithMC(value.name, discordId);
           
           if (!!textChannel && !!voiceChannel) {
-            // TODO: add mutation to create games
-            // const game: Game = {
-            //   name: value.name,
-            //   textChannelID: textChannel.id,
-            //   voiceChannelID: voiceChannel.id,
-            // };
-
-            // setGame(game);
-            // history.push(`/game/${game.textChannelID}`);
+            await createGame({ variables: {discordId, name: value.name, textChannelId: textChannel.id, voiceChannelId: voiceChannel.id}})
+            console.log('game created')
+            history.push(`/game/${textChannel.id}`);
           }
-          // Create a Discord channel for the game
-          // Add this game creator to the Discord channel
-          // Navigate to MCPage
         }
       }}
     >
