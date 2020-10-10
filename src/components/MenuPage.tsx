@@ -63,7 +63,6 @@ const MenuPage: FC = () => {
       <TransitionGroup>
         {buttonsContainer === 0 && (
           <CSSTransition in={buttonsContainer === 0} timeout={1000} classNames="buttons-container">
-            <div>
               <ButtonsContainer>
                 <Box gap="small">
                   {!!userData && userData.userByDiscordId.gameRoles.length > 0 && (
@@ -95,7 +94,6 @@ const MenuPage: FC = () => {
                   <Button label="LOG OUT" size="large" alignSelf="center" fill onClick={() => handleLogout()} />
                 </Box>
               </ButtonsContainer>
-            </div>
           </CSSTransition>
         )}
         {buttonsContainer === 1 && (

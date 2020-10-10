@@ -15,8 +15,8 @@ export interface DiscordUser {
 export interface Game {
   id: string;
   name: string;
-  textChannelID: string;
-  voiceChannelID?: string;
+  textChannelId: string;
+  voiceChannelId?: string;
 }
 
 export interface GameContext {

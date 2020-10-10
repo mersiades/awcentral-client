@@ -9,8 +9,8 @@ const GamePage = () => {
   const { game } = useGame();
   const userRole = Roles.mc;
   console.log(`Game name: ${game?.name}`);
-  console.log(`Discord text chat: https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelID}`);
-  console.log(`Discord voice chat: https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.voiceChannelID}`);
+  console.log(`Discord text chat: https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelId}`);
+  console.log(`Discord voice chat: https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.voiceChannelId}`);
 
   if (userRole === Roles.mc) {
     return <MCPage />;

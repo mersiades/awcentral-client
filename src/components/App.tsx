@@ -58,8 +58,6 @@ const App: FC = () => {
     setAuthTokens(undefined);
   };
 
-  console.log('user', user);
-
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens, logOut }}>
       <DiscordUserContext.Provider value={{ ...user }}>

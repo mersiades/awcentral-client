@@ -199,7 +199,7 @@ const MCPage = () => {
           <Button label="Threat map" />
           <Button
             label="Discord channel"
-            href={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelID}`}
+            href={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelId}`}
             target="_blank"
           />
         </ThemeContext.Extend>
