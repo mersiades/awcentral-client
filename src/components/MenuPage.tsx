@@ -1,16 +1,13 @@
 import React, { FC, useState } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { Button, Box, Image, Heading, FormField, TextInput, Text, Grid } from 'grommet';
+import { Button, Box, Image, Heading, FormField, TextInput, Text, Grid, BoxProps } from 'grommet';
 import { Close } from 'grommet-icons';
 import { useAuth } from '../contexts/authContext';
 import styled from 'styled-components';
 import '../assets/styles/transitions.css';
-import { useHistory } from 'react-router-dom';
 import CreateGameForm from './CreateGameForm';
 import { useDiscordUser } from '../contexts/discordUserContext';
 import { useQuery } from '@apollo/client';
 import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
-import { DiscordUser } from '../@types';
 import GamesList from './GamesList';
 
 const background = {
@@ -21,7 +18,7 @@ const background = {
 };
 
 //
-const ButtonsContainer = styled.div`
+const ButtonsContainer = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
   position: absolute;
   bottom: calc(4vh + 2px);
   min-width: 172px;
@@ -45,8 +42,6 @@ const MenuPage: FC = () => {
   const { logOut } = useAuth();
   const { username, discordId } = useDiscordUser();
 
-  const history = useHistory();
-
   // ------------------------------ Hooking in to Apollo graphql ----------------------------------------- //
   const { data: userData, loading } = useQuery(USER_BY_DISCORD_ID, { variables: { discordId }, skip: !discordId });
   !!userData && console.log('userData', userData);
@@ -55,162 +50,152 @@ const MenuPage: FC = () => {
     logOut();
   };
 
+  // if (loading || !userData) {
+  //   return <Box fill background={background} />
+  // }
+
   return (
     <Box fill background={background}>
       <Text margin="medium" size="medium">
         {username && `Welcome, ${username}`}
       </Text>
-      <TransitionGroup>
         {buttonsContainer === 0 && (
-          <CSSTransition in={buttonsContainer === 0} timeout={1000} classNames="buttons-container">
-              <ButtonsContainer>
-                <Box gap="small">
-                  {!!userData && userData.userByDiscordId.gameRoles.length > 0 && (
-                    <Button
-                      label="RETURN TO GAME"
-                      primary
-                      size="large"
-                      alignSelf="center"
-                      fill
-                      onClick={() => setButtonsContainer(1)}
-                    />
-                  )}
-                  <Button
-                    label="JOIN GAME"
-                    secondary
-                    size="large"
-                    alignSelf="center"
-                    fill
-                    onClick={() => setButtonsContainer(2)}
-                  />
-                  <Button
-                    label="CREATE GAME"
-                    secondary
-                    size="large"
-                    alignSelf="center"
-                    fill
-                    onClick={() => setButtonsContainer(3)}
-                  />
-                  <Button label="LOG OUT" size="large" alignSelf="center" fill onClick={() => handleLogout()} />
-                </Box>
-              </ButtonsContainer>
-          </CSSTransition>
+          <ButtonsContainer animation={{ type: "slideUp", size: "large", duration: 750}}>
+            <Box gap="small">
+              {!!userData && userData.userByDiscordId.gameRoles.length > 0 && (
+                <Button
+                  label="RETURN TO GAME"
+                  primary
+                  size="large"
+                  alignSelf="center"
+                  fill
+                  onClick={() => setButtonsContainer(1)}
+                />
+              )}
+              <Button
+                label="JOIN GAME"
+                secondary
+                size="large"
+                alignSelf="center"
+                fill
+                onClick={() => setButtonsContainer(2)}
+              />
+              <Button
+                label="CREATE GAME"
+                secondary
+                size="large"
+                alignSelf="center"
+                fill
+                onClick={() => setButtonsContainer(3)}
+              />
+             <Button label="LOG OUT" size="large" alignSelf="center" fill onClick={() => handleLogout()} />
+            </Box>
+          </ButtonsContainer>
         )}
         {buttonsContainer === 1 && (
-          <CSSTransition in={buttonsContainer === 1} timeout={1000} classNames="buttons-container">
-            <ButtonsContainer>
-              <Grid
-                rows={['xsmall']}
-                columns={['xxsmall', 'small']}
-                justifyContent="between"
-                align="center"
-                areas={[
-                  { name: 'header-left', start: [0, 0], end: [0, 0] },
-                  { name: 'header-right', start: [1, 0], end: [1, 0] },
-                ]}
-              >
-                <Box gridArea="header-left" align="start" alignContent="center">
-                  <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
-                </Box>
-                <Box gridArea="header-right">
-                  <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
-                    YOUR GAMES
-                  </Heading>
-                </Box>
-              </Grid>
-              <GamesList gameRoles={userData.userByDiscordId.gameRoles} />
-            </ButtonsContainer>
-          </CSSTransition>
+          <ButtonsContainer animation={{ type: "slideUp", size: "large", duration: 750}}>
+            <Grid
+              rows={['xsmall']}
+              columns={['xxsmall', 'small']}
+              justifyContent="between"
+              align="center"
+              areas={[
+                { name: 'header-left', start: [0, 0], end: [0, 0] },
+                { name: 'header-right', start: [1, 0], end: [1, 0] },
+              ]}
+            >
+              <Box gridArea="header-left" align="start" alignContent="center">
+                <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
+              </Box>
+              <Box gridArea="header-right">
+                <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                  YOUR GAMES
+                </Heading>
+              </Box>
+            </Grid>
+            <GamesList gameRoles={userData.userByDiscordId.gameRoles} />
+          </ButtonsContainer>
         )}
         {buttonsContainer === 2 && (
-          <CSSTransition in={buttonsContainer === 2} timeout={1000} classNames="buttons-container">
-            <ButtonsContainer>
-              <Grid
-                rows={['xsmall']}
-                columns={['xxsmall', 'small']}
-                justifyContent="between"
-                align="center"
-                areas={[
-                  { name: 'header-left', start: [0, 0], end: [0, 0] },
-                  { name: 'header-right', start: [1, 0], end: [1, 0] },
-                ]}
-              >
-                <Box gridArea="header-left" align="start" alignContent="center">
-                  <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
-                </Box>
-                <Box gridArea="header-right">
-                  <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
-                    JOIN GAME
-                  </Heading>
-                </Box>
-              </Grid>
-              <Box gap="small">
-                <FormField label="Game code">
-                  <TextInput placeholder="Enter code" />
-                </FormField>
-                <Text color="accent-1" margin={{ top: 'xsmall' }}>
-                  Don't have a game code? Ask your game's MC for it
-                </Text>
-                <Button label="SUBMIT" primary size="large" alignSelf="center" fill />
+          <ButtonsContainer animation={{ type: "slideUp", size: "large", duration: 750}}>
+            <Grid
+              rows={['xsmall']}
+              columns={['xxsmall', 'small']}
+              justifyContent="between"
+              align="center"
+              areas={[
+                { name: 'header-left', start: [0, 0], end: [0, 0] },
+                { name: 'header-right', start: [1, 0], end: [1, 0] },
+              ]}
+            >
+              <Box gridArea="header-left" align="start" alignContent="center">
+                <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
               </Box>
-            </ButtonsContainer>
-          </CSSTransition>
+              <Box gridArea="header-right">
+                <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                  JOIN GAME
+                </Heading>
+              </Box>
+            </Grid>
+            <Box gap="small">
+              <FormField label="Game code">
+                <TextInput placeholder="Enter code" />
+              </FormField>
+              <Text color="accent-1" margin={{ top: 'xsmall' }}>
+                Don't have a game code? Ask your game's MC for it
+              </Text>
+              <Button label="SUBMIT" primary size="large" alignSelf="center" fill />
+            </Box>
+          </ButtonsContainer>
         )}
         {buttonsContainer === 3 && (
-          <CSSTransition in={buttonsContainer === 3} timeout={1000} classNames="buttons-container">
-            <ButtonsContainer>
-              <Grid
-                rows={['xsmall']}
-                columns={['xxsmall', 'small']}
-                justifyContent="between"
-                align="center"
-                areas={[
-                  { name: 'header-left', start: [0, 0], end: [0, 0] },
-                  { name: 'header-right', start: [1, 0], end: [1, 0] },
-                ]}
-              >
-                <Box gridArea="header-left" align="start" alignContent="center">
-                  <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
-                </Box>
-                <Box gridArea="header-right">
-                  <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
-                    CREATE GAME
-                  </Heading>
-                </Box>
-              </Grid>
-              <CreateGameForm />
-            </ButtonsContainer>
-          </CSSTransition>
+          <ButtonsContainer animation={{ type: "slideUp", size: "large", duration: 750}}>
+            <Grid
+              rows={['xsmall']}
+              columns={['xxsmall', 'small']}
+              justifyContent="between"
+              align="center"
+              areas={[
+                { name: 'header-left', start: [0, 0], end: [0, 0] },
+                { name: 'header-right', start: [1, 0], end: [1, 0] },
+              ]}
+            >
+              <Box gridArea="header-left" align="start" alignContent="center">
+                <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
+              </Box>
+              <Box gridArea="header-right">
+                <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                  CREATE GAME
+                </Heading>
+              </Box>
+            </Grid>
+            <CreateGameForm />
+          </ButtonsContainer>
         )}
         {buttonsContainer === 3 && (
-          <CSSTransition in={buttonsContainer === 3} timeout={1000} classNames="buttons-container">
-            <div>
-              <ButtonsContainer>
-                <Grid
-                  rows={['xsmall']}
-                  columns={['xxsmall', 'small']}
-                  justifyContent="between"
-                  align="center"
-                  areas={[
-                    { name: 'header-left', start: [0, 0], end: [0, 0] },
-                    { name: 'header-right', start: [1, 0], end: [1, 0] },
-                  ]}
-                >
-                  <Box gridArea="header-left" align="start" alignContent="center">
-                    <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
-                  </Box>
-                  <Box gridArea="header-right">
-                    <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
-                      CREATE GAME
-                    </Heading>
-                  </Box>
-                </Grid>
-                <CreateGameForm />
-              </ButtonsContainer>
-            </div>
-          </CSSTransition>
+          <ButtonsContainer animation={{ type: "slideUp", size: "large", duration: 750}}>
+            <Grid
+              rows={['xsmall']}
+              columns={['xxsmall', 'small']}
+              justifyContent="between"
+              align="center"
+              areas={[
+                { name: 'header-left', start: [0, 0], end: [0, 0] },
+                { name: 'header-right', start: [1, 0], end: [1, 0] },
+              ]}
+            >
+              <Box gridArea="header-left" align="start" alignContent="center">
+                <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
+              </Box>
+              <Box gridArea="header-right">
+                <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                  CREATE GAME
+                </Heading>
+              </Box>
+            </Grid>
+            <CreateGameForm />
+          </ButtonsContainer>
         )}
-      </TransitionGroup>
       <TitleContainer>
         <Box>
           <Image
