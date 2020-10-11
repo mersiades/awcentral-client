@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button, Box, Image, Heading, FormField, TextInput, Text, Grid, BoxProps } from 'grommet';
+import { Button, Box, Image, Heading, FormField, TextInput, Text, Grid } from 'grommet';
 import { Close } from 'grommet-icons';
 import { useAuth } from '../contexts/authContext';
 import '../assets/styles/transitions.css';
@@ -30,23 +30,24 @@ const MenuPage: FC = () => {
     logOut();
   };
 
-  // if (loading || !userData) {
-  //   return <Box fill background={background} />
-  // }
+  if (loading || !userData) {
+    return <Box fill background={background} />
+  }
 
   return (
     <Box fill background={background}>
     <Grid
-      rows={["1/2", "1/2"]}
-      columns={["15%", "auto", "15%"]}
+      rows={["49%", "49%", "2%"]}
+      columns={["18%", "auto", "18%"]}
       gap={{ column: "xsmall", row: "none"}}
       fill
       responsive
       areas={[
-        { name: "leftMargin", start: [0,0], end: [0, 1]},
+        { name: "leftMargin", start: [0,0], end: [0, 2]},
         { name: "centerTop", start: [1,0], end: [1, 0]},
         { name: "centerBottom", start: [1,1], end: [1, 1]},
-        { name: "rightMargin", start: [2,0], end: [2, 1]}
+        { name: "centerFooter", start: [1,2], end: [1, 2]},
+        { name: "rightMargin", start: [2,0], end: [2, 2]}
 
       ]}
       >
@@ -59,7 +60,7 @@ const MenuPage: FC = () => {
       <Box gridArea="centerBottom">
         <Grid
           rows={["full"]}
-          columns={[["250px", "450px"], ["10px", "auto"], ["250px", "450px"]]}
+          columns={[["250px", "450px"], ["5%", "auto"], ["250px", "450px"]]}
           fill
           justifyContent="between"
           areas={[

@@ -33,7 +33,7 @@ const App: FC = () => {
 
   const getUser = async () => {
     const {
-      data: { id, username, avatar, discriminator },
+      data: { id, username, avatar },
     } = await getDiscordUser();
 
     // Cors policy is blocking my efforts to get avatar from Discord from localhost

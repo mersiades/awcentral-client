@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import Discord, { Client, GuildChannel, GuildMember, Guild, GuildCreateChannelOptions } from 'discord.js';
+import Discord, { Client } from 'discord.js';
 import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_BOT_TOKEN } from '../config/discordConfig';
 import { getAuthHeader } from '../helpers/getAuthHeader';
 
@@ -133,38 +133,6 @@ export const createVoiceChannelWithMC = (gameName: string, mcDiscordId: string) 
     ]
   });
 };
-
-// export const setTextChannelPermissions = (textChannel: GuildChannel, memberID: string) => {
-//   const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID) as Guild;
-//   const member = guild.members.cache.get(memberID) as GuildMember;
-//   // textChannel.updateOverwrite(textChannel.guild.roles.everyone, {
-//   //   VIEW_CHANNEL: false,
-//   //   SEND_MESSAGES: false,
-//   //   SEND_TTS_MESSAGES: false,
-//   // }).then(channel => channel.permissionOverwrites.forEach(perm => console.log(perm))).catch(e => console.log('e', e));
-//   textChannel.updateOverwrite(member.user.id, { VIEW_CHANNEL: true, SEND_MESSAGES: true });
-// };
-
-// export const setVoiceChannelPermissions = (voiceChannel: GuildChannel, memberID: string) => {
-//   const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID) as Guild;
-//   const member = guild.members.cache.get(memberID) as GuildMember;
-//   voiceChannel.updateOverwrite(voiceChannel.guild.roles.everyone, {
-//     VIEW_CHANNEL: false,
-//     SEND_MESSAGES: false,
-//     SEND_TTS_MESSAGES: false,
-//     CONNECT: false,
-//     SPEAK: false,
-//   });
-//   voiceChannel.updateOverwrite(member.user.id, {
-//     VIEW_CHANNEL: true,
-//     SEND_MESSAGES: true,
-//     PRIORITY_SPEAKER: true,
-//     CONNECT: true,
-//     SPEAK: true,
-//     MUTE_MEMBERS: true,
-//   });
-// };
-
 
 
 export const getDiscordUser = () => {

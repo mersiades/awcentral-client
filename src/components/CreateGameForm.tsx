@@ -4,12 +4,11 @@ import {
   createTextChannelWithMC,
   createVoiceChannelWithMC,
 } from '../services/discordService';
-import { useGame } from '../contexts/gameContext';
-import { Game } from '../@types';
 import { useDiscordUser } from '../contexts/discordUserContext';
 import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import CREATE_GAME from '../mutations/createGame';
+import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
@@ -23,15 +22,17 @@ const CreateGameForm: FC = () => {
       onChange={(nextName) => setGameName(nextName)}
       onReset={() => setGameName({ name: '' })}
       onSubmit={async ({ value }: any) => {
-        console.log('value', value);
         if (!!discordId) {
-          // Create game on server, save returned data to GameContext
+
+          // Create text and audio channels on Discord for the new game
           const textChannel = await createTextChannelWithMC(value.name, discordId);
           const voiceChannel = await createVoiceChannelWithMC(value.name, discordId);
           
           if (!!textChannel && !!voiceChannel) {
-            await createGame({ variables: {discordId, name: value.name, textChannelId: textChannel.id, voiceChannelId: voiceChannel.id}})
-            console.log('game created')
+            await createGame({
+              variables: {discordId, name: value.name, textChannelId: textChannel.id, voiceChannelId: voiceChannel.id},
+              refetchQueries: [{ query: USER_BY_DISCORD_ID, variables: { discordId }}]
+            })
             history.push(`/game/${textChannel.id}`);
           }
         }
