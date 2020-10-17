@@ -17,6 +17,7 @@ const GAME_BY_TEXT_CHANNEL_ID = gql`
         }
         characters {
           id
+          name
         }
       }
   }

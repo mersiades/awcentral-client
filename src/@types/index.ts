@@ -17,6 +17,7 @@ export interface Game {
   name: string;
   textChannelId: string;
   voiceChannelId?: string;
+  gameRoles: GameRole[]
 }
 
 export interface GameContext {
@@ -24,8 +25,14 @@ export interface GameContext {
   setGame: (game: Game) => void;
 }
 
+export interface Character {
+  id: string
+  name: string
+}
+
 export interface GameRole {
   id: string;
   role: Roles;
-  game: Game;
+  game?: Game;
+  characters?: Character[]
 }

@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { Box, Header, Menu, BoxProps, Button, Tabs, Tab, grommet, ThemeContext } from 'grommet';
 import styled, { css } from 'styled-components';
 import { neutralColors, accentColors } from '../config/grommetConfig';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
 import { AWCENTRAL_GUILD_ID } from '../services/discordService';
-import { useGame } from '../contexts/gameContext';
 import { deepMerge } from 'grommet/utils';
 import '../assets/styles/transitions.css';
 import GamePanel from './GamePanel';
+import { useQuery } from '@apollo/client';
+import GAME_BY_TEXT_CHANNEL_ID from '../queries/gameByTextChannelId';
+import { Game } from '../@types';
+import { Roles } from '../@types/enums';
 
 interface SidePanelProps {
   readonly sidePanel: number;
@@ -156,9 +159,17 @@ const customTabStyles = deepMerge(grommet, {
   },
 });
 
-const dummyData = {
-  players: [{ name: 'Abe' }, { name: 'Snow' }, { name: 'Joyette' }, { name: 'Hammer' }],
-};
+// const dummyData = {
+//   players: [{ name: 'Abe' }, { name: 'Snow' }, { name: 'Joyette' }, { name: 'Hammer' }],
+// };
+
+interface GameData {
+  gameByTextChannelId: Game
+}
+
+interface GameVars {
+  textChannelId: string
+}
 
 const MCPage = () => {
   /**
@@ -180,7 +191,17 @@ const MCPage = () => {
   const [sidePanel, setSidePanel] = useState<number>(3);
   const history = useHistory();
   const { logOut } = useAuth();
-  const { game } = useGame();
+  const { gameID: textChannelId} = useParams<{ gameID: string}>()
+
+  const { data, loading} = useQuery<GameData, GameVars>(GAME_BY_TEXT_CHANNEL_ID, {variables: {textChannelId}})
+  console.log('loading', loading)
+
+  const game = data?.gameByTextChannelId
+  if (loading || !game) {
+    return <div> Loading </div>
+  }
+
+  console.log('game', game)
   return (
     <>
       <Header background="neutral-1">
@@ -193,9 +214,9 @@ const MCPage = () => {
               { label: 'Log out', onClick: () => logOut() },
             ]}
           />
-          {dummyData.players.map((player) => (
-            <Button key={player.name} label={player.name} />
-          ))}
+          { game.gameRoles.filter((gameRole) => gameRole.role === Roles.player)
+          .map((gameRole) => gameRole.characters?.map((character) => (<Button key={character.name} label={character.name} />)))
+          }
           <Button label="Threat map" />
           <Button
             label="Discord channel"
@@ -206,7 +227,7 @@ const MCPage = () => {
       </Header>
       <div>
         <SidePanel sidePanel={sidePanel}>
-          {sidePanel === 0 && <GamePanel closePanel={setSidePanel} />}
+          {sidePanel === 0 && <GamePanel closePanel={setSidePanel} game={game}/>}
           {sidePanel === 1 && <p onClick={() => setSidePanel(3)}>MovesPanel</p>}
           {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
         </SidePanel>

@@ -9,6 +9,7 @@ import { useHistory } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import CREATE_GAME from '../mutations/createGame';
 import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
+import { Roles } from '../@types/enums';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
@@ -33,7 +34,7 @@ const CreateGameForm: FC = () => {
               variables: {discordId, name: value.name, textChannelId: textChannel.id, voiceChannelId: voiceChannel.id},
               refetchQueries: [{ query: USER_BY_DISCORD_ID, variables: { discordId }}]
             })
-            history.push(`/game/${textChannel.id}`);
+            history.push(`/game/${textChannel.id}`, { role: Roles.mc});
           }
         }
       }}

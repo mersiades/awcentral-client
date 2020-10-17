@@ -1,17 +1,15 @@
 import React, { FC } from 'react';
-import { Box, Grid, Button, grommet, ThemeContext } from 'grommet';
-import { useGame } from '../contexts/gameContext';
+import { Box, Grid, Button, Text, grommet, ThemeContext } from 'grommet';
 import { Close, Edit, Trash } from 'grommet-icons';
 import { deepMerge } from 'grommet/utils';
 import { accentColors } from '../config/grommetConfig';
+import { Game } from '../@types';
+import { Roles } from '../@types/enums';
 
 interface GamePanelProps {
   closePanel: (tab: number) => void;
+  game: Game
 }
-
-const dummyData = {
-  players: [{ name: 'Abe' }, { name: 'Snow' }, { name: 'Joyette' }, { name: 'Hammer' }],
-};
 
 const customDefaultButtonStyles = deepMerge(grommet, {
   button: {
@@ -41,8 +39,7 @@ const handleDeleteGame = () => {
   
 }
 
-const GamePanel: FC<GamePanelProps> = ({ closePanel }) => {
-  const { game } = useGame();
+const GamePanel: FC<GamePanelProps> = ({ game, closePanel }) => {
   return (
     <Grid
       fill
@@ -68,16 +65,21 @@ const GamePanel: FC<GamePanelProps> = ({ closePanel }) => {
       </Box>
       <Box gridArea="players" pad="small" alignSelf="center" animation="fadeIn">
         <h3>Players</h3>
-        {dummyData.players.map((player) => (
-          <Box key={player.name} direction="row" align="center" alignContent="end" fill>
+        {
+          game.gameRoles.filter((gameRole) => gameRole.role === Roles.player).length === 0 ? (
+            <Box align="start" alignContent="center" margin={{ vertical: "small"}}><Text>No players yet</Text></Box>
+          ) :
+          game.gameRoles.filter((gameRole) => gameRole.role === Roles.player).map((gameRole) => gameRole.characters?.map((character) => (
+            <Box key={character.name} direction="row" align="center" alignContent="end" fill margin={{ vertical: "small"}}>
             <Box align="start" fill>
-              <p>{player.name}</p>
+              <Text>{character.name}</Text>
             </Box>
             <Box align="end" fill>
               <Trash color="accent-1" onClick={() => console.log('clicked')} cursor="grab" />
             </Box>
           </Box>
-        ))}
+          )))
+        }
         <Button label="INVITE PLAYER" primary size="large" alignSelf="center" fill onClick={() => console.log('clicked')} />
       </Box>
       <Box gridArea="delete-game" pad="small" alignSelf="end" animation="fadeIn">
