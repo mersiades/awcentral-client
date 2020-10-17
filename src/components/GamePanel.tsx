@@ -37,6 +37,10 @@ const customDefaultButtonStyles = deepMerge(grommet, {
   },
 });
 
+const handleDeleteGame = () => {
+  
+}
+
 const GamePanel: FC<GamePanelProps> = ({ closePanel }) => {
   const { game } = useGame();
   return (
