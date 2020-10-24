@@ -10,7 +10,6 @@ interface LocationState {
 
 const GamePage = () => {
   const { state: { role } } = useLocation<LocationState>()
-  console.log('role', role)
 
   if (role === Roles.mc) {
     return <MCPage />;

@@ -1,43 +1,27 @@
 import React, { FC, useState } from 'react';
 import { FormField, TextInput, Text, Button, Box, Form } from 'grommet';
-import {
-  createTextChannelWithMC,
-  createVoiceChannelWithMC,
-} from '../services/discordService';
 import { useDiscordUser } from '../contexts/discordUserContext';
-import { useHistory } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import CREATE_GAME from '../mutations/createGame';
-import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
-import { Roles } from '../@types/enums';
+import { useWebsocketContext } from '../contexts/websocketContext';
+import { NewGameRequestBody } from '../@types';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
   const { discordId } = useDiscordUser();
-  const [createGame ] = useMutation(CREATE_GAME)
-  const history = useHistory();
+  const { stompClient } = useWebsocketContext();
+
+  const sendNewGameRequest = (discordId: string, name: string) => {
+    const destination = '/app/games'
+    const newGameRequest: NewGameRequestBody = { discordId, name }
+    const body = JSON.stringify(newGameRequest)
+    stompClient?.publish({ destination, body })
+  }
   
   return (
     <Form
       value={gameName}
       onChange={(nextName) => setGameName(nextName)}
       onReset={() => setGameName({ name: '' })}
-      onSubmit={async ({ value }: any) => {
-        if (!!discordId) {
-
-          // Create text and audio channels on Discord for the new game
-          const textChannel = await createTextChannelWithMC(value.name, discordId);
-          const voiceChannel = await createVoiceChannelWithMC(value.name, discordId);
-          
-          if (!!textChannel && !!voiceChannel) {
-            await createGame({
-              variables: {discordId, name: value.name, textChannelId: textChannel.id, voiceChannelId: voiceChannel.id},
-              refetchQueries: [{ query: USER_BY_DISCORD_ID, variables: { discordId }}]
-            })
-            history.push(`/game/${textChannel.id}`, { role: Roles.mc});
-          }
-        }
-      }}
+      onSubmit={async ({ value: { name } }: any) => !!discordId && sendNewGameRequest(discordId, name)}
     >
       <Box gap="small">
         <FormField name="name" label="Game name" htmlFor="text-input-id">

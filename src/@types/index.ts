@@ -36,3 +36,13 @@ export interface GameRole {
   game?: Game;
   characters?: Character[]
 }
+
+export interface NewGameRequestBody {
+  discordId: string
+  name: string
+}
+
+export interface NewGame extends NewGameRequestBody {
+  textChannelId: string;
+  voiceChannelId: string;
+}

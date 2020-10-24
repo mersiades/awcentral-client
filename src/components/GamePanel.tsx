@@ -5,6 +5,7 @@ import { deepMerge } from 'grommet/utils';
 import { accentColors } from '../config/grommetConfig';
 import { Game } from '../@types';
 import { Roles } from '../@types/enums';
+import { useDiscordUser } from '../contexts/discordUserContext';
 
 interface GamePanelProps {
   closePanel: (tab: number) => void;
@@ -40,18 +41,20 @@ const handleDeleteGame = () => {
 }
 
 const GamePanel: FC<GamePanelProps> = ({ game, closePanel }) => {
+  const { username } = useDiscordUser()
   return (
     <Grid
       fill
-      rows={['xxsmall', 'xsmall', 'medium', 'xsmall']}
+      rows={['xxsmall', 'xsmall', 'xsmall', 'medium', 'xsmall']}
       columns={['3/4', '1/4']}
       align="center"
       areas={[
         { name: 'top-row', start: [0, 0], end: [1, 0] },
         { name: 'title', start: [0, 1], end: [0, 1] },
         { name: 'edit-title', start: [1, 1], end: [1, 1] },
-        { name: 'players', start: [0, 2], end: [1, 2] },
-        { name: 'delete-game', start: [0, 3], end: [1, 3] },
+        { name: 'mc', start: [0, 2], end: [1, 2] },
+        { name: 'players', start: [0, 3], end: [1, 3] },
+        { name: 'delete-game', start: [0, 4], end: [1, 4] },
       ]}
     >
       <Box gridArea="top-row" align="end" alignContent="end" pad="small" alignSelf="start" animation="fadeIn">
@@ -62,6 +65,10 @@ const GamePanel: FC<GamePanelProps> = ({ game, closePanel }) => {
       </Box>
       <Box gridArea="edit-title" align="end" alignContent="end" pad="small" alignSelf="center" animation="fadeIn">
         <Edit color="accent-1" onClick={() => console.log('clicked')} cursor="grab" />
+      </Box>
+      <Box gridArea="mc" align="start" alignContent="center" pad="small" alignSelf="center" animation="fadeIn">
+        <h3>MC</h3>
+        <Text>{!!username ? username : "MC unknown"}</Text>
       </Box>
       <Box gridArea="players" pad="small" alignSelf="center" animation="fadeIn">
         <h3>Players</h3>

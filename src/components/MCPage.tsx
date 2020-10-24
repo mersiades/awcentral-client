@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Header, Menu, BoxProps, Button, Tabs, Tab, grommet, ThemeContext } from 'grommet';
 import styled, { css } from 'styled-components';
 import { neutralColors, accentColors } from '../config/grommetConfig';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
-import { AWCENTRAL_GUILD_ID } from '../services/discordService';
+import { AWCENTRAL_GUILD_ID, getTextChannel } from '../services/discordService';
 import { deepMerge } from 'grommet/utils';
 import '../assets/styles/transitions.css';
 import GamePanel from './GamePanel';
@@ -195,6 +195,23 @@ const MCPage = () => {
 
   const { data, loading} = useQuery<GameData, GameVars>(GAME_BY_TEXT_CHANNEL_ID, {variables: {textChannelId}})
   console.log('loading', loading)
+
+  useEffect(() => {
+    const fetchChannel = async () => {
+      if (!!textChannelId) {
+        try {
+          const channel = await getTextChannel(textChannelId)
+          console.log('channel', channel)
+
+        } catch(e) {
+          console.log('e', e)
+        }
+      }
+    }
+   
+    fetchChannel()
+    
+  }, [textChannelId])
 
   const game = data?.gameByTextChannelId
   if (loading || !game) {

@@ -30,9 +30,18 @@ client.on('ready', () => {
 });
 
 export const getGuild = () => {
+  console.log('client', client)
   const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID);
+  console.log('guild', guild)
   return guild
 };
+
+// export const getTextChannel = async (textChannelId: String) => {
+//   const guild = await getGuild()
+
+//   // const channel = guild?.channels.cache.filter((channel) => channel.id === textChannelId)
+//   return guild?.channels.cache.filter((channel: any) => channel.id === textChannelId)
+// }
 
 // Creates a text channel on Discord, with no permissions for 
 export const createTextChannelWithMC = (gameName: string, mcDiscordId: string) => {
@@ -163,5 +172,14 @@ export const getDefaultAvatar = (discriminator: number) => {
   };
   return axios.get(`https://cdn.discordapp.com/embed/avatars/${discriminator % 5}.png`, config);
 };
+
+export const getTextChannel = (textChannelId: String) => {
+  const config: AxiosRequestConfig = {
+    headers: {
+      Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
+    },
+  };
+  return axios.get(`https://discordapp.com/api/channels/${textChannelId}`, config);
+}
 
 client.login(DISCORD_BOT_TOKEN);

@@ -5,11 +5,13 @@ import { Tokens, DiscordUser, Game } from '../@types';
 import { getDiscordUser } from '../services/discordService';
 import { DiscordUserContext } from '../contexts/discordUserContext';
 import { GameContext } from '../contexts/gameContext';
+import SocketManager from './SocketManager';
 
 const App: FC = () => {
   const [authTokens, setAuthTokens] = useState<Tokens | undefined>();
   const [user, setUser] = useState<DiscordUser | undefined>();
   const [game, setGame] = useState<Game | undefined>();
+  
 
   useEffect(() => {
     const existingAccessToken = localStorage.getItem('access_token');
@@ -60,11 +62,13 @@ const App: FC = () => {
 
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens, logOut }}>
+    <SocketManager>
       <DiscordUserContext.Provider value={{ ...user }}>
         <GameContext.Provider value={{ game, setGame }}>
           <AppRouter />
         </GameContext.Provider>
       </DiscordUserContext.Provider>
+      </SocketManager>
     </AuthContext.Provider>
   );
 };
