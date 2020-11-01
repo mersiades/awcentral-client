@@ -204,7 +204,7 @@ export const theme = deepMerge(grommet, {
         dark: 'white',
         light: 'white',
       },
-      extend: 'font-weight: 900; font-size: 40px;',
+      extend: 'font-weight: 500;',
     },
 
     extend: "font-family: 'Vtks good luck for you', sans-serif; font-size: 36px; line-height: 36px;",

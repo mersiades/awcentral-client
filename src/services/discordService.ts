@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import Discord, { Client } from 'discord.js';
-import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET, DISCORD_BOT_TOKEN } from '../config/discordConfig';
+import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from '../config/discordConfig';
 import { getAuthHeader } from '../helpers/getAuthHeader';
 
 export const AWCENTRAL_GUILD_ID = '736768552161509406';
@@ -23,126 +22,6 @@ export const requestToken = async (code: string) => {
   return await axios.post('https://discordapp.com/api/oauth2/token', formData, config);
 };
 
-const client: Client = new Discord.Client();
-
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user?.tag}!`);
-});
-
-export const getGuild = () => {
-  console.log('client', client)
-  const guild = client.guilds.cache.get(AWCENTRAL_GUILD_ID);
-  console.log('guild', guild)
-  return guild
-};
-
-// export const getTextChannel = async (textChannelId: String) => {
-//   const guild = await getGuild()
-
-//   // const channel = guild?.channels.cache.filter((channel) => channel.id === textChannelId)
-//   return guild?.channels.cache.filter((channel: any) => channel.id === textChannelId)
-// }
-
-// Creates a text channel on Discord, with no permissions for 
-export const createTextChannelWithMC = (gameName: string, mcDiscordId: string) => {
-  console.log('mcDiscordId', mcDiscordId)
-  const guild = getGuild()
-  return guild?.channels.create(gameName, {
-    type: 'text',
-    permissionOverwrites: [
-      {
-        id: guild.roles.everyone,
-        deny: [
-          'ADD_REACTIONS',
-          'ATTACH_FILES',
-          'CONNECT',
-          'CREATE_INSTANT_INVITE',
-          'EMBED_LINKS',
-          'MENTION_EVERYONE',
-          'READ_MESSAGE_HISTORY',
-          'SEND_MESSAGES',
-          'SEND_TTS_MESSAGES',
-          'SPEAK',
-          'STREAM',
-          'USE_EXTERNAL_EMOJIS',
-          "USE_VAD",
-          'VIEW_CHANNEL',
-        ]
-      },
-      {
-        id: mcDiscordId,
-        allow: [
-          'ADD_REACTIONS',
-          'ATTACH_FILES',
-          'CONNECT',
-          'CREATE_INSTANT_INVITE',
-          'EMBED_LINKS',
-          'MENTION_EVERYONE',
-          'READ_MESSAGE_HISTORY',
-          'SEND_MESSAGES',
-          'SEND_TTS_MESSAGES',
-          'SPEAK',
-          'STREAM',
-          'USE_EXTERNAL_EMOJIS',
-          "USE_VAD",
-          'VIEW_CHANNEL',
-        ]
-      }
-    ]
-  });
-};
-
-export const createVoiceChannelWithMC = (gameName: string, mcDiscordId: string) => {
-  const guild = getGuild()
-  return guild?.channels.create(`${gameName}-voice`, {
-    type: 'voice',
-    bitrate: 64000, // 64kbps
-    userLimit: 9,
-    permissionOverwrites: [
-      {
-        id: guild.roles.everyone,
-        deny: [
-          'ADD_REACTIONS',
-          'ATTACH_FILES',
-          'CHANGE_NICKNAME',
-          'CONNECT',
-          'CREATE_INSTANT_INVITE',
-          'EMBED_LINKS',
-          'MENTION_EVERYONE',
-          'READ_MESSAGE_HISTORY',
-          'SEND_MESSAGES',
-          'SEND_TTS_MESSAGES',
-          'SPEAK',
-          'STREAM',
-          'USE_EXTERNAL_EMOJIS',
-          "USE_VAD",
-          'VIEW_CHANNEL',
-        ]
-      },
-      {
-        id: mcDiscordId,
-        allow: [
-          'ADD_REACTIONS',
-          'ATTACH_FILES',
-          'CHANGE_NICKNAME',
-          'CONNECT',
-          'CREATE_INSTANT_INVITE',
-          'EMBED_LINKS',
-          'MENTION_EVERYONE',
-          'READ_MESSAGE_HISTORY',
-          'SEND_MESSAGES',
-          'SEND_TTS_MESSAGES',
-          'SPEAK',
-          'STREAM',
-          'USE_EXTERNAL_EMOJIS',
-          "USE_VAD",
-          'VIEW_CHANNEL',
-        ]
-      },
-    ]
-  });
-};
-
 
 export const getDiscordUser = () => {
   const config: AxiosRequestConfig = {
@@ -153,33 +32,3 @@ export const getDiscordUser = () => {
 
   return axios.get('https://discordapp.com/api/users/@me', config);
 };
-
-export const getUserAvatar = (userId: string, hash: string) => {
-  const config: AxiosRequestConfig = {
-    headers: {
-      Authorization: getAuthHeader(),
-    },
-  };
-
-  return axios.get(`https://cdn.discordapp.com/${userId}/${hash}.png`, config);
-};
-
-export const getDefaultAvatar = (discriminator: number) => {
-  const config: AxiosRequestConfig = {
-    headers: {
-      Authorization: getAuthHeader(),
-    },
-  };
-  return axios.get(`https://cdn.discordapp.com/embed/avatars/${discriminator % 5}.png`, config);
-};
-
-export const getTextChannel = (textChannelId: String) => {
-  const config: AxiosRequestConfig = {
-    headers: {
-      Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
-    },
-  };
-  return axios.get(`https://discordapp.com/api/channels/${textChannelId}`, config);
-}
-
-client.login(DISCORD_BOT_TOKEN);
