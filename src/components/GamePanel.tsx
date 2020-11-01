@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
-import { Box, Button, Text, grommet, ThemeContext, Heading } from 'grommet';
+import { Box, Button, Text, Heading } from 'grommet';
 import { Close, Edit, Trash } from 'grommet-icons';
-import { deepMerge } from 'grommet/utils';
-import { accentColors } from '../config/grommetConfig';
 import { Game } from '../@types';
 import { Roles } from '../@types/enums';
 import { useDiscordUser } from '../contexts/discordUserContext';
@@ -12,31 +10,6 @@ interface GamePanelProps {
   closePanel: (tab: number) => void;
   setShowDeleteGameDialog: (show: boolean) => void
 }
-
-const customDefaultButtonStyles = deepMerge(grommet, {
-  button: {
-    default: {},
-    hover: {
-      backgroundColor: `${accentColors[0]}`,
-      extend: 'font-weight: 700; font-size: 40px;',
-    },
-    extend: `
-    font-family: 'Vtks good luck for you', sans-serif;
-    font-size: 36px;
-    line-height: 36px;
-    &:hover {
-      background-color: ${accentColors[0]};
-      color: #fff;
-    };
-    &:focus {
-      outline: 0;
-      box-shadow: none;
-      background-color: ${accentColors[0]};
-    }
-    `,
-  },
-});
-
 
 const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDialog }) => {
   const { username } = useDiscordUser()
@@ -77,9 +50,7 @@ const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDial
         </div>
         <div>
           <Box fill="horizontal" pad="small" animation="fadeIn" >
-            <ThemeContext.Extend value={customDefaultButtonStyles}>
-              <Button label="DELETE GAME" size="large" alignSelf="center" fill onClick={() => setShowDeleteGameDialog(true)} />
-            </ThemeContext.Extend>
+            <Button label="DELETE GAME" secondary size="large" alignSelf="center" fill onClick={() => setShowDeleteGameDialog(true)} />
           </Box>
         </div>
       </Box>

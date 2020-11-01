@@ -193,18 +193,53 @@ export const theme = deepMerge(grommet, {
       },
     },
     hover: {
+      primary: {
+        border: {
+          color: {
+            dark: 'white',
+            light: 'brand',
+          },
+          width: '2px',
+        },
+        color: {
+          dark: 'white',
+          light: 'white',
+        },
+        background: {
+          dark: 'brand',
+          light: 'accent-3',
+        },
+        extend: 'font-weight: 500;'
+      },
+      secondary: {
+        border: {
+          color: {
+            dark: 'white',
+            light: 'brand',
+          },
+          width: '2px',
+        },
+        color: {
+          dark: 'white',
+          light: 'white',
+        },
+        background: {         
+          light: 'accent-3',
+        },
+        extend: 'font-weight: 500;',
+      },
       border: {
         color: {
           dark: 'white',
-          light: 'accent-3',
+          light: 'neutral-1',
         },
         width: '2px',
       },
       color: {
         dark: 'white',
-        light: 'white',
+        light: 'neutral-1',
       },
-      extend: 'font-weight: 500;',
+      extend: 'font-weight: 500;'
     },
 
     extend: "font-family: 'Vtks good luck for you', sans-serif; font-size: 36px; line-height: 36px;",
