@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Box, Header, Menu, BoxProps, Button, Tabs, Tab, grommet, ThemeContext, Layer, Heading, Paragraph } from 'grommet';
+import { Box, Header, Menu, BoxProps, Button, Tabs, Tab,  ThemeContext, Layer, Heading, Paragraph, Collapsible } from 'grommet';
 import styled, { css } from 'styled-components';
-import { neutralColors, accentColors } from '../config/grommetConfig';
+import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import { useHistory, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
 import { AWCENTRAL_GUILD_ID } from '../services/discordService';
-import { deepMerge } from 'grommet/utils';
 import '../assets/styles/transitions.css';
 import GamePanel from './GamePanel';
 import { useMutation, useQuery } from '@apollo/client';
@@ -17,45 +16,7 @@ import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
 import { useDiscordUser } from '../contexts/discordUserContext';
 import ALL_MOVES from '../queries/allMoves';
 import MovesPanel from './MovesPanel';
-
-interface SidePanelProps {
-  readonly sidePanel: number;
-}
-
-const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.IntrinsicElements['div']>)(({ sidePanel }) => {
-  return css`
-    border-right: 1px solid transparent;
-    border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), black, rgba(0, 0, 0, 0)) 1 100%;
-    position: absolute;
-    height: calc(100vh - 95px);
-    width: 25vw;
-    transform: translateX(-25vw);
-    transition: transform 200ms ease-in-out;
-    ${sidePanel !== 3 &&
-    css`
-      transform: translateX(0vw);
-    `};
-  `;
-});
-
-interface MainContainerProps {
-  readonly sidePanel: number;
-}
-
-const MainContainer = styled(Box as React.FC<MainContainerProps & BoxProps & JSX.IntrinsicElements['div']>)(
-  ({ sidePanel }) => {
-    return css`
-      height: calc(100vh - 95px);
-      width: 100vw;
-      transition: width 200ms ease-in-out, transform 200ms ease-in-out;
-      ${sidePanel !== 3 &&
-      css`
-        transform: translateX(25vw);
-        width: 75vw;
-      `};
-    `;
-  }
-);
+import { Footer, MainContainer, SidePanel } from './styledComponents';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -98,72 +59,6 @@ const RightMainContainer = styled(Box as React.FC<RightMainProps & BoxProps & JS
   }
 );
 
-const Footer = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
-  border-top: 6px solid transparent;
-  border-image-source: url(/images/black-line-short.png);
-  border-image-slice: 17 0;
-  border-image-repeat: round;
-`;
-
-const customDefaultButtonStyles = deepMerge(grommet, {
-  button: {
-    default: {
-      color: {
-        dark: 'white',
-        light: 'black',
-      },
-      background: {
-        color: {
-          dark: neutralColors[0],
-          light: neutralColors[0],
-        },
-        opacity: 100,
-      },
-      border: 'none',
-    },
-    hover: {
-      border: 'none',
-      backgroundColor: `${accentColors[0]}`,
-      extend: 'font-weight: 500; font-size: 18px;',
-    },
-    extend: `
-    font-family: 'Vtks good luck for you', sans-serif;
-    font-size: 18px;
-    line-height: 24px;
-    color: #fff;
-    &:hover {
-      background-color: ${accentColors[0]};
-      color: #fff;
-    };
-    &:focus {
-      outline: 0;
-      box-shadow: none;
-      background-color: ${accentColors[0]};
-    }
-    `,
-  },
-});
-
-const customTabStyles = deepMerge(grommet, {
-  text: {
-    medium: '36px',
-  },
-  tab: {
-    extend: `
-    font-size: 36px;
-    font-family: 'Vtks good luck for you', sans-serif;
-    `,
-  },
-  button: {
-    extend: `
-    &:focus {
-      outline: 0;
-      box-shadow: none;
-    }
-    `,
-  },
-});
-
 interface GameData {
   gameByTextChannelId: Game
 }
@@ -177,6 +72,9 @@ interface AllMovesData {
 }
 
 const MCPage = () => {
+  const maxSidePanel = 3
+  const sidePanelWidth = 25
+
   /**
    * Number that indicates what should be shown in the right panel
    * 0 - ThreatsPanel
@@ -215,8 +113,6 @@ const MCPage = () => {
     return <div> Loading </div>
   }
 
-  console.log('game', game)
-  console.log('allMoves', allMoves)
   return (
     <>
       {showDeleteGameDialog && (
@@ -256,12 +152,14 @@ const MCPage = () => {
         </ThemeContext.Extend>
       </Header>
       <div>
-        <SidePanel sidePanel={sidePanel}>
+        <Collapsible direction="horizontal" open={sidePanel < 3}>
+        <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
           {sidePanel === 0 && <GamePanel closePanel={setSidePanel} setShowDeleteGameDialog={setShowDeleteGameDialog} game={game}/>}
           {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
         </SidePanel>
-        <MainContainer sidePanel={sidePanel}>
+        </Collapsible>
+        <MainContainer sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
           <LeftMainContainer rightPanel={rightPanel}>
             <p>Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre</p>
           </LeftMainContainer>

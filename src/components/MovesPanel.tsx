@@ -48,12 +48,12 @@ const MovesPanel: FC<MovesPanelProps> = ({allMoves, closePanel}) => {
       <Box fill="horizontal" align="end" pad="small" animation="fadeIn">
         <Close color="accent-1" onClick={() => closePanel(3)} cursor="grab" />
       </Box>
-      <Box overflow="auto">
+      <Box overflow="auto" animation="fadeIn">
         <Accordion>
           <AccordionPanel label={<LevelOneAccordionLabel moveKind={MoveKinds.basic}/>}>
             <Accordion >
             {basicMoves.map((move) => (
-                <AccordionPanel label={move.name}>
+                <AccordionPanel key={move.name} label={move.name}>
                   <Box pad="12px">
                     <ReactMarkdown>{move.description}</ReactMarkdown>
                   </Box>
@@ -65,7 +65,7 @@ const MovesPanel: FC<MovesPanelProps> = ({allMoves, closePanel}) => {
           <AccordionPanel label={<LevelOneAccordionLabel moveKind={MoveKinds.peripheral}/>}>
             <Accordion >
             {peripheralMoves.map((move) => (
-                <AccordionPanel label={move.name}>
+                <AccordionPanel key={move.name} label={move.name}>
                   <Box pad="12px">
                     <ReactMarkdown>{move.description}</ReactMarkdown>
                   </Box>
@@ -77,7 +77,7 @@ const MovesPanel: FC<MovesPanelProps> = ({allMoves, closePanel}) => {
           <AccordionPanel label={<LevelOneAccordionLabel moveKind={MoveKinds.battle}/>}>
             <Accordion >
             {battleMoves.map((move) => (
-                <AccordionPanel label={move.name}>
+                <AccordionPanel key={move.name} label={move.name}>
                   <Box pad="12px">
                     <ReactMarkdown>{move.description}</ReactMarkdown>
                   </Box>
@@ -89,7 +89,7 @@ const MovesPanel: FC<MovesPanelProps> = ({allMoves, closePanel}) => {
           <AccordionPanel label={<LevelOneAccordionLabel moveKind={MoveKinds.roadWar}/>}>
             <Accordion >
             {roadWarMoves.map((move) => (
-                <AccordionPanel label={move.name}>
+                <AccordionPanel key={move.name} label={move.name}>
                   <Box pad="12px">
                     <ReactMarkdown>{move.description}</ReactMarkdown>
                   </Box>

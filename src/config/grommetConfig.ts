@@ -320,3 +320,62 @@ export const theme = deepMerge(grommet, {
     },
   },
 });
+
+export const customDefaultButtonStyles = deepMerge(grommet, {
+  button: {
+    default: {
+      color: {
+        dark: 'white',
+        light: 'black',
+      },
+      background: {
+        color: {
+          dark: neutralColors[0],
+          light: neutralColors[0],
+        },
+        opacity: 100,
+      },
+      border: 'none',
+    },
+    hover: {
+      border: 'none',
+      backgroundColor: `${accentColors[0]}`,
+      extend: 'font-weight: 500; font-size: 18px;',
+    },
+    extend: `
+    font-family: 'Vtks good luck for you', sans-serif;
+    font-size: 18px;
+    line-height: 24px;
+    color: #fff;
+    &:hover {
+      background-color: ${accentColors[0]};
+      color: #fff;
+    };
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+      background-color: ${accentColors[0]};
+    }
+    `,
+  },
+});
+
+export const customTabStyles = deepMerge(grommet, {
+  text: {
+    medium: '36px',
+  },
+  tab: {
+    extend: `
+    font-size: 36px;
+    font-family: 'Vtks good luck for you', sans-serif;
+    `,
+  },
+  button: {
+    extend: `
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+    }
+    `,
+  },
+});
