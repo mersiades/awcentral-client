@@ -10,11 +10,13 @@ import '../assets/styles/transitions.css';
 import GamePanel from './GamePanel';
 import { useMutation, useQuery } from '@apollo/client';
 import GAME_BY_TEXT_CHANNEL_ID from '../queries/gameByTextChannelId';
-import { Game } from '../@types';
+import { Game, Move } from '../@types';
 import { Roles } from '../@types/enums';
 import DELETE_GAME from '../mutations/deleteGame';
 import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
 import { useDiscordUser } from '../contexts/discordUserContext';
+import ALL_MOVES from '../queries/allMoves';
+import MovesPanel from './MovesPanel';
 
 interface SidePanelProps {
   readonly sidePanel: number;
@@ -162,16 +164,16 @@ const customTabStyles = deepMerge(grommet, {
   },
 });
 
-// const dummyData = {
-//   players: [{ name: 'Abe' }, { name: 'Snow' }, { name: 'Joyette' }, { name: 'Hammer' }],
-// };
-
 interface GameData {
   gameByTextChannelId: Game
 }
 
 interface GameVars {
   textChannelId: string
+}
+
+interface AllMovesData {
+  allMoves: Move[]
 }
 
 const MCPage = () => {
@@ -198,37 +200,23 @@ const MCPage = () => {
   const { discordId } = useDiscordUser()
   const { gameID: textChannelId} = useParams<{ gameID: string}>()
   const [ deleteGame ] = useMutation(DELETE_GAME)
+  const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES)
 
-  const { data, loading} = useQuery<GameData, GameVars>(GAME_BY_TEXT_CHANNEL_ID, {variables: {textChannelId}})
+  const { data: gameData, loading: loadingGame} = useQuery<GameData, GameVars>(GAME_BY_TEXT_CHANNEL_ID, {variables: {textChannelId}})
   
   const handleDeleteGame = () => {
     deleteGame({ variables: { textChannelId }, refetchQueries: [{ query: USER_BY_DISCORD_ID, variables: { discordId  }}]})
     history.push('/menu')
   }
 
-  // useEffect(() => {
-  //   const fetchChannel = async () => {
-  //     if (!!textChannelId) {
-  //       try {
-  //         const channel = await getTextChannel(textChannelId)
-  //         console.log('channel', channel)
-
-  //       } catch(e) {
-  //         console.log('e', e)
-  //       }
-  //     }
-  //   }
-   
-  //   fetchChannel()
-    
-  // }, [textChannelId])
-
-  const game = data?.gameByTextChannelId
-  if (loading || !game) {
+  const game = gameData?.gameByTextChannelId
+  const allMoves = allMovesData?.allMoves
+  if (loadingGame || !game) {
     return <div> Loading </div>
   }
 
   console.log('game', game)
+  console.log('allMoves', allMoves)
   return (
     <>
       {showDeleteGameDialog && (
@@ -270,7 +258,7 @@ const MCPage = () => {
       <div>
         <SidePanel sidePanel={sidePanel}>
           {sidePanel === 0 && <GamePanel closePanel={setSidePanel} setShowDeleteGameDialog={setShowDeleteGameDialog} game={game}/>}
-          {sidePanel === 1 && <p onClick={() => setSidePanel(3)}>MovesPanel</p>}
+          {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
         </SidePanel>
         <MainContainer sidePanel={sidePanel}>
@@ -293,7 +281,7 @@ const MCPage = () => {
             }}
           >
             <Tab title="Game" />
-            <Tab title="Moves" />
+            {allMoves && <Tab title="Moves" />}
             <Tab title="MC Moves" />
           </Tabs>
           <Tabs

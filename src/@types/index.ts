@@ -1,4 +1,5 @@
-import { Roles } from './enums';
+
+import { MoveKinds, PlayBooks, Roles, Stats } from './enums';
 
 export interface Tokens {
   accessToken: string;
@@ -45,4 +46,13 @@ export interface NewGameRequestBody {
 export interface NewGame extends NewGameRequestBody {
   textChannelId: string;
   voiceChannelId: string;
+}
+
+export interface Move {
+  id?: string
+  name: string
+  description: string
+  stat?: Stats
+  kind: MoveKinds
+  playbook?: PlayBooks
 }
