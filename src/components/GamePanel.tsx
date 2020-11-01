@@ -8,8 +8,9 @@ import { Roles } from '../@types/enums';
 import { useDiscordUser } from '../contexts/discordUserContext';
 
 interface GamePanelProps {
-  closePanel: (tab: number) => void;
   game: Game
+  closePanel: (tab: number) => void;
+  setShowDeleteGameDialog: (show: boolean) => void
 }
 
 const customDefaultButtonStyles = deepMerge(grommet, {
@@ -36,12 +37,10 @@ const customDefaultButtonStyles = deepMerge(grommet, {
   },
 });
 
-const handleDeleteGame = () => {
-  
-}
 
-const GamePanel: FC<GamePanelProps> = ({ game, closePanel }) => {
+const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDialog }) => {
   const { username } = useDiscordUser()
+
   return (
     <Grid
       fill
@@ -91,7 +90,7 @@ const GamePanel: FC<GamePanelProps> = ({ game, closePanel }) => {
       </Box>
       <Box gridArea="delete-game" pad="small" alignSelf="end" animation="fadeIn">
         <ThemeContext.Extend value={customDefaultButtonStyles}>
-          <Button label="DELETE GAME" size="large" alignSelf="center" fill onClick={() => console.log('clicked')} />
+          <Button label="DELETE GAME" size="large" alignSelf="center" fill onClick={() => setShowDeleteGameDialog(true)} />
         </ThemeContext.Extend>
       </Box>
     </Grid>

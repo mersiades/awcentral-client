@@ -11,8 +11,8 @@ import USER_BY_DISCORD_ID from '../queries/userByDiscordId'
 
 const SocketManager: FC = ({children}) => {
   const [stompClient, setStompClient] = useState<Client | undefined>()
-  // const [newGame, setNewGame] = useState<NewGame | undefined>()
-  const [createGame ] = useMutation(CREATE_GAME)
+ 
+  const [ createGame ] = useMutation(CREATE_GAME)
   const history = useHistory();
 
   const handleNewGame = useCallback(

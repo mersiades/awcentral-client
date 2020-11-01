@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Header, Menu, BoxProps, Button, Tabs, Tab, grommet, ThemeContext } from 'grommet';
+import { Box, Header, Menu, BoxProps, Button, Tabs, Tab, grommet, ThemeContext, Layer, Heading, Paragraph } from 'grommet';
 import styled, { css } from 'styled-components';
 import { neutralColors, accentColors } from '../config/grommetConfig';
 import { useHistory, useParams } from 'react-router-dom';
@@ -8,10 +8,13 @@ import { AWCENTRAL_GUILD_ID, getTextChannel } from '../services/discordService';
 import { deepMerge } from 'grommet/utils';
 import '../assets/styles/transitions.css';
 import GamePanel from './GamePanel';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import GAME_BY_TEXT_CHANNEL_ID from '../queries/gameByTextChannelId';
 import { Game } from '../@types';
 import { Roles } from '../@types/enums';
+import DELETE_GAME from '../mutations/deleteGame';
+import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
+import { useDiscordUser } from '../contexts/discordUserContext';
 
 interface SidePanelProps {
   readonly sidePanel: number;
@@ -178,7 +181,6 @@ const MCPage = () => {
    * 1 - NpcPanel
    * 2 - None, right panel is closed
    */
-
   const [rightPanel, setRightPanel] = useState<number>(2);
 
   /**
@@ -189,12 +191,20 @@ const MCPage = () => {
    * 3 - None, side panel is closed
    */
   const [sidePanel, setSidePanel] = useState<number>(3);
+  const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false)
+
   const history = useHistory();
   const { logOut } = useAuth();
+  const { discordId } = useDiscordUser()
   const { gameID: textChannelId} = useParams<{ gameID: string}>()
+  const [ deleteGame ] = useMutation(DELETE_GAME)
 
   const { data, loading} = useQuery<GameData, GameVars>(GAME_BY_TEXT_CHANNEL_ID, {variables: {textChannelId}})
-  console.log('loading', loading)
+  
+  const handleDeleteGame = () => {
+    deleteGame({ variables: { textChannelId }, refetchQueries: [{ query: USER_BY_DISCORD_ID, variables: { discordId  }}]})
+    history.push('/menu')
+  }
 
   useEffect(() => {
     const fetchChannel = async () => {
@@ -221,6 +231,21 @@ const MCPage = () => {
   console.log('game', game)
   return (
     <>
+      {showDeleteGameDialog && (
+        <Layer
+          onEsc={() => setShowDeleteGameDialog(false)}
+          onClickOutside={() => setShowDeleteGameDialog(false)}
+        >
+          <Box gap="24px" pad="24px">
+            <Heading level={3}>Delete game?</Heading>
+            <Paragraph>{`Are you sure you want to delete ${game.name}? This can't be undone.`}</Paragraph>
+            <Box direction="row" align="end" justify="end" gap="6px">
+            <Button label="CANCEL" secondary size="large" onClick={() => setShowDeleteGameDialog(false)} />
+              <Button label="DELETE" primary size="large" onClick={() => handleDeleteGame()} />
+              </Box>
+          </Box>
+        </Layer>
+      )}
       <Header background="neutral-1">
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
@@ -244,7 +269,7 @@ const MCPage = () => {
       </Header>
       <div>
         <SidePanel sidePanel={sidePanel}>
-          {sidePanel === 0 && <GamePanel closePanel={setSidePanel} game={game}/>}
+          {sidePanel === 0 && <GamePanel closePanel={setSidePanel} setShowDeleteGameDialog={setShowDeleteGameDialog} game={game}/>}
           {sidePanel === 1 && <p onClick={() => setSidePanel(3)}>MovesPanel</p>}
           {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
         </SidePanel>

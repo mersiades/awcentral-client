@@ -6,7 +6,6 @@ const DELETE_GAME = gql`
       id
     }
   }
-}
 `
 
 export default DELETE_GAME
