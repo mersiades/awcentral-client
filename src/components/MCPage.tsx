@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import { Box, Header, Menu, BoxProps, Button, Tabs, Tab,  ThemeContext, Layer, Heading, Paragraph, Collapsible } from 'grommet';
 import styled, { css } from 'styled-components';
-import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
-import { useHistory, useParams } from 'react-router-dom';
-import { useAuth } from '../contexts/authContext';
-import { AWCENTRAL_GUILD_ID } from '../services/discordService';
-import '../assets/styles/transitions.css';
-import GamePanel from './GamePanel';
 import { useMutation, useQuery } from '@apollo/client';
-import GAME_BY_TEXT_CHANNEL_ID from '../queries/gameByTextChannelId';
-import { Game, Move } from '../@types';
-import { Roles } from '../@types/enums';
-import DELETE_GAME from '../mutations/deleteGame';
-import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
-import { useDiscordUser } from '../contexts/discordUserContext';
-import ALL_MOVES from '../queries/allMoves';
+
+import GamePanel from './GamePanel';
 import MovesPanel from './MovesPanel';
 import { Footer, MainContainer, SidePanel } from './styledComponents';
+import { useAuth } from '../contexts/authContext';
+import { useDiscordUser } from '../contexts/discordUserContext';
+import DELETE_GAME from '../mutations/deleteGame';
+import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
+import GAME_BY_TEXT_CHANNEL_ID, { GameByTextChannelData, GameByTextChannelVars } from '../queries/gameByTextChannelId';
+import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
+import { Roles } from '../@types/enums';
+import { AWCENTRAL_GUILD_ID } from '../services/discordService';
+import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import '../assets/styles/transitions.css';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -59,18 +59,6 @@ const RightMainContainer = styled(Box as React.FC<RightMainProps & BoxProps & JS
   }
 );
 
-interface GameData {
-  gameByTextChannelId: Game
-}
-
-interface GameVars {
-  textChannelId: string
-}
-
-interface AllMovesData {
-  allMoves: Move[]
-}
-
 const MCPage = () => {
   const maxSidePanel = 3
   const sidePanelWidth = 25
@@ -100,7 +88,7 @@ const MCPage = () => {
   const [ deleteGame ] = useMutation(DELETE_GAME)
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES)
 
-  const { data: gameData, loading: loadingGame} = useQuery<GameData, GameVars>(GAME_BY_TEXT_CHANNEL_ID, {variables: {textChannelId}})
+  const { data: gameData, loading: loadingGame} = useQuery<GameByTextChannelData, GameByTextChannelVars>(GAME_BY_TEXT_CHANNEL_ID, {variables: {textChannelId}})
   
   const handleDeleteGame = () => {
     deleteGame({ variables: { textChannelId }, refetchQueries: [{ query: USER_BY_DISCORD_ID, variables: { discordId  }}]})

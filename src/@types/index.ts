@@ -62,3 +62,12 @@ export interface User {
   discordId: string
   gameRoles: GameRole[]
 }
+
+export interface Playbook {
+  id: string
+  playbookType: PlayBooks
+  barterInstructions: string
+  intro: string
+  introComment: string
+  playbookImageUrl: string
+}

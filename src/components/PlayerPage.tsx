@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Button, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
+import { Button, Collapsible, Header, Layer, Menu, Tab, Tabs, ThemeContext } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Game, GameRole, Move, User } from '../@types';
@@ -11,6 +11,7 @@ import ALL_MOVES from '../queries/allMoves';
 import GAME_FOR_PLAYER from '../queries/gameForPlayer';
 import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
 import { AWCENTRAL_GUILD_ID } from '../services/discordService';
+import CharacterCreator from './CharacterCreator';
 import MovesPanel from './MovesPanel';
 import { Footer, MainContainer, SidePanel } from './styledComponents';
 
@@ -45,6 +46,7 @@ const PlayerPage: FC = () => {
    */
   const [sidePanel, setSidePanel] = useState<number>(maxSidePanel);
   const [gameRole, setGameRole] = useState<GameRole | undefined>()
+  const [showCharacterCreator, setshowCharacterCreator] = useState(true)
   
   const history = useHistory();
   const { logOut } = useAuth();
@@ -74,6 +76,14 @@ const PlayerPage: FC = () => {
   console.log('gameRole.characters.length', gameRole && gameRole.characters && gameRole.characters.length)
   return (
     <>
+    { showCharacterCreator && (
+      <Layer
+        onEsc={() => setshowCharacterCreator(false)}
+        onClickOutside={() => setshowCharacterCreator(false)}
+      >
+        <CharacterCreator gameRoleId={gameRole.id} userId={userId}/>
+      </Layer>
+    )}
       <Header background="neutral-1">
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
@@ -98,22 +108,24 @@ const PlayerPage: FC = () => {
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           </SidePanel>
         </Collapsible>
-        <MainContainer sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>Main Conatiner</MainContainer>
+        <MainContainer fill justify="center" align="center" sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
+          {gameRole && gameRole.characters?.length === 0 && <Button label="CREATE CHARACTER" primary size="medium" onClick={() => setshowCharacterCreator(true)}/>}
+        </MainContainer>
       </div>
-      <ThemeContext.Extend value={customTabStyles}>
-        <Footer direction="row" justify="between">
-          <Tabs
-            activeIndex={sidePanel}
-            onActive={(tab) => {
-              console.log('clicked', tab);
-              tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
-            }}
-          >
-            {gameRole && gameRole.characters?.length === 1 && <Tab title="Character" />}
-            {allMoves && <Tab title="Moves" />}
-          </Tabs>
+        <Footer direction="row" justify="start">
+          <ThemeContext.Extend value={customTabStyles}>
+            <Tabs
+              activeIndex={sidePanel}
+              onActive={(tab) => {
+                console.log('clicked', tab);
+                tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
+              }}
+            >
+              {gameRole && gameRole.characters?.length === 1 && <Tab title="Character" />}
+              {allMoves && <Tab title="Moves" />}
+            </Tabs>
+          </ThemeContext.Extend>
         </Footer>
-      </ThemeContext.Extend>
     </>
   );
 };

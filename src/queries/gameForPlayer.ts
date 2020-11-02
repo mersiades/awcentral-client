@@ -8,6 +8,7 @@ const GAME_FOR_PLAYER = gql`
       textChannelId
       voiceChannelId
       gameRoles {
+        id
         role
         characters {
           id
