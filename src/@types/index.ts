@@ -56,3 +56,9 @@ export interface Move {
   kind: MoveKinds
   playbook?: PlayBooks
 }
+
+export interface User {
+  id: string
+  discordId: string
+  gameRoles: GameRole[]
+}

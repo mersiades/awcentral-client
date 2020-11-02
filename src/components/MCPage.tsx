@@ -113,6 +113,8 @@ const MCPage = () => {
     return <div> Loading </div>
   }
 
+  console.log('game', game)
+
   return (
     <>
       {showDeleteGameDialog && (

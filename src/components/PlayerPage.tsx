@@ -1,18 +1,21 @@
 import { useQuery } from '@apollo/client';
 import { Button, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Game, Move } from '../@types';
+import { Game, GameRole, Move, User } from '../@types';
 import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import { useAuth } from '../contexts/authContext';
+import { useDiscordUser } from '../contexts/discordUserContext';
 import ALL_MOVES from '../queries/allMoves';
-import GAME_BY_TEXT_CHANNEL_ID from '../queries/gameByTextChannelId';
+// import GAME_BY_TEXT_CHANNEL_ID from '../queries/gameByTextChannelId';
+import GAME_FOR_PLAYER from '../queries/gameForPlayer';
+import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
 import { AWCENTRAL_GUILD_ID } from '../services/discordService';
 import MovesPanel from './MovesPanel';
 import { Footer, MainContainer, SidePanel } from './styledComponents';
 
 interface GameData {
-  gameByTextChannelId: Game
+  gameForPlayer: Game
 }
 
 interface GameVars {
@@ -21,6 +24,14 @@ interface GameVars {
 
 interface AllMovesData {
   allMoves: Move[]
+}
+
+interface UserByDiscordIdData {
+  userByDiscordId: User
+}
+
+interface UserByDiscordIdVars {
+  discordId?: string // TODO: change so that discordId can't be undefined
 }
 
 const PlayerPage: FC = () => {
@@ -33,20 +44,34 @@ const PlayerPage: FC = () => {
    * 2 - None, side panel is closed
    */
   const [sidePanel, setSidePanel] = useState<number>(maxSidePanel);
+  const [gameRole, setGameRole] = useState<GameRole | undefined>()
   
   const history = useHistory();
   const { logOut } = useAuth();
+  const { discordId } = useDiscordUser()
+  const { data: userData, loading: loadingUser } = useQuery<UserByDiscordIdData, UserByDiscordIdVars>(USER_BY_DISCORD_ID, { variables: { discordId }, skip: !discordId });
   const { gameID: textChannelId} = useParams<{ gameID: string}>()
-  const { data: gameData, loading: loadingGame} = useQuery<GameData, GameVars>(GAME_BY_TEXT_CHANNEL_ID, {variables: {textChannelId}})
+  const userId = userData?.userByDiscordId.id
+  // @ts-ignore
+  const { data: gameData, loading: loadingGame} = useQuery<GameData, GameVars>(GAME_FOR_PLAYER, {variables: { textChannelId, userId }})
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES)
 
-  const game = gameData?.gameByTextChannelId
+  const game = gameData?.gameForPlayer
+  const gameRoles = game?.gameRoles
   const allMoves = allMovesData?.allMoves
+
+  useEffect(() => {
+    if (!!gameRoles && gameRoles.length > 0) {
+      setGameRole(gameRoles[0])
+    }
+  }, [gameRoles])
   
-  if (loadingGame || !game) {
+  if (loadingGame || !game || loadingUser || !userId || !gameRole) {
     return <div> Loading </div>
   }
 
+  console.log('gameRole', gameRole)
+  console.log('gameRole.characters.length', gameRole && gameRole.characters && gameRole.characters.length)
   return (
     <>
       <Header background="neutral-1">
@@ -69,7 +94,7 @@ const PlayerPage: FC = () => {
       <div>
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
-            {sidePanel === 0 && <p>Character Panel</p>}
+            {sidePanel === 0 && gameRole && gameRole.characters?.length === 1 && <p>Character Panel</p>}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           </SidePanel>
         </Collapsible>
@@ -84,7 +109,7 @@ const PlayerPage: FC = () => {
               tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
             }}
           >
-            <Tab title="Character" />
+            {gameRole && gameRole.characters?.length === 1 && <Tab title="Character" />}
             {allMoves && <Tab title="Moves" />}
           </Tabs>
         </Footer>
