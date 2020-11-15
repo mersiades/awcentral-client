@@ -1,4 +1,14 @@
 import { gql } from '@apollo/client';
+import { Game } from '../@types';
+
+export interface GameForPlayerData {
+  gameForPlayer: Game;
+}
+
+export interface GameForPlayerVars {
+  textChannelId: string;
+  userId: string;
+}
 
 const GAME_FOR_PLAYER = gql`
   query GameForPlayer($textChannelId: String!, $userId: String!) {

@@ -11,7 +11,8 @@ interface GamesListProps {
 interface GameInList {
   name: string;
   role: Roles;
-  gameId: string
+  gameId: string;
+  numberOfCharacters: number;
 }
 
 const GamesList: FC<GamesListProps> = ({ gameRoles }) => {
@@ -21,21 +22,34 @@ const GamesList: FC<GamesListProps> = ({ gameRoles }) => {
     const games: GameInList[] = [];
     gameRoles.forEach((gameRole) => {
       if (!!gameRole.game) {
-      const datum = {
-        name: gameRole.game.name,
-        role: gameRole.role,
-        gameId: gameRole.game.textChannelId,
-      };
-      games.push(datum);
-    }
+        console.log('gameRole', gameRole);
+        const datum = {
+          name: gameRole.game.name,
+          role: gameRole.role,
+          gameId: gameRole.game.textChannelId,
+          numberOfCharacters: gameRole.characters ? gameRole.characters.length : 0,
+        };
+        games.push(datum);
+      }
     });
 
     return games;
   };
 
-  return <List primaryKey="name" secondaryKey="role" data={transformGames()} onClickItem={(e: any) => {
-    history.push(`/game/${e.item.gameId}`, { role: e.item.role})
-  }}/>;
+  return (
+    <List
+      primaryKey="name"
+      secondaryKey="role"
+      data={transformGames()}
+      onClickItem={(e: any) => {
+        if (e.item.role === Roles.player && e.item.numberOfCharacters === 0) {
+          history.push(`/new-game/${e.item.gameId}`, { role: e.item.role });
+        } else {
+          history.push(`/game/${e.item.gameId}`, { role: e.item.role });
+        }
+      }}
+    />
+  );
 };
 
 export default GamesList;

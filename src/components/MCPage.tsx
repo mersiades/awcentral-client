@@ -27,11 +27,11 @@ import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
 import GAME_BY_TEXT_CHANNEL_ID, { GameByTextChannelData, GameByTextChannelVars } from '../queries/gameByTextChannelId';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
 import { Roles, WebsocketRequests } from '../@types/enums';
-import { AWCENTRAL_GUILD_ID } from '../services/discordService';
 import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
 import { useWebsocketContext } from '../contexts/websocketContext';
 import { GameRequest } from '../@types';
+import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
 
 interface LeftMainProps {
   readonly rightPanel: number;

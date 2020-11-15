@@ -6,6 +6,7 @@ import PrivateRoute from './PrivateRoute';
 import MenuPage from '../components/MenuPage';
 import PublicRoute from './PublicRoute';
 import GamePage from '../components/GamePage';
+import CharacterCreator from '../components/CharacterCreator';
 
 const AppRouter = () => {
   return (
@@ -13,6 +14,7 @@ const AppRouter = () => {
       <Switch>
         <PrivateRoute path="/menu" component={MenuPage} />
         <PrivateRoute path="/game/:gameID" component={GamePage} />
+        <PrivateRoute path="/new-game/:gameID" component={CharacterCreator} />
         <PublicRoute exact path="/" component={LandingPage} />
       </Switch>
     </Box>

@@ -2,8 +2,6 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from '../config/discordConfig';
 import { getAuthHeader } from '../helpers/getAuthHeader';
 
-export const AWCENTRAL_GUILD_ID = '736768552161509406';
-
 export const requestToken = async (code: string) => {
   const config: AxiosRequestConfig = {
     headers: {

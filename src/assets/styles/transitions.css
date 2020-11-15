@@ -27,3 +27,17 @@
   transform: translateY(calc(4vh + 2px));
   transition: transform 500ms;
 }
+
+.fadeOut {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  transition: opacity 0.25s;
+  /* transition: width 0.5s 0.5s, height 0.5s 0.5s, opacity 0.5s; */
+}
+.fadeIn {
+  opacity: 1;
+  width: 100px;
+  height: 100px;
+  transition: width 0.5s, height 0.5s, opacity 0.5s 0.5s;
+}

@@ -1,43 +1,26 @@
 import { useQuery } from '@apollo/client';
-import { Button, Collapsible, Header, Layer, Menu, Tab, Tabs, ThemeContext } from 'grommet';
+import { Button, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Game, GameRole, Move, User } from '../@types';
+import { GameRole, Move } from '../@types';
+import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
 import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import { useAuth } from '../contexts/authContext';
 import { useDiscordUser } from '../contexts/discordUserContext';
 import ALL_MOVES from '../queries/allMoves';
 // import GAME_BY_TEXT_CHANNEL_ID from '../queries/gameByTextChannelId';
-import GAME_FOR_PLAYER from '../queries/gameForPlayer';
-import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
-import { AWCENTRAL_GUILD_ID } from '../services/discordService';
-import CharacterCreator from './CharacterCreator';
+import GAME_FOR_PLAYER, { GameForPlayerData, GameForPlayerVars } from '../queries/gameForPlayer';
+import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
 import MovesPanel from './MovesPanel';
 import { Footer, MainContainer, SidePanel } from './styledComponents';
 
-interface GameData {
-  gameForPlayer: Game
-}
-
-interface GameVars {
-  textChannelId: string
-}
-
 interface AllMovesData {
-  allMoves: Move[]
-}
-
-interface UserByDiscordIdData {
-  userByDiscordId: User
-}
-
-interface UserByDiscordIdVars {
-  discordId?: string // TODO: change so that discordId can't be undefined
+  allMoves: Move[];
 }
 
 const PlayerPage: FC = () => {
-  const maxSidePanel = 2
-  const sidePanelWidth = 34
+  const maxSidePanel = 2;
+  const sidePanelWidth = 34;
   /**
    * Number that indicates what should be shown in the side panel
    * 0 - CharacterPanel
@@ -45,45 +28,45 @@ const PlayerPage: FC = () => {
    * 2 - None, side panel is closed
    */
   const [sidePanel, setSidePanel] = useState<number>(maxSidePanel);
-  const [gameRole, setGameRole] = useState<GameRole | undefined>()
-  const [showCharacterCreator, setshowCharacterCreator] = useState(true)
-  
+  const [gameRole, setGameRole] = useState<GameRole | undefined>();
+
   const history = useHistory();
   const { logOut } = useAuth();
-  const { discordId } = useDiscordUser()
-  const { data: userData, loading: loadingUser } = useQuery<UserByDiscordIdData, UserByDiscordIdVars>(USER_BY_DISCORD_ID, { variables: { discordId }, skip: !discordId });
-  const { gameID: textChannelId} = useParams<{ gameID: string}>()
-  const userId = userData?.userByDiscordId.id
-  // @ts-ignore
-  const { data: gameData, loading: loadingGame} = useQuery<GameData, GameVars>(GAME_FOR_PLAYER, {variables: { textChannelId, userId }})
-  const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES)
+  const { discordId } = useDiscordUser();
+  const { data: userData, loading: loadingUser } = useQuery<UserByDiscordIdData, UserByDiscordIdVars>(USER_BY_DISCORD_ID, {
+    variables: { discordId },
+    skip: !discordId,
+  });
+  const { gameID: textChannelId } = useParams<{ gameID: string }>();
+  const userId = userData?.userByDiscordId.id;
+  const { data: gameData, loading: loadingGame } = useQuery<GameForPlayerData, GameForPlayerVars>(GAME_FOR_PLAYER, {
+    // @ts-ignore
+    variables: { textChannelId, userId },
+  });
+  const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
 
-  const game = gameData?.gameForPlayer
-  const gameRoles = game?.gameRoles
-  const allMoves = allMovesData?.allMoves
+  // ------------------------------------------ Component functions ------------------------------------------- //
+
+  // ------------------------------------------------ Render -------------------------------------------------- //
+
+  const game = gameData?.gameForPlayer;
+  const gameRoles = game?.gameRoles;
+  const allMoves = allMovesData?.allMoves;
 
   useEffect(() => {
     if (!!gameRoles && gameRoles.length > 0) {
-      setGameRole(gameRoles[0])
+      setGameRole(gameRoles[0]);
     }
-  }, [gameRoles])
-  
+  }, [gameRoles]);
+
   if (loadingGame || !game || loadingUser || !userId || !gameRole) {
-    return <div> Loading </div>
+    return <div> Loading </div>;
   }
 
-  console.log('gameRole', gameRole)
-  console.log('gameRole.characters.length', gameRole && gameRole.characters && gameRole.characters.length)
+  console.log('gameRole', gameRole);
+  console.log('gameRole.characters.length', gameRole && gameRole.characters && gameRole.characters.length);
   return (
     <>
-    { showCharacterCreator && (
-      <Layer
-        onEsc={() => setshowCharacterCreator(false)}
-        onClickOutside={() => setshowCharacterCreator(false)}
-      >
-        <CharacterCreator gameRoleId={gameRole.id} userId={userId}/>
-      </Layer>
-    )}
       <Header background="neutral-1">
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
@@ -108,24 +91,38 @@ const PlayerPage: FC = () => {
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           </SidePanel>
         </Collapsible>
-        <MainContainer fill justify="center" align="center" sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
-          {gameRole && gameRole.characters?.length === 0 && <Button label="CREATE CHARACTER" primary size="medium" onClick={() => setshowCharacterCreator(true)}/>}
-        </MainContainer>
+        <MainContainer
+          fill
+          justify="center"
+          align="center"
+          sidePanel={sidePanel}
+          maxPanels={maxSidePanel}
+          shinkWidth={sidePanelWidth}
+        ></MainContainer>
       </div>
-        <Footer direction="row" justify="start">
-          <ThemeContext.Extend value={customTabStyles}>
-            <Tabs
-              activeIndex={sidePanel}
-              onActive={(tab) => {
-                console.log('clicked', tab);
-                tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
-              }}
-            >
-              {gameRole && gameRole.characters?.length === 1 && <Tab title="Character" />}
-              {allMoves && <Tab title="Moves" />}
-            </Tabs>
-          </ThemeContext.Extend>
-        </Footer>
+      <Footer direction="row" justify="between" align="center">
+        <ThemeContext.Extend value={customTabStyles}>
+          <Tabs
+            activeIndex={sidePanel}
+            onActive={(tab) => {
+              console.log('clicked', tab);
+              tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
+            }}
+          >
+            {gameRole && gameRole.characters && gameRole.characters.length >= 1 && <Tab title="Character" />}
+            {allMoves && <Tab title="Moves" />}
+          </Tabs>
+        </ThemeContext.Extend>
+        {/*gameRole && gameRole.characters?.length === 0 && !showCharacterCreator && (
+          <Button
+            label="CREATE CHARACTER"
+            primary
+            size="medium"
+            onClick={() => setshowCharacterCreator(true)}
+            style={{ marginRight: '10px' }}
+          />
+        ) */}
+      </Footer>
     </>
   );
 };
