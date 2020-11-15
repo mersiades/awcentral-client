@@ -1,5 +1,5 @@
 
-import { MoveKinds, PlayBooks, Roles, Stats } from './enums';
+import { MoveKinds, PlayBooks, Roles, Stats, WebsocketRequests, WebsocketResponses } from './enums';
 
 export interface Tokens {
   accessToken: string;
@@ -38,14 +38,28 @@ export interface GameRole {
   characters?: Character[]
 }
 
-export interface NewGameRequestBody {
-  discordId: string
-  name: string
+interface RequestBody {
+  type: WebsocketRequests
 }
 
-export interface NewGame extends NewGameRequestBody {
-  textChannelId: string;
-  voiceChannelId: string;
+export interface GameRequest extends RequestBody {
+  id?: string
+  discordId?: string
+  name?: string
+  textChannelId?: string;
+  voiceChannelId?: string;
+}
+
+interface ResponseBody {
+  type: WebsocketResponses
+}
+
+export interface GameResponse extends ResponseBody {
+  id?: string
+  discordId?: string
+  name?: string
+  textChannelId?: string;
+  voiceChannelId?: string;
 }
 
 export interface Move {

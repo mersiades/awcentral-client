@@ -2,20 +2,38 @@ import React, { FC, useState } from 'react';
 import { FormField, TextInput, Text, Button, Box, Form } from 'grommet';
 import { useDiscordUser } from '../contexts/discordUserContext';
 import { useWebsocketContext } from '../contexts/websocketContext';
-import { NewGameRequestBody } from '../@types';
+import CREATE_GAME, { CreateGameData, CreateGameVars } from '../mutations/createGame';
+// import { GameRequestBody } from '../@types';
+// import { WebsocketRequests } from '../@types/enums';
+import { useMutation } from '@apollo/client';
+import { GameRequest, GameResponse } from '../@types';
+import { WebsocketRequests } from '../@types/enums';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
   const { discordId } = useDiscordUser();
-  const { stompClient } = useWebsocketContext();
+  const { stompClient, handleGame } = useWebsocketContext();
+  const [createGame] = useMutation<CreateGameData, CreateGameVars>(CREATE_GAME);
 
-  const sendNewGameRequest = (discordId: string, name: string) => {
-    const destination = '/app/games'
-    const newGameRequest: NewGameRequestBody = { discordId, name }
-    const body = JSON.stringify(newGameRequest)
-    stompClient?.publish({ destination, body })
-  }
-  
+  const sendNewGameRequest = async (discordId: string, name: string) => {
+    // Tell awcentral-api to create a new game
+    const { data: newGame } = await createGame({
+      variables: { discordId, name },
+    });
+
+    if (!!newGame && !!stompClient && !!handleGame) {
+      // Subscribe to a awc-bot websocket channel for the new game
+      const gameId = newGame.createGame.id;
+      stompClient?.subscribe(`/topic/game/${gameId}`, (payload) => handleGame(JSON.parse(payload.body) as GameResponse));
+
+      // Tell awc-bot to create Discord channels for the new game
+      const destination = `/app/game/${gameId}`;
+      const addChannelsRequest: GameRequest = { type: WebsocketRequests.addChannels, id: gameId, discordId, name };
+      const body = JSON.stringify(addChannelsRequest);
+      stompClient.publish({ destination, body });
+    }
+  };
+
   return (
     <Form
       value={gameName}

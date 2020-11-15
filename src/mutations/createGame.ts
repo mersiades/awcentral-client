@@ -1,12 +1,20 @@
 import { gql } from '@apollo/client';
+import { GameResponse } from '../@types';
+
+export interface CreateGameData {
+  createGame: GameResponse
+}
+
+export interface CreateGameVars {
+  discordId: string
+  name: string
+}
 
 const CREATE_GAME = gql`
-  mutation CreateGame($discordId: String!, $name: String!, $textChannelId: String!, $voiceChannelId: String!) {
-    createGame(discordId: $discordId, name: $name, textChannelId: $textChannelId, voiceChannelId: $voiceChannelId) {
+  mutation CreateGame($discordId: String!, $name: String!) {
+    createGame(discordId: $discordId, name: $name) {
     id
     name
-    textChannelId
-    voiceChannelId
     gameRoles {
         id
         role
