@@ -28,7 +28,9 @@ export interface GameContext {
 
 export interface Character {
   id: string
-  name: string
+  name?: string
+  playbook?: PlayBooks
+  gear?: String
 }
 
 export interface GameRole {
@@ -36,6 +38,17 @@ export interface GameRole {
   role: Roles;
   game?: Game;
   characters?: Character[]
+}
+
+export interface PlaybookCreator {
+  id: string
+  playbookType: PlayBooks
+  playbook?: Playbook
+    gearInstructions: string
+    improvementInstructions: string
+    movesInstructions: string
+    hxInstructions: string
+    names: Name[]
 }
 
 interface RequestBody {
@@ -84,4 +97,9 @@ export interface Playbook {
   intro: string
   introComment: string
   playbookImageUrl: string
+}
+
+export interface Name {
+  id: string
+  name: string
 }

@@ -17,7 +17,7 @@ import NewGameIntro from './NewGameIntro';
 import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
 import { useDiscordUser } from '../contexts/discordUserContext';
 import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
-import { GameRole } from '../@types';
+import { Character, GameRole } from '../@types';
 import Spinner from './Spinner';
 
 interface CharacterCreatorProps {}
@@ -27,6 +27,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
    * Step 0 = Choose a playbook
    */
   const [creationStep, setCreationStep] = useState<number>(0);
+  const [character, setCharacter] = useState<Character | undefined>();
   const { discordId } = useDiscordUser();
   const [gameRole, setGameRole] = useState<GameRole | undefined>();
   const { data: userData, loading: loadingUser } = useQuery<UserByDiscordIdData, UserByDiscordIdVars>(USER_BY_DISCORD_ID, {
@@ -82,8 +83,19 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
   useEffect(() => {
     if (!!gameRoles && gameRoles.length > 0) {
       setGameRole(gameRoles[0]);
+      if (!!gameRoles[0].characters && gameRoles[0].characters.length === 1) {
+        setCharacter(gameRoles[0].characters[0]);
+      }
     }
   }, [gameRoles]);
+
+  useEffect(() => {
+    if (character) {
+      if (creationStep === 0 && !!character.playbook && !character.name) {
+        setCreationStep(2);
+      }
+    }
+  }, [character, creationStep]);
 
   if (loadingPlaybooks || loadingUser || loadingGame || !playbooks || !game) {
     return (
@@ -92,6 +104,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
       </Box>
     );
   }
+  console.log('character', character);
 
   return (
     <Box fill background="black">
@@ -103,7 +116,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
         />
       )}
       {creationStep === 1 && <PlaybooksSelector playbooks={playbooks} handlePlaybookSelect={handlePlaybookSelect} />}
-      {creationStep === 2 && <PlaybookBasicForm />}
+      {creationStep === 2 && character && character.playbook && <PlaybookBasicForm playbookType={character?.playbook} />}
     </Box>
   );
 };
