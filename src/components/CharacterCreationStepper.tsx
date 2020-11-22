@@ -29,7 +29,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
   };
 
   return (
-    <Box direction="row" fill="horizontal" background="black" border justify="center" pad="24px" align="center">
+    <Box direction="row" fill="horizontal" background="black" justify="center" pad="24px" align="center">
       {steps.map((step, index) => {
         const content = getStepContent(index);
         const isSelected = index === currentStep;
@@ -42,13 +42,13 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           <Box
             key={index}
             margin={{ left: 'small', right: 'small' }}
-            border
             align="center"
             justify="center"
-            background={{ color: isSelected ? 'brand' : 'neutral-1', opacity: isSelected ? 1 : 0.5 }}
+            background={{ color: 'neutral-1', opacity: isSelected ? 1 : 0.5 }}
             round="medium"
             width="small"
             height="xsmall"
+            border
             onClick={() => setCreationStep(index)}
           >
             <Text color="white" weight="bold">
