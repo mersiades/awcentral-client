@@ -15,8 +15,13 @@ const SET_CHARACTER_NAME = gql`
   mutation SetCharacterName($gameRoleId: String!, $characterId: String!, $name: String!) {
     setCharacterName(gameRoleId: $gameRoleId, characterId: $characterId, name: $name) {
       id
-      playbook
       name
+      playbook
+      gear
+      looks {
+        look
+        category
+      }
     }
   }
 `

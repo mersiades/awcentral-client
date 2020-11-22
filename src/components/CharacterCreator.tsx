@@ -18,10 +18,11 @@ import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
 import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
 import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
 import { useDiscordUser } from '../contexts/discordUserContext';
-import { CharacterCreationSteps, PlayBooks } from '../@types/enums';
+import { CharacterCreationSteps, LookCategories, PlayBooks } from '../@types/enums';
 import { Character, GameRole } from '../@types';
 import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '../mutations/setCharacterName';
 import CharacterLooksForm from './CharacterLooksForm';
+import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 
 interface CharacterCreatorProps {}
 
@@ -49,6 +50,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
   const [createCharacter] = useMutation<CreateCharacterData, CreateCharacterVars>(CREATE_CHARACTER);
   const [setCharacterPlaybook] = useMutation<SetCharacterPlaybookData, SetCharacterPlaybookVars>(SET_CHARACTER_PLAYBOOK);
   const [setCharacterName] = useMutation<SetCharacterNameData, SetCharacterNameVars>(SET_CHARACTER_NAME);
+  const [setCharacterLook] = useMutation<SetCharacterLookData, SetCharacterLookVars>(SET_CHARACTER_LOOK);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.gameForPlayer;
@@ -88,6 +90,20 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
           variables: { gameRoleId: gameRole.id, characterId: character.id, name },
           refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
         });
+        setCreationStep((prevStep) => prevStep + 1);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleSubmitLook = async (look: string, category: LookCategories) => {
+    if (!!gameRole && !!character) {
+      try {
+        await setCharacterLook({
+          variables: { gameRoleId: gameRole.id, characterId: character.id, look, category },
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
+        });
       } catch (error) {
         console.error(error);
       }
@@ -113,8 +129,10 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
     if (character && creationStep === CharacterCreationSteps.intro) {
       if (!!character.playbook && !character.name) {
         setCreationStep(2);
-      } else if (!!character.name && !character.looks) {
+      } else if (!!character.name && (!character.looks || character.looks.length < 5)) {
         setCreationStep(3);
+      } else if (!!character.looks && character.looks.length === 5) {
+        setCreationStep(4);
       }
     }
   }, [character, creationStep]);
@@ -154,7 +172,18 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
         />
       )}
       {creationStep === CharacterCreationSteps.selectLooks && character && character.name && character.playbook && (
-        <CharacterLooksForm playbookType={character?.playbook} characterName={character.name} />
+        <CharacterLooksForm
+          playbookType={character?.playbook}
+          characterName={character.name}
+          handleSubmitLook={handleSubmitLook}
+          existingLooks={{
+            gender: character.looks?.filter((look) => look.category === LookCategories.gender)[0]?.look || '',
+            clothes: character.looks?.filter((look) => look.category === LookCategories.clothes)[0]?.look || '',
+            face: character.looks?.filter((look) => look.category === LookCategories.face)[0]?.look || '',
+            eyes: character.looks?.filter((look) => look.category === LookCategories.eyes)[0]?.look || '',
+            body: character.looks?.filter((look) => look.category === LookCategories.body)[0]?.look || '',
+          }}
+        />
       )}
     </Box>
   );

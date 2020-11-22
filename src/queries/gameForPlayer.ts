@@ -25,6 +25,10 @@ const GAME_FOR_PLAYER = gql`
           name
           playbook
           gear
+          looks {
+            look
+            category
+          }
         }
       }
     }

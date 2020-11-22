@@ -31,7 +31,7 @@ export interface Character {
   name?: string
   playbook?: PlayBooks
   gear?: String
-  looks?: String[]
+  looks?: Look[]
 }
 
 export interface GameRole {

@@ -13,6 +13,9 @@ interface CharacterCreationStepperProps {
 const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentStep, setCreationStep, character }) => {
   const [steps] = useState(Object.values(CharacterCreationSteps).filter((step) => typeof step === 'number'));
 
+  let looksAsString = '';
+  character?.looks?.forEach((look) => (looksAsString += look.look + '\t'));
+
   const getStepContent = (index: number): { label: string; value?: string } => {
     switch (index) {
       case 0:
@@ -22,7 +25,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       case 2:
         return { label: 'Name', value: !!character?.name ? character.name : '...' };
       case 3:
-        return { label: 'Looks', value: !!character?.looks ? character.looks.toString() : '...' };
+        return { label: 'Looks', value: !!character?.looks ? looksAsString : '...' };
       default:
         throw Error('Character creation step does not exist');
     }

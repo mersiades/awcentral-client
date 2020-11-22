@@ -9,30 +9,34 @@ import Spinner from './Spinner';
 interface CharacterLooksFormProps {
   playbookType: PlayBooks;
   characterName: string;
+  handleSubmitLook: (look: string, category: LookCategories) => void;
+  existingLooks: {
+    gender: string;
+    clothes: string;
+    face: string;
+    eyes: string;
+    body: string;
+  };
 }
 
 interface ActionButtonsProps {
   value: string;
 }
 
-// interface CharacterLooksFormValues {
-//   gender: string
-//   clothes: string
-//   face: string
-//   eyes: string
-//   body: string
-// }
-
-const CharacterLooksForm: FC<CharacterLooksFormProps> = ({ playbookType, characterName }) => {
+const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
+  playbookType,
+  characterName,
+  handleSubmitLook,
+  existingLooks,
+}) => {
   const [steps] = useState(Object.values(LookCategories));
   const [selectedStep, setSelectedStep] = useState(0);
-  const [animation, setAnimation] = useState<'slideLeft' | 'slideRight' | undefined>(undefined);
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
-  const [genderValue, setGenderValue] = useState({ gender: '' });
-  const [clothesValue, setClothesValue] = useState({ clothes: '' });
-  const [faceValue, setFaceValue] = useState({ face: '' });
-  const [eyesValue, setEyesValue] = useState({ eyes: '' });
-  const [bodyValue, setBodyValue] = useState({ body: '' });
+  const [genderValue, setGenderValue] = useState({ gender: existingLooks.gender });
+  const [clothesValue, setClothesValue] = useState({ clothes: existingLooks.clothes });
+  const [faceValue, setFaceValue] = useState({ face: existingLooks.face });
+  const [eyesValue, setEyesValue] = useState({ eyes: existingLooks.eyes });
+  const [bodyValue, setBodyValue] = useState({ body: existingLooks.body });
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
     {
@@ -51,14 +55,10 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({ playbookType, charact
       </Box>
     );
   }
-  console.log('steps', steps);
 
-  console.log('pbCreator', pbCreator);
-
-  const handleSetClick = () => {
+  const handleSetClick = (look: string, category: LookCategories) => {
     setSelectedStep((prevStep) => prevStep + 1);
-    setAnimation('slideRight');
-    // handleSubmitName(value.characterName)
+    handleSubmitLook(look, category);
   };
 
   const renderPill = (look: Look, onClick: any, field: string) => (
@@ -100,21 +100,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({ playbookType, charact
         {steps.map((step, index) => {
           const isSelected = index === selectedStep;
           return (
-            <Heading
-              key={index}
-              level={4}
-              color={isSelected ? 'accent-1' : 'white'}
-              onClick={() => {
-                if (isSelected) {
-                  setAnimation(undefined);
-                } else if (index < selectedStep) {
-                  setAnimation('slideLeft');
-                } else if (index > selectedStep) {
-                  setAnimation('slideRight');
-                }
-                setSelectedStep(index);
-              }}
-            >
+            <Heading key={index} level={4} color={isSelected ? 'accent-1' : 'white'} onClick={() => setSelectedStep(index)}>
               {step}
             </Heading>
           );
@@ -125,9 +111,14 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({ playbookType, charact
           value={genderValue}
           onChange={(nextValue) => setGenderValue(nextValue)}
           onReset={() => setGenderValue({ gender: '' })}
-          onSubmit={({ value }: any) => handleSetClick()}
+          onSubmit={({ value }: any) => handleSetClick(value.gender, LookCategories.gender)}
         >
-          <Box width="50vw" height="30vh" align="center" animation={{ type: animation, size: 'large' }}>
+          <Box
+            width="50vw"
+            height="30vh"
+            align="center"
+            animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+          >
             <FormField name="gender" width="100%">
               <TextInput placeholder="Type or select" name="gender" size="xxlarge" />
             </FormField>
@@ -145,9 +136,14 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({ playbookType, charact
           value={clothesValue}
           onChange={(nextValue) => setClothesValue(nextValue)}
           onReset={() => setClothesValue({ clothes: '' })}
-          onSubmit={({ value }: any) => handleSetClick()}
+          onSubmit={({ value }: any) => handleSetClick(value.clothes, LookCategories.clothes)}
         >
-          <Box width="50vw" height="30vh" align="center" animation={{ type: animation, size: 'large' }}>
+          <Box
+            width="50vw"
+            height="30vh"
+            align="center"
+            animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+          >
             <FormField name="clothes" width="100%">
               <TextInput placeholder="Type or select" name="clothes" size="xxlarge" />
             </FormField>
@@ -165,9 +161,14 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({ playbookType, charact
           value={faceValue}
           onChange={(nextValue) => setFaceValue(nextValue)}
           onReset={() => setFaceValue({ face: '' })}
-          onSubmit={({ value }: any) => handleSetClick()}
+          onSubmit={({ value }: any) => handleSetClick(value.face, LookCategories.face)}
         >
-          <Box width="50vw" height="30vh" align="center" animation={{ type: animation, size: 'large' }}>
+          <Box
+            width="50vw"
+            height="30vh"
+            align="center"
+            animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+          >
             <FormField name="face" width="100%">
               <TextInput placeholder="Type or select" name="face" size="xxlarge" />
             </FormField>
@@ -185,9 +186,14 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({ playbookType, charact
           value={eyesValue}
           onChange={(nextValue) => setEyesValue(nextValue)}
           onReset={() => setEyesValue({ eyes: '' })}
-          onSubmit={({ value }: any) => handleSetClick()}
+          onSubmit={({ value }: any) => handleSetClick(value.eyes, LookCategories.eyes)}
         >
-          <Box width="50vw" height="30vh" align="center" animation={{ type: animation, size: 'large' }}>
+          <Box
+            width="50vw"
+            height="30vh"
+            align="center"
+            animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+          >
             <FormField name="eyes" width="100%">
               <TextInput placeholder="Type or select" name="eyes" size="xxlarge" />
             </FormField>
@@ -205,9 +211,14 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({ playbookType, charact
           value={bodyValue}
           onChange={(nextValue) => setBodyValue(nextValue)}
           onReset={() => setBodyValue({ body: '' })}
-          onSubmit={({ value }: any) => handleSetClick()}
+          onSubmit={({ value }: any) => handleSetClick(value.body, LookCategories.body)}
         >
-          <Box width="50vw" height="30vh" align="center" animation={{ type: animation, size: 'large' }}>
+          <Box
+            width="50vw"
+            height="30vh"
+            align="center"
+            animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+          >
             <FormField name="body" width="100%">
               <TextInput placeholder="Type or select" name="body" size="xxlarge" />
             </FormField>
