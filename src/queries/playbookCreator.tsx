@@ -22,6 +22,11 @@ const PLAYBOOK_CREATOR = gql`
       improvementInstructions
       movesInstructions
       hxInstructions
+      looks {
+        id
+        look
+        category
+      }
       names {
         id
         name

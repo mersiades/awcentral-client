@@ -1,5 +1,5 @@
 
-import { MoveKinds, PlayBooks, Roles, Stats, WebsocketRequests, WebsocketResponses } from './enums';
+import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, WebsocketRequests, WebsocketResponses } from './enums';
 
 export interface Tokens {
   accessToken: string;
@@ -31,6 +31,7 @@ export interface Character {
   name?: string
   playbook?: PlayBooks
   gear?: String
+  looks?: String[]
 }
 
 export interface GameRole {
@@ -49,6 +50,7 @@ export interface PlaybookCreator {
     movesInstructions: string
     hxInstructions: string
     names: Name[]
+    looks: Look[]
 }
 
 interface RequestBody {
@@ -102,4 +104,10 @@ export interface Playbook {
 export interface Name {
   id: string
   name: string
+}
+
+export interface Look {
+  id: string
+  look: string
+  category: LookCategories
 }

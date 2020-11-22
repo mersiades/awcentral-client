@@ -48,5 +48,14 @@ export enum WebsocketRequests {
 export enum CharacterCreationSteps {
   intro = 0,
   selectPlaybook = 1,
-  selectName = 2
+  selectName = 2,
+  selectLooks = 3
+}
+
+export enum LookCategories {
+  gender = 'GENDER',
+    clothes = 'CLOTHES',
+    face = 'FACE',
+    eyes = 'EYES',
+    body = 'BODY'
 }

@@ -21,6 +21,7 @@ import { useDiscordUser } from '../contexts/discordUserContext';
 import { CharacterCreationSteps, PlayBooks } from '../@types/enums';
 import { Character, GameRole } from '../@types';
 import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '../mutations/setCharacterName';
+import CharacterLooksForm from './CharacterLooksForm';
 
 interface CharacterCreatorProps {}
 
@@ -106,10 +107,14 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
     }
   }, [gameRoles]);
 
+  // If page is loading but character is already partially created,
+  // set creationStep to appropriate step
   useEffect(() => {
-    if (character) {
-      if (creationStep === 0 && !!character.playbook && !character.name) {
+    if (character && creationStep === CharacterCreationSteps.intro) {
+      if (!!character.playbook && !character.name) {
         setCreationStep(2);
+      } else if (!!character.name && !character.looks) {
+        setCreationStep(3);
       }
     }
   }, [character, creationStep]);
@@ -123,6 +128,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
   }
   console.log('character', character);
 
+  console.log('creationStep', creationStep);
   return (
     <Box fill background="black">
       <CharacterCreationStepper character={character} currentStep={creationStep} setCreationStep={setCreationStep} />
@@ -141,7 +147,14 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
         />
       )}
       {creationStep === CharacterCreationSteps.selectName && character && character.playbook && (
-        <CharacterNameForm playbookType={character?.playbook} handleSubmitName={handleSubmitName} />
+        <CharacterNameForm
+          playbookType={character?.playbook}
+          handleSubmitName={handleSubmitName}
+          existingName={character.name}
+        />
+      )}
+      {creationStep === CharacterCreationSteps.selectLooks && character && character.name && character.playbook && (
+        <CharacterLooksForm playbookType={character?.playbook} characterName={character.name} />
       )}
     </Box>
   );

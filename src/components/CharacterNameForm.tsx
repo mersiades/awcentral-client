@@ -6,15 +6,17 @@ import Spinner from './Spinner';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import { PlaybookCreator } from '../@types';
 import { PlayBooks } from '../@types/enums';
+import { formatPlaybookType } from '../helpers/formatPlaybookType';
 
 interface CharacterNameFormProps {
   playbookType: PlayBooks;
   handleSubmitName: (name: string) => void;
+  existingName?: string;
 }
 
-const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSubmitName }) => {
+const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSubmitName, existingName }) => {
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
-  const [value, setValue] = useState({ characterName: '' });
+  const [value, setValue] = useState({ characterName: existingName || '' });
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
     {
@@ -51,7 +53,7 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
         onSubmit={({ value }: any) => handleSubmitName(value.characterName)}
       >
         <Box width="50vw" height="50vh" align="center">
-          <Heading level={1}>SET CHARACTER NAME</Heading>
+          <Heading level={1}>{`WHAT IS THE ${formatPlaybookType(playbookType)} CALLED?`}</Heading>
           <FormField name="characterName" width="100%">
             <TextInput placeholder="Type or select name" name="characterName" size="xxlarge" />
           </FormField>
