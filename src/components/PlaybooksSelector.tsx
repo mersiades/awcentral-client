@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Box, Button, Grid, Heading, Paragraph } from 'grommet';
 
@@ -6,14 +6,14 @@ import { Playbook } from '../@types';
 import { PlayBooks } from '../@types/enums';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import '../assets/styles/transitions.css';
-import CharacterCreator from './CharacterCreator';
 
 interface PlaybookSelectorProps {
   playbooks: Playbook[];
   handlePlaybookSelect: (playbookType: PlayBooks) => void;
+  playbook?: PlayBooks;
 }
 
-const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, handlePlaybookSelect }) => {
+const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, handlePlaybookSelect, playbook }) => {
   const [selectedPlaybook, setSelectedPlaybook] = useState<Playbook | undefined>();
   const [showIntro, setShowIntro] = useState(true);
   const [startFadeOut, setStartFadeOut] = useState(false);
@@ -33,6 +33,14 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, handlePlaybook
     setSelectedPlaybook(undefined);
     setTimeout(() => setSelectedPlaybook(playbook), 0);
   };
+
+  // If the playbook has already been set, show that playbook to the User
+  useEffect(() => {
+    if (!!playbook) {
+      const setPlaybook = playbooks.filter((pb) => pb.playbookType === playbook)[0];
+      setSelectedPlaybook(setPlaybook);
+    }
+  }, [playbook, playbooks]);
 
   return (
     <Box

@@ -1,8 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
+import { Box } from 'grommet';
 
 import PlaybooksSelector from './PlaybooksSelector';
+import CharacterNameForm from './CharacterNameForm';
+import CharacterCreationStepper from './CharacterCreationStepper';
+import NewGameIntro from './NewGameIntro';
+import Spinner from './Spinner';
 import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../mutations/createCharacter';
 import SET_CHARACTER_PLAYBOOK, {
   SetCharacterPlaybookData,
@@ -10,16 +15,11 @@ import SET_CHARACTER_PLAYBOOK, {
 } from '../mutations/setCharacterPlaybook';
 import GAME_FOR_PLAYER, { GameForPlayerData, GameForPlayerVars } from '../queries/gameForPlayer';
 import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
-import { CharacterCreationSteps, PlayBooks } from '../@types/enums';
-import PlaybookBasicForm from './PlaybookBasicForm';
-import { Box } from 'grommet';
-import NewGameIntro from './NewGameIntro';
+import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
 import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
 import { useDiscordUser } from '../contexts/discordUserContext';
-import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
+import { CharacterCreationSteps, PlayBooks } from '../@types/enums';
 import { Character, GameRole } from '../@types';
-import Spinner from './Spinner';
-import CharacterCreationStepper from './CharacterCreationStepper';
 
 interface CharacterCreatorProps {}
 
@@ -35,6 +35,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
     variables: { discordId },
     skip: !discordId,
   });
+
   const userId = userData?.userByDiscordId.id;
   const { gameID: textChannelId } = useParams<{ gameID: string }>();
 
@@ -118,10 +119,14 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
         />
       )}
       {creationStep === CharacterCreationSteps.selectPlaybook && (
-        <PlaybooksSelector playbooks={playbooks} handlePlaybookSelect={handlePlaybookSelect} />
+        <PlaybooksSelector
+          playbooks={playbooks}
+          playbook={character?.playbook}
+          handlePlaybookSelect={handlePlaybookSelect}
+        />
       )}
       {creationStep === CharacterCreationSteps.selectName && character && character.playbook && (
-        <PlaybookBasicForm playbookType={character?.playbook} />
+        <CharacterNameForm playbookType={character?.playbook} />
       )}
     </Box>
   );
