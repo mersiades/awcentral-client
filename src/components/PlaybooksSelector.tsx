@@ -6,6 +6,7 @@ import { Playbook } from '../@types';
 import { PlayBooks } from '../@types/enums';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import '../assets/styles/transitions.css';
+import CharacterCreator from './CharacterCreator';
 
 interface PlaybookSelectorProps {
   playbooks: Playbook[];

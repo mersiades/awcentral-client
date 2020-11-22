@@ -28,7 +28,6 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
    * Step 0 = Choose a playbook
    */
   const [creationStep, setCreationStep] = useState<number>(0);
-  const [numberOfSteps] = useState<number>(Object.keys(CharacterCreationSteps).length);
   const [character, setCharacter] = useState<Character | undefined>();
   const { discordId } = useDiscordUser();
   const [gameRole, setGameRole] = useState<GameRole | undefined>();
@@ -110,7 +109,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
 
   return (
     <Box fill background="black">
-      <CharacterCreationStepper numberOfSteps={numberOfSteps} currentStep={creationStep} />
+      <CharacterCreationStepper character={character} currentStep={creationStep} setCreationStep={setCreationStep} />
       {creationStep === CharacterCreationSteps.intro && (
         <NewGameIntro
           gameName={game.name}
