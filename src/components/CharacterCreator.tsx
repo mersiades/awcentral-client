@@ -10,7 +10,7 @@ import SET_CHARACTER_PLAYBOOK, {
 } from '../mutations/setCharacterPlaybook';
 import GAME_FOR_PLAYER, { GameForPlayerData, GameForPlayerVars } from '../queries/gameForPlayer';
 import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
-import { PlayBooks } from '../@types/enums';
+import { CharacterCreationSteps, PlayBooks } from '../@types/enums';
 import PlaybookBasicForm from './PlaybookBasicForm';
 import { Box } from 'grommet';
 import NewGameIntro from './NewGameIntro';
@@ -19,6 +19,7 @@ import { useDiscordUser } from '../contexts/discordUserContext';
 import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
 import { Character, GameRole } from '../@types';
 import Spinner from './Spinner';
+import CharacterCreationStepper from './CharacterCreationStepper';
 
 interface CharacterCreatorProps {}
 
@@ -27,6 +28,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
    * Step 0 = Choose a playbook
    */
   const [creationStep, setCreationStep] = useState<number>(0);
+  const [numberOfSteps] = useState<number>(Object.keys(CharacterCreationSteps).length);
   const [character, setCharacter] = useState<Character | undefined>();
   const { discordId } = useDiscordUser();
   const [gameRole, setGameRole] = useState<GameRole | undefined>();
@@ -108,15 +110,20 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
 
   return (
     <Box fill background="black">
-      {creationStep === 0 && (
+      <CharacterCreationStepper numberOfSteps={numberOfSteps} currentStep={creationStep} />
+      {creationStep === CharacterCreationSteps.intro && (
         <NewGameIntro
           gameName={game.name}
-          voiceChannelUrl={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game.voiceChannelId}`}
+          voiceChannelUrl={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game.textChannelId}`}
           closeNewGameIntro={closeNewGameIntro}
         />
       )}
-      {creationStep === 1 && <PlaybooksSelector playbooks={playbooks} handlePlaybookSelect={handlePlaybookSelect} />}
-      {creationStep === 2 && character && character.playbook && <PlaybookBasicForm playbookType={character?.playbook} />}
+      {creationStep === CharacterCreationSteps.selectPlaybook && (
+        <PlaybooksSelector playbooks={playbooks} handlePlaybookSelect={handlePlaybookSelect} />
+      )}
+      {creationStep === CharacterCreationSteps.selectName && character && character.playbook && (
+        <PlaybookBasicForm playbookType={character?.playbook} />
+      )}
     </Box>
   );
 };

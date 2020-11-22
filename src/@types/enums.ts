@@ -44,3 +44,9 @@ export enum WebsocketRequests {
   deleteChannels = 'DELETE_CHANNELS_REQUEST',
   addChannels = 'ADD_CHANNELS_REQUEST'
 }
+
+export enum CharacterCreationSteps {
+  intro = 0,
+  selectPlaybook = 1,
+  selectName = 2
+}

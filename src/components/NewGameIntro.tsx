@@ -24,7 +24,7 @@ const NewGameIntro: FC<NewGameIntroProps> = ({ gameName, voiceChannelUrl, closeN
       <Paragraph textAlign="center" size="medium">
         If you haven't already, join the rest of your crew on Discord at{' '}
         <Anchor href={voiceChannelUrl} target="_blank" rel="noopener noreferrer">
-          {`${gameName}-voice`}
+          {gameName}
         </Anchor>
         .
       </Paragraph>
