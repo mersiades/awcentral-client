@@ -20,6 +20,7 @@ import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
 import { useDiscordUser } from '../contexts/discordUserContext';
 import { CharacterCreationSteps, PlayBooks } from '../@types/enums';
 import { Character, GameRole } from '../@types';
+import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '../mutations/setCharacterName';
 
 interface CharacterCreatorProps {}
 
@@ -46,6 +47,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
   });
   const [createCharacter] = useMutation<CreateCharacterData, CreateCharacterVars>(CREATE_CHARACTER);
   const [setCharacterPlaybook] = useMutation<SetCharacterPlaybookData, SetCharacterPlaybookVars>(SET_CHARACTER_PLAYBOOK);
+  const [setCharacterName] = useMutation<SetCharacterNameData, SetCharacterNameVars>(SET_CHARACTER_NAME);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.gameForPlayer;
@@ -75,6 +77,19 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
       }
 
       setCreationStep((prevState) => prevState + 1);
+    }
+  };
+
+  const handleSubmitName = async (name: string) => {
+    if (!!gameRole && !!character) {
+      try {
+        await setCharacterName({
+          variables: { gameRoleId: gameRole.id, characterId: character.id, name },
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -126,7 +141,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
         />
       )}
       {creationStep === CharacterCreationSteps.selectName && character && character.playbook && (
-        <CharacterNameForm playbookType={character?.playbook} />
+        <CharacterNameForm playbookType={character?.playbook} handleSubmitName={handleSubmitName} />
       )}
     </Box>
   );

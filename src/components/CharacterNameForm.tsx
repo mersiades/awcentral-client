@@ -9,13 +9,10 @@ import { PlayBooks } from '../@types/enums';
 
 interface CharacterNameFormProps {
   playbookType: PlayBooks;
+  handleSubmitName: (name: string) => void;
 }
 
-interface NameFormValues {
-  name: string;
-}
-
-const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType }) => {
+const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSubmitName }) => {
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
   const [value, setValue] = useState({ characterName: '' });
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
@@ -51,7 +48,7 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType }) => {
         value={value}
         onChange={(nextValue) => setValue(nextValue)}
         onReset={() => setValue({ characterName: '' })}
-        onSubmit={({ value }: any) => console.log(`submitted ${value.characterName}`)}
+        onSubmit={({ value }: any) => handleSubmitName(value.characterName)}
       >
         <Box width="50vw" height="50vh" align="center">
           <Heading level={1}>SET CHARACTER NAME</Heading>
