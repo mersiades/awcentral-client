@@ -32,6 +32,7 @@ export interface Character {
   playbook?: PlayBooks
   gear?: String
   looks?: Look[]
+  statsBlock: StatsBlock
 }
 
 export interface GameRole {
@@ -51,7 +52,7 @@ export interface PlaybookCreator {
     hxInstructions: string
     names: Name[]
     looks: Look[]
-    statsOptions: StatsOptions[]
+    statsOptions: StatsOption[]
 }
 
 interface RequestBody {
@@ -113,11 +114,23 @@ export interface Look {
   category: LookCategories
 }
 
-export interface StatsOptions {
+export interface StatsOption {
   id: string
   COOL: number
         HARD: number
         HOT: number
         SHARP: number
         WEIRD: number
+}
+
+export interface StatsBlock {
+  id: string
+  stats: CharacterStat[]
+}
+
+export interface CharacterStat {
+  id: string
+  stat: Stats
+    value: number
+    isHighlighted: Boolean
 }

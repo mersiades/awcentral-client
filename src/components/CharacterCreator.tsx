@@ -24,6 +24,7 @@ import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '
 import CharacterLooksForm from './CharacterLooksForm';
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import CharacterStatsForm from './CharacterStatsForm';
+import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 
 interface CharacterCreatorProps {}
 
@@ -52,6 +53,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
   const [setCharacterPlaybook] = useMutation<SetCharacterPlaybookData, SetCharacterPlaybookVars>(SET_CHARACTER_PLAYBOOK);
   const [setCharacterName] = useMutation<SetCharacterNameData, SetCharacterNameVars>(SET_CHARACTER_NAME);
   const [setCharacterLook] = useMutation<SetCharacterLookData, SetCharacterLookVars>(SET_CHARACTER_LOOK);
+  const [setCharacterStats] = useMutation<SetCharacterStatsData, SetCharacterStatsVars>(SET_CHARACTER_STATS);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.gameForPlayer;
@@ -101,12 +103,12 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
   const handleSubmitLook = async (look: string, category: LookCategories) => {
     if (!!gameRole && !!character) {
       try {
-        await setCharacterLook({
+        const data = await setCharacterLook({
           variables: { gameRoleId: gameRole.id, characterId: character.id, look, category },
           refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
         });
-        console.log('character.looks?.length', character.looks?.length);
-        if (character.looks?.length === 5) {
+
+        if (data.data?.setCharacterLook.looks?.length === 5) {
           setCreationStep((prevState) => prevState + 1);
         }
       } catch (error) {
@@ -115,7 +117,20 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
     }
   };
 
-  const handleSubmitStats = () => console.log('submiting stats');
+  const handleSubmitStats = async (statsOptionId: string) => {
+    console.log('statsOptionId', statsOptionId);
+    if (!!gameRole && !!character) {
+      try {
+        await setCharacterStats({
+          variables: { gameRoleId: gameRole.id, characterId: character.id, statsOptionId },
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
+        });
+        setCreationStep((prevState) => prevState + 1);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 

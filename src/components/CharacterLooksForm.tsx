@@ -57,7 +57,13 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
   }
 
   const handleSetClick = (look: string, category: LookCategories) => {
-    setSelectedStep((prevStep) => prevStep + 1);
+    setSelectedStep((prevStep) => {
+      if (prevStep < 4) {
+        return prevStep + 1;
+      } else {
+        return prevStep;
+      }
+    });
     handleSubmitLook(look, category);
   };
 
