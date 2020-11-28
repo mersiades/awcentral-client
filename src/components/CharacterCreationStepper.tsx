@@ -33,7 +33,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           label: 'Looks',
           value:
             reversedLooks.length > 0 ? (
-              <ul style={{ margin: 'unset', overflowY: 'auto' }}>
+              <ul style={{ margin: 'unset', overflowY: 'auto', width: '100%', alignSelf: 'baseline' }}>
                 {reversedLooks.map((look) => (
                   <li key={look}>{look}</li>
                 ))}
@@ -43,7 +43,19 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
             ),
         };
       case 4:
-        return { label: 'Stats', value: <Text>...</Text> };
+        return {
+          label: 'Stats',
+          value:
+            !!character && character.statsBlock.stats.length > 0 ? (
+              <ul style={{ margin: 'unset', overflowY: 'auto', width: '100%', alignSelf: 'baseline' }}>
+                {character.statsBlock.stats.map((stat) => (
+                  <li key={stat.id}>{`${stat.stat} --- ${stat.value}`}</li>
+                ))}
+              </ul>
+            ) : (
+              <Text>...</Text>
+            ),
+        };
       default:
         throw Error('Character creation step does not exist');
     }

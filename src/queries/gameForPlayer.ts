@@ -29,6 +29,9 @@ const GAME_FOR_PLAYER = gql`
             id
             stats {
               id
+              stat
+              value
+              isHighlighted
             }
           }
           looks {
