@@ -42,6 +42,8 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
               <Text>...</Text>
             ),
         };
+      case 4:
+        return { label: 'Stats', value: <Text>...</Text> };
       default:
         throw Error('Character creation step does not exist');
     }

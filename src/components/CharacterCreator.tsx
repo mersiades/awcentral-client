@@ -23,6 +23,7 @@ import { Character, GameRole } from '../@types';
 import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '../mutations/setCharacterName';
 import CharacterLooksForm from './CharacterLooksForm';
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
+import CharacterStatsForm from './CharacterStatsForm';
 
 interface CharacterCreatorProps {}
 
@@ -104,11 +105,17 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
           variables: { gameRoleId: gameRole.id, characterId: character.id, look, category },
           refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
         });
+        console.log('character.looks?.length', character.looks?.length);
+        if (character.looks?.length === 5) {
+          setCreationStep((prevState) => prevState + 1);
+        }
       } catch (error) {
         console.error(error);
       }
     }
   };
+
+  const handleSubmitStats = () => console.log('submiting stats');
 
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
@@ -183,6 +190,13 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
             eyes: character.looks?.filter((look) => look.category === LookCategories.eyes)[0]?.look || '',
             body: character.looks?.filter((look) => look.category === LookCategories.body)[0]?.look || '',
           }}
+        />
+      )}
+      {creationStep === CharacterCreationSteps.selectStats && character && character.name && character.playbook && (
+        <CharacterStatsForm
+          characterName={character.name}
+          playbookType={character?.playbook}
+          handleSubmitStats={handleSubmitStats}
         />
       )}
     </Box>

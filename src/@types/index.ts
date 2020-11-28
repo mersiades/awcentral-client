@@ -111,3 +111,7 @@ export interface Look {
   look: string
   category: LookCategories
 }
+
+export interface StatsOptions {
+  
+}

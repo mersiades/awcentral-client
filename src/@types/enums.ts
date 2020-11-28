@@ -49,7 +49,8 @@ export enum CharacterCreationSteps {
   intro = 0,
   selectPlaybook = 1,
   selectName = 2,
-  selectLooks = 3
+  selectLooks = 3,
+  selectStats = 4
 }
 
 export enum LookCategories {
