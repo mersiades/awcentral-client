@@ -31,6 +31,14 @@ const PLAYBOOK_CREATOR = gql`
         id
         name
       }
+      statsOptions {
+        id
+        COOL
+        HARD
+        HOT
+        SHARP
+        WEIRD
+      }
     }
   }
 `;

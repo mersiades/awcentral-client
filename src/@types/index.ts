@@ -51,6 +51,7 @@ export interface PlaybookCreator {
     hxInstructions: string
     names: Name[]
     looks: Look[]
+    statsOptions: StatsOptions[]
 }
 
 interface RequestBody {
@@ -113,5 +114,10 @@ export interface Look {
 }
 
 export interface StatsOptions {
-  
+  id: string
+  COOL: number
+        HARD: number
+        HOT: number
+        SHARP: number
+        WEIRD: number
 }
