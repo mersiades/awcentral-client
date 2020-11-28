@@ -13,19 +13,35 @@ interface CharacterCreationStepperProps {
 const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentStep, setCreationStep, character }) => {
   const [steps] = useState(Object.values(CharacterCreationSteps).filter((step) => typeof step === 'number'));
 
-  let looksAsString = '';
-  character?.looks?.forEach((look) => (looksAsString += look.look + '\t'));
-
-  const getStepContent = (index: number): { label: string; value?: string } => {
+  const getStepContent = (index: number): { label: string; value?: any } => {
     switch (index) {
       case 0:
       // Intentionally falls through
       case 1:
-        return { label: 'Playbook', value: !!character?.playbook ? formatPlaybookType(character?.playbook) : '...' };
+        return {
+          label: 'Playbook',
+          value: !!character?.playbook ? <Text>{formatPlaybookType(character?.playbook)}</Text> : <Text>...</Text>,
+        };
       case 2:
-        return { label: 'Name', value: !!character?.name ? character.name : '...' };
+        return { label: 'Name', value: !!character?.name ? <Text>{character.name}</Text> : <Text>...</Text> };
       case 3:
-        return { label: 'Looks', value: !!character?.looks ? looksAsString : '...' };
+        let reversedLooks: string[] = [];
+        if (!!character && !!character.looks) {
+          reversedLooks = character.looks.map((look) => look.look).reverse();
+        }
+        return {
+          label: 'Looks',
+          value:
+            reversedLooks.length > 0 ? (
+              <ul style={{ margin: 'unset', overflowY: 'auto' }}>
+                {reversedLooks.map((look) => (
+                  <li key={look}>{look}</li>
+                ))}
+              </ul>
+            ) : (
+              <Text>...</Text>
+            ),
+        };
       default:
         throw Error('Character creation step does not exist');
     }
@@ -46,18 +62,19 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
             key={index}
             margin={{ left: 'small', right: 'small' }}
             align="center"
-            justify="center"
+            justify="start"
             background={{ color: 'neutral-1', opacity: isSelected ? 1 : 0.5 }}
             round="medium"
             width="small"
             height="xsmall"
             border
             onClick={() => setCreationStep(index)}
+            pad="12px"
           >
             <Text color="white" weight="bold">
               {content.label}
             </Text>
-            {!!content.value && <Text>{content.value}</Text>}
+            {!!content.value && content.value}
           </Box>
         );
       })}
