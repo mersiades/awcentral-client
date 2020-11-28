@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box } from 'grommet';
 
-import PlaybooksSelector from './PlaybooksSelector';
+import PlaybooksSelector from './PlaybookSelector';
 import CharacterNameForm from './CharacterNameForm';
 import CharacterCreationStepper from './CharacterCreationStepper';
 import NewGameIntro from './NewGameIntro';

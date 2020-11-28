@@ -87,7 +87,7 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, handlePlaybook
                 />
               </Box>
               <Box gridArea="text" pad="24px" animation="fadeIn" justify="around" align="center">
-                <Heading level={2} alignSelf="center">
+                <Heading level={1} alignSelf="center">
                   {formatPlaybookType(selectedPlaybook.playbookType)}
                 </Heading>
                 <Box overflow="auto" style={{ maxWidth: '600px' }}>
@@ -110,7 +110,7 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, handlePlaybook
             </Grid>
           )}
         </Box>
-        <Box gridArea="playbook-previews" direction="row" justify="around">
+        <Box gridArea="playbook-previews" direction="row" justify="around" pad="3px">
           {sortedPlaybooks.map((playbook) => (
             <Box
               key={playbook.playbookImageUrl}
