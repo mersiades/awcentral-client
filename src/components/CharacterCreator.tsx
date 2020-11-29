@@ -25,6 +25,7 @@ import CharacterLooksForm from './CharacterLooksForm';
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import CharacterStatsForm from './CharacterStatsForm';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
+import CharacterGearForm from './CharacterGearForm';
 
 interface CharacterCreatorProps {}
 
@@ -132,6 +133,8 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
     }
   };
 
+  const handleSubmitGear = () => console.log('submitting gear');
+
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
   // ------------------------------------------------ Render -------------------------------------------------- //
@@ -153,8 +156,10 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
         setCreationStep(2);
       } else if (!!character.name && (!character.looks || character.looks.length < 5)) {
         setCreationStep(3);
-      } else if (!!character.looks && character.looks.length === 5) {
+      } else if (!!character.looks && character.looks.length < 5) {
         setCreationStep(4);
+      } else if (!!character.statsBlock && character.statsBlock.stats.length === 5) {
+        setCreationStep(5);
       }
     }
   }, [character, creationStep]);
@@ -167,7 +172,6 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
     );
   }
   console.log('character', character);
-
   console.log('creationStep', creationStep);
   return (
     <Box fill background="black">
@@ -212,6 +216,13 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
           characterName={character.name}
           playbookType={character?.playbook}
           handleSubmitStats={handleSubmitStats}
+        />
+      )}
+      {creationStep === CharacterCreationSteps.selectGear && character && character.name && character.playbook && (
+        <CharacterGearForm
+          characterName={character.name}
+          playbookType={character?.playbook}
+          handleSubmitGear={handleSubmitGear}
         />
       )}
     </Box>

@@ -18,7 +18,17 @@ const PLAYBOOK_CREATOR = gql`
       playbook {
         id
       }
-      gearInstructions
+      gearInstructions {
+        id
+        youGet
+        youGetItems
+        inAddition
+        introduceChoice
+        numberCanChoose
+        chooseableGear
+        withMC
+        startingBarter
+      }
       improvementInstructions
       movesInstructions
       hxInstructions

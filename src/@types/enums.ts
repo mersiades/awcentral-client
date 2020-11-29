@@ -50,13 +50,14 @@ export enum CharacterCreationSteps {
   selectPlaybook = 1,
   selectName = 2,
   selectLooks = 3,
-  selectStats = 4
+  selectStats = 4,
+  selectGear = 5
 }
 
 export enum LookCategories {
   gender = 'GENDER',
-    clothes = 'CLOTHES',
-    face = 'FACE',
-    eyes = 'EYES',
-    body = 'BODY'
+  clothes = 'CLOTHES',
+  face = 'FACE',
+  eyes = 'EYES',
+  body = 'BODY'
 }

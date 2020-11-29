@@ -53,6 +53,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
         <Box fill margin={{ bottom: '48px' }}>
           {pbCreator.statsOptions.map((opt) => (
             <Box
+              key={opt.id}
               direction="row"
               justify="around"
               align="center"

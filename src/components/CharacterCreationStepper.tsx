@@ -32,12 +32,13 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
         gap="small"
         justifyContent="center"
         rows={['50%', '50%']}
-        columns={['small', 'small', 'small']}
+        columns={['small', 'small', 'small', 'small']}
         areas={[
           { name: 'playbook-box', start: [0, 0], end: [0, 0] },
           { name: 'name-box', start: [0, 1], end: [0, 1] },
           { name: 'looks-box', start: [1, 0], end: [1, 1] },
           { name: 'stats-box', start: [2, 0], end: [2, 1] },
+          { name: 'gear-box', start: [3, 0], end: [3, 1] },
         ]}
       >
         <Box
@@ -114,10 +115,35 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           <Text color="white" weight="bold">
             Stats
           </Text>
-          {!!character && character.statsBlock.stats.length > 0 ? (
+          {!!character && character.statsBlock?.stats?.length > 0 ? (
             <CustomUL>
               {character.statsBlock.stats.map((stat) => (
                 <li key={stat.id}>{`${stat.stat} ${'--'.repeat(8 - stat.stat.length)} ${stat.value}`}</li>
+              ))}
+            </CustomUL>
+          ) : (
+            <Text>...</Text>
+          )}
+        </Box>
+        <Box
+          fill
+          gridArea="gear-box"
+          margin={{ left: 'small', right: 'small' }}
+          align="center"
+          justify="start"
+          background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectGear === currentStep ? 1 : 0.5 }}
+          round="medium"
+          border
+          onClick={() => setCreationStep(CharacterCreationSteps.selectGear)}
+          pad="12px"
+        >
+          <Text color="white" weight="bold">
+            Gear
+          </Text>
+          {!!character && character.gear?.length > 0 ? (
+            <CustomUL>
+              {character.gear.map((item) => (
+                <li key={item}>item</li>
               ))}
             </CustomUL>
           ) : (

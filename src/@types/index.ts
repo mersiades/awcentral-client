@@ -30,7 +30,7 @@ export interface Character {
   id: string
   name?: string
   playbook?: PlayBooks
-  gear?: String
+  gear: string[]
   looks?: Look[]
   statsBlock: StatsBlock
 }
@@ -46,13 +46,13 @@ export interface PlaybookCreator {
   id: string
   playbookType: PlayBooks
   playbook?: Playbook
-    gearInstructions: string
-    improvementInstructions: string
-    movesInstructions: string
-    hxInstructions: string
-    names: Name[]
-    looks: Look[]
-    statsOptions: StatsOption[]
+  gearInstructions: GearInstructions
+  improvementInstructions: string
+  movesInstructions: string
+  hxInstructions: string
+  names: Name[]
+  looks: Look[]
+  statsOptions: StatsOption[]
 }
 
 interface RequestBody {
@@ -133,4 +133,24 @@ export interface CharacterStat {
   stat: Stats
     value: number
     isHighlighted: Boolean
+}
+
+export interface GearInstructions {
+  id: string
+
+  youGet: string
+
+  youGetItems : string[]
+
+  inAddition: string
+
+  introduceChoice: string
+
+  numberCanChoose: number
+
+  chooseableGear: string[]
+
+  withMC: string
+
+  startingBarter: number
 }
