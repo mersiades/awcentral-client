@@ -44,7 +44,7 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       pad="24px"
       align="center"
-      justify="center"
+      justify="start"
     >
       <Form
         value={value}

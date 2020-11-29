@@ -11,7 +11,7 @@ export interface SetCharacterStatsVars {
   statsOptionId: string
 }
 
-const SET_CHARACTER_LOOK = gql`
+const SET_CHARACTER_STATS = gql`
   mutation SetCharacterStats($gameRoleId: String!,$characterId: String!, $statsOptionId: String!) {
     setCharacterStats(gameRoleId: $gameRoleId, characterId: $characterId, statsOptionId: $statsOptionId) {
       id
@@ -35,4 +35,4 @@ const SET_CHARACTER_LOOK = gql`
   }
 `
 
-export default SET_CHARACTER_LOOK
+export default SET_CHARACTER_STATS

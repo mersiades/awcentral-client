@@ -99,7 +99,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       pad="24px"
       align="center"
-      justify="center"
+      justify="start"
     >
       <Heading level={1}>{`WHAT DOES ${characterName} LOOK LIKE?`}</Heading>
       <Box direction="row" justify="between" gap="24px">

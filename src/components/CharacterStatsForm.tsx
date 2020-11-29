@@ -27,8 +27,6 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
     !!pbCreatorData && setPbCreator(pbCreatorData.playbookCreator);
   }, [pbCreatorData]);
 
-  console.log('pbCreator', pbCreator);
-
   if (loadingPbCreator || !pbCreatorData || !pbCreator) {
     return (
       <Box fill background="black" justify="center" align="center">
@@ -45,7 +43,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       pad="24px"
       align="center"
-      justify="center"
+      justify="start"
     >
       <Box width="50vw" height="50vh">
         <Heading level={1} textAlign="center">{`WHAT ARE ${characterName}'s STRENGTHS AND WEAKNESSES?`}</Heading>
@@ -58,7 +56,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
               direction="row"
               justify="around"
               align="center"
-              hoverIndicator={{ color: 'neutral-1', opacity: 0.3 }}
+              hoverIndicator={{ color: 'neutral-1', opacity: 0.4 }}
               onClick={() => setSelectedStatsOption(opt)}
               gap="6px"
             >
