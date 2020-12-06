@@ -20,8 +20,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import GamePanel from './GamePanel';
 import MovesPanel from './MovesPanel';
 import { Footer, MainContainer, SidePanel } from './styledComponents';
-import { useAuth } from '../contexts/authContext';
-import { useDiscordUser } from '../contexts/discordUserContext';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import DELETE_GAME from '../mutations/deleteGame';
 import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
 import GAME_BY_TEXT_CHANNEL_ID, { GameByTextChannelData, GameByTextChannelVars } from '../queries/gameByTextChannelId';
@@ -32,6 +31,7 @@ import '../assets/styles/transitions.css';
 import { useWebsocketContext } from '../contexts/websocketContext';
 import { GameRequest } from '../@types';
 import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
+import { useKeycloak } from '@react-keycloak/web';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -97,8 +97,8 @@ const MCPage = () => {
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
 
   const history = useHistory();
-  const { logOut } = useAuth();
-  const { discordId } = useDiscordUser();
+  const { keycloak } = useKeycloak();
+  const { id: discordId } = useKeycloakUser();
   const { stompClient } = useWebsocketContext();
   const { gameID: textChannelId } = useParams<{ gameID: string }>();
   const [deleteGame] = useMutation(DELETE_GAME);
@@ -156,7 +156,7 @@ const MCPage = () => {
             label="AW Central"
             items={[
               { label: 'Main menu', onClick: () => history.push('/menu') },
-              { label: 'Log out', onClick: () => logOut() },
+              { label: 'Log out', onClick: () => keycloak.logout() },
             ]}
           />
           {game.gameRoles

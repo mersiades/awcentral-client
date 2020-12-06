@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client';
+import { useKeycloak } from '@react-keycloak/web';
 import { Button, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { GameRole, Move } from '../@types';
 import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
 import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
-import { useAuth } from '../contexts/authContext';
-import { useDiscordUser } from '../contexts/discordUserContext';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import ALL_MOVES from '../queries/allMoves';
 // import GAME_BY_TEXT_CHANNEL_ID from '../queries/gameByTextChannelId';
 import GAME_FOR_PLAYER, { GameForPlayerData, GameForPlayerVars } from '../queries/gameForPlayer';
@@ -31,8 +31,8 @@ const PlayerPage: FC = () => {
   const [gameRole, setGameRole] = useState<GameRole | undefined>();
 
   const history = useHistory();
-  const { logOut } = useAuth();
-  const { discordId } = useDiscordUser();
+  const { keycloak } = useKeycloak();
+  const { id: discordId } = useKeycloakUser();
   const { data: userData, loading: loadingUser } = useQuery<UserByDiscordIdData, UserByDiscordIdVars>(USER_BY_DISCORD_ID, {
     variables: { discordId },
     skip: !discordId,
@@ -74,7 +74,7 @@ const PlayerPage: FC = () => {
             label="AW Central"
             items={[
               { label: 'Main menu', onClick: () => history.push('/menu') },
-              { label: 'Log out', onClick: () => logOut() },
+              { label: 'Log out', onClick: () => keycloak.logout() },
             ]}
           />
           <Button

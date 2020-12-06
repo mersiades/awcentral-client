@@ -1,75 +1,23 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+
 import AppRouter from '../routers/AppRouter';
-import { AuthContext } from '../contexts/authContext';
-import { Tokens, DiscordUser, Game } from '../@types';
-import { getDiscordUser } from '../services/discordService';
-import { DiscordUserContext } from '../contexts/discordUserContext';
+import { Game } from '../@types';
 import { GameContext } from '../contexts/gameContext';
 import SocketManager from './SocketManager';
+import keycloak from '../config/keycloakConfig';
 
 const App: FC = () => {
-  const [authTokens, setAuthTokens] = useState<Tokens | undefined>();
-  const [user, setUser] = useState<DiscordUser | undefined>();
   const [game, setGame] = useState<Game | undefined>();
-  
-
-  useEffect(() => {
-    const existingAccessToken = localStorage.getItem('access_token');
-    const existingRefreshToken = localStorage.getItem('refresh_token');
-    const existingExpiresIn = localStorage.getItem('expires_in');
-    !!existingAccessToken &&
-      !!existingRefreshToken &&
-      !!existingExpiresIn &&
-      setTokens({
-        accessToken: existingAccessToken,
-        refreshToken: existingRefreshToken,
-        expiresIn: existingExpiresIn,
-      });
-  }, []);
-
-  useEffect(() => {
-    if (!!authTokens?.accessToken) {
-      getUser();
-    }
-  }, [authTokens]);
-
-  const getUser = async () => {
-    const {
-      data: { id, username, avatar },
-    } = await getDiscordUser();
-
-    // Cors policy is blocking my efforts to get avatar from Discord from localhost
-    // let avatarImage;
-    // if (!!avatar) {
-    //   avatarImage = await getUserAvatar(id, avatar);
-    // } else if (!!discriminator) {
-    //   avatarImage = await getDefaultAvatar(discriminator);
-    // }
-    setUser({ discordId: id, username, avatarHash: avatar });
-  };
-
-  const setTokens = (tokens: Tokens) => {
-    localStorage.setItem('access_token', tokens.accessToken);
-    localStorage.setItem('refresh_token', tokens.refreshToken);
-    localStorage.setItem('expires_in', tokens.expiresIn);
-    setAuthTokens(tokens);
-  };
-
-  const logOut = () => {
-    localStorage.clear();
-    setAuthTokens(undefined);
-  };
 
   return (
-    <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens, logOut }}>
-    <SocketManager>
-      <DiscordUserContext.Provider value={{ ...user }}>
+    <ReactKeycloakProvider authClient={keycloak}>
+      <SocketManager>
         <GameContext.Provider value={{ game, setGame }}>
           <AppRouter />
         </GameContext.Provider>
-      </DiscordUserContext.Provider>
       </SocketManager>
-    </AuthContext.Provider>
+    </ReactKeycloakProvider>
   );
 };
 

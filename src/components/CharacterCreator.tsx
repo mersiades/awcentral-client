@@ -15,7 +15,7 @@ import PlaybookBasicForm from './PlaybookBasicForm';
 import { Box } from 'grommet';
 import NewGameIntro from './NewGameIntro';
 import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
-import { useDiscordUser } from '../contexts/discordUserContext';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
 import { Character, GameRole } from '../@types';
 import Spinner from './Spinner';
@@ -28,7 +28,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
    */
   const [creationStep, setCreationStep] = useState<number>(0);
   const [character, setCharacter] = useState<Character | undefined>();
-  const { discordId } = useDiscordUser();
+  const { id: discordId } = useKeycloakUser();
   const [gameRole, setGameRole] = useState<GameRole | undefined>();
   const { data: userData, loading: loadingUser } = useQuery<UserByDiscordIdData, UserByDiscordIdVars>(USER_BY_DISCORD_ID, {
     variables: { discordId },

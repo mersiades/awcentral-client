@@ -7,10 +7,10 @@ export interface Tokens {
   expiresIn: string;
 }
 
-export interface DiscordUser {
-  discordId?: string;
+export interface KeycloakUser {
+  id?: string;
   username?: string;
-  avatarHash?: string;
+  email?: string;
 }
 
 export interface Game {
@@ -102,4 +102,14 @@ export interface Playbook {
 export interface Name {
   id: string
   name: string
+}
+
+export interface KeycloakUserInfo {
+  email: string
+email_verified: boolean
+family_name: string
+given_name: string
+name: string
+preferred_username: string
+sub: string
 }

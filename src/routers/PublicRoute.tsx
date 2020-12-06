@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { useKeycloak } from '@react-keycloak/web';
 
 interface PublicRootProps {
   component: any;
@@ -8,12 +9,11 @@ interface PublicRootProps {
 }
 
 const PublicRoute: FC<PublicRootProps> = ({ component: Component, ...rest }) => {
-  const accessToken = localStorage.getItem('access_token');
-  const expiresIn = localStorage.getItem('expires_in');
-  const isLoggedIn = accessToken?.length === 30 && !!expiresIn && parseInt(expiresIn) > 0;
-  console.log('accessToken length', accessToken?.length);
+  const { keycloak } = useKeycloak();
 
-  return <Route {...rest} render={(props) => (isLoggedIn ? <Redirect to="/menu" /> : <Component {...props} />)} />;
+  return (
+    <Route {...rest} render={(props) => (keycloak.authenticated ? <Redirect to="/menu" /> : <Component {...props} />)} />
+  );
 };
 
 export default PublicRoute;

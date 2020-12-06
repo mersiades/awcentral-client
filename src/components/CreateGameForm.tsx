@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { FormField, TextInput, Text, Button, Box, Form } from 'grommet';
-import { useDiscordUser } from '../contexts/discordUserContext';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useWebsocketContext } from '../contexts/websocketContext';
 import CREATE_GAME, { CreateGameData, CreateGameVars } from '../mutations/createGame';
 // import { GameRequestBody } from '../@types';
@@ -11,7 +11,7 @@ import { WebsocketRequests } from '../@types/enums';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
-  const { discordId } = useDiscordUser();
+  const { id: discordId } = useKeycloakUser();
   const { stompClient, handleGame } = useWebsocketContext();
   const [createGame] = useMutation<CreateGameData, CreateGameVars>(CREATE_GAME);
 
