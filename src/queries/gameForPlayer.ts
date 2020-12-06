@@ -6,17 +6,15 @@ export interface GameForPlayerData {
 }
 
 export interface GameForPlayerVars {
-  textChannelId: string;
+  gameId: string;
   userId: string;
 }
 
 const GAME_FOR_PLAYER = gql`
-  query GameForPlayer($textChannelId: String!, $userId: String!) {
-    gameForPlayer(textChannelId: $textChannelId, userId: $userId) {
+  query GameForPlayer($gameId: String!, $userId: String!) {
+    gameForPlayer(gameId: $gameId, userId: $userId) {
       id
       name
-      textChannelId
-      voiceChannelId
       gameRoles {
         id
         role

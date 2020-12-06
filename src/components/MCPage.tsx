@@ -21,17 +21,15 @@ import GamePanel from './GamePanel';
 import MovesPanel from './MovesPanel';
 import { Footer, MainContainer, SidePanel } from './styledComponents';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import DELETE_GAME from '../mutations/deleteGame';
-import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
-import GAME_BY_TEXT_CHANNEL_ID, { GameByTextChannelData, GameByTextChannelVars } from '../queries/gameByTextChannelId';
+import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
+import GAME, { GameData, GameVars } from '../queries/game';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
-import { Roles, WebsocketRequests } from '../@types/enums';
+import { Roles } from '../@types/enums';
 import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
-import { useWebsocketContext } from '../contexts/websocketContext';
-import { GameRequest } from '../@types';
-import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
+// import { useWebsocketContext } from '../contexts/websocketContext';
 import { useKeycloak } from '@react-keycloak/web';
+import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -98,36 +96,21 @@ const MCPage = () => {
 
   const history = useHistory();
   const { keycloak } = useKeycloak();
-  const { id: discordId } = useKeycloakUser();
-  const { stompClient } = useWebsocketContext();
-  const { gameID: textChannelId } = useParams<{ gameID: string }>();
-  const [deleteGame] = useMutation(DELETE_GAME);
+  const { id: userId } = useKeycloakUser();
+  // const { stompClient } = useWebsocketContext();
+  const { gameId } = useParams<{ gameId: string }>();
+  const [deleteGame] = useMutation<DeleteGameData, DeleteGameVars>(DELETE_GAME);
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
 
-  const { data: gameData, loading: loadingGame } = useQuery<GameByTextChannelData, GameByTextChannelVars>(
-    GAME_BY_TEXT_CHANNEL_ID,
-    { variables: { textChannelId } }
-  );
+  const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
 
   const handleDeleteGame = () => {
     console.log('handleDeleteGame', handleDeleteGame);
-    if (!!game?.voiceChannelId) {
-      const destination = '/app/games';
-      const deleteChannelsRequest: GameRequest = {
-        type: WebsocketRequests.deleteChannels,
-        textChannelId,
-        voiceChannelId: game?.voiceChannelId,
-      };
-      const body = JSON.stringify(deleteChannelsRequest);
-      stompClient?.publish({ destination, body });
-    } else {
-      console.warn('Unable to delete Discord channels');
-    }
-    deleteGame({ variables: { textChannelId }, refetchQueries: [{ query: USER_BY_DISCORD_ID, variables: { discordId } }] });
+    deleteGame({ variables: { gameId }, refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { userId } }] });
     history.push('/menu');
   };
 
-  const game = gameData?.gameByTextChannelId;
+  const game = gameData?.game;
   const allMoves = allMovesData?.allMoves;
   if (loadingGame || !game) {
     return <div> Loading </div>;
@@ -165,11 +148,6 @@ const MCPage = () => {
               gameRole.characters?.map((character) => <Button key={character.name} label={character.name} />)
             )}
           <Button label="Threat map" />
-          <Button
-            label="Discord channel"
-            href={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelId}`}
-            target="_blank"
-          />
         </ThemeContext.Extend>
       </Header>
       <div>

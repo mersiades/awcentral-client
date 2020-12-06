@@ -57,7 +57,7 @@ interface RequestBody {
 
 export interface GameRequest extends RequestBody {
   id?: string
-  discordId?: string
+  userId?: string
   name?: string
   textChannelId?: string;
   voiceChannelId?: string;
@@ -69,7 +69,7 @@ interface ResponseBody {
 
 export interface GameResponse extends ResponseBody {
   id?: string
-  discordId?: string
+  userId?: string
   name?: string
   textChannelId?: string;
   voiceChannelId?: string;
@@ -86,7 +86,7 @@ export interface Move {
 
 export interface User {
   id: string
-  discordId: string
+  userId: string
   gameRoles: GameRole[]
 }
 

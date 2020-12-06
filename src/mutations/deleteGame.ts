@@ -1,8 +1,17 @@
 import { gql } from '@apollo/client';
+import { Game } from '../@types';
+
+export interface DeleteGameData {
+  deleteGame: Game
+}
+
+export interface DeleteGameVars {
+  gameId: string
+}
 
 const DELETE_GAME = gql`
-  mutation DeleteGame($textChannelId: String!) {
-    deleteGame(textChannelId: $textChannelId) {
+  mutation DeleteGame($gameId: String!) {
+    deleteGame(gameId: $gameId) {
       id
     }
   }

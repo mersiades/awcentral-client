@@ -6,10 +6,11 @@ import { Box } from 'grommet';
 import PrivateRoute from './PrivateRoute';
 import MenuPage from '../components/MenuPage';
 import PublicRoute from './PublicRoute';
-import GamePage from '../components/GamePage';
 import CharacterCreator from '../components/CharacterCreator';
 import { KeycloakUserContext } from '../contexts/keycloakUserContext';
 import { KeycloakUser, KeycloakUserInfo } from '../@types';
+import PlayerPage from '../components/PlayerPage';
+import MCPage from '../components/MCPage';
 
 const background = {
   color: 'black',
@@ -43,8 +44,9 @@ const AppRouter = () => {
         <Switch>
           <PublicRoute exact path="/" component={LandingPage} />
           <PrivateRoute path="/menu" component={MenuPage} />
-          <PrivateRoute path="/game/:gameID" component={GamePage} />
-          <PrivateRoute path="/new-game/:gameID" component={CharacterCreator} />
+          <PrivateRoute path="/player-game/:gameId" component={PlayerPage} />
+          <PrivateRoute path="/mc-game/:gameId" component={MCPage} />
+          <PrivateRoute path="/new-game/:gameId" component={CharacterCreator} />
         </Switch>
       </KeycloakUserContext.Provider>
     </Box>

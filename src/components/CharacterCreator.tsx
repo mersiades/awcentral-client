@@ -14,9 +14,7 @@ import { PlayBooks } from '../@types/enums';
 import PlaybookBasicForm from './PlaybookBasicForm';
 import { Box } from 'grommet';
 import NewGameIntro from './NewGameIntro';
-import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
 import { Character, GameRole } from '../@types';
 import Spinner from './Spinner';
 
@@ -28,19 +26,15 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
    */
   const [creationStep, setCreationStep] = useState<number>(0);
   const [character, setCharacter] = useState<Character | undefined>();
-  const { id: discordId } = useKeycloakUser();
+  const { id: userId } = useKeycloakUser();
   const [gameRole, setGameRole] = useState<GameRole | undefined>();
-  const { data: userData, loading: loadingUser } = useQuery<UserByDiscordIdData, UserByDiscordIdVars>(USER_BY_DISCORD_ID, {
-    variables: { discordId },
-    skip: !discordId,
-  });
-  const userId = userData?.userByDiscordId.id;
-  const { gameID: textChannelId } = useParams<{ gameID: string }>();
+
+  const { gameId } = useParams<{ gameId: string }>();
 
   const { data: playbooksData, loading: loadingPlaybooks } = useQuery<PlaybooksData>(PLAYBOOKS);
   const { data: gameData, loading: loadingGame } = useQuery<GameForPlayerData, GameForPlayerVars>(GAME_FOR_PLAYER, {
     // @ts-ignore
-    variables: { textChannelId, userId },
+    variables: { gameId, userId },
   });
   const [createCharacter] = useMutation<CreateCharacterData, CreateCharacterVars>(CREATE_CHARACTER);
   const [setCharacterPlaybook] = useMutation<SetCharacterPlaybookData, SetCharacterPlaybookVars>(SET_CHARACTER_PLAYBOOK);
@@ -66,7 +60,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
       try {
         await setCharacterPlaybook({
           variables: { gameRoleId: gameRole.id, characterId, playbookType },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
         });
       } catch (error) {
         console.error(error);
@@ -97,7 +91,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
     }
   }, [character, creationStep]);
 
-  if (loadingPlaybooks || loadingUser || loadingGame || !playbooks || !game) {
+  if (loadingPlaybooks || loadingGame || !playbooks || !game) {
     return (
       <Box fill background="black" justify="center" align="center">
         <Spinner />
@@ -109,11 +103,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
   return (
     <Box fill background="black">
       {creationStep === 0 && (
-        <NewGameIntro
-          gameName={game.name}
-          voiceChannelUrl={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game.voiceChannelId}`}
-          closeNewGameIntro={closeNewGameIntro}
-        />
+        <NewGameIntro gameName={game.name} voiceChannelUrl={`https://bubkisUrl`} closeNewGameIntro={closeNewGameIntro} />
       )}
       {creationStep === 1 && <PlaybooksSelector playbooks={playbooks} handlePlaybookSelect={handlePlaybookSelect} />}
       {creationStep === 2 && character && character.playbook && <PlaybookBasicForm playbookType={character?.playbook} />}

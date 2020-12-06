@@ -1,16 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { useKeycloak } from '@react-keycloak/web';
-import { Button, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
+import { Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { GameRole, Move } from '../@types';
-import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
 import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import ALL_MOVES from '../queries/allMoves';
-// import GAME_BY_TEXT_CHANNEL_ID from '../queries/gameByTextChannelId';
 import GAME_FOR_PLAYER, { GameForPlayerData, GameForPlayerVars } from '../queries/gameForPlayer';
-import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
 import MovesPanel from './MovesPanel';
 import { Footer, MainContainer, SidePanel } from './styledComponents';
 
@@ -32,16 +29,13 @@ const PlayerPage: FC = () => {
 
   const history = useHistory();
   const { keycloak } = useKeycloak();
-  const { id: discordId } = useKeycloakUser();
-  const { data: userData, loading: loadingUser } = useQuery<UserByDiscordIdData, UserByDiscordIdVars>(USER_BY_DISCORD_ID, {
-    variables: { discordId },
-    skip: !discordId,
-  });
-  const { gameID: textChannelId } = useParams<{ gameID: string }>();
-  const userId = userData?.userByDiscordId.id;
+  const { id: userId } = useKeycloakUser();
+
+  const { gameId } = useParams<{ gameId: string }>();
+
   const { data: gameData, loading: loadingGame } = useQuery<GameForPlayerData, GameForPlayerVars>(GAME_FOR_PLAYER, {
     // @ts-ignore
-    variables: { textChannelId, userId },
+    variables: { gameId, userId },
   });
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
 
@@ -59,7 +53,7 @@ const PlayerPage: FC = () => {
     }
   }, [gameRoles]);
 
-  if (loadingGame || !game || loadingUser || !userId || !gameRole) {
+  if (loadingGame || !game || !userId || !gameRole) {
     return <div> Loading </div>;
   }
 
@@ -76,11 +70,6 @@ const PlayerPage: FC = () => {
               { label: 'Main menu', onClick: () => history.push('/menu') },
               { label: 'Log out', onClick: () => keycloak.logout() },
             ]}
-          />
-          <Button
-            label="Discord channel"
-            href={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game?.textChannelId}`}
-            target="_blank"
           />
         </ThemeContext.Extend>
       </Header>

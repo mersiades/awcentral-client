@@ -22,11 +22,10 @@ const GamesList: FC<GamesListProps> = ({ gameRoles }) => {
     const games: GameInList[] = [];
     gameRoles.forEach((gameRole) => {
       if (!!gameRole.game) {
-        console.log('gameRole', gameRole);
         const datum = {
           name: gameRole.game.name,
           role: gameRole.role,
-          gameId: gameRole.game.textChannelId,
+          gameId: gameRole.game.id,
           numberOfCharacters: gameRole.characters ? gameRole.characters.length : 0,
         };
         games.push(datum);
@@ -44,8 +43,10 @@ const GamesList: FC<GamesListProps> = ({ gameRoles }) => {
       onClickItem={(e: any) => {
         if (e.item.role === Roles.player && e.item.numberOfCharacters === 0) {
           history.push(`/new-game/${e.item.gameId}`, { role: e.item.role });
+        } else if (e.item.role === Roles.player) {
+          history.push(`/player-game/${e.item.gameId}`);
         } else {
-          history.push(`/game/${e.item.gameId}`, { role: e.item.role });
+          history.push(`/mc-game/${e.item.gameId}`);
         }
       }}
     />

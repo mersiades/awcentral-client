@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 import { Button, Box, Image, Heading, FormField, TextInput, Text, Grid } from 'grommet';
 import { Close } from 'grommet-icons';
@@ -6,7 +6,6 @@ import '../assets/styles/transitions.css';
 import CreateGameForm from './CreateGameForm';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useQuery } from '@apollo/client';
-import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
 import GamesList from './GamesList';
 import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
 
@@ -27,21 +26,18 @@ const MenuPage: FC = () => {
   // ---------------------------------- Hooking in to Keycloak  -------------------------------------------- //
   const { keycloak } = useKeycloak();
 
-  // ------------------------------ Hooking in to Apollo graphql ----------------------------------------- //
+  // -------------------------------- Hooking in to Apollo graphql ----------------------------------------- //
   const { data, loading } = useQuery<GameRolesByUserIdData, GameRolesByUserIdVars>(GAMEROLES_BY_USER_ID, {
     // @ts-ignore
     variables: { id: keycloakId },
     skip: !keycloakId,
   });
-  console.log('data', data);
 
   const gameRoles = data?.gameRolesByUserId;
-  // const { data: userData, loading } = useQuery(USER_BY_DISCORD_ID, { variables: { keycloakId }, skip: !keycloakId });
-  // !!userData && console.log('userData', userData);
 
-  console.log('gameRoles', gameRoles);
-  console.log('keycloakId', keycloakId);
-  console.log('keycloak.token', keycloak.token);
+  // console.log('keycloak.token', keycloak.token);
+
+  // ------------------------------------- Render component ---------------------------------------------- //
   if (loading || !gameRoles) {
     return <Box fill background={background} />;
   }
