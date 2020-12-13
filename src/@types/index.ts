@@ -16,8 +16,6 @@ export interface KeycloakUser {
 export interface Game {
   id: string;
   name: string;
-  textChannelId: string;
-  voiceChannelId?: string;
   gameRoles: GameRole[]
 }
 
