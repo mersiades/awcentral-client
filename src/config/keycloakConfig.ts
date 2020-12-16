@@ -1,7 +1,8 @@
 import Keycloak from 'keycloak-js'
 
 const keycloakConfigOptions: Keycloak.KeycloakConfig = {
-  url: 'http://localhost:8083/auth',
+  url: 'https://keycloak.aw-central.com/auth',
+  // url: 'http://localhost:8180/auth',
   realm: 'awc-realm',
   clientId: 'awc-client'
 }
