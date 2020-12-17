@@ -12,48 +12,50 @@ import APPEND_CHANNELS, { AppendChannelsData, AppendChannelsVars } from '../muta
 const SocketManager: FC = ({ children }) => {
   const [stompClient, setStompClient] = useState<Client | undefined>();
 
-  const [appendChannels] = useMutation<AppendChannelsData, AppendChannelsVars>(APPEND_CHANNELS);
-  const history = useHistory();
+  // const [appendChannels] = useMutation<AppendChannelsData, AppendChannelsVars>(APPEND_CHANNELS);
+  // const history = useHistory();
 
-  const handleGame = useCallback(
-    async ({ type, id, userId, name, textChannelId, voiceChannelId }: GameResponse) => {
-      console.log('Incoming game websocket message:', type);
-      switch (type) {
-        case WebsocketResponses.addChannels:
-          if (!!id && !!textChannelId && !!voiceChannelId) {
-            await appendChannels({
-              variables: { id, textChannelId, voiceChannelId },
-              // refetchQueries: [{ query: USER_BY_DISCORD_ID, variables: { discordId } }],
-            });
-          } else {
-            console.warn('Unable to append channels: missing mutation variable');
-          }
-          history.push(`/game/${textChannelId}`, { role: Roles.mc });
-          break;
-        default:
-          break;
-      }
-    },
-    [appendChannels, history]
-  );
+  const handleGame = () => console.log('mock handling game');
 
-  const connectStompClient = useCallback(() => {
-    const socket = new SockJS('http://localhost:8081/chat');
-    const client = Stomp.over(socket);
+  // const handleGame = useCallback(
+  //   async ({ type, id, userId, name, textChannelId, voiceChannelId }: GameResponse) => {
+  //     console.log('Incoming game websocket message:', type);
+  //     switch (type) {
+  //       case WebsocketResponses.addChannels:
+  //         if (!!id && !!textChannelId && !!voiceChannelId) {
+  //           await appendChannels({
+  //             variables: { id, textChannelId, voiceChannelId },
+  //             // refetchQueries: [{ query: USER_BY_DISCORD_ID, variables: { discordId } }],
+  //           });
+  //         } else {
+  //           console.warn('Unable to append channels: missing mutation variable');
+  //         }
+  //         history.push(`/game/${textChannelId}`, { role: Roles.mc });
+  //         break;
+  //       default:
+  //         break;
+  //     }
+  //   },
+  //   [appendChannels, history]
+  // );
 
-    client.connect({}, (frame: IFrame) => {
-      console.log('Connected: ' + frame);
-    });
+  // const connectStompClient = useCallback(() => {
+  //   const socket = new SockJS('http://localhost:8081/chat');
+  //   const client = Stomp.over(socket);
 
-    return client;
-  }, []);
+  //   client.connect({}, (frame: IFrame) => {
+  //     console.log('Connected: ' + frame);
+  //   });
 
-  useEffect(() => {
-    if (!stompClient) {
-      const client = connectStompClient();
-      setStompClient(client);
-    }
-  }, [stompClient, connectStompClient]);
+  //   return client;
+  // }, []);
+
+  // useEffect(() => {
+  //   if (!stompClient) {
+  //     const client = connectStompClient();
+  //     setStompClient(client);
+  //   }
+  // }, [stompClient, connectStompClient]);
 
   return <WebsocketContext.Provider value={{ stompClient, handleGame }}>{children}</WebsocketContext.Provider>;
 };

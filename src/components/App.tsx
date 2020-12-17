@@ -4,7 +4,7 @@ import { ReactKeycloakProvider } from '@react-keycloak/web';
 import AppRouter from '../routers/AppRouter';
 import { Game } from '../@types';
 import { GameContext } from '../contexts/gameContext';
-import SocketManager from './SocketManager';
+// import SocketManager from './SocketManager';
 import keycloak from '../config/keycloakConfig';
 
 const App: FC = () => {
