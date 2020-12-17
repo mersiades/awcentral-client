@@ -1,14 +1,16 @@
 import React, { FC, useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 import { FormField, TextInput, Text, Button, Box, Form } from 'grommet';
+
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 // import { useWebsocketContext } from '../contexts/websocketContext';
 import CREATE_GAME, { CreateGameData, CreateGameVars } from '../mutations/createGame';
+import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 // import { GameRequestBody } from '../@types';
 // import { WebsocketRequests } from '../@types/enums';
-import { useMutation } from '@apollo/client';
 // import { GameRequest, GameResponse } from '../@types';
 // import { WebsocketRequests } from '../@types/enums';
-import { useHistory } from 'react-router-dom';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
@@ -21,6 +23,7 @@ const CreateGameForm: FC = () => {
     // Tell awcentral-api to create a new game
     const { data: newGame } = await createGame({
       variables: { userId, name },
+      refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { id: userId } }],
     });
 
     const gameId = newGame?.createGame.id;

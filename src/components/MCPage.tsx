@@ -106,7 +106,7 @@ const MCPage = () => {
 
   const handleDeleteGame = () => {
     console.log('handleDeleteGame', handleDeleteGame);
-    deleteGame({ variables: { gameId }, refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { userId } }] });
+    deleteGame({ variables: { gameId }, refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { id: userId } }] });
     history.push('/menu');
   };
 

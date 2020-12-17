@@ -36,10 +36,8 @@ const LandingPage = () => {
   return (
     <Box fill background={background}>
       <ButtonsContainer>
-        <Box>
+        <Box gap="small">
           <Button label="LOG IN" primary size="large" alignSelf="center" fill onClick={() => keycloak.login()} />
-        </Box>
-        <Box>
           <Button label="REGISTER" secondary size="large" alignSelf="center" fill onClick={() => keycloak.register()} />
         </Box>
       </ButtonsContainer>

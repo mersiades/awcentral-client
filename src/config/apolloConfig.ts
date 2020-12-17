@@ -3,7 +3,7 @@ import { HttpLink } from 'apollo-link-http';
 import keycloak from './keycloakConfig';
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:8080/graphql',
+  uri: `${process.env.REACT_APP_GRAPHQL_HTTP_ROOT}/graphql`,
 });
 
 const authLink = new ApolloLink((operation, forward) => {

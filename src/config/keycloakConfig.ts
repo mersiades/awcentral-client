@@ -1,10 +1,13 @@
 import Keycloak from 'keycloak-js'
 
+const KEYCLOAK_REALM = 'awc-realm'
+const KEYCLOAK_CLIENT = 'awc-client'
+const url = process.env.REACT_APP_KEYCLOAK_AUTH_SERVER
+
 const keycloakConfigOptions: Keycloak.KeycloakConfig = {
-  url: 'https://keycloak.aw-central.com/auth',
-  // url: 'http://localhost:8180/auth',
-  realm: 'awc-realm',
-  clientId: 'awc-client'
+  url,
+  realm: KEYCLOAK_REALM,
+  clientId: KEYCLOAK_CLIENT
 }
 
 // @ts-ignore
