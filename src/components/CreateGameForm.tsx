@@ -1,19 +1,19 @@
 import React, { FC, useState } from 'react';
 import { FormField, TextInput, Text, Button, Box, Form } from 'grommet';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import { useWebsocketContext } from '../contexts/websocketContext';
+// import { useWebsocketContext } from '../contexts/websocketContext';
 import CREATE_GAME, { CreateGameData, CreateGameVars } from '../mutations/createGame';
 // import { GameRequestBody } from '../@types';
 // import { WebsocketRequests } from '../@types/enums';
 import { useMutation } from '@apollo/client';
-import { GameRequest, GameResponse } from '../@types';
-import { WebsocketRequests } from '../@types/enums';
+// import { GameRequest, GameResponse } from '../@types';
+// import { WebsocketRequests } from '../@types/enums';
 import { useHistory } from 'react-router-dom';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
   const { id: userId } = useKeycloakUser();
-  const { stompClient, handleGame } = useWebsocketContext();
+  // const { stompClient, handleGame } = useWebsocketContext();
   const [createGame] = useMutation<CreateGameData, CreateGameVars>(CREATE_GAME);
   const history = useHistory();
 
