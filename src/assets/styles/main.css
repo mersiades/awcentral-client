@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Vtks good luck for you';
+  src: url('https://db.onlinewebfonts.com/t/3e4977fc65095d2d0963cc95cd33606f.eot');
+  src: url('../fonts/Vtks\ good\ luck\ for\ you.woff') format('woff'),
+    url('../fonts/Vtks\ good\ luck\ for\ you.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'crust_clean';
+  font-style: normal;
+  font-weight: normal;
+  src: local('crust_clean'), url('../fonts/crustype_clean.woff') format('woff'),
+    url('../fonts/crustype_clean.ttf') format('truetype');
+}
