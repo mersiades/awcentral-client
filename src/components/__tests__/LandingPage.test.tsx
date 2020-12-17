@@ -1,19 +1,10 @@
 import React from 'react';
 import { render } from '../../utils/test-utils';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
-import LandingPage, { getDiscordUrl } from '../LandingPage';
 import generateRandomString from '../../utils/__mocks__/generateRandomString';
-import { DISCORD_CLIENT_ID } from '../../config/discordConfig';
+import LandingPage from '../LandingPage';
 
 jest.mock('../../utils/generateRandomString');
-
-describe('Testing getDiscordUrl', () => {
-  test('should generate url without state', () => {
-    const expectedUrl = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code&scope=identify`;
-    const returnedUrl = getDiscordUrl();
-    expect(returnedUrl).toEqual(expectedUrl);
-  });
-});
 
 describe('Rendering Landing Page', () => {
   const setItemSpy = jest.spyOn(Object.getPrototypeOf(window.localStorage), 'setItem');

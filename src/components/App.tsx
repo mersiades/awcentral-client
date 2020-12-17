@@ -12,11 +12,11 @@ const App: FC = () => {
 
   return (
     <ReactKeycloakProvider authClient={keycloak}>
-      <SocketManager>
-        <GameContext.Provider value={{ game, setGame }}>
-          <AppRouter />
-        </GameContext.Provider>
-      </SocketManager>
+      {/* <SocketManager> */}
+      <GameContext.Provider value={{ game, setGame }}>
+        <AppRouter />
+      </GameContext.Provider>
+      {/* </SocketManager> */}
     </ReactKeycloakProvider>
   );
 };
