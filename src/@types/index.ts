@@ -7,17 +7,15 @@ export interface Tokens {
   expiresIn: string;
 }
 
-export interface DiscordUser {
-  discordId?: string;
+export interface KeycloakUser {
+  id?: string;
   username?: string;
-  avatarHash?: string;
+  email?: string;
 }
 
 export interface Game {
   id: string;
   name: string;
-  textChannelId: string;
-  voiceChannelId?: string;
   gameRoles: GameRole[]
 }
 
@@ -61,7 +59,7 @@ interface RequestBody {
 
 export interface GameRequest extends RequestBody {
   id?: string
-  discordId?: string
+  userId?: string
   name?: string
   textChannelId?: string;
   voiceChannelId?: string;
@@ -73,7 +71,7 @@ interface ResponseBody {
 
 export interface GameResponse extends ResponseBody {
   id?: string
-  discordId?: string
+  userId?: string
   name?: string
   textChannelId?: string;
   voiceChannelId?: string;
@@ -90,7 +88,7 @@ export interface Move {
 
 export interface User {
   id: string
-  discordId: string
+  userId: string
   gameRoles: GameRole[]
 }
 
@@ -153,4 +151,14 @@ export interface GearInstructions {
   withMC: string
 
   startingBarter: number
+}
+
+export interface KeycloakUserInfo {
+  email: string
+email_verified: boolean
+family_name: string
+given_name: string
+name: string
+preferred_username: string
+sub: string
 }

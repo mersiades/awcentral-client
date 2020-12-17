@@ -1,10 +1,7 @@
-import React, { useEffect, useCallback } from 'react';
-import { Button, Box, Image, Heading, Text, Anchor } from 'grommet';
+import React from 'react';
+import { useKeycloak } from '@react-keycloak/web';
+import { Button, Box, Image } from 'grommet';
 import styled from 'styled-components';
-import generateRandomString from '../utils/generateRandomString';
-import { DISCORD_CLIENT_ID } from '../config/discordConfig';
-import { requestToken } from '../services/discordService';
-import { useAuth } from '../contexts/authContext';
 
 const background = {
   color: 'black',
@@ -31,82 +28,19 @@ const TitleContainer = styled.div`
   right: 15vw;
 `;
 
-export const getDiscordUrl = () => {
-  let url = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CLIENT_ID}&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code&scope=identify`;
-  // const state = localStorage.getItem('stateParameter');
-  // if (!!state) {
-  //   url += `&state=${btoa(state)}`;
-  // }
-  return url;
-};
-
 const LandingPage = () => {
   // --------------------------------------- Hooking into contexts ---------------------------------------------- //
-  const { setAuthTokens } = useAuth();
-
-  // ---------------------------------------- Component functions ----------------------------------------------- //
-  const getDiscordToken = useCallback(
-    async (code: string) => {
-      const response = await requestToken(code);
-      if (!!response && response.status === 200) {
-        setAuthTokens({
-          accessToken: response.data.access_token,
-          refreshToken: response.data.refresh_token,
-          expiresIn: response.data.expires_in,
-        });
-        // localStorage.setItem('access_token', response.data.access_token);
-        // localStorage.setItem('refresh_token', response.data.refresh_token);
-        // localStorage.setItem('expires_in', response.data.expires_in);
-      }
-    },
-    [setAuthTokens]
-  );
-
-  // ---------------------------------------- Lifecycle functions ----------------------------------------------- //
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get('code');
-    // let returnedState = params.get('state');
-    // if (!!returnedState) {
-    //   returnedState = atob(decodeURIComponent(returnedState));
-    // }
-    // const localState = localStorage.getItem('stateParameter');
-    const accessToken = localStorage.getItem('access_token');
-    // if (!!returnedState && returnedState !== localState) {
-    //   console.warn('You may have been click-jacked');
-    //   // Handle secrity breach here
-    //   return;
-    // }
-    console.log('code', code);
-    // console.log('returnedState', returnedState);
-    console.log('accessToken', accessToken);
-    if (!!code && !accessToken) {
-      getDiscordToken(code);
-    }
-  }, [getDiscordToken]);
-
-  // TODO: use a session id rather than a random string for the state parameter
-  useEffect(() => {
-    const currentState = localStorage.getItem('stateParameter');
-    if (!currentState) {
-      const randStr = generateRandomString();
-      localStorage.setItem('stateParameter', randStr);
-    }
-  }, []);
+  const { keycloak } = useKeycloak();
 
   // ----------------------------------------- Render component  ------------------------------------------------ //
   return (
     <Box fill background={background}>
       <ButtonsContainer>
         <Box>
-          <Heading level={3} margin={{ vertical: 'small' }} size="small" textAlign="center">
-            Log in with Discord
-          </Heading>
-          <Button label="LOG IN" primary size="large" alignSelf="center" fill href={getDiscordUrl()} />
-          <Text color="accent-1" margin={{ top: 'xsmall' }}>
-            You'll need a Discord account to rock the apocalypse with us{' '}
-          </Text>
-          <Anchor href="https://discord.com/register" label="Create Discord account" />
+          <Button label="LOG IN" primary size="large" alignSelf="center" fill onClick={() => keycloak.login()} />
+        </Box>
+        <Box>
+          <Button label="REGISTER" secondary size="large" alignSelf="center" fill onClick={() => keycloak.register()} />
         </Box>
       </ButtonsContainer>
       <TitleContainer>

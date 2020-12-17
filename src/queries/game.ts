@@ -1,21 +1,19 @@
 import { gql } from '@apollo/client';
 import { Game } from '../@types';
 
-export interface GameByTextChannelData {
-  gameByTextChannelId: Game
+export interface GameData {
+  game: Game
 }
 
-export interface GameByTextChannelVars {
-  textChannelId: string
+export interface GameVars {
+  gameId: string
 }
 
 const GAME_BY_TEXT_CHANNEL_ID = gql`
-  query GameByTextChannelId($textChannelId: String!) {
-    gameByTextChannelId(textChannelId: $textChannelId) {
+  query Game($gameId: String!) {
+    game(gameId: $gameId) {
       id
       name
-      textChannelId
-      voiceChannelId
       gameRoles {
         role
         npcs {

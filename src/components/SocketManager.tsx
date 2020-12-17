@@ -16,7 +16,7 @@ const SocketManager: FC = ({ children }) => {
   const history = useHistory();
 
   const handleGame = useCallback(
-    async ({ type, id, discordId, name, textChannelId, voiceChannelId }: GameResponse) => {
+    async ({ type, id, userId, name, textChannelId, voiceChannelId }: GameResponse) => {
       console.log('Incoming game websocket message:', type);
       switch (type) {
         case WebsocketResponses.addChannels:

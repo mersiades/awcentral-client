@@ -6,13 +6,13 @@ export interface CreateGameData {
 }
 
 export interface CreateGameVars {
-  discordId: string
+  userId: string
   name: string
 }
 
 const CREATE_GAME = gql`
-  mutation CreateGame($discordId: String!, $name: String!) {
-    createGame(discordId: $discordId, name: $name) {
+  mutation CreateGame($userId: String!, $name: String!) {
+    createGame(userId: $userId, name: $name) {
     id
     name
     gameRoles {

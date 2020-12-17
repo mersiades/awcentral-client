@@ -5,6 +5,9 @@ import { Box } from 'grommet';
 
 import PlaybooksSelector from './PlaybookSelector';
 import CharacterNameForm from './CharacterNameForm';
+import CharacterLooksForm from './CharacterLooksForm';
+import CharacterStatsForm from './CharacterStatsForm';
+import CharacterGearForm from './CharacterGearForm';
 import CharacterCreationStepper from './CharacterCreationStepper';
 import NewGameIntro from './NewGameIntro';
 import Spinner from './Spinner';
@@ -15,40 +18,33 @@ import SET_CHARACTER_PLAYBOOK, {
 } from '../mutations/setCharacterPlaybook';
 import GAME_FOR_PLAYER, { GameForPlayerData, GameForPlayerVars } from '../queries/gameForPlayer';
 import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
-import USER_BY_DISCORD_ID, { UserByDiscordIdData, UserByDiscordIdVars } from '../queries/userByDiscordId';
-import { AWCENTRAL_GUILD_ID } from '../config/discordConfig';
-import { useDiscordUser } from '../contexts/discordUserContext';
-import { CharacterCreationSteps, LookCategories, PlayBooks } from '../@types/enums';
-import { Character, GameRole } from '../@types';
 import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '../mutations/setCharacterName';
-import CharacterLooksForm from './CharacterLooksForm';
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
-import CharacterStatsForm from './CharacterStatsForm';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
-import CharacterGearForm from './CharacterGearForm';
+import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
+import { Character, GameRole } from '../@types';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
 
 interface CharacterCreatorProps {}
 
 const CharacterCreator: FC<CharacterCreatorProps> = () => {
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   /**
    * Step 0 = Choose a playbook
    */
   const [creationStep, setCreationStep] = useState<number>(0);
   const [character, setCharacter] = useState<Character | undefined>();
-  const { discordId } = useDiscordUser();
   const [gameRole, setGameRole] = useState<GameRole | undefined>();
-  const { data: userData, loading: loadingUser } = useQuery<UserByDiscordIdData, UserByDiscordIdVars>(USER_BY_DISCORD_ID, {
-    variables: { discordId },
-    skip: !discordId,
-  });
 
-  const userId = userData?.userByDiscordId.id;
-  const { gameID: textChannelId } = useParams<{ gameID: string }>();
+  // -------------------------------------------------- Context hooks ---------------------------------------------------- //
+  const { id: userId } = useKeycloakUser();
+  const { gameId } = useParams<{ gameId: string }>();
 
+  // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
   const { data: playbooksData, loading: loadingPlaybooks } = useQuery<PlaybooksData>(PLAYBOOKS);
   const { data: gameData, loading: loadingGame } = useQuery<GameForPlayerData, GameForPlayerVars>(GAME_FOR_PLAYER, {
     // @ts-ignore
-    variables: { textChannelId, userId },
+    variables: { gameId, userId },
   });
   const [createCharacter] = useMutation<CreateCharacterData, CreateCharacterVars>(CREATE_CHARACTER);
   const [setCharacterPlaybook] = useMutation<SetCharacterPlaybookData, SetCharacterPlaybookVars>(SET_CHARACTER_PLAYBOOK);
@@ -60,6 +56,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
   const game = gameData?.gameForPlayer;
   const gameRoles = game?.gameRoles;
 
+  // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const handlePlaybookSelect = async (playbookType: PlayBooks) => {
     if (!!gameRole) {
       let characterId;
@@ -77,7 +74,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
       try {
         await setCharacterPlaybook({
           variables: { gameRoleId: gameRole.id, characterId, playbookType },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
         });
       } catch (error) {
         console.error(error);
@@ -92,7 +89,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
       try {
         await setCharacterName({
           variables: { gameRoleId: gameRole.id, characterId: character.id, name },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
         });
         setCreationStep((prevStep) => prevStep + 1);
       } catch (error) {
@@ -106,7 +103,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
       try {
         const data = await setCharacterLook({
           variables: { gameRoleId: gameRole.id, characterId: character.id, look, category },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
         });
 
         if (data.data?.setCharacterLook.looks?.length === 5) {
@@ -124,7 +121,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
       try {
         await setCharacterStats({
           variables: { gameRoleId: gameRole.id, characterId: character.id, statsOptionId },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { textChannelId, userId } }],
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
         });
         setCreationStep((prevState) => prevState + 1);
       } catch (error) {
@@ -137,8 +134,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
 
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
-  // ------------------------------------------------ Render -------------------------------------------------- //
-
+  // -------------------------------------------------- UseEffects ---------------------------------------------------- //
   useEffect(() => {
     if (!!gameRoles && gameRoles.length > 0) {
       setGameRole(gameRoles[0]);
@@ -164,24 +160,24 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
     }
   }, [character, creationStep]);
 
-  if (loadingPlaybooks || loadingUser || loadingGame || !playbooks || !game) {
+  // -------------------------------------------------- Render component  ---------------------------------------------------- //
+
+  // console.log('playbooks', playbooks);
+  // console.log('game', game);
+  if (loadingPlaybooks || loadingGame || !playbooks || !game) {
     return (
       <Box fill background="black" justify="center" align="center">
         <Spinner />
       </Box>
     );
   }
-  console.log('character', character);
-  console.log('creationStep', creationStep);
+  // console.log('character', character);
+  // console.log('creationStep', creationStep);
   return (
     <Box fill background="black">
       <CharacterCreationStepper character={character} currentStep={creationStep} setCreationStep={setCreationStep} />
-      {creationStep === CharacterCreationSteps.intro && (
-        <NewGameIntro
-          gameName={game.name}
-          voiceChannelUrl={`https://discord.com/channels/${AWCENTRAL_GUILD_ID}/${game.textChannelId}`}
-          closeNewGameIntro={closeNewGameIntro}
-        />
+      {creationStep === 0 && (
+        <NewGameIntro gameName={game.name} voiceChannelUrl={`https://bubkisUrl`} closeNewGameIntro={closeNewGameIntro} />
       )}
       {creationStep === CharacterCreationSteps.selectPlaybook && (
         <PlaybooksSelector

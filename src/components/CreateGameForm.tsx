@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { FormField, TextInput, Text, Button, Box, Form } from 'grommet';
-import { useDiscordUser } from '../contexts/discordUserContext';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useWebsocketContext } from '../contexts/websocketContext';
 import CREATE_GAME, { CreateGameData, CreateGameVars } from '../mutations/createGame';
 // import { GameRequestBody } from '../@types';
@@ -8,30 +8,38 @@ import CREATE_GAME, { CreateGameData, CreateGameVars } from '../mutations/create
 import { useMutation } from '@apollo/client';
 import { GameRequest, GameResponse } from '../@types';
 import { WebsocketRequests } from '../@types/enums';
+import { useHistory } from 'react-router-dom';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
-  const { discordId } = useDiscordUser();
+  const { id: userId } = useKeycloakUser();
   const { stompClient, handleGame } = useWebsocketContext();
   const [createGame] = useMutation<CreateGameData, CreateGameVars>(CREATE_GAME);
+  const history = useHistory();
 
-  const sendNewGameRequest = async (discordId: string, name: string) => {
+  const sendNewGameRequest = async (userId: string, name: string) => {
     // Tell awcentral-api to create a new game
     const { data: newGame } = await createGame({
-      variables: { discordId, name },
+      variables: { userId, name },
     });
 
-    if (!!newGame && !!stompClient && !!handleGame) {
-      // Subscribe to a awc-bot websocket channel for the new game
-      const gameId = newGame.createGame.id;
-      stompClient?.subscribe(`/topic/game/${gameId}`, (payload) => handleGame(JSON.parse(payload.body) as GameResponse));
+    const gameId = newGame?.createGame.id;
 
-      // Tell awc-bot to create Discord channels for the new game
-      const destination = `/app/game/${gameId}`;
-      const addChannelsRequest: GameRequest = { type: WebsocketRequests.addChannels, id: gameId, discordId, name };
-      const body = JSON.stringify(addChannelsRequest);
-      stompClient.publish({ destination, body });
+    if (!!gameId) {
+      history.push(`/mc-game/${gameId}`);
     }
+
+    // if (!!newGame && !!stompClient && !!handleGame) {
+    //   // Subscribe to a awc-bot websocket channel for the new game
+    //   const gameId = newGame.createGame.id;
+    //   stompClient?.subscribe(`/topic/game/${gameId}`, (payload) => handleGame(JSON.parse(payload.body) as GameResponse));
+
+    //   // Tell awc-bot to create Discord channels for the new game
+    //   const destination = `/app/game/${gameId}`;
+    //   const addChannelsRequest: GameRequest = { type: WebsocketRequests.addChannels, id: gameId, userId, name };
+    //   const body = JSON.stringify(addChannelsRequest);
+    //   stompClient.publish({ destination, body });
+    // }
   };
 
   return (
@@ -39,7 +47,7 @@ const CreateGameForm: FC = () => {
       value={gameName}
       onChange={(nextName) => setGameName(nextName)}
       onReset={() => setGameName({ name: '' })}
-      onSubmit={async ({ value: { name } }: any) => !!discordId && sendNewGameRequest(discordId, name)}
+      onSubmit={async ({ value: { name } }: any) => !!userId && sendNewGameRequest(userId, name)}
     >
       <Box gap="small">
         <FormField name="name" label="Game name" htmlFor="text-input-id">

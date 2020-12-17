@@ -17,6 +17,9 @@ const CustomUL = styled.ul`
   width: 100%;
   align-self: inherit;
   list-style-type: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentStep, setCreationStep, character }) => {

@@ -1,13 +1,13 @@
 import React, { FC, useState } from 'react';
+import { useKeycloak } from '@react-keycloak/web';
 import { Button, Box, Image, Heading, FormField, TextInput, Text, Grid } from 'grommet';
 import { Close } from 'grommet-icons';
-import { useAuth } from '../contexts/authContext';
 import '../assets/styles/transitions.css';
 import CreateGameForm from './CreateGameForm';
-import { useDiscordUser } from '../contexts/discordUserContext';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useQuery } from '@apollo/client';
-import USER_BY_DISCORD_ID from '../queries/userByDiscordId';
 import GamesList from './GamesList';
+import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
 
 const background = {
   color: 'black',
@@ -17,20 +17,28 @@ const background = {
 };
 
 const MenuPage: FC = () => {
-  const [buttonsContainer, setButtonsContainer] = useState(0);
   // ---------------------------------- Accessing React context -------------------------------------------- //
-  const { logOut } = useAuth();
-  const { username, discordId } = useDiscordUser();
+  const [buttonsContainer, setButtonsContainer] = useState(0);
 
-  // ------------------------------ Hooking in to Apollo graphql ----------------------------------------- //
-  const { data: userData, loading } = useQuery(USER_BY_DISCORD_ID, { variables: { discordId }, skip: !discordId });
-  !!userData && console.log('userData', userData);
+  // ---------------------------------- Accessing React context -------------------------------------------- //
+  const { username, id: keycloakId } = useKeycloakUser();
 
-  const handleLogout = () => {
-    logOut();
-  };
+  // ---------------------------------- Hooking in to Keycloak  -------------------------------------------- //
+  const { keycloak } = useKeycloak();
 
-  if (loading || !userData) {
+  // -------------------------------- Hooking in to Apollo graphql ----------------------------------------- //
+  const { data, loading } = useQuery<GameRolesByUserIdData, GameRolesByUserIdVars>(GAMEROLES_BY_USER_ID, {
+    // @ts-ignore
+    variables: { id: keycloakId },
+    skip: !keycloakId,
+  });
+
+  const gameRoles = data?.gameRolesByUserId;
+
+  // console.log('keycloak.token', keycloak.token);
+
+  // ------------------------------------- Render component ---------------------------------------------- //
+  if (loading || !gameRoles) {
     return <Box fill background={background} />;
   }
 
@@ -74,7 +82,7 @@ const MenuPage: FC = () => {
               {buttonsContainer === 0 && (
                 <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
                   <Box gap="small">
-                    {!!userData && userData.userByDiscordId.gameRoles.length > 0 && (
+                    {!!gameRoles && gameRoles.length > 0 && (
                       <Button
                         label="RETURN TO GAME"
                         primary
@@ -100,7 +108,7 @@ const MenuPage: FC = () => {
                       fill
                       onClick={() => setButtonsContainer(3)}
                     />
-                    <Button label="LOG OUT" size="large" alignSelf="center" fill onClick={() => handleLogout()} />
+                    <Button label="LOG OUT" size="large" alignSelf="center" fill onClick={() => keycloak.logout()} />
                   </Box>
                 </Box>
               )}
@@ -125,7 +133,7 @@ const MenuPage: FC = () => {
                       </Heading>
                     </Box>
                   </Grid>
-                  <GamesList gameRoles={userData.userByDiscordId.gameRoles} />
+                  <GamesList gameRoles={gameRoles} />
                 </Box>
               )}
               {buttonsContainer === 2 && (
