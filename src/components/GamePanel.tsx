@@ -9,9 +9,10 @@ interface GamePanelProps {
   game: Game;
   closePanel: (tab: number) => void;
   setShowDeleteGameDialog: (show: boolean) => void;
+  setShowInvitationForm: (show: boolean) => void;
 }
 
-const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDialog }) => {
+const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDialog, setShowInvitationForm }) => {
   const { username } = useKeycloakUser();
 
   const renderPlayers = () => {
@@ -81,7 +82,7 @@ const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDial
             size="large"
             alignSelf="center"
             fill="horizontal"
-            onClick={() => console.log('clicked')}
+            onClick={() => setShowInvitationForm(true)}
           />
         </Box>
       </div>

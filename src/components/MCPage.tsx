@@ -30,6 +30,7 @@ import '../assets/styles/transitions.css';
 // import { useWebsocketContext } from '../contexts/websocketContext';
 import { useKeycloak } from '@react-keycloak/web';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
+import InvitationForm from './InvitationForm';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -93,6 +94,7 @@ const MCPage = () => {
    */
   const [sidePanel, setSidePanel] = useState<number>(3);
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
+  const [showInvitationForm, setShowInvitationForm] = useState(true);
 
   const history = useHistory();
   const { keycloak } = useKeycloak();
@@ -132,6 +134,13 @@ const MCPage = () => {
           </Box>
         </Layer>
       )}
+      {showInvitationForm && (
+        <Layer onEsc={() => setShowInvitationForm(false)} onClickOutside={() => setShowInvitationForm(false)}>
+          <Box gap="24px" pad="24px">
+            <InvitationForm gameName={game.name} gameId={game.id} setShowInvitationForm={setShowInvitationForm} />
+          </Box>
+        </Layer>
+      )}
       <Header background="neutral-1">
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
@@ -160,7 +169,12 @@ const MCPage = () => {
         <Collapsible direction="horizontal" open={sidePanel < 3}>
           <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
             {sidePanel === 0 && (
-              <GamePanel closePanel={setSidePanel} setShowDeleteGameDialog={setShowDeleteGameDialog} game={game} />
+              <GamePanel
+                closePanel={setSidePanel}
+                setShowDeleteGameDialog={setShowDeleteGameDialog}
+                setShowInvitationForm={setShowInvitationForm}
+                game={game}
+              />
             )}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
             {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}

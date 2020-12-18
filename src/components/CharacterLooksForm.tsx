@@ -1,9 +1,10 @@
 import { useQuery } from '@apollo/client';
-import { Box, Button, Form, FormField, Heading, TextInput, Text } from 'grommet';
+import { Box, Form, FormField, Heading, TextInput, Text } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
 import { Look, PlaybookCreator } from '../@types';
 import { LookCategories, PlayBooks } from '../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import ActionButtons from './ActionButtons';
 import Spinner from './Spinner';
 
 interface CharacterLooksFormProps {
@@ -17,10 +18,6 @@ interface CharacterLooksFormProps {
     eyes: string;
     body: string;
   };
-}
-
-interface ActionButtonsProps {
-  value: string;
 }
 
 const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
@@ -84,13 +81,6 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
     </Box>
   );
 
-  const ActionButtons: FC<ActionButtonsProps> = ({ value }) => (
-    <Box direction="row" justify="end" gap="24px">
-      <Button type="reset" label="CLEAR" />
-      <Button type="submit" primary label="SET" disabled={!value} />
-    </Box>
-  );
-
   return (
     <Box
       fill
@@ -134,7 +124,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
                 .map((look) => renderPill(look, setGenderValue, 'gender'))}
             </Box>
           </Box>
-          <ActionButtons value={genderValue.gender} />
+          <ActionButtons value={genderValue.gender} primaryLabel="SET" />
         </Form>
       )}
       {selectedStep === 1 && (
@@ -159,7 +149,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
                 .map((look) => renderPill(look, setClothesValue, 'clothes'))}
             </Box>
           </Box>
-          <ActionButtons value={clothesValue.clothes} />
+          <ActionButtons value={clothesValue.clothes} primaryLabel="SET" />
         </Form>
       )}
       {selectedStep === 2 && (
@@ -184,7 +174,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
                 .map((look) => renderPill(look, setFaceValue, 'face'))}
             </Box>
           </Box>
-          <ActionButtons value={faceValue.face} />
+          <ActionButtons value={faceValue.face} primaryLabel="SET" />
         </Form>
       )}
       {selectedStep === 3 && (
@@ -209,7 +199,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
                 .map((look) => renderPill(look, setEyesValue, 'eyes'))}
             </Box>
           </Box>
-          <ActionButtons value={eyesValue.eyes} />
+          <ActionButtons value={eyesValue.eyes} primaryLabel="SET" />
         </Form>
       )}
       {selectedStep === 4 && (
@@ -234,7 +224,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
                 .map((look) => renderPill(look, setBodyValue, 'body'))}
             </Box>
           </Box>
-          <ActionButtons value={bodyValue.body} />
+          <ActionButtons value={bodyValue.body} primaryLabel="SET" />
         </Form>
       )}
     </Box>
