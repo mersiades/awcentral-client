@@ -14,6 +14,50 @@ interface GamePanelProps {
 const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDialog }) => {
   const { username } = useKeycloakUser();
 
+  const renderPlayers = () => {
+    if (game.gameRoles.filter((gameRole) => gameRole.role === Roles.player).length === 0) {
+      return (
+        <Box direction="row" align="center" alignContent="end" fill margin={{ vertical: 'small' }}>
+          <Box align="start" fill>
+            <Text>No players yet</Text>
+          </Box>
+        </Box>
+      );
+    } else {
+      return game.gameRoles
+        .filter((gameRole) => gameRole.role === Roles.player)
+        .map((gameRole, index) => {
+          if (!gameRole.characters || gameRole.characters.length === 0) {
+            return (
+              <Box key={index} direction="row" align="center" alignContent="end" fill margin={{ vertical: 'small' }}>
+                <Box align="start" fill>
+                  <Text>XXX has no character yet</Text>
+                </Box>
+              </Box>
+            );
+          } else {
+            return gameRole.characters?.map((character) => (
+              <Box
+                key={character.name}
+                direction="row"
+                align="center"
+                alignContent="end"
+                fill
+                margin={{ vertical: 'small' }}
+              >
+                <Box align="start" fill>
+                  <Text>{character.name}</Text>
+                </Box>
+                <Box align="end" fill>
+                  <Trash color="accent-1" onClick={() => console.log('clicked')} cursor="grab" />
+                </Box>
+              </Box>
+            ));
+          }
+        });
+    }
+  };
+
   return (
     <Box fill justify="between">
       <div>
@@ -30,33 +74,7 @@ const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDial
         </Box>
         <Box fill="horizontal" pad="small" animation="fadeIn">
           <Heading level={3}>Players</Heading>
-          {game.gameRoles.filter((gameRole) => gameRole.role === Roles.player).length === 0 ? (
-            <Box align="start" alignContent="center" margin={{ vertical: 'small' }}>
-              <Text>No players yet</Text>
-            </Box>
-          ) : (
-            game.gameRoles
-              .filter((gameRole) => gameRole.role === Roles.player)
-              .map((gameRole) =>
-                gameRole.characters?.map((character) => (
-                  <Box
-                    key={character.name}
-                    direction="row"
-                    align="center"
-                    alignContent="end"
-                    fill
-                    margin={{ vertical: 'small' }}
-                  >
-                    <Box align="start" fill>
-                      <Text>{character.name}</Text>
-                    </Box>
-                    <Box align="end" fill>
-                      <Trash color="accent-1" onClick={() => console.log('clicked')} cursor="grab" />
-                    </Box>
-                  </Box>
-                ))
-              )
-          )}
+          {renderPlayers()}
           <Button
             label="INVITE PLAYER"
             primary
