@@ -1,19 +1,29 @@
-import { Box, Form, FormField, Heading, Paragraph, TextInput, Text, Anchor, Button, TextArea } from 'grommet';
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { Box, Form, FormField, Heading, Paragraph, TextInput, Button, TextArea } from 'grommet';
+import React, { FC, useEffect, useState } from 'react';
 import { EMAIL_REGEX } from '../config/constants';
 import ActionButtons from './ActionButtons';
+import { ShowInvitation } from './MCPage';
 
 interface InvitationFormProps {
   gameName: string;
   gameId: string;
   handleAddInvitee: (email: string) => void;
-  setShowInvitationForm: (show: boolean) => void;
+  setShowInvitationForm: (showInvitation: ShowInvitation) => void;
+  existingEmail?: string;
+  showMessageOnly?: boolean;
 }
 
-const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, handleAddInvitee, setShowInvitationForm }) => {
-  const [formValues, setFormValues] = useState<{ email: string }>({ email: '' });
-  const [message, setMessage] = useState('');
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+const InvitationForm: FC<InvitationFormProps> = ({
+  gameName,
+  gameId,
+  handleAddInvitee,
+  setShowInvitationForm,
+  existingEmail = '',
+  showMessageOnly,
+}) => {
+  const [formValues, setFormValues] = useState<{ email: string }>({ email: existingEmail });
+  const [message, setMessage] = useState(existingEmail);
+  const [hasSubmitted, setHasSubmitted] = useState(showMessageOnly);
 
   const copyToClipboard = () => {
     const el = document.createElement('textarea');
@@ -40,7 +50,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, handleAddIn
     return (
       <TextArea
         resize={false}
-        style={{ height: '25vh' }}
+        style={{ height: '33vh', borderRadius: 'unset' }}
         fill
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -59,8 +69,8 @@ const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, handleAddIn
       {hasSubmitted ? (
         <Box animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
           <Paragraph>
-            Then, let the player know how to join your game. You can edit the instructions below (if you want) and then copy
-            and paste into an email, Discord chat etc.
+            Let your player know how to join your game. You can edit the instructions below (if you want) and then copy and
+            paste into an email, Discord chat etc.
           </Paragraph>
           <Box pad="12px" background="#CCCCCC" width="432px">
             {renderMessage()}
@@ -69,7 +79,10 @@ const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, handleAddIn
             </Button>
           </Box>
           <Box direction="row" justify="end" gap="24px" pad={{ top: '24px' }}>
-            <Button label="CLOSE" onClick={() => setShowInvitationForm(false)} />
+            <Button
+              label="CLOSE"
+              onClick={() => setShowInvitationForm({ show: false, showMessageOnly: false, existingEmail: '' })}
+            />
             <Button
               primary
               label="INVITE ANOTHER"

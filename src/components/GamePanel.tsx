@@ -4,12 +4,13 @@ import { Close, Edit, Trash } from 'grommet-icons';
 import { Game } from '../@types';
 import { Roles } from '../@types/enums';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import { ShowInvitation } from './MCPage';
 
 interface GamePanelProps {
   game: Game;
   closePanel: (tab: number) => void;
   setShowDeleteGameDialog: (show: boolean) => void;
-  setShowInvitationForm: (show: boolean) => void;
+  setShowInvitationForm: (showInvitation: ShowInvitation) => void;
 }
 
 const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDialog, setShowInvitationForm }) => {
@@ -72,7 +73,11 @@ const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDial
       return game.invitees.map((invitee) => {
         return (
           <Box key={invitee} direction="row" align="center" alignContent="end" fill margin={{ vertical: 'small' }}>
-            <Box align="start" fill>
+            <Box
+              align="start"
+              fill
+              onClick={() => setShowInvitationForm({ show: true, showMessageOnly: true, existingEmail: invitee })}
+            >
               <Text>{invitee}</Text>
             </Box>
             <Box align="end" fill>
@@ -111,7 +116,7 @@ const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDial
             size="large"
             alignSelf="center"
             fill="horizontal"
-            onClick={() => setShowInvitationForm(true)}
+            onClick={() => setShowInvitationForm({ show: true, showMessageOnly: false, existingEmail: '' })}
           />
         </Box>
       </div>

@@ -74,9 +74,20 @@ const RightMainContainer = styled(Box as React.FC<RightMainProps & BoxProps & JS
   }
 );
 
+export interface ShowInvitation {
+  show: boolean;
+  showMessageOnly: boolean;
+  existingEmail: string;
+}
+
 const MCPage = () => {
   const maxSidePanel = 3;
   const sidePanelWidth = 25;
+  const resetInvitationForm: ShowInvitation = {
+    show: false,
+    showMessageOnly: false,
+    existingEmail: '',
+  };
 
   /**
    * Number that indicates what should be shown in the right panel
@@ -95,7 +106,7 @@ const MCPage = () => {
    */
   const [sidePanel, setSidePanel] = useState<number>(3);
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
-  const [showInvitationForm, setShowInvitationForm] = useState(false);
+  const [showInvitationForm, setShowInvitationForm] = useState<ShowInvitation>(resetInvitationForm);
 
   const history = useHistory();
   const { keycloak } = useKeycloak();
@@ -140,14 +151,19 @@ const MCPage = () => {
           </Box>
         </Layer>
       )}
-      {showInvitationForm && (
-        <Layer onEsc={() => setShowInvitationForm(false)} onClickOutside={() => setShowInvitationForm(false)}>
+      {showInvitationForm.show && (
+        <Layer
+          onEsc={() => setShowInvitationForm(resetInvitationForm)}
+          onClickOutside={() => setShowInvitationForm(resetInvitationForm)}
+        >
           <Box gap="24px" pad="24px">
             <InvitationForm
               gameName={game.name}
               gameId={game.id}
               setShowInvitationForm={setShowInvitationForm}
               handleAddInvitee={handleAddInvitee}
+              existingEmail={showInvitationForm.existingEmail}
+              showMessageOnly={showInvitationForm.showMessageOnly}
             />
           </Box>
         </Layer>
