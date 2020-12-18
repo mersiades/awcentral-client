@@ -17,7 +17,7 @@ export interface Game {
   id: string;
   name: string;
   gameRoles: GameRole[]
-  invitees: String[]
+  invitees: string[]
 }
 
 export interface GameContext {

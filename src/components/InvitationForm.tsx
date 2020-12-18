@@ -1,5 +1,5 @@
-import { Box, Form, FormField, Heading, Paragraph, TextInput, Text, Anchor, Button } from 'grommet';
-import React, { FC, useState } from 'react';
+import { Box, Form, FormField, Heading, Paragraph, TextInput, Text, Anchor, Button, TextArea } from 'grommet';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { EMAIL_REGEX } from '../config/constants';
 import ActionButtons from './ActionButtons';
 
@@ -12,7 +12,17 @@ interface InvitationFormProps {
 
 const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, handleAddInvitee, setShowInvitationForm }) => {
   const [formValues, setFormValues] = useState<{ email: string }>({ email: '' });
+  const [message, setMessage] = useState('');
   const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  const copyToClipboard = () => {
+    const el = document.createElement('textarea');
+    el.value = message;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+  };
 
   const validateEmail = (value: string) => {
     if (typeof value === 'undefined' || value.length === 0) {
@@ -26,21 +36,22 @@ const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, handleAddIn
     }
   };
 
-  const renderMessage = () => (
-    <>
-      <Text>
-        Hi. You've been invited to an Apocalypse World game called {gameName}. We're using AW Central to manage playbooks,
-        dice rolls etc.
-      </Text>
-      <br />
-      <Text>You can join the game on AW Central at this url:</Text>
-      <Anchor href={`https://www.aw-central.com/player-game/${gameId}`} target="_blank" rel="noopener noreferrer">
-        {gameName}
-      </Anchor>
-      <br />
-      <Text>You'll need to log in (or register if you're new to AW Central) with {formValues.email}</Text>
-    </>
-  );
+  const renderMessage = () => {
+    return (
+      <TextArea
+        resize={false}
+        style={{ height: '25vh' }}
+        fill
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+    );
+  };
+
+  useEffect(() => {
+    const defaultMessage = `Hi. You've been invited to an Apocalypse World game called ${gameName}. We're using AW Central to manage playbooks, dice rolls etc.\n\nYou can join the game on AW Central at this url:\n\nhttps://www.aw-central.com/player-game/${gameId}\n\nYou'll need to log in (or register) with ${formValues.email}.\n\n`;
+    hasSubmitted && setMessage(defaultMessage);
+  }, [hasSubmitted, gameName, gameId, formValues, setMessage]);
 
   return (
     <Box pad="24px">
@@ -48,11 +59,14 @@ const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, handleAddIn
       {hasSubmitted ? (
         <Box animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
           <Paragraph>
-            Then, let the player know how to join the game. You can copy and paste the text below into an email, Discord chat
-            etc.
+            Then, let the player know how to join your game. You can edit the instructions below (if you want) and then copy
+            and paste into an email, Discord chat etc.
           </Paragraph>
           <Box pad="12px" background="#CCCCCC" width="432px">
             {renderMessage()}
+            <Button margin={{ top: '12px' }} secondary fill onClick={() => copyToClipboard()}>
+              COPY TO CLIPBOARD
+            </Button>
           </Box>
           <Box direction="row" justify="end" gap="24px" pad={{ top: '24px' }}>
             <Button label="CLOSE" onClick={() => setShowInvitationForm(false)} />
