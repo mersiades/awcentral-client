@@ -32,6 +32,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import InvitationForm from './InvitationForm';
 import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
+import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -115,6 +116,7 @@ const MCPage = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const [deleteGame] = useMutation<DeleteGameData, DeleteGameVars>(DELETE_GAME);
   const [addInvitee] = useMutation<AddInviteeData, AddInviteeVars>(ADD_INVITEE);
+  const [removeInvitee] = useMutation<RemoveInviteeData, RemoveInviteeVars>(REMOVE_INVITEE);
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
 
   const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
@@ -128,6 +130,12 @@ const MCPage = () => {
   const handleAddInvitee = (email: string) => {
     if (!game?.invitees.includes(email)) {
       addInvitee({ variables: { gameId, email } });
+    }
+  };
+
+  const handleRemoveInvitee = (email: string) => {
+    if (game?.invitees.includes(email)) {
+      removeInvitee({ variables: { gameId, email } });
     }
   };
 
@@ -202,6 +210,7 @@ const MCPage = () => {
                 closePanel={setSidePanel}
                 setShowDeleteGameDialog={setShowDeleteGameDialog}
                 setShowInvitationForm={setShowInvitationForm}
+                handleRemoveInvitee={handleRemoveInvitee}
                 game={game}
               />
             )}

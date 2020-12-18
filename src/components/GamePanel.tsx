@@ -11,9 +11,16 @@ interface GamePanelProps {
   closePanel: (tab: number) => void;
   setShowDeleteGameDialog: (show: boolean) => void;
   setShowInvitationForm: (showInvitation: ShowInvitation) => void;
+  handleRemoveInvitee: (email: string) => void;
 }
 
-const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDialog, setShowInvitationForm }) => {
+const GamePanel: FC<GamePanelProps> = ({
+  game,
+  closePanel,
+  setShowDeleteGameDialog,
+  setShowInvitationForm,
+  handleRemoveInvitee,
+}) => {
   const { username } = useKeycloakUser();
 
   const renderPlayers = () => {
@@ -81,7 +88,7 @@ const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDial
               <Text>{invitee}</Text>
             </Box>
             <Box align="end" fill>
-              <Trash color="accent-1" onClick={() => console.log('clicked')} cursor="grab" />
+              <Trash color="accent-1" onClick={() => handleRemoveInvitee(invitee)} cursor="grab" />
             </Box>
           </Box>
         );
@@ -113,6 +120,7 @@ const GamePanel: FC<GamePanelProps> = ({ game, closePanel, setShowDeleteGameDial
           <Button
             label="INVITE PLAYER"
             primary
+            margin={{ top: '12px' }}
             size="large"
             alignSelf="center"
             fill="horizontal"
