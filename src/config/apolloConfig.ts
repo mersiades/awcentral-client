@@ -7,7 +7,11 @@ const httpLink = new HttpLink({
 });
 
 const authLink = new ApolloLink((operation, forward) => {
-  const token = keycloak.token
+  let token = keycloak.token
+  keycloak.updateToken(5)
+    .then((isRefreshed) => token = keycloak.token)
+    .catch(() => keycloak.logout())
+    
   operation.setContext(({ headers }: Record<string, any>) => ({
     headers: {
       ...headers,

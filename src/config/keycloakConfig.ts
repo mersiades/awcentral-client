@@ -11,7 +11,7 @@ const keycloakConfigOptions: Keycloak.KeycloakConfig = {
 }
 
 // @ts-ignore
-const keycloak = new Keycloak(keycloakConfigOptions)
+const keycloak = new Keycloak(keycloakConfigOptions) as Keycloak.KeycloakInstance
 
 export default keycloak
 

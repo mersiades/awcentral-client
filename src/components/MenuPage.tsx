@@ -8,6 +8,7 @@ import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useQuery } from '@apollo/client';
 import GamesList from './GamesList';
 import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
+import { useHistory } from 'react-router-dom';
 
 const background = {
   color: 'black',
@@ -35,7 +36,8 @@ const MenuPage: FC = () => {
 
   const gameRoles = data?.gameRolesByUserId;
 
-  // console.log('keycloak.token', keycloak.token);
+  // -------------------------------- Hooking in to react-router ----------------------------------------- //
+  const history = useHistory();
 
   // ------------------------------------- Render component ---------------------------------------------- //
   if (loading || !gameRoles) {
@@ -108,7 +110,16 @@ const MenuPage: FC = () => {
                       fill
                       onClick={() => setButtonsContainer(3)}
                     />
-                    <Button label="LOG OUT" size="large" alignSelf="center" fill onClick={() => keycloak.logout()} />
+                    <Button
+                      label="LOG OUT"
+                      size="large"
+                      alignSelf="center"
+                      fill
+                      onClick={() => {
+                        history.push('/');
+                        keycloak.logout();
+                      }}
+                    />
                   </Box>
                 </Box>
               )}

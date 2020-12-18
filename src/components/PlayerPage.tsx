@@ -68,7 +68,13 @@ const PlayerPage: FC = () => {
             label="AW Central"
             items={[
               { label: 'Main menu', onClick: () => history.push('/menu') },
-              { label: 'Log out', onClick: () => keycloak.logout() },
+              {
+                label: 'Log out',
+                onClick: () => {
+                  history.push('/');
+                  keycloak.logout();
+                },
+              },
             ]}
           />
         </ThemeContext.Extend>
