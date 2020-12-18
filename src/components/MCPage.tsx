@@ -126,7 +126,9 @@ const MCPage = () => {
   };
 
   const handleAddInvitee = (email: string) => {
-    addInvitee({ variables: { gameId, email } });
+    if (!game?.invitees.includes(email)) {
+      addInvitee({ variables: { gameId, email } });
+    }
   };
 
   const game = gameData?.game;

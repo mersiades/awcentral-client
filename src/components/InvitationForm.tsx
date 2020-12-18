@@ -101,7 +101,6 @@ const InvitationForm: FC<InvitationFormProps> = ({
             onChange={(nextValue) => setFormValues(nextValue)}
             onReset={() => setFormValues({ email: '' })}
             onSubmit={() => {
-              console.log('submitting');
               handleAddInvitee(formValues.email);
               setHasSubmitted(true);
             }}
