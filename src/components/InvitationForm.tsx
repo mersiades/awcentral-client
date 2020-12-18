@@ -6,10 +6,11 @@ import ActionButtons from './ActionButtons';
 interface InvitationFormProps {
   gameName: string;
   gameId: string;
+  handleAddInvitee: (email: string) => void;
   setShowInvitationForm: (show: boolean) => void;
 }
 
-const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, setShowInvitationForm }) => {
+const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, handleAddInvitee, setShowInvitationForm }) => {
   const [formValues, setFormValues] = useState<{ email: string }>({ email: '' });
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
@@ -74,6 +75,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ gameName, gameId, setShowInvi
             onReset={() => setFormValues({ email: '' })}
             onSubmit={() => {
               console.log('submitting');
+              handleAddInvitee(formValues.email);
               setHasSubmitted(true);
             }}
           >

@@ -31,6 +31,7 @@ import '../assets/styles/transitions.css';
 import { useKeycloak } from '@react-keycloak/web';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import InvitationForm from './InvitationForm';
+import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -94,7 +95,7 @@ const MCPage = () => {
    */
   const [sidePanel, setSidePanel] = useState<number>(3);
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
-  const [showInvitationForm, setShowInvitationForm] = useState(true);
+  const [showInvitationForm, setShowInvitationForm] = useState(false);
 
   const history = useHistory();
   const { keycloak } = useKeycloak();
@@ -102,6 +103,7 @@ const MCPage = () => {
   // const { stompClient } = useWebsocketContext();
   const { gameId } = useParams<{ gameId: string }>();
   const [deleteGame] = useMutation<DeleteGameData, DeleteGameVars>(DELETE_GAME);
+  const [addInvitee] = useMutation<AddInviteeData, AddInviteeVars>(ADD_INVITEE);
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
 
   const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
@@ -110,6 +112,10 @@ const MCPage = () => {
     console.log('handleDeleteGame', handleDeleteGame);
     deleteGame({ variables: { gameId }, refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { id: userId } }] });
     history.push('/menu');
+  };
+
+  const handleAddInvitee = (email: string) => {
+    addInvitee({ variables: { gameId, email } });
   };
 
   const game = gameData?.game;
@@ -137,7 +143,12 @@ const MCPage = () => {
       {showInvitationForm && (
         <Layer onEsc={() => setShowInvitationForm(false)} onClickOutside={() => setShowInvitationForm(false)}>
           <Box gap="24px" pad="24px">
-            <InvitationForm gameName={game.name} gameId={game.id} setShowInvitationForm={setShowInvitationForm} />
+            <InvitationForm
+              gameName={game.name}
+              gameId={game.id}
+              setShowInvitationForm={setShowInvitationForm}
+              handleAddInvitee={handleAddInvitee}
+            />
           </Box>
         </Layer>
       )}
