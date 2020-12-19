@@ -14,7 +14,7 @@ import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
-  const { id: userId } = useKeycloakUser();
+  const { id: userId, username: displayName, email } = useKeycloakUser();
   // const { stompClient, handleGame } = useWebsocketContext();
   const [createGame] = useMutation<CreateGameData, CreateGameVars>(CREATE_GAME);
   const history = useHistory();
@@ -22,7 +22,9 @@ const CreateGameForm: FC = () => {
   const sendNewGameRequest = async (userId: string, name: string) => {
     // Tell awcentral-api to create a new game
     const { data: newGame } = await createGame({
-      variables: { userId, name },
+      // @ts-ignore
+      variables: { userId, name, displayName, email },
+      skip: !displayName || !email,
       refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { id: userId } }],
     });
 

@@ -16,7 +16,10 @@ export interface KeycloakUser {
 export interface Game {
   id: string;
   name: string;
+  mc: { displayName: string }
+  players: { displayName: string }[]
   gameRoles: GameRole[]
+  invitees: string[]
 }
 
 export interface GameContext {

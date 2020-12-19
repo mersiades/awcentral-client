@@ -292,6 +292,11 @@ export const theme = deepMerge(grommet, {
       },
     },
   },
+  layer: {
+    border: {
+      radius: 'unset'
+    }
+  },
   tab: {
     active: {
       color: 'neutral-1',

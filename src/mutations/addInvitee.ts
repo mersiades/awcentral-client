@@ -1,26 +1,21 @@
 import { gql } from '@apollo/client';
 import { Game } from '../@types';
 
-export interface GameData {
+export interface AddInviteeData {
   game: Game
 }
 
-export interface GameVars {
-  gameId: string
+export interface AddInviteeVars {
+  gameId: string,
+  email: string
 }
 
-const GAME = gql`
-  query Game($gameId: String!) {
-    game(gameId: $gameId) {
+const ADD_INVITEE = gql`
+  mutation AddInvitee($gameId: String!, $email: String!) {
+    addInvitee(gameId: $gameId, email: $email) {
       id
       name
       invitees
-      mc {
-        displayName
-      }
-      players {
-        displayName
-      }
       gameRoles {
         role
         npcs {
@@ -34,7 +29,8 @@ const GAME = gql`
           name
         }
       }
+    }
   }
-}
-`;
-export default GAME;
+`
+
+export default ADD_INVITEE

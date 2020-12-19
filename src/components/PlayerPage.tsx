@@ -57,6 +57,9 @@ const PlayerPage: FC = () => {
     return <div> Loading </div>;
   }
 
+  // Redirect if new game/ no character
+  // Also, may need to create gameRole
+
   console.log('gameRole', gameRole);
   console.log('gameRole.characters.length', gameRole && gameRole.characters && gameRole.characters.length);
   return (
@@ -68,7 +71,13 @@ const PlayerPage: FC = () => {
             label="AW Central"
             items={[
               { label: 'Main menu', onClick: () => history.push('/menu') },
-              { label: 'Log out', onClick: () => keycloak.logout() },
+              {
+                label: 'Log out',
+                onClick: () => {
+                  history.push('/');
+                  keycloak.logout();
+                },
+              },
             ]}
           />
         </ThemeContext.Extend>

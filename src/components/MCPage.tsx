@@ -30,6 +30,9 @@ import '../assets/styles/transitions.css';
 // import { useWebsocketContext } from '../contexts/websocketContext';
 import { useKeycloak } from '@react-keycloak/web';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
+import InvitationForm from './InvitationForm';
+import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
+import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -72,9 +75,20 @@ const RightMainContainer = styled(Box as React.FC<RightMainProps & BoxProps & JS
   }
 );
 
+export interface ShowInvitation {
+  show: boolean;
+  showMessageOnly: boolean;
+  existingEmail: string;
+}
+
 const MCPage = () => {
   const maxSidePanel = 3;
   const sidePanelWidth = 25;
+  const resetInvitationForm: ShowInvitation = {
+    show: false,
+    showMessageOnly: false,
+    existingEmail: '',
+  };
 
   /**
    * Number that indicates what should be shown in the right panel
@@ -93,6 +107,7 @@ const MCPage = () => {
    */
   const [sidePanel, setSidePanel] = useState<number>(3);
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
+  const [showInvitationForm, setShowInvitationForm] = useState<ShowInvitation>(resetInvitationForm);
 
   const history = useHistory();
   const { keycloak } = useKeycloak();
@@ -100,6 +115,8 @@ const MCPage = () => {
   // const { stompClient } = useWebsocketContext();
   const { gameId } = useParams<{ gameId: string }>();
   const [deleteGame] = useMutation<DeleteGameData, DeleteGameVars>(DELETE_GAME);
+  const [addInvitee] = useMutation<AddInviteeData, AddInviteeVars>(ADD_INVITEE);
+  const [removeInvitee] = useMutation<RemoveInviteeData, RemoveInviteeVars>(REMOVE_INVITEE);
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
 
   const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
@@ -108,6 +125,18 @@ const MCPage = () => {
     console.log('handleDeleteGame', handleDeleteGame);
     deleteGame({ variables: { gameId }, refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { id: userId } }] });
     history.push('/menu');
+  };
+
+  const handleAddInvitee = (email: string) => {
+    if (!game?.invitees.includes(email)) {
+      addInvitee({ variables: { gameId, email } });
+    }
+  };
+
+  const handleRemoveInvitee = (email: string) => {
+    if (game?.invitees.includes(email)) {
+      removeInvitee({ variables: { gameId, email } });
+    }
   };
 
   const game = gameData?.game;
@@ -132,6 +161,23 @@ const MCPage = () => {
           </Box>
         </Layer>
       )}
+      {showInvitationForm.show && (
+        <Layer
+          onEsc={() => setShowInvitationForm(resetInvitationForm)}
+          onClickOutside={() => setShowInvitationForm(resetInvitationForm)}
+        >
+          <Box gap="24px" pad="24px">
+            <InvitationForm
+              gameName={game.name}
+              gameId={game.id}
+              setShowInvitationForm={setShowInvitationForm}
+              handleAddInvitee={handleAddInvitee}
+              existingEmail={showInvitationForm.existingEmail}
+              showMessageOnly={showInvitationForm.showMessageOnly}
+            />
+          </Box>
+        </Layer>
+      )}
       <Header background="neutral-1">
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
@@ -139,7 +185,13 @@ const MCPage = () => {
             label="AW Central"
             items={[
               { label: 'Main menu', onClick: () => history.push('/menu') },
-              { label: 'Log out', onClick: () => keycloak.logout() },
+              {
+                label: 'Log out',
+                onClick: () => {
+                  history.push('/');
+                  keycloak.logout();
+                },
+              },
             ]}
           />
           {game.gameRoles
@@ -154,7 +206,13 @@ const MCPage = () => {
         <Collapsible direction="horizontal" open={sidePanel < 3}>
           <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
             {sidePanel === 0 && (
-              <GamePanel closePanel={setSidePanel} setShowDeleteGameDialog={setShowDeleteGameDialog} game={game} />
+              <GamePanel
+                closePanel={setSidePanel}
+                setShowDeleteGameDialog={setShowDeleteGameDialog}
+                setShowInvitationForm={setShowInvitationForm}
+                handleRemoveInvitee={handleRemoveInvitee}
+                game={game}
+              />
             )}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
             {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}

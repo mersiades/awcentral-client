@@ -1,7 +1,6 @@
 import Keycloak from 'keycloak-js'
+import { KEYCLOAK_CLIENT, KEYCLOAK_REALM } from './constants'
 
-const KEYCLOAK_REALM = 'awc-realm'
-const KEYCLOAK_CLIENT = 'awc-client'
 const url = process.env.REACT_APP_KEYCLOAK_AUTH_SERVER
 
 const keycloakConfigOptions: Keycloak.KeycloakConfig = {
@@ -11,7 +10,7 @@ const keycloakConfigOptions: Keycloak.KeycloakConfig = {
 }
 
 // @ts-ignore
-const keycloak = new Keycloak(keycloakConfigOptions)
+const keycloak = new Keycloak(keycloakConfigOptions) as Keycloak.KeycloakInstance
 
 export default keycloak
 
