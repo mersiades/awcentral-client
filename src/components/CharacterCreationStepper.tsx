@@ -51,7 +51,6 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           align="center"
           justify="start"
           background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectPlaybook === currentStep ? 1 : 0.5 }}
-          round="medium"
           border
           onClick={() => setCreationStep(CharacterCreationSteps.selectPlaybook)}
           pad="12px"
@@ -68,7 +67,6 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           align="center"
           justify="start"
           background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectName === currentStep ? 1 : 0.5 }}
-          round="medium"
           border
           onClick={() => setCreationStep(CharacterCreationSteps.selectName)}
           pad="12px"
@@ -85,7 +83,6 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           align="center"
           justify="start"
           background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectLooks === currentStep ? 1 : 0.5 }}
-          round="medium"
           border
           onClick={() => setCreationStep(CharacterCreationSteps.selectLooks)}
           pad="12px"
@@ -110,7 +107,6 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           align="center"
           justify="start"
           background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectStats === currentStep ? 1 : 0.5 }}
-          round="medium"
           border
           onClick={() => setCreationStep(CharacterCreationSteps.selectStats)}
           pad="12px"
@@ -135,7 +131,6 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           align="center"
           justify="start"
           background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectGear === currentStep ? 1 : 0.5 }}
-          round="medium"
           border
           onClick={() => setCreationStep(CharacterCreationSteps.selectGear)}
           pad="12px"
