@@ -91,7 +91,7 @@ const MenuPage: FC = () => {
                       ]}
                     >
                       <Box gridArea="header-left" align="start" alignContent="center">
-                        <Close color="accent-1" onClick={() => console.log('close clicked')} />
+                        <Close color="accent-1" onClick={() => history.push('/')} cursor="pointer" />
                       </Box>
                       <Box gridArea="header-right">
                         <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">

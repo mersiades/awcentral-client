@@ -17,7 +17,10 @@ const ADD_USER_TO_GAME = gql`
     addUserToGame(userId: $userId, displayName: $displayName, email: $email, gameId: $gameId) {
     id
     name
-    users {
+    mc {
+      displayName
+    }
+    players {
       displayName
     }
     gameRoles {

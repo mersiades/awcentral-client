@@ -14,6 +14,12 @@ const GAMES_FOR_INVITEE = gql`
     gamesForInvitee(email: $email) {
       id
       name
+      mc {
+        displayName
+      }
+      players {
+        displayName
+      }
     }
   }
 `

@@ -25,15 +25,41 @@ const InvitationsList: FC<InvitationsListProps> = ({ games }) => {
     history.push(`/new-game/${gameId}`, { role: Roles.player });
   };
 
+  const getPlayersString = (game: Game) => {
+    let string = 'with ';
+    if (game.players.length === 0) {
+      string += `${game.mc.displayName}`;
+    }
+    if (game.players.length === 1) {
+      string += `${game.mc.displayName} `;
+    } else if (game.players.length > 1) {
+      string += `${game.mc.displayName}, `;
+    }
+
+    game.players.forEach((player, index) => {
+      if (game.players.length === index + 1) {
+        string += `and ${player.displayName}`;
+      } else {
+        string += `${player.displayName}, `;
+      }
+    });
+    return string;
+  };
+
   return (
     <Box>
       {games.map((game) => {
         return (
-          <Box direction="row" justify="between" align="center">
-            <Text weight="bold" size="xlarge">
-              {game.name}
-            </Text>
-            <Button secondary onClick={() => handleJoinGame(game.id)} disabled={loading}>
+          <Box key={game.id} direction="row" justify="between" align="center">
+            <Box direction="column" fill="horizontal">
+              <Text weight="bold" size="xlarge" truncate>
+                {game.name}
+              </Text>
+              <Text size="small" truncate>
+                {getPlayersString(game)}
+              </Text>
+            </Box>
+            <Button secondary onClick={() => handleJoinGame(game.id)} disabled={loading} focusIndicator={false}>
               {loading ? <Spinner fillColor="#FFF" /> : 'JOIN'}
             </Button>
           </Box>

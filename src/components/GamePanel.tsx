@@ -3,7 +3,6 @@ import { Box, Button, Text, Heading } from 'grommet';
 import { Close, Edit, Trash } from 'grommet-icons';
 import { Game } from '../@types';
 import { Roles } from '../@types/enums';
-import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { ShowInvitation } from './MCPage';
 
 interface GamePanelProps {
@@ -21,8 +20,6 @@ const GamePanel: FC<GamePanelProps> = ({
   setShowInvitationForm,
   handleRemoveInvitee,
 }) => {
-  const { username } = useKeycloakUser();
-
   const renderPlayers = () => {
     if (game.gameRoles.filter((gameRole) => gameRole.role === Roles.player).length === 0) {
       return (
@@ -33,37 +30,25 @@ const GamePanel: FC<GamePanelProps> = ({
         </Box>
       );
     } else {
-      return game.gameRoles
-        .filter((gameRole) => gameRole.role === Roles.player)
-        .map((gameRole, index) => {
-          if (!gameRole.characters || gameRole.characters.length === 0) {
-            return (
-              <Box key={index} direction="row" align="center" alignContent="end" fill margin={{ vertical: 'small' }}>
-                <Box align="start" fill>
-                  <Text>XXX has no character yet</Text>
-                </Box>
-              </Box>
-            );
-          } else {
-            return gameRole.characters?.map((character) => (
-              <Box
-                key={character.name}
-                direction="row"
-                align="center"
-                alignContent="end"
-                fill
-                margin={{ vertical: 'small' }}
-              >
-                <Box align="start" fill>
-                  <Text>{character.name}</Text>
-                </Box>
-                <Box align="end" fill>
-                  <Trash color="accent-1" onClick={() => console.log('clicked')} cursor="grab" />
-                </Box>
-              </Box>
-            ));
-          }
-        });
+      return game.players.map((player) => {
+        return (
+          <Box
+            key={player.displayName}
+            direction="row"
+            align="center"
+            alignContent="end"
+            fill
+            margin={{ vertical: 'small' }}
+          >
+            <Box align="start" fill>
+              <Text>{player.displayName}</Text>
+            </Box>
+            <Box align="end" fill>
+              <Trash color="accent-1" onClick={() => console.log('clicked')} cursor="grab" />
+            </Box>
+          </Box>
+        );
+      });
     }
   };
 
@@ -108,7 +93,7 @@ const GamePanel: FC<GamePanelProps> = ({
         </Box>
         <Box fill="horizontal" pad="small" animation="fadeIn">
           <Heading level={3}>MC</Heading>
-          <Text>{!!username ? username : 'MC unknown'}</Text>
+          <Text>{game.mc.displayName}</Text>
         </Box>
         <Box fill="horizontal" pad="small" animation="fadeIn">
           <Heading level={3}>Players</Heading>
