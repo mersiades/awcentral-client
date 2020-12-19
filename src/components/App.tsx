@@ -11,7 +11,12 @@ const App: FC = () => {
   const [game, setGame] = useState<Game | undefined>();
 
   return (
-    <ReactKeycloakProvider authClient={keycloak}>
+    <ReactKeycloakProvider
+      authClient={keycloak}
+      initOptions={{
+        onLoad: 'login-required',
+      }}
+    >
       {/* <SocketManager> */}
       <GameContext.Provider value={{ game, setGame }}>
         <AppRouter />
