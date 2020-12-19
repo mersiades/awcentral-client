@@ -15,6 +15,9 @@ const GAME = gql`
       id
       name
       invitees
+      users {
+        displayName
+      }
       gameRoles {
         role
         npcs {

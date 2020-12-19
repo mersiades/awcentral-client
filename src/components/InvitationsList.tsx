@@ -14,14 +14,14 @@ interface InvitationsListProps {
 
 const InvitationsList: FC<InvitationsListProps> = ({ games }) => {
   const history = useHistory();
-  const { id: userId } = useKeycloakUser();
+  const { id: userId, username: displayName, email } = useKeycloakUser();
   const [addUserToGame, { loading }] = useMutation<AddUserToGameData, AddUserToGameVars>(ADD_USER_TO_GAME);
 
   console.log('games', games);
 
   const handleJoinGame = async (gameId: string) => {
     // @ts-ignore
-    await addUserToGame({ variables: { gameId, userId }, skip: !userId });
+    await addUserToGame({ variables: { userId, displayName, email, gameId }, skip: !userId });
     history.push(`/new-game/${gameId}`, { role: Roles.player });
   };
 

@@ -18,7 +18,7 @@ const background = {
 
 const MenuPage: FC = () => {
   // ---------------------------------- Accessing React context -------------------------------------------- //
-  const { username, id: keycloakId, email } = useKeycloakUser();
+  const { username, email } = useKeycloakUser();
 
   // -------------------------------- Hooking in to Apollo graphql ----------------------------------------- //
   const { data, loading } = useQuery<GamesForInviteeData, GamesForInviteeVars>(GAMES_FOR_INVITEE, {
