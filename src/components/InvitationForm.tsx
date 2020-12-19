@@ -13,6 +13,8 @@ interface InvitationFormProps {
   showMessageOnly?: boolean;
 }
 
+const baseUrl = process.env.REACT_APP_ENV === 'prod' ? 'https://www.aw-central.com' : 'http://localhost:3000';
+
 const InvitationForm: FC<InvitationFormProps> = ({
   gameName,
   gameId,
@@ -59,7 +61,8 @@ const InvitationForm: FC<InvitationFormProps> = ({
   };
 
   useEffect(() => {
-    const defaultMessage = `Hi. You've been invited to an Apocalypse World game called ${gameName}. We're using AW Central to manage playbooks, dice rolls etc.\n\nYou can join the game on AW Central at this url:\n\nhttps://www.aw-central.com/player-game/${gameId}\n\nYou'll need to log in (or register) with ${formValues.email}.\n\n`;
+    // const defaultMessage = `Hi. You've been invited to an Apocalypse World game called ${gameName}. We're using AW Central to manage playbooks, dice rolls etc.\n\nYou can join the game on AW Central at this url:\n\n${baseUrl}/join-game\n\nYou'll need to log in (or register) with ${formValues.email}.\n\n`;
+    const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${baseUrl}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${gameName}`;
     hasSubmitted && setMessage(defaultMessage);
   }, [hasSubmitted, gameName, gameId, formValues, setMessage]);
 

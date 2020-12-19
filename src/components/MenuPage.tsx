@@ -100,7 +100,7 @@ const MenuPage: FC = () => {
                       size="large"
                       alignSelf="center"
                       fill
-                      onClick={() => setButtonsContainer(2)}
+                      onClick={() => history.push('/join-game')}
                     />
                     <Button
                       label="CREATE GAME"
