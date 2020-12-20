@@ -1,21 +1,23 @@
 import { gql } from '@apollo/client';
 import { Game } from '../@types';
 
-export interface AddInviteeData {
+export interface AddCommsAppData {
   game: Game
 }
 
-export interface AddInviteeVars {
+export interface AddCommsAppVars {
   gameId: string,
-  email: string
+  app: string
 }
 
-const ADD_INVITEE = gql`
-  mutation AddInvitee($gameId: String!, $email: String!) {
-    addInvitee(gameId: $gameId, email: $email) {
+const ADD_COMMS_APP = gql`
+  mutation AddCommsApp($gameId: String!, $app: String!) {
+    addCommsApp(gameId: $gameId, app: $app) {
       id
       name
       invitees
+      commsApp
+      commsUrl
       mc {
         displayName
       }
@@ -36,4 +38,4 @@ const ADD_INVITEE = gql`
   }
 `
 
-export default ADD_INVITEE
+export default ADD_COMMS_APP

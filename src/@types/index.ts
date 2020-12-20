@@ -16,6 +16,8 @@ export interface KeycloakUser {
 export interface Game {
   id: string;
   name: string;
+  commsApp: string
+  commsUrl: string
   mc: { displayName: string }
   players: { displayName: string }[]
   gameRoles: GameRole[]

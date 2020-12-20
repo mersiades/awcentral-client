@@ -9,13 +9,7 @@ import { useQuery } from '@apollo/client';
 import GamesList from './GamesList';
 import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
 import { useHistory } from 'react-router-dom';
-
-const background = {
-  color: 'black',
-  dark: true,
-  size: 'contain',
-  image: 'url(/images/cover-background.jpg)',
-};
+import { background } from '../config/grommetConfig';
 
 const MenuPage: FC = () => {
   // ---------------------------------- Accessing React context -------------------------------------------- //

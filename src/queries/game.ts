@@ -15,6 +15,8 @@ const GAME = gql`
       id
       name
       invitees
+      commsApp
+      commsUrl
       mc {
         displayName
       }

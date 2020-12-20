@@ -1,8 +1,11 @@
-import { Box, Form, FormField, Heading, Paragraph, TextInput, Button, TextArea } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
-import { EMAIL_REGEX } from '../config/constants';
+import { Box, Form, FormField, Heading, Paragraph, TextInput, Button, TextArea } from 'grommet';
+
 import ActionButtons from './ActionButtons';
 import { ShowInvitation } from './MCPage';
+import { copyToClipboard } from '../helpers/copyToClipboard';
+import { validateEmail } from '../helpers/validateEmail';
+import { BASE_URL } from '../config/constants';
 
 interface InvitationFormProps {
   gameName: string;
@@ -12,8 +15,6 @@ interface InvitationFormProps {
   existingEmail?: string;
   showMessageOnly?: boolean;
 }
-
-const baseUrl = process.env.REACT_APP_ENV === 'prod' ? 'https://www.aw-central.com' : 'http://localhost:3000';
 
 const InvitationForm: FC<InvitationFormProps> = ({
   gameName,
@@ -26,27 +27,6 @@ const InvitationForm: FC<InvitationFormProps> = ({
   const [formValues, setFormValues] = useState<{ email: string }>({ email: existingEmail });
   const [message, setMessage] = useState(existingEmail);
   const [hasSubmitted, setHasSubmitted] = useState(showMessageOnly);
-
-  const copyToClipboard = () => {
-    const el = document.createElement('textarea');
-    el.value = message;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-  };
-
-  const validateEmail = (value: string) => {
-    if (typeof value === 'undefined' || value.length === 0) {
-      return '';
-    }
-
-    if (!EMAIL_REGEX.test(value)) {
-      return '';
-    } else {
-      return value;
-    }
-  };
 
   const renderMessage = () => {
     return (
@@ -61,8 +41,7 @@ const InvitationForm: FC<InvitationFormProps> = ({
   };
 
   useEffect(() => {
-    // const defaultMessage = `Hi. You've been invited to an Apocalypse World game called ${gameName}. We're using AW Central to manage playbooks, dice rolls etc.\n\nYou can join the game on AW Central at this url:\n\n${baseUrl}/join-game\n\nYou'll need to log in (or register) with ${formValues.email}.\n\n`;
-    const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${baseUrl}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${gameName}`;
+    const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${BASE_URL}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${gameName}`;
     hasSubmitted && setMessage(defaultMessage);
   }, [hasSubmitted, gameName, gameId, formValues, setMessage]);
 
@@ -77,7 +56,7 @@ const InvitationForm: FC<InvitationFormProps> = ({
           </Paragraph>
           <Box pad="12px" background="#CCCCCC" width="432px">
             {renderMessage()}
-            <Button margin={{ top: '12px' }} secondary fill onClick={() => copyToClipboard()}>
+            <Button margin={{ top: '12px' }} secondary fill onClick={() => copyToClipboard(message)}>
               COPY TO CLIPBOARD
             </Button>
           </Box>

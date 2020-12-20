@@ -17,7 +17,10 @@ const CREATE_GAME = gql`
     createGame(userId: $userId, name: $name, displayName: $displayName, email: $email) {
     id
     name
-    users {
+    mc {
+      displayName
+    }
+    players {
       displayName
     }
     gameRoles {
