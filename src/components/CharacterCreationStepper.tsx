@@ -1,26 +1,16 @@
 import React, { FC } from 'react';
 import { Box, Grid, Text } from 'grommet';
+
 import { CharacterCreationSteps } from '../@types/enums';
 import { Character } from '../@types';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
-import styled from 'styled-components';
+import { CustomUL } from '../config/grommetConfig';
 
 interface CharacterCreationStepperProps {
   currentStep: number;
   setCreationStep: (step: number) => void;
   character?: Character;
 }
-
-const CustomUL = styled.ul`
-  margin: unset;
-  overflow-y: auto;
-  width: 100%;
-  align-self: inherit;
-  list-style-type: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
 
 const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentStep, setCreationStep, character }) => {
   let reversedLooks: string[] = [];

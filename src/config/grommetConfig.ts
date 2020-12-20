@@ -2,6 +2,7 @@ import { rgba } from 'polished';
 import { deepMerge } from 'grommet/utils';
 import { grommet } from 'grommet/themes/grommet';
 import '../assets/styles/main.css'
+import styled from 'styled-components';
 
 const brandColor = '#CD3F3E';
 
@@ -385,3 +386,21 @@ export const customTabStyles = deepMerge(grommet, {
     `,
   },
 });
+
+export const background = {
+  color: 'black',
+  dark: true,
+  size: 'contain',
+  image: 'url(/images/cover-background.jpg)',
+};
+
+export const CustomUL = styled.ul`
+  margin: unset;
+  overflow-y: auto;
+  width: 100%;
+  align-self: inherit;
+  list-style-type: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;

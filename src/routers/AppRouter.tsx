@@ -12,6 +12,7 @@ import { KeycloakUser, KeycloakUserInfo } from '../@types';
 import PlayerPage from '../components/PlayerPage';
 import MCPage from '../components/MCPage';
 import JoinGamePage from '../components/JoinGamePage';
+import CreateGamePage from '../components/CreateGamePage';
 
 const background = {
   color: 'black',
@@ -46,6 +47,7 @@ const AppRouter = () => {
           <PublicRoute exact path="/" component={LandingPage} />
           <PrivateRoute path="/menu" component={MenuPage} />
           <PrivateRoute path="/join-game" component={JoinGamePage} />
+          <PrivateRoute path="/create-game/:gameId" component={CreateGamePage} />
           <PrivateRoute path="/player-game/:gameId" component={PlayerPage} />
           <PrivateRoute path="/mc-game/:gameId" component={MCPage} />
           <PrivateRoute path="/new-game/:gameId" component={CharacterCreator} />
