@@ -402,6 +402,7 @@ export const CustomUL = styled.ul`
   width: 100%;
   align-self: inherit;
   list-style-type: none;
+  padding: 0;
   &::-webkit-scrollbar {
     display: none;
   }
