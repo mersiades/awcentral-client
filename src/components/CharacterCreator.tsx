@@ -25,9 +25,7 @@ import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enu
 import { Character, GameRole } from '../@types';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 
-interface CharacterCreatorProps {}
-
-const CharacterCreator: FC<CharacterCreatorProps> = () => {
+const CharacterCreator: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   /**
    * Step 0 = Choose a playbook
@@ -176,9 +174,7 @@ const CharacterCreator: FC<CharacterCreatorProps> = () => {
   return (
     <Box fill background="black">
       <CharacterCreationStepper character={character} currentStep={creationStep} setCreationStep={setCreationStep} />
-      {creationStep === 0 && (
-        <NewGameIntro gameName={game.name} voiceChannelUrl={`https://bubkisUrl`} closeNewGameIntro={closeNewGameIntro} />
-      )}
+      {creationStep === 0 && <NewGameIntro game={game} closeNewGameIntro={closeNewGameIntro} />}
       {creationStep === CharacterCreationSteps.selectPlaybook && (
         <PlaybooksSelector
           playbooks={playbooks}

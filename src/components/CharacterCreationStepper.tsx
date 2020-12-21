@@ -206,12 +206,16 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
 
   return (
     <Box direction="row" fill="horizontal" background="black" justify="center" pad="24px" align="center">
-      {currentStep > 0 && (
+      {currentStep > 1 ? (
         <Previous cursor="pointer" onClick={() => setCreationStep(currentStep - 1)} size="large" color="neutral-1" />
+      ) : (
+        <div style={{ height: 48, width: 48, backgroundColor: '#000' }} />
       )}
       {window.innerWidth < 800 ? renderBoxesSmall() : renderBoxes()}
-      {currentStep < 6 && (
+      {currentStep < 5 ? (
         <Next cursor="pointer" onClick={() => setCreationStep(currentStep + 1)} size="large" color="neutral-1" />
+      ) : (
+        <div style={{ height: 48, width: 48, backgroundColor: '#000' }} />
       )}
     </Box>
   );

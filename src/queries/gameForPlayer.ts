@@ -15,6 +15,8 @@ const GAME_FOR_PLAYER = gql`
     gameForPlayer(gameId: $gameId, userId: $userId) {
       id
       name
+      commsUrl
+      commsApp
       gameRoles {
         id
         role
