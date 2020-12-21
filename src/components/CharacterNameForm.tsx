@@ -14,6 +14,16 @@ interface CharacterNameFormProps {
   existingName?: string;
 }
 
+export const background = `
+  background-color: #000;
+  background-image: url(/images/background-image-2.png);
+  background-position-x: left;
+  background-position-y: bottom;
+  background-repeat: no-repeat;
+  background-size: 30%;
+  background-opacity: 0.5;
+`;
+
 const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSubmitName, existingName }) => {
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
   const [value, setValue] = useState({ characterName: existingName || '' });
@@ -40,11 +50,11 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
     <Box
       fill
       direction="column"
-      background="black"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       pad="24px"
       align="center"
       justify="start"
+      background={background}
     >
       <Form
         value={value}

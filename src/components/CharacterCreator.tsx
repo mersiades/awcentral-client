@@ -150,7 +150,7 @@ const CharacterCreator: FC = () => {
         setCreationStep(2);
       } else if (!!character.name && (!character.looks || character.looks.length < 5)) {
         setCreationStep(3);
-      } else if (!!character.looks && character.looks.length < 5) {
+      } else if (!!character.looks && character.looks.length >= 5) {
         setCreationStep(4);
       } else if (!!character.statsBlock && character.statsBlock.stats.length === 5) {
         setCreationStep(5);

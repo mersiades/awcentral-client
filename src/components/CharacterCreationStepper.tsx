@@ -13,6 +13,13 @@ interface CharacterCreationStepperProps {
   character?: Character;
 }
 
+export const background = {
+  color: 'black',
+  dark: true,
+  size: 'contain',
+  image: 'url(/images/landscape-smoke.jpg)',
+};
+
 const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentStep, setCreationStep, character }) => {
   let reversedLooks: string[] = [];
   if (!!character && !!character.looks) {
@@ -48,7 +55,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
         background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectName === currentStep ? 1 : 0.5 }}
         onClick={(e: any) => {
           e.currentTarget.blur();
-          setCreationStep(CharacterCreationSteps.selectName);
+          !!character?.playbook && setCreationStep(CharacterCreationSteps.selectName);
         }}
       >
         <Text color="white" weight="bold">
@@ -71,7 +78,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectLooks === currentStep ? 1 : 0.5 }}
       onClick={(e: any) => {
         e.currentTarget.blur();
-        setCreationStep(CharacterCreationSteps.selectLooks);
+        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.selectLooks);
       }}
     >
       <Text color="white" weight="bold">
@@ -101,7 +108,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectStats === currentStep ? 1 : 0.5 }}
       onClick={(e: any) => {
         e.currentTarget.blur();
-        setCreationStep(CharacterCreationSteps.selectStats);
+        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.selectStats);
       }}
     >
       <Text color="white" weight="bold">
@@ -131,7 +138,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectGear === currentStep ? 1 : 0.5 }}
       onClick={(e: any) => {
         e.currentTarget.blur();
-        setCreationStep(CharacterCreationSteps.selectGear);
+        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.selectGear);
       }}
     >
       <Text color="white" weight="bold">
@@ -205,15 +212,25 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
   };
 
   return (
-    <Box direction="row" fill="horizontal" background="black" justify="center" pad="24px" align="center">
+    <Box direction="row" fill="horizontal" background={background} justify="center" pad="24px" align="center">
       {currentStep > 1 ? (
-        <Previous cursor="pointer" onClick={() => setCreationStep(currentStep - 1)} size="large" color="neutral-1" />
+        <Previous
+          cursor="pointer"
+          onClick={() => !!character?.name && !!character?.playbook && setCreationStep(currentStep - 1)}
+          size="large"
+          color="neutral-1"
+        />
       ) : (
         <div style={{ height: 48, width: 48, backgroundColor: '#000' }} />
       )}
       {window.innerWidth < 800 ? renderBoxesSmall() : renderBoxes()}
       {currentStep < 5 ? (
-        <Next cursor="pointer" onClick={() => setCreationStep(currentStep + 1)} size="large" color="neutral-1" />
+        <Next
+          cursor="pointer"
+          onClick={() => !!character?.name && !!character?.playbook && setCreationStep(currentStep + 1)}
+          size="large"
+          color="neutral-1"
+        />
       ) : (
         <div style={{ height: 48, width: 48, backgroundColor: '#000' }} />
       )}

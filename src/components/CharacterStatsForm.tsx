@@ -12,6 +12,16 @@ interface CharacterStatsFormProps {
   characterName: string;
 }
 
+export const background = `
+  background-color: #000;
+  background-image: url(/images/background-image-3.png);
+  background-position-x: right;
+  background-position-y: bottom;
+  background-repeat: no-repeat;
+  background-size: 25%;
+  background-opacity: 0.5;
+`;
+
 const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleSubmitStats, characterName }) => {
   const [selectedStatsOption, setSelectedStatsOption] = useState<StatsOption | undefined>();
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
@@ -39,7 +49,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
     <Box
       fill
       direction="column"
-      background="black"
+      background={background}
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       pad="24px"
       align="center"
