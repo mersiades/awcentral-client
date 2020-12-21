@@ -33,6 +33,7 @@ import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import InvitationForm from './InvitationForm';
 import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
+import CommsFormShort from './CommsFormShort';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -108,6 +109,7 @@ const MCPage = () => {
   const [sidePanel, setSidePanel] = useState<number>(3);
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
   const [showInvitationForm, setShowInvitationForm] = useState<ShowInvitation>(resetInvitationForm);
+  const [showCommsForm, setShowCommsForm] = useState(false);
 
   const history = useHistory();
   const { keycloak } = useKeycloak();
@@ -149,6 +151,13 @@ const MCPage = () => {
 
   return (
     <>
+      {showCommsForm && (
+        <Layer onEsc={() => setShowCommsForm(false)} onClickOutside={() => setShowCommsForm(false)}>
+          <Box gap="24px" pad="24px">
+            <CommsFormShort game={game} setShowCommsForm={setShowCommsForm} />
+          </Box>
+        </Layer>
+      )}
       {showDeleteGameDialog && (
         <Layer onEsc={() => setShowDeleteGameDialog(false)} onClickOutside={() => setShowDeleteGameDialog(false)}>
           <Box gap="24px" pad="24px">
@@ -210,6 +219,7 @@ const MCPage = () => {
                 closePanel={setSidePanel}
                 setShowDeleteGameDialog={setShowDeleteGameDialog}
                 setShowInvitationForm={setShowInvitationForm}
+                setShowCommsForm={setShowCommsForm}
                 handleRemoveInvitee={handleRemoveInvitee}
                 game={game}
               />

@@ -3,6 +3,7 @@ import { deepMerge } from 'grommet/utils';
 import { grommet } from 'grommet/themes/grommet';
 import '../assets/styles/main.css'
 import styled from 'styled-components';
+import { FormDown } from 'grommet-icons';
 
 const brandColor = '#CD3F3E';
 
@@ -366,6 +367,7 @@ export const customDefaultButtonStyles = deepMerge(grommet, {
     `,
   },
 });
+
 
 export const customTabStyles = deepMerge(grommet, {
   text: {

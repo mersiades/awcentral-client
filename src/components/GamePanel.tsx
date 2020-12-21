@@ -1,14 +1,16 @@
 import React, { FC } from 'react';
 import { Box, Button, Text, Heading } from 'grommet';
-import { Close, Edit, Trash } from 'grommet-icons';
+import { Clipboard, Close, Copy, Edit, Trash } from 'grommet-icons';
 import { Game } from '../@types';
 import { Roles } from '../@types/enums';
 import { ShowInvitation } from './MCPage';
+import { copyToClipboard } from '../helpers/copyToClipboard';
 
 interface GamePanelProps {
   game: Game;
   closePanel: (tab: number) => void;
   setShowDeleteGameDialog: (show: boolean) => void;
+  setShowCommsForm: (show: boolean) => void;
   setShowInvitationForm: (showInvitation: ShowInvitation) => void;
   handleRemoveInvitee: (email: string) => void;
 }
@@ -18,6 +20,7 @@ const GamePanel: FC<GamePanelProps> = ({
   closePanel,
   setShowDeleteGameDialog,
   setShowInvitationForm,
+  setShowCommsForm,
   handleRemoveInvitee,
 }) => {
   const renderPlayers = () => {
@@ -81,6 +84,32 @@ const GamePanel: FC<GamePanelProps> = ({
     }
   };
 
+  const renderComms = () => {
+    if (!!game.commsUrl) {
+      if (!!game.commsApp) {
+        return (
+          <Box>
+            <Text>{`Also play on ${game.commsApp}`}</Text>
+            <Text truncate>{`at ${game.commsUrl}`}</Text>
+          </Box>
+        );
+      } else {
+        return (
+          <Box>
+            <Text>{`Also play at:`}</Text>
+            <Text truncate>{game.commsUrl}</Text>
+          </Box>
+        );
+      }
+    } else if (!!game.commsApp) {
+      return (
+        <Box>
+          <Text>{`Also play on ${game.commsApp}`}</Text>
+        </Box>
+      );
+    }
+  };
+
   return (
     <Box fill justify="between" overflow="auto">
       <div>
@@ -89,7 +118,12 @@ const GamePanel: FC<GamePanelProps> = ({
         </Box>
         <Box direction="row" fill="horizontal" justify="between" align="center" pad="small" animation="fadeIn">
           <Heading level={3}>{game ? game.name : 'Game name'}</Heading>
-          <Edit color="accent-1" onClick={() => console.log('clicked')} cursor="grab" />
+          <Edit color="accent-1" onClick={() => console.log('clicked')} cursor="pointer" />
+        </Box>
+        <Box direction="row" fill="horizontal" justify="between" align="center" pad="small" animation="fadeIn" gap="small">
+          {renderComms()}
+          {game.commsUrl && <Copy color="accent-1" onClick={() => copyToClipboard(game.commsUrl)} cursor="pointer" />}
+          <Edit color="accent-1" onClick={() => setShowCommsForm(true)} cursor="pointer" />
         </Box>
         <Box fill="horizontal" pad="small" animation="fadeIn">
           <Heading level={3}>MC</Heading>

@@ -186,7 +186,7 @@ const MenuPage: FC = () => {
                     ]}
                   >
                     <Box gridArea="header-left" align="start" alignContent="center">
-                      <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
+                      <Close color="accent-1" onClick={() => setButtonsContainer(0)} cursor="pointer" />
                     </Box>
                     <Box gridArea="header-right">
                       <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">

@@ -21,7 +21,7 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
     } else if (!!game.commsUrl) {
       return <Text truncate>{game.commsUrl}</Text>;
     } else {
-      return <Text>...</Text>;
+      return <Text alignSelf="center">...</Text>;
     }
   };
   return (

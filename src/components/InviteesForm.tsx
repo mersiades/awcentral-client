@@ -73,7 +73,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
             </Paragraph>
             <Box pad="12px" background="#CCCCCC" width="100%">
               {renderMessage()}
-              <Box direction="row" width="100%" justify="end" gap="12px" margin={{ top: '12px' }}>
+              <Box direction="row" width="100%" justify="between" gap="12px" margin={{ top: '12px' }}>
                 <Button secondary onClick={() => copyToClipboard(message)}>
                   COPY TO CLIPBOARD
                 </Button>

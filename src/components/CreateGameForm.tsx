@@ -43,11 +43,11 @@ const CreateGameForm: FC = () => {
       onSubmit={async ({ value: { name } }: any) => !!userId && sendNewGameRequest(userId, name)}
     >
       <Box gap="small">
-        <FormField name="name" label="Game name" htmlFor="text-input-id">
-          <TextInput id="text-input-id" name="name" size="xxlarge" />
+        <FormField name="name" label="Name" htmlFor="text-input-id">
+          <TextInput id="text-input-id" name="name" size="xlarge" placeholder={`${displayName}'s game`} />
         </FormField>
         <Text color="accent-1" margin={{ top: 'xsmall' }}>
-          Create a game with you as the MC. Then invite your players
+          Create a game with you as the MC
         </Text>
         <Button type="submit" label="SUBMIT" primary size="large" alignSelf="center" fill />
       </Box>
