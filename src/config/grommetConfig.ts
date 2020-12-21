@@ -1,9 +1,9 @@
 import { rgba } from 'polished';
 import { deepMerge } from 'grommet/utils';
 import { grommet } from 'grommet/themes/grommet';
-import '../assets/styles/main.css'
 import styled from 'styled-components';
-import { FormDown } from 'grommet-icons';
+
+import '../assets/styles/main.css'
 
 const brandColor = '#CD3F3E';
 

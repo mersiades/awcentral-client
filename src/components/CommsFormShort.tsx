@@ -1,8 +1,8 @@
-import { useMutation } from '@apollo/client';
-import { Box, Heading, Paragraph, Select, Button, FormField, TextInput, TextArea, ThemeContext } from 'grommet';
 import React, { FC, useState } from 'react';
-import { Game } from '../@types';
+import { useMutation } from '@apollo/client';
+import { Box, Select, Button, TextArea } from 'grommet';
 
+import { Game } from '../@types';
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
 
@@ -44,16 +44,6 @@ const CommsFormShort: FC<CommsFormShortProps> = ({ game, setShowCommsForm }) => 
       } catch (e) {
         console.warn(e);
       }
-    }
-  };
-
-  const getUrlSize = () => {
-    if (url.length < 20) {
-      return 'xlarge';
-    } else if (url.length < 50) {
-      return 'large';
-    } else {
-      return 'medium';
     }
   };
 
