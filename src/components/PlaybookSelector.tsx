@@ -62,7 +62,7 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, handlePlaybook
         <Box gridArea="playbook-display" fill align="center" justify="center">
           {!selectedPlaybook && showIntro && (
             <>
-              <Heading level={1}>Choose your playbook</Heading>
+              <Heading level={2}>Choose your playbook</Heading>
               <Paragraph>
                 You should probably wait for your MC and the rest of your crew, tho. No headstarts for nobody in Apocalypse
                 World.
