@@ -58,7 +58,7 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
     >
       <Form
         value={value}
-        onChange={(nextValue) => setValue(nextValue)}
+        onChange={(nextValue: any) => setValue(nextValue)}
         onReset={() => setValue({ characterName: '' })}
         onSubmit={({ value }: any) => handleSubmitName(value.characterName)}
       >

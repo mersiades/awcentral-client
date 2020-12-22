@@ -105,7 +105,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       {selectedStep === 0 && (
         <Form
           value={genderValue}
-          onChange={(nextValue) => setGenderValue(nextValue)}
+          onChange={(nextValue: any) => setGenderValue(nextValue)}
           onReset={() => setGenderValue({ gender: '' })}
           onSubmit={({ value }: any) => handleSetClick(value.gender, LookCategories.gender)}
         >
@@ -130,7 +130,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       {selectedStep === 1 && (
         <Form
           value={clothesValue}
-          onChange={(nextValue) => setClothesValue(nextValue)}
+          onChange={(nextValue: any) => setClothesValue(nextValue)}
           onReset={() => setClothesValue({ clothes: '' })}
           onSubmit={({ value }: any) => handleSetClick(value.clothes, LookCategories.clothes)}
         >
@@ -155,7 +155,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       {selectedStep === 2 && (
         <Form
           value={faceValue}
-          onChange={(nextValue) => setFaceValue(nextValue)}
+          onChange={(nextValue: any) => setFaceValue(nextValue)}
           onReset={() => setFaceValue({ face: '' })}
           onSubmit={({ value }: any) => handleSetClick(value.face, LookCategories.face)}
         >
@@ -180,7 +180,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       {selectedStep === 3 && (
         <Form
           value={eyesValue}
-          onChange={(nextValue) => setEyesValue(nextValue)}
+          onChange={(nextValue: any) => setEyesValue(nextValue)}
           onReset={() => setEyesValue({ eyes: '' })}
           onSubmit={({ value }: any) => handleSetClick(value.eyes, LookCategories.eyes)}
         >
@@ -205,7 +205,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       {selectedStep === 4 && (
         <Form
           value={bodyValue}
-          onChange={(nextValue) => setBodyValue(nextValue)}
+          onChange={(nextValue: any) => setBodyValue(nextValue)}
           onReset={() => setBodyValue({ body: '' })}
           onSubmit={({ value }: any) => handleSetClick(value.body, LookCategories.body)}
         >
