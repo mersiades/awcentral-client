@@ -1,13 +1,45 @@
 import { Anchor, Box, Button, Heading, Paragraph } from 'grommet';
 import React, { FC } from 'react';
+import { Game } from '../@types';
 
 interface NewGameIntroProps {
-  gameName: string;
-  voiceChannelUrl: string;
+  game: Game;
   closeNewGameIntro: () => void;
 }
 
-const NewGameIntro: FC<NewGameIntroProps> = ({ gameName, voiceChannelUrl, closeNewGameIntro }) => {
+const NewGameIntro: FC<NewGameIntroProps> = ({ game, closeNewGameIntro }) => {
+  console.log('game', game);
+  const renderComms = () => {
+    if (!!game.commsApp) {
+      if (!!game.commsUrl) {
+        return (
+          <Paragraph textAlign="center" size="medium">
+            If you haven't already, join the rest of your crew on{' '}
+            <Anchor href={game.commsUrl} target="_blank" rel="noopener noreferrer">
+              {game.commsApp}
+            </Anchor>
+            .
+          </Paragraph>
+        );
+      } else {
+        return (
+          <Paragraph textAlign="center" size="medium">
+            {`If you haven't already, join the rest of your crew on ${game.commsApp}.`}
+          </Paragraph>
+        );
+      }
+    } else if (!!game.commsUrl) {
+      return (
+        <Paragraph textAlign="center" size="medium">
+          If you haven't already, join the rest of your crew{' '}
+          <Anchor href={game.commsUrl} target="_blank" rel="noopener noreferrer">
+            here
+          </Anchor>
+          .
+        </Paragraph>
+      );
+    }
+  };
   return (
     <Box
       direction="column"
@@ -21,13 +53,7 @@ const NewGameIntro: FC<NewGameIntroProps> = ({ gameName, voiceChannelUrl, closeN
       <Paragraph textAlign="center" size="large">
         Welcome to the jungle, baby.
       </Paragraph>
-      <Paragraph textAlign="center" size="medium">
-        If you haven't already, join the rest of your crew on Discord at{' '}
-        <Anchor href={voiceChannelUrl} target="_blank" rel="noopener noreferrer">
-          {gameName}
-        </Anchor>
-        .
-      </Paragraph>
+      {renderComms()}
       <Paragraph textAlign="center" size="medium">
         Once everyone's ready, punch NEXT to get started.
       </Paragraph>
