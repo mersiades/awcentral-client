@@ -93,7 +93,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
             <Paragraph>First, add the player's email address to the game</Paragraph>
             <Form
               value={formValues}
-              onChange={(nextValue) => setFormValues(nextValue)}
+              onChange={(nextValue: any) => setFormValues(nextValue)}
               onReset={() => setFormValues({ email: '' })}
               onSubmit={() => {
                 handleAddInvitee(formValues.email);

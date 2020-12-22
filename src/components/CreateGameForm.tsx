@@ -38,7 +38,7 @@ const CreateGameForm: FC = () => {
   return (
     <Form
       value={gameName}
-      onChange={(nextName) => setGameName(nextName)}
+      onChange={(nextName: any) => setGameName(nextName)}
       onReset={() => setGameName({ name: '' })}
       onSubmit={async ({ value: { name } }: any) => !!userId && sendNewGameRequest(userId, name)}
     >
