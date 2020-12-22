@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Box, FormField, TextInput, Button, Select, Heading, Paragraph, Text, TextArea, ThemeContext } from 'grommet';
+import { Box, Button, Select, Heading, Paragraph, Text, TextArea } from 'grommet';
 
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
@@ -47,6 +47,8 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
     }
   };
 
+  // ------------------------------------------------ Render component ------------------------------------------------- //
+
   const renderOption = (option: string) => {
     return (
       <Box pad="xsmall">
@@ -59,7 +61,6 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
     <Box
       direction="column"
       fill
-      background="black"
       align="center"
       justify="center"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
@@ -112,7 +113,7 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
                   />
                 )}
               </Box>
-              <Text color="neutral-1" margin={{ top: 'xsmall' }}>
+              <Text color="accent-1" weight="bold" margin={{ top: 'xsmall' }}>
                 Video app to use
               </Text>
             </Box>
@@ -147,7 +148,7 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
                   />
                 )}
               </Box>
-              <Text color="neutral-1" margin={{ top: 'xsmall' }}>
+              <Text color="accent-1" weight="bold" margin={{ top: 'xsmall' }}>
                 Url to video chat group, meeting, channel etc
               </Text>
             </Box>

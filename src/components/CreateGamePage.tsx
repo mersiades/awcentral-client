@@ -10,6 +10,14 @@ import InviteesForm from './InviteesForm';
 import Spinner from './Spinner';
 import GAME, { GameData, GameVars } from '../queries/game';
 
+export const background = {
+  color: 'black',
+  dark: true,
+  position: 'right top',
+  size: 'contain',
+  image: 'url(/images/background-image-4.jpg)',
+};
+
 const CreateGamePage = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [creationStep, setCreationStep] = useState<number>(0);
@@ -49,7 +57,7 @@ const CreateGamePage = () => {
   }
 
   return (
-    <Box fill background="black">
+    <Box fill background={background}>
       <Box direction="row" align="center" pad="9px" fill="horizontal" height="40px">
         <Close color="white" onClick={() => history.push('/menu')} cursor="pointer" />
       </Box>
