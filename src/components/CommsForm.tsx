@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Box, FormField, TextInput, Button, Select, Heading, Paragraph } from 'grommet';
+import { Box, FormField, TextInput, Button, Select, Heading, Paragraph, Text, TextArea, ThemeContext } from 'grommet';
 
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
@@ -47,6 +47,14 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
     }
   };
 
+  const renderOption = (option: string) => {
+    return (
+      <Box pad="xsmall">
+        <Text style={{ fontFamily: 'chaparral pro' }}>{option}</Text>
+      </Box>
+    );
+  };
+
   return (
     <Box
       direction="column"
@@ -56,57 +64,99 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
       justify="center"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box width="50vw" height="70vh" align="center" direction="column" justify="between" overflow="auto">
-        <Heading level={1}>COMMS</Heading>
-        <Paragraph textAlign="center" size="large">
-          How will you talk to your players?
-        </Paragraph>
-        <Paragraph textAlign="center" size="medium">
-          AW Central can manage playbooks, threats, dice rolls etc, but you'll need to use some other app to talk with your
-          players.
-        </Paragraph>
-        <Box width="406px" gap="medium">
-          <Box gap="small" direction="row" justify="between">
-            <Select
-              id="app-input"
-              name="app"
-              size="large"
-              placeholder="App"
-              options={appOptions}
-              value={app}
-              onChange={(e) => setApp(e.value)}
-            />
-            {!!game.commsApp ? (
-              <Button label="SET" secondary size="large" alignSelf="center" onClick={() => handleSetApp()} disabled={!app} />
+      <Box width="65vw" height="70vh" align="center" direction="column" justify="start" overflow="auto">
+        <Heading level={2}>COMMS</Heading>
+        <Box direction="row" justify="evenly" gap="48px" height="400px">
+          <Box direction="column" fill="vertical">
+            <Paragraph textAlign="center" size="large">
+              How will you talk to your players?
+            </Paragraph>
+            <Paragraph textAlign="center" size="medium">
+              AW Central can manage playbooks, threats, dice rolls etc, but you'll need to use some other app to talk with
+              your players.
+            </Paragraph>
+            <Paragraph textAlign="center" size="medium">
+              If you know your voice comms details, add them here to make it easier for your players to join you.
+            </Paragraph>
+          </Box>
+          <Box direction="column" fill="vertical" justify="around">
+            <Box direction="column">
+              <Box gap="small" direction="row" justify="between">
+                <Select
+                  id="app-input"
+                  name="app"
+                  size="large"
+                  options={appOptions}
+                  value={app}
+                  onChange={(e) => setApp(e.value)}
+                  children={(option) => renderOption(option)}
+                />
+
+                {!!game.commsApp ? (
+                  <Button
+                    label="SET"
+                    secondary
+                    size="large"
+                    alignSelf="center"
+                    onClick={() => handleSetApp()}
+                    disabled={!app}
+                  />
+                ) : (
+                  <Button
+                    label="SET"
+                    primary
+                    size="large"
+                    alignSelf="center"
+                    onClick={() => handleSetApp()}
+                    disabled={!app}
+                  />
+                )}
+              </Box>
+              <Text color="neutral-1" margin={{ top: 'xsmall' }}>
+                Video app to use
+              </Text>
+            </Box>
+            <Box direction="column">
+              <Box gap="small" direction="row" justify="between">
+                <TextArea
+                  id="url-input"
+                  name="url"
+                  size="large"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://"
+                />
+
+                {!!game.commsUrl ? (
+                  <Button
+                    label="SET"
+                    secondary
+                    size="large"
+                    alignSelf="center"
+                    onClick={() => handleSetUrl()}
+                    disabled={!url}
+                  />
+                ) : (
+                  <Button
+                    label="SET"
+                    primary
+                    size="large"
+                    alignSelf="center"
+                    onClick={() => handleSetUrl()}
+                    disabled={!url}
+                  />
+                )}
+              </Box>
+              <Text color="neutral-1" margin={{ top: 'xsmall' }}>
+                Url to video chat group, meeting, channel etc
+              </Text>
+            </Box>
+            {!!game.commsApp && !!game.commsUrl ? (
+              <Button label="NEXT" primary size="large" alignSelf="end" onClick={() => setCreationStep(2)} />
             ) : (
-              <Button label="SET" primary size="large" alignSelf="center" onClick={() => handleSetApp()} disabled={!app} />
+              <Button label="LATER" size="large" alignSelf="end" onClick={() => setCreationStep(2)} />
             )}
           </Box>
-          <Paragraph textAlign="center" size="medium">
-            Do you have a url to your video chat?
-          </Paragraph>
-          <Box gap="small" direction="row" justify="between">
-            <FormField>
-              <TextInput
-                id="url-input"
-                name="url"
-                size="xlarge"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://"
-              />
-            </FormField>
-            {!!game.commsUrl ? (
-              <Button label="SET" secondary size="large" alignSelf="center" onClick={() => handleSetUrl()} disabled={!url} />
-            ) : (
-              <Button label="SET" primary size="large" alignSelf="center" onClick={() => handleSetUrl()} disabled={!url} />
-            )}
-          </Box>
-          {!!game.commsApp && !!game.commsUrl ? (
-            <Button label="NEXT" primary size="large" alignSelf="end" onClick={() => setCreationStep(2)} />
-          ) : (
-            <Button label="LATER" size="large" alignSelf="end" onClick={() => setCreationStep(2)} />
-          )}
         </Box>
       </Box>
     </Box>
