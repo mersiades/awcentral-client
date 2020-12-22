@@ -25,15 +25,7 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
     }
   };
   return (
-    <Box
-      direction="row"
-      fill="horizontal"
-      background="black"
-      justify="center"
-      align="center"
-      height="195px"
-      pad={{ bottom: '12px' }}
-    >
+    <Box direction="row" fill="horizontal" justify="center" align="center" height="195px" pad={{ bottom: '12px' }}>
       <Grid
         fill
         gap="small"

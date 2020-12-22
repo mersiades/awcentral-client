@@ -55,8 +55,8 @@ const CommsFormShort: FC<CommsFormShortProps> = ({ game, setShowCommsForm }) => 
       justify="center"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box align="center" direction="column" justify="between" overflow="auto">
-        <Box width="30vw" gap="medium">
+      <Box align="center" width="520px" direction="column" justify="between" overflow="auto">
+        <Box gap="medium">
           <Box gap="small" width="100%" direction="row" justify="between">
             <Select
               id="app-input"
@@ -91,11 +91,6 @@ const CommsFormShort: FC<CommsFormShortProps> = ({ game, setShowCommsForm }) => 
             )}
           </Box>
           <Button label="CLOSE" size="large" alignSelf="end" onClick={() => setShowCommsForm(false)} />
-          {/*!!game.commsApp && !!game.commsUrl ? (
-        <Button label="NEXT" primary size="large" alignSelf="end" onClick={() => setCreationStep(2)} />
-      ) : (
-        <Button label="LATER" size="large" alignSelf="end" onClick={() => setCreationStep(2)} />
-      )*/}
         </Box>
       </Box>
     </Box>
