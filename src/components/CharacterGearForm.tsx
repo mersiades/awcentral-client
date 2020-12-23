@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Box, Button, Grid, Heading, Paragraph, Text, TextArea } from 'grommet';
-import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { PlaybookCreator } from '../@types';
 import { PlayBooks } from '../@types/enums';
@@ -9,23 +9,22 @@ import Spinner from './Spinner';
 
 interface CharacterGearFormProps {
   playbookType: PlayBooks;
-  handleSubmitGear: (gear: string[]) => void;
   characterName: string;
+  handleSubmitGear: (gear: string[]) => void;
 }
 
 const GearUL = styled.ul`
   margin: unset;
   overflow-y: auto;
-  width: 100%;
+  width: -webkit-fill-available;
   align-self: center;
   cursor: default;
 `;
 
-const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSubmitGear, characterName }) => {
+const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, characterName, handleSubmitGear }) => {
   const [gear, setGear] = useState<string[]>([]);
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
   const [value, setValue] = useState('');
-  const [selectedItem, setSelectedItem] = useState('');
 
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
@@ -34,9 +33,13 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSub
     }
   );
 
+  // ---------------------------------------------------- UseEffects  -------------------------------------------------------- //
+
   useEffect(() => {
     !!pbCreatorData && setPbCreator(pbCreatorData.playbookCreator);
   }, [pbCreatorData]);
+
+  // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
   const renderInAddition = () => {
     if (!!pbCreator?.gearInstructions.inAddition) {
@@ -44,18 +47,37 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSub
     }
   };
 
-  const renderDefaultItems = useCallback(() => {
-    if (!!pbCreator?.gearInstructions.youGetItems) {
-      setGear((prevGear: string[]) => {
-        return [...prevGear, ...pbCreator.gearInstructions.youGetItems];
-      });
+  const renderYouGet = () => {
+    if (!!pbCreator?.gearInstructions.youGet) {
+      return <Text>{pbCreator.gearInstructions.youGet}</Text>;
     }
-  }, [pbCreator]);
+  };
+
+  const renderYouGetItem = () => {
+    if (!!pbCreator?.gearInstructions?.youGetItems && pbCreator.gearInstructions.youGetItems.length > 0) {
+      return (
+        <GearUL>
+          {pbCreator.gearInstructions.youGetItems.map((item, index) => (
+            <li
+              key={index}
+              // @ts-ignore
+              onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
+              // @ts-ignore
+              onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
+              onClick={(e: React.MouseEvent<HTMLLIElement>) => setValue(item)}
+            >
+              {item}
+            </li>
+          ))}
+        </GearUL>
+      );
+    }
+  };
 
   const renderIntroduceChoice = () => {
     if (!!pbCreator?.gearInstructions.introduceChoice) {
       return (
-        <Text weight="bold">{`${pbCreator.gearInstructions.introduceChoice} (choose ${pbCreator.gearInstructions.numberCanChoose}):`}</Text>
+        <Text>{`${pbCreator.gearInstructions.introduceChoice} (choose ${pbCreator.gearInstructions.numberCanChoose}):`}</Text>
       );
     }
   };
@@ -64,14 +86,14 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSub
     if (!!pbCreator?.gearInstructions.chooseableGear) {
       return (
         <GearUL>
-          {pbCreator.gearInstructions.chooseableGear.map((item) => (
+          {pbCreator.gearInstructions.chooseableGear.map((item, index) => (
             <li
-              key={item}
+              key={index}
               // @ts-ignore
               onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
               // @ts-ignore
               onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
-              onClick={() => setValue(item)}
+              onClick={(e: React.MouseEvent<HTMLLIElement>) => setValue(item)}
             >
               {item}
             </li>
@@ -87,10 +109,6 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSub
     }
   };
 
-  useEffect(() => {
-    renderDefaultItems();
-  }, [pbCreator, renderDefaultItems]);
-
   if (loadingPbCreator || !pbCreatorData || !pbCreator) {
     return (
       <Box fill background="black" justify="center" align="center">
@@ -98,7 +116,6 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSub
       </Box>
     );
   }
-  console.log('selectedItem', selectedItem);
 
   return (
     <Box
@@ -110,7 +127,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSub
       align="center"
       justify="start"
     >
-      <Box width="50vw" height="70vh">
+      <Box width="70vw" height="70vh">
         <Heading level={2} textAlign="center">{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</Heading>
         <Text textAlign="center">Select an item to add, edit or delete it, or just type your own.</Text>
         <Grid
@@ -133,7 +150,10 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSub
               <Heading level={4} alignSelf="center">
                 Options
               </Heading>
+              {renderYouGet()}
+              {renderYouGetItem()}
               {renderInAddition()}
+              <br />
               {renderIntroduceChoice()}
               {renderChooseableGear()}
               {renderWithMC()}
@@ -145,35 +165,14 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSub
             </Heading>
             {renderInAddition()}
             <GearUL>
-              {gear.map((item) => (
+              {gear.map((item, index) => (
                 <li
-                  key={item}
-                  style={{ color: selectedItem === item ? '#CD3F3E' : '#FFF' }}
+                  key={index}
                   // @ts-ignore
                   onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
-                  onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => {
-                    if (selectedItem !== item) {
-                      // @ts-ignore
-                      e.target.style.color = '#FFF';
-                    } else {
-                      // @ts-ignore
-                      e.target.style.color = '#CD3F3E';
-                      const listItems = document.body.getElementsByTagName('li');
-                      for (let i = 0; i <= listItems.length - 1; i++) {
-                        listItems[1].style.color = '#FFF';
-                      }
-                    }
-                  }}
-                  onClick={(e: React.MouseEvent<HTMLLIElement>) => {
-                    setValue(item);
-                    setSelectedItem(item);
-                  }}
-                  onBlur={() => {
-                    // @ts-ignore
-                    e.target.style.color = '#FFF';
-                    setValue('');
-                    setSelectedItem('');
-                  }}
+                  // @ts-ignore
+                  onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
+                  onClick={(e: React.MouseEvent<HTMLLIElement>) => setValue(item)}
                 >
                   {item}
                 </li>
@@ -189,8 +188,29 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, handleSub
             />
           </Box>
           <Box gridArea="add-delete-box" direction="column" gap="6px">
-            <Button secondary label="ADD" disabled={!value || value === selectedItem} fill="horizontal" />
-            <Button label="DELETE" disabled={!selectedItem} fill="horizontal" />
+            <Button
+              secondary
+              label="ADD"
+              disabled={!value || gear.includes(value)}
+              fill="horizontal"
+              style={{ outline: 'none', boxShadow: 'none' }}
+              onClick={() => {
+                const newGear = [...gear, value];
+                setGear(newGear);
+                setValue('');
+              }}
+            />
+            <Button
+              label="REMOVE"
+              disabled={!gear.includes(value)}
+              fill="horizontal"
+              style={{ outline: 'none', boxShadow: 'none' }}
+              onClick={() => {
+                const newGear = gear.filter((item) => item !== value);
+                setGear(newGear);
+                setValue('');
+              }}
+            />
           </Box>
           <Box gridArea="barter-box">
             <Paragraph

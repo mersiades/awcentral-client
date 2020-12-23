@@ -146,8 +146,8 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       </Text>
       {!!character && character.gear?.length > 0 ? (
         <CustomUL>
-          {character.gear.map((item) => (
-            <li key={item}>item</li>
+          {character.gear.map((item, index) => (
+            <li key={index}>{item}</li>
           ))}
         </CustomUL>
       ) : (
