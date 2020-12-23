@@ -63,7 +63,7 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
         onSubmit={({ value }: any) => handleSubmitName(value.characterName)}
       >
         <Box width="50vw" height="50vh" align="center">
-          <Heading level={1}>{`WHAT IS THE ${formatPlaybookType(playbookType)} CALLED?`}</Heading>
+          <Heading level={2}>{`WHAT IS THE ${formatPlaybookType(playbookType).toUpperCase()} CALLED?`}</Heading>
           <FormField name="characterName" width="100%">
             <TextInput placeholder="Type or select name" name="characterName" size="xxlarge" />
           </FormField>

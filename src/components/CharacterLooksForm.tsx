@@ -91,7 +91,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       align="center"
       justify="start"
     >
-      <Heading level={1}>{`WHAT DOES ${characterName} LOOK LIKE?`}</Heading>
+      <Heading level={2}>{`WHAT DOES ${characterName.toUpperCase()} LOOK LIKE?`}</Heading>
       <Box direction="row" justify="between" gap="24px">
         {steps.map((step, index) => {
           const isSelected = index === selectedStep;

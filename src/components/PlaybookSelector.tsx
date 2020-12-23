@@ -9,11 +9,11 @@ import '../assets/styles/transitions.css';
 
 interface PlaybookSelectorProps {
   playbooks: Playbook[];
-  handlePlaybookSelect: (playbookType: PlayBooks) => void;
+  checkPlaybookReset: (playbookType: PlayBooks) => void;
   playbook?: PlayBooks;
 }
 
-const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, handlePlaybookSelect, playbook }) => {
+const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookReset, playbook }) => {
   const [selectedPlaybook, setSelectedPlaybook] = useState<Playbook | undefined>();
   const [showIntro, setShowIntro] = useState(true);
   const [startFadeOut, setStartFadeOut] = useState(false);
@@ -87,7 +87,7 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, handlePlaybook
                 />
               </Box>
               <Box gridArea="text" pad="24px" animation="fadeIn" justify="around" align="center">
-                <Heading level={1} alignSelf="center">
+                <Heading level={2} alignSelf="center">
                   {formatPlaybookType(selectedPlaybook.playbookType)}
                 </Heading>
                 <Box overflow="auto" style={{ maxWidth: '600px' }}>
@@ -97,15 +97,17 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, handlePlaybook
                   </em>
                 </Box>
 
-                <Button
-                  label={`SELECT ${formatPlaybookType(selectedPlaybook.playbookType)}`}
-                  primary
-                  size="large"
-                  onClick={() => {
-                    setStartFadeOut(true);
-                    handlePlaybookSelect(selectedPlaybook.playbookType);
-                  }}
-                />
+                {[PlayBooks.angel, PlayBooks.battlebabe].includes(selectedPlaybook.playbookType) && (
+                  <Button
+                    label={`SELECT ${formatPlaybookType(selectedPlaybook.playbookType)}`}
+                    primary
+                    size="large"
+                    onClick={() => {
+                      setStartFadeOut(true);
+                      checkPlaybookReset(selectedPlaybook.playbookType);
+                    }}
+                  />
+                )}
               </Box>
             </Grid>
           )}

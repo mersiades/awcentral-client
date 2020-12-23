@@ -49,7 +49,7 @@ const NewGameIntro: FC<NewGameIntroProps> = ({ game, closeNewGameIntro }) => {
       justify="center"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Heading level={1}>NEW GAME</Heading>
+      <Heading level={2}>NEW GAME</Heading>
       <Paragraph textAlign="center" size="large">
         Welcome to the jungle, baby.
       </Paragraph>

@@ -56,7 +56,10 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
       justify="start"
     >
       <Box width="50vw" height="50vh">
-        <Heading level={1} textAlign="center">{`WHAT ARE ${characterName}'s STRENGTHS AND WEAKNESSES?`}</Heading>
+        <Heading
+          level={2}
+          textAlign="center"
+        >{`WHAT ARE ${characterName.toUpperCase()}'s STRENGTHS AND WEAKNESSES?`}</Heading>
         <Heading level={4} textAlign="start">
           Choose a set:
         </Heading>

@@ -221,10 +221,10 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           color="neutral-1"
         />
       ) : (
-        <div style={{ height: 48, width: 48, backgroundColor: '#000' }} />
+        <div style={{ height: 48, width: 48, background: 'transparent' }} />
       )}
       {window.innerWidth < 800 ? renderBoxesSmall() : renderBoxes()}
-      {currentStep < 5 && currentStep > 1 ? (
+      {currentStep < 5 && currentStep > 1 && !!character?.name ? (
         <Next
           cursor="pointer"
           onClick={() => !!character?.name && !!character?.playbook && setCreationStep(currentStep + 1)}
@@ -232,7 +232,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
           color="neutral-1"
         />
       ) : (
-        <div style={{ height: 48, width: 48, backgroundColor: '#000' }} />
+        <div style={{ height: 48, width: 48, background: 'transparent' }} />
       )}
     </Box>
   );
