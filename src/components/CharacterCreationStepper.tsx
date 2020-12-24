@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Text } from 'grommet';
 
-import { CharacterCreationSteps, PlayBooks } from '../@types/enums';
+import { CharacterCreationSteps, PlayBooks, UniqueTypes } from '../@types/enums';
 import { Character } from '../@types';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import { CustomUL } from '../config/grommetConfig';
@@ -29,14 +29,11 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   character,
   playbookType,
 }) => {
-  const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
-    PLAYBOOK_CREATOR,
-    {
-      // @ts-ignore
-      variables: { playbookType },
-      skip: !playbookType,
-    }
-  );
+  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
+    // @ts-ignore
+    variables: { playbookType },
+    skip: !playbookType,
+  });
 
   const pbCreator = pbCreatorData?.playbookCreator;
 
@@ -175,6 +172,24 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
     </Box>
   );
 
+  const renderUnique = () => {
+    if (!!character?.playbookUnique) {
+      switch (character?.playbookUnique.type) {
+        case UniqueTypes.brainerGear:
+          const concatGear = character.playbookUnique.brainerGear.brainerGear.map((gear) => gear.split('('));
+          return (
+            <CustomUL>
+              {concatGear.map((item, index) => (
+                <li key={index}>{item[0]}</li>
+              ))}
+            </CustomUL>
+          );
+        default:
+          return null;
+      }
+    }
+  };
+
   const box4Step6 = (
     <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
@@ -194,7 +209,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       <Text color="white" weight="bold" alignSelf="center">
         {!!pbCreator ? formatPlaybookType(pbCreator.playbookUniqueCreator.type) : '...'}
       </Text>
-      <Text>...</Text>
+      {!!character && !!character.playbookUnique ? renderUnique() : <Text>...</Text>}
     </Box>
   );
 

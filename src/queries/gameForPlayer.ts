@@ -38,6 +38,14 @@ const GAME_FOR_PLAYER = gql`
             look
             category
           }
+          playbookUnique {
+            id
+            type
+            brainerGear {
+              id
+              brainerGear
+            }
+          }
         }
       }
     }

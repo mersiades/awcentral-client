@@ -26,6 +26,7 @@ import { Character, GameRole } from '../@types';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
 import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
+import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mutations/setBrainerGear';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -61,6 +62,7 @@ const CharacterCreator: FC = () => {
   const [setCharacterLook] = useMutation<SetCharacterLookData, SetCharacterLookVars>(SET_CHARACTER_LOOK);
   const [setCharacterStats] = useMutation<SetCharacterStatsData, SetCharacterStatsVars>(SET_CHARACTER_STATS);
   const [setCharacterGear] = useMutation<SetCharacterGearData, SetCharacterGearVars>(SET_CHARACTER_GEAR);
+  const [setBrainerGear] = useMutation<SetBrainerGearData, SetBrainerGearVars>(SET_BRAINER_GEAR);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.gameForPlayer;
@@ -169,6 +171,20 @@ const CharacterCreator: FC = () => {
       try {
         await setCharacterGear({
           variables: { gameRoleId: gameRole.id, characterId: character.id, gear },
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+        });
+        setCreationStep((prevState) => prevState + 1);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleSubmitBrainerGear = async (brainerGear: string[]) => {
+    if (!!gameRole && !!character) {
+      try {
+        await setBrainerGear({
+          variables: { gameRoleId: gameRole.id, characterId: character.id, brainerGear },
           refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -314,7 +330,11 @@ const CharacterCreator: FC = () => {
         />
       )}
       {creationStep === CharacterCreationSteps.setUnique && character && character.name && character.playbook && (
-        <PlaybookUniqueFormContainer playbookType={character.playbook} characterName={character.name} />
+        <PlaybookUniqueFormContainer
+          playbookType={character.playbook}
+          characterName={character.name}
+          handleSubmitBrainerGear={handleSubmitBrainerGear}
+        />
       )}
     </Box>
   );

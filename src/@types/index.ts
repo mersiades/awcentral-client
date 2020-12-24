@@ -36,6 +36,7 @@ export interface Character {
   gear: string[]
   looks?: Look[]
   statsBlock: StatsBlock
+  playbookUnique?: PlaybookUnique
 }
 
 export interface GameRole {
@@ -178,6 +179,7 @@ export interface PlaybookUniqueCreator {
 }
 
 export interface AngelKitCreator {
+  id: string
   angelKitInstructions: string
   startingStock: number
 }
@@ -210,4 +212,15 @@ export interface ItemCharacteristic {
   id: string
   description: string
   tag: string
+}
+
+export interface PlaybookUnique {
+  id: string
+  type: UniqueTypes
+  brainerGear: BrainerGear
+}
+
+export interface BrainerGear {
+  id: string
+  brainerGear: string[]
 }

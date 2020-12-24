@@ -9,15 +9,17 @@ import UniqueFormBrainer from './UniqueFormBrainer';
 interface PlaybookUniqueFormContainerProps {
   playbookType: PlayBooks;
   characterName: string;
+  handleSubmitBrainerGear: (brainerGear: string[]) => void;
 }
 
-const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({ playbookType, characterName }) => {
-  const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
-    PLAYBOOK_CREATOR,
-    {
-      variables: { playbookType },
-    }
-  );
+const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
+  playbookType,
+  characterName,
+  handleSubmitBrainerGear,
+}) => {
+  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
+    variables: { playbookType },
+  });
 
   const playbookUniqueCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator;
 
@@ -36,7 +38,13 @@ const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({ pla
       case PlayBooks.battlebabe:
         return null;
       case PlayBooks.brainer:
-        return <UniqueFormBrainer characterName={characterName} playbookUniqueCreator={playbookUniqueCreator} />;
+        return (
+          <UniqueFormBrainer
+            characterName={characterName}
+            playbookUniqueCreator={playbookUniqueCreator}
+            handleSubmitBrainerGear={handleSubmitBrainerGear}
+          />
+        );
       default:
         return null;
     }
