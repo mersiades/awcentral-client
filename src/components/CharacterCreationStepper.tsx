@@ -47,7 +47,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   console.log('currentStep', currentStep);
 
   const box0Step1 = (
-    <Box margin={{ left: 'xsmall', right: 'xsmall' }} justify="between" width="10rem" height="10rem" gap="small">
+    <Box margin={{ left: 'xsmall', right: 'xsmall' }} justify="between" width="11em" height="10rem" gap="small">
       <Box
         align="center"
         fill="horizontal"
@@ -88,7 +88,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
     <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
-      width="10rem"
+      width="11rem"
       height="10rem"
       gap="small"
       align="center"
@@ -118,7 +118,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
     <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
-      width="10rem"
+      width="11rem"
       height="10rem"
       gap="small"
       align="center"
@@ -148,7 +148,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
     <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
-      width="10rem"
+      width="11rem"
       height="10rem"
       gap="small"
       align="center"
@@ -179,7 +179,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
     <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
-      width="10rem"
+      width="11rem"
       height="10rem"
       gap="small"
       align="center"
@@ -191,7 +191,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
         !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.setUnique);
       }}
     >
-      <Text color="white" weight="bold">
+      <Text color="white" weight="bold" alignSelf="center">
         {!!pbCreator ? formatPlaybookType(pbCreator.playbookUniqueCreator.type) : '...'}
       </Text>
       <Text>...</Text>

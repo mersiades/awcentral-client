@@ -54,12 +54,41 @@ const PLAYBOOK_CREATOR = gql`
         type
         angelKitCreator {
           id
+          angelKitInstructions
+          startingStock
         }
         customWeaponsCreator {
           id
+          firearmsTitle
+          firearmsBaseInstructions
+          firearmsBaseOptions {
+            id
+            description
+            tags
+          }
+          firearmsOptionsInstructions
+          firearmsOptionsOptions {
+            id
+            description
+            tag
+          } 
+          handTitle
+          handBaseInstructions
+          handBaseOptions {
+            id
+            description
+            tags
+          }
+          handOptionsInstructions
+          handOptionsOptions {
+            id
+            description
+            tag
+          }
         }
         brainerGearCreator {
           id
+          gear
         }
       }
     }

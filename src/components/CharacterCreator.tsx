@@ -25,6 +25,7 @@ import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enu
 import { Character, GameRole } from '../@types';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
+import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -199,8 +200,10 @@ const CharacterCreator: FC = () => {
         setCreationStep(3);
       } else if (!!character.looks && character.looks.length >= 5 && character.statsBlock.stats.length < 5) {
         setCreationStep(4);
-      } else if (!!character.statsBlock && character.statsBlock.stats.length === 5) {
+      } else if (!!character.statsBlock && character.statsBlock.stats.length === 5 && character.gear.length === 0) {
         setCreationStep(5);
+      } else if (!!character.gear && character.gear.length > 0) {
+        setCreationStep(6);
       }
     }
   }, [character, creationStep]);
@@ -309,6 +312,9 @@ const CharacterCreator: FC = () => {
           playbookType={character?.playbook}
           handleSubmitGear={handleSubmitGear}
         />
+      )}
+      {creationStep === CharacterCreationSteps.setUnique && character && character.name && character.playbook && (
+        <PlaybookUniqueFormContainer playbookType={character.playbook} characterName={character.name} />
       )}
     </Box>
   );
