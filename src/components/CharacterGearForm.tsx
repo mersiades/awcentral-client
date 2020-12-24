@@ -69,8 +69,6 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
   }, [pbCreatorData]);
 
   useEffect(() => {
-    console.log('instructionsBoxRef', instructionsBoxRef);
-    console.log('instructionsBoxRef.current', instructionsBoxRef.current);
     if (instructionsBoxRef.current) {
       // contentRef.current.addEventListener('touchmove', (e: any) => onScroll(e));
       if (instructionsBoxRef.current.scrollHeight > instructionsBoxRef.current.offsetHeight) {

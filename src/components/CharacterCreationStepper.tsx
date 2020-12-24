@@ -1,16 +1,19 @@
 import React, { FC } from 'react';
 import { Box, Text } from 'grommet';
 
-import { CharacterCreationSteps } from '../@types/enums';
+import { CharacterCreationSteps, PlayBooks } from '../@types/enums';
 import { Character } from '../@types';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import { CustomUL } from '../config/grommetConfig';
 import { Next, Previous } from 'grommet-icons';
+import { useQuery } from '@apollo/client';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 
 interface CharacterCreationStepperProps {
   currentStep: number;
   setCreationStep: (step: number) => void;
   character?: Character;
+  playbookType?: PlayBooks;
 }
 
 export const background = {
@@ -20,7 +23,23 @@ export const background = {
   image: 'url(/images/landscape-smoke.jpg)',
 };
 
-const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentStep, setCreationStep, character }) => {
+const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
+  currentStep,
+  setCreationStep,
+  character,
+  playbookType,
+}) => {
+  const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
+    PLAYBOOK_CREATOR,
+    {
+      // @ts-ignore
+      variables: { playbookType },
+      skip: !playbookType,
+    }
+  );
+
+  const pbCreator = pbCreatorData?.playbookCreator;
+
   let reversedLooks: string[] = [];
   if (!!character && !!character.looks) {
     reversedLooks = character.looks.map((look) => look.look).reverse();
@@ -156,7 +175,30 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
     </Box>
   );
 
-  const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5];
+  const box4Step6 = (
+    <Box
+      margin={{ left: 'xsmall', right: 'xsmall' }}
+      justify="start"
+      width="10rem"
+      height="10rem"
+      gap="small"
+      align="center"
+      pad="small"
+      border
+      background={{ color: 'neutral-1', opacity: CharacterCreationSteps.setUnique === currentStep ? 1 : 0.5 }}
+      onClick={(e: any) => {
+        e.currentTarget.blur();
+        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.setUnique);
+      }}
+    >
+      <Text color="white" weight="bold">
+        {!!pbCreator ? formatPlaybookType(pbCreator.playbookUniqueCreator.type) : '...'}
+      </Text>
+      <Text>...</Text>
+    </Box>
+  );
+
+  const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6];
   const renderBoxesSmall = () => {
     switch (currentStep) {
       case 0:

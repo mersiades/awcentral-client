@@ -51,7 +51,8 @@ export enum CharacterCreationSteps {
   selectName = 2,
   selectLooks = 3,
   selectStats = 4,
-  selectGear = 5
+  selectGear = 5,
+  setUnique= 6
 }
 
 export enum LookCategories {
@@ -60,4 +61,18 @@ export enum LookCategories {
   face = 'FACE',
   eyes = 'EYES',
   body = 'BODY'
+}
+
+export enum UniqueTypes {
+  angelKit = 'ANGEL_KIT',
+    customWeapons = 'CUSTOM_WEAPONS',
+    brainerGear = 'BRAINER_GEAR',
+    gang = 'GANG',
+    car = 'CAR',
+    weapons = 'WEAPONS',
+    holding = 'HOLDING',
+    followers = 'FOLLOWERS',
+    establishment = 'ESTABLISHMENT',
+    workspace = 'WORKSPACE',
+    skinnerGear = 'SKINNER_GEAR'
 }

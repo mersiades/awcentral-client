@@ -1,5 +1,5 @@
 
-import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, WebsocketRequests, WebsocketResponses } from './enums';
+import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, UniqueTypes, WebsocketRequests, WebsocketResponses } from './enums';
 
 export interface Tokens {
   accessToken: string;
@@ -56,6 +56,7 @@ export interface PlaybookCreator {
   names: Name[]
   looks: Look[]
   statsOptions: StatsOption[]
+  playbookUniqueCreator: PlaybookUniqueCreator
 }
 
 interface RequestBody {
@@ -166,4 +167,47 @@ given_name: string
 name: string
 preferred_username: string
 sub: string
+}
+
+export interface PlaybookUniqueCreator {
+  id: string
+  type: UniqueTypes
+  angelKitCreator: AngelKitCreator
+  customWeaponsCreator: CustomWeaponsCreator
+  brainerGearCreator: BrainerGearCreator
+}
+
+export interface AngelKitCreator {
+  angelKitInstructions: string
+  startingStock: number
+}
+
+export interface CustomWeaponsCreator {
+  firearmsTitle: string
+firearmsBaseInstructions: string
+firearmsBaseOptions: TaggedItem[]
+firearmsOptionsInstructions: string
+firearmsOptionsOptions: ItemCharacteristic[]
+handTitle: string
+handBaseInstructions: string
+handBaseOptions: TaggedItem[]
+handOptionsInstructions: string
+handOptionsOptions: ItemCharacteristic[]
+}
+
+export interface BrainerGearCreator {
+  id: string
+  gear: string[]
+}
+
+export interface TaggedItem {
+  id: string
+  description: string
+  tags: string[]
+}
+
+export interface ItemCharacteristic {
+  id: string
+  description: string
+  tag: string
 }

@@ -1,5 +1,7 @@
 export const formatPlaybookType = (playbookType: string) => {
   const lowercased = playbookType.toLowerCase()
   const uppercased = lowercased.charAt(0).toUpperCase() + lowercased.slice(1)
-  return uppercased === "Maestro_d" ? "Maestro'D" : uppercased
+  const noUnderscore = uppercased.replace(/_/g, ' ')
+  console.log('noUnderscore', noUnderscore)
+  return noUnderscore === "Maestro d" ? "Maestro'D" : noUnderscore
 }

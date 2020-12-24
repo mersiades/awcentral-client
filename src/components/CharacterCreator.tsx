@@ -264,7 +264,12 @@ const CharacterCreator: FC = () => {
           </Box>
         </Layer>
       )}
-      <CharacterCreationStepper character={character} currentStep={creationStep} setCreationStep={setCreationStep} />
+      <CharacterCreationStepper
+        character={character}
+        playbookType={character?.playbook}
+        currentStep={creationStep}
+        setCreationStep={setCreationStep}
+      />
       {creationStep === 0 && <NewGameIntro game={game} closeNewGameIntro={closeNewGameIntro} />}
       {creationStep === CharacterCreationSteps.selectPlaybook && (
         <PlaybooksSelector playbooks={playbooks} playbook={character?.playbook} checkPlaybookReset={checkPlaybookReset} />

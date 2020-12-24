@@ -49,6 +49,19 @@ const PLAYBOOK_CREATOR = gql`
         SHARP
         WEIRD
       }
+      playbookUniqueCreator {
+        id
+        type
+        angelKitCreator {
+          id
+        }
+        customWeaponsCreator {
+          id
+        }
+        brainerGearCreator {
+          id
+        }
+      }
     }
   }
 `;
