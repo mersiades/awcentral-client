@@ -97,7 +97,7 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
                   </em>
                 </Box>
 
-                {[PlayBooks.angel, PlayBooks.battlebabe].includes(selectedPlaybook.playbookType) && (
+                {[PlayBooks.angel, PlayBooks.battlebabe, PlayBooks.brainer].includes(selectedPlaybook.playbookType) && (
                   <Button
                     label={`SELECT ${formatPlaybookType(selectedPlaybook.playbookType)}`}
                     primary

@@ -24,6 +24,7 @@ import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } fro
 import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
 import { Character, GameRole } from '../@types';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -58,6 +59,7 @@ const CharacterCreator: FC = () => {
   const [setCharacterName] = useMutation<SetCharacterNameData, SetCharacterNameVars>(SET_CHARACTER_NAME);
   const [setCharacterLook] = useMutation<SetCharacterLookData, SetCharacterLookVars>(SET_CHARACTER_LOOK);
   const [setCharacterStats] = useMutation<SetCharacterStatsData, SetCharacterStatsVars>(SET_CHARACTER_STATS);
+  const [setCharacterGear] = useMutation<SetCharacterGearData, SetCharacterGearVars>(SET_CHARACTER_GEAR);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.gameForPlayer;
@@ -161,7 +163,19 @@ const CharacterCreator: FC = () => {
     }
   };
 
-  const handleSubmitGear = () => console.log('submitting gear');
+  const handleSubmitGear = async (gear: string[]) => {
+    if (!!gameRole && !!character) {
+      try {
+        await setCharacterGear({
+          variables: { gameRoleId: gameRole.id, characterId: character.id, gear },
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+        });
+        setCreationStep((prevState) => prevState + 1);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
@@ -285,6 +299,7 @@ const CharacterCreator: FC = () => {
       )}
       {creationStep === CharacterCreationSteps.selectGear && character && character.name && character.playbook && (
         <CharacterGearForm
+          existingGear={character.gear}
           characterName={character.name}
           playbookType={character?.playbook}
           handleSubmitGear={handleSubmitGear}

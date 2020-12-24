@@ -8,6 +8,7 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../q
 import Spinner from './Spinner';
 
 interface CharacterGearFormProps {
+  existingGear: string[];
   playbookType: PlayBooks;
   characterName: string;
   handleSubmitGear: (gear: string[]) => void;
@@ -21,8 +22,13 @@ const GearUL = styled.ul`
   cursor: default;
 `;
 
-const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, characterName, handleSubmitGear }) => {
-  const [gear, setGear] = useState<string[]>([]);
+const CharacterGearForm: FC<CharacterGearFormProps> = ({
+  existingGear = [],
+  playbookType,
+  characterName,
+  handleSubmitGear,
+}) => {
+  const [gear, setGear] = useState<string[]>(existingGear);
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
   const [value, setValue] = useState('');
 
@@ -128,7 +134,11 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, character
       justify="start"
     >
       <Box width="70vw" height="70vh">
-        <Heading level={2} textAlign="center">{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</Heading>
+        <Heading
+          level={2}
+          textAlign="center"
+          style={{ maxWidth: 'unset' }}
+        >{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</Heading>
         <Text textAlign="center">Select an item to add, edit or delete it, or just type your own.</Text>
         <Grid
           fill
@@ -219,7 +229,12 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({ playbookType, character
             >{`... and you get oddments worth ${pbCreator.gearInstructions.startingBarter}-barter`}</Paragraph>
           </Box>
           <Box gridArea="submit-box" direction="row" justify="end" gap="24px" fill>
-            <Button primary label="SET" onClick={() => console.log('clicked')} disabled={gear.length < 2} />
+            <Button
+              primary
+              label="SET"
+              onClick={() => handleSubmitGear(gear)}
+              disabled={gear.length < 1 || JSON.stringify(gear) === JSON.stringify(existingGear)}
+            />
           </Box>
         </Grid>
       </Box>
