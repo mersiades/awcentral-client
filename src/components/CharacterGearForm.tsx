@@ -1,9 +1,10 @@
 import { useQuery } from '@apollo/client';
 import { Box, Button, Grid, Heading, Paragraph, Text, TextArea } from 'grommet';
-import React, { ChangeEvent, FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { PlaybookCreator } from '../@types';
 import { PlayBooks } from '../@types/enums';
+import { accentColors } from '../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
 
@@ -16,7 +17,6 @@ interface CharacterGearFormProps {
 
 const GearUL = styled.ul`
   margin: unset;
-  overflow-y: auto;
   width: -webkit-fill-available;
   align-self: center;
   cursor: default;
@@ -31,6 +31,9 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
   const [gear, setGear] = useState<string[]>(existingGear);
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
   const [value, setValue] = useState('');
+  const [showScrollDown, setShowScrollDown] = useState(false);
+
+  const instructionsBoxRef = useRef<HTMLDivElement>(null);
 
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
@@ -39,11 +42,46 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
     }
   );
 
+  const handleScroll = (e: any) => {
+    if (!e.currentTarget) {
+      return;
+    }
+    if (e.currentTarget.scrollHeight <= e.currentTarget.offsetHeight) {
+      setShowScrollDown(false);
+      return;
+    }
+
+    if (e.currentTarget.scrollTop > 0) {
+      setShowScrollDown(false);
+      return;
+    }
+
+    if (e.currentTarget.scrollTop === 0) {
+      setShowScrollDown(true);
+      return;
+    }
+  };
+
   // ---------------------------------------------------- UseEffects  -------------------------------------------------------- //
 
   useEffect(() => {
     !!pbCreatorData && setPbCreator(pbCreatorData.playbookCreator);
   }, [pbCreatorData]);
+
+  useEffect(() => {
+    console.log('instructionsBoxRef', instructionsBoxRef);
+    console.log('instructionsBoxRef.current', instructionsBoxRef.current);
+    if (instructionsBoxRef.current) {
+      // contentRef.current.addEventListener('touchmove', (e: any) => onScroll(e));
+      if (instructionsBoxRef.current.scrollHeight > instructionsBoxRef.current.offsetHeight) {
+        setShowScrollDown(true);
+      } else {
+        setShowScrollDown(false);
+      }
+      instructionsBoxRef.current.scrollTop = 0;
+    }
+    return () => {};
+  }, [instructionsBoxRef, pbCreator]);
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
@@ -155,21 +193,26 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
             { name: 'submit-box', start: [0, 3], end: [3, 3] },
           ]}
         >
-          <Box fill gridArea="instructions-box">
-            <>
-              <Heading level={4} alignSelf="center">
-                Options
-              </Heading>
-              {renderYouGet()}
-              {renderYouGetItem()}
-              {renderInAddition()}
-              <br />
-              {renderIntroduceChoice()}
-              {renderChooseableGear()}
-              {renderWithMC()}
-            </>
+          <Box
+            ref={instructionsBoxRef}
+            fill
+            gridArea="instructions-box"
+            overflow="auto"
+            onScroll={(e) => handleScroll(e)}
+            style={showScrollDown ? { boxShadow: `0px -10px 10px -8px ${accentColors[0]} inset` } : undefined}
+          >
+            <Heading level={4} alignSelf="center">
+              Options
+            </Heading>
+            {renderYouGet()}
+            {renderYouGetItem()}
+            {renderInAddition()}
+            <br />
+            {renderIntroduceChoice()}
+            {renderChooseableGear()}
+            {renderWithMC()}
           </Box>
-          <Box fill gridArea="gear-box">
+          <Box fill gridArea="gear-box" overflow="auto">
             <Heading level={4} alignSelf="center">
               Gear
             </Heading>
