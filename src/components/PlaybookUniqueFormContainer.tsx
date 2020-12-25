@@ -11,7 +11,7 @@ interface PlaybookUniqueFormContainerProps {
   playbookType: PlayBooks;
   characterName: string;
   handleSubmitBrainerGear: (brainerGear: string[]) => void;
-  handleSubmitAngelKit: (stock: number) => void;
+  handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
 }
 
 const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({

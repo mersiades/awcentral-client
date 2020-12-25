@@ -45,6 +45,16 @@ const GAME_FOR_PLAYER = gql`
               id
               brainerGear
             }
+            angelKit {
+              id
+              description
+              stock
+              angelKitMoves {
+                id
+              }
+              hasSupplier
+              supplierText
+            }
           }
         }
       }

@@ -1,15 +1,14 @@
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import styled from 'styled-components';
-import { Box, Button, CheckBoxGroup, CheckBoxProps, FormField, Heading, Paragraph, Text, TextInput } from 'grommet';
+import { Box, Button, FormField, Heading, TextInput } from 'grommet';
 
 import { PlaybookUniqueCreator } from '../@types';
-import { accentColors, brandColor } from '../config/grommetConfig';
+import { brandColor } from '../config/grommetConfig';
 
 interface UniqueFormAngelProps {
   characterName: string;
   playbookUniqueCreator: PlaybookUniqueCreator;
-  handleSubmitAngelKit: (stock: number) => void;
+  handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
 }
 
 const boxShadow = {
@@ -41,7 +40,7 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniq
         </Box>
       </Box>
       <Box fill direction="row" justify="end" align="center" style={{ minHeight: 52 }}>
-        <Button label="SET" primary onClick={() => handleSubmitAngelKit(startingStock)} margin={{ right: '5px' }} />
+        <Button label="SET" primary onClick={() => handleSubmitAngelKit(startingStock, false)} margin={{ right: '5px' }} />
       </Box>
     </Box>
   );

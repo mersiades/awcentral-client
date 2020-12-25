@@ -27,6 +27,7 @@ import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
 import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mutations/setBrainerGear';
+import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/setAngelKit';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -63,6 +64,7 @@ const CharacterCreator: FC = () => {
   const [setCharacterStats] = useMutation<SetCharacterStatsData, SetCharacterStatsVars>(SET_CHARACTER_STATS);
   const [setCharacterGear] = useMutation<SetCharacterGearData, SetCharacterGearVars>(SET_CHARACTER_GEAR);
   const [setBrainerGear] = useMutation<SetBrainerGearData, SetBrainerGearVars>(SET_BRAINER_GEAR);
+  const [setAngelKit] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.gameForPlayer;
@@ -194,7 +196,19 @@ const CharacterCreator: FC = () => {
     }
   };
 
-  const handleSubmitAngelKit = (stock: number) => console.log('submitting');
+  const handleSubmitAngelKit = async (stock: number, hasSupplier: boolean) => {
+    if (!!gameRole && !!character) {
+      try {
+        await setAngelKit({
+          variables: { gameRoleId: gameRole.id, characterId: character.id, stock, hasSupplier },
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+        });
+        setCreationStep((prevState) => prevState + 1);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 

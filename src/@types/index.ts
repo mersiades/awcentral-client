@@ -91,6 +91,20 @@ export interface Move {
   stat?: Stats
   kind: MoveKinds
   playbook?: PlayBooks
+  statModifier?: StatModifier
+  rollModifier?: RollModifier
+}
+
+export interface StatModifier {
+  id: string
+    statToModify: Stats
+    modification: number
+}
+
+export interface RollModifier {
+  id: string
+    movesToModify: Move[]
+    statToRollWith: Stats[]
 }
 
 export interface User {
@@ -217,10 +231,20 @@ export interface ItemCharacteristic {
 export interface PlaybookUnique {
   id: string
   type: UniqueTypes
-  brainerGear: BrainerGear
+  brainerGear?: BrainerGear
+  angelKit?: AngelKit
 }
 
 export interface BrainerGear {
   id: string
   brainerGear: string[]
+}
+
+export interface AngelKit {
+  id: string
+  description: string
+  stock: number
+  angelKitMoves: Move[] 
+  hasSupplier: boolean
+  supplierText: string
 }

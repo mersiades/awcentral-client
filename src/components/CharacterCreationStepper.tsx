@@ -175,15 +175,29 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   const renderUnique = () => {
     if (!!character?.playbookUnique) {
       switch (character?.playbookUnique.type) {
+        case UniqueTypes.angelKit:
+          if (!!character.playbookUnique.angelKit) {
+            const { stock, hasSupplier } = character.playbookUnique.angelKit;
+            return (
+              <CustomUL>
+                <li key={1}>{`Stock: ${stock}`}</li>
+                <li key={2}>{hasSupplier ? 'Has supplier' : 'No supplier yet'}</li>
+              </CustomUL>
+            );
+          }
+          return null;
         case UniqueTypes.brainerGear:
-          const concatGear = character.playbookUnique.brainerGear.brainerGear.map((gear) => gear.split('('));
-          return (
-            <CustomUL>
-              {concatGear.map((item, index) => (
-                <li key={index}>{item[0]}</li>
-              ))}
-            </CustomUL>
-          );
+          if (!!character.playbookUnique.brainerGear) {
+            const concatGear = character.playbookUnique.brainerGear.brainerGear.map((gear) => gear.split('('));
+            return (
+              <CustomUL>
+                {concatGear.map((item, index) => (
+                  <li key={index}>{item[0]}</li>
+                ))}
+              </CustomUL>
+            );
+          }
+          return null;
         default:
           return null;
       }
