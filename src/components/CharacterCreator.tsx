@@ -210,6 +210,8 @@ const CharacterCreator: FC = () => {
     }
   };
 
+  const handleSubmitCustomWeapons = () => console.log('submitting');
+
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
   // -------------------------------------------------- UseEffects ---------------------------------------------------- //
@@ -351,6 +353,7 @@ const CharacterCreator: FC = () => {
           characterName={character.name}
           handleSubmitBrainerGear={handleSubmitBrainerGear}
           handleSubmitAngelKit={handleSubmitAngelKit}
+          handleSubmitCustomWeapons={handleSubmitCustomWeapons}
         />
       )}
     </Box>

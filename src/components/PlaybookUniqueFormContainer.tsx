@@ -5,6 +5,7 @@ import { PlayBooks } from '../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
 import UniqueFormAngel from './UniqueFormAngel';
+import UniqueFormBattlebabe from './UniqueFormBattlebabe';
 import UniqueFormBrainer from './UniqueFormBrainer';
 
 interface PlaybookUniqueFormContainerProps {
@@ -12,13 +13,15 @@ interface PlaybookUniqueFormContainerProps {
   characterName: string;
   handleSubmitBrainerGear: (brainerGear: string[]) => void;
   handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
+  handleSubmitCustomWeapons: () => void;
 }
 
 const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
   playbookType,
   characterName,
-  handleSubmitBrainerGear,
   handleSubmitAngelKit,
+  handleSubmitBrainerGear,
+  handleSubmitCustomWeapons,
 }) => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType },
@@ -45,7 +48,13 @@ const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
           />
         );
       case PlayBooks.battlebabe:
-        return null;
+        return (
+          <UniqueFormBattlebabe
+            characterName={characterName}
+            playbookUniqueCreator={playbookUniqueCreator}
+            handleSubmitCustomWeapons={handleSubmitCustomWeapons}
+          />
+        );
       case PlayBooks.brainer:
         return (
           <UniqueFormBrainer

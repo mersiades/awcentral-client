@@ -327,6 +327,24 @@ export const theme = deepMerge(grommet, {
       bottom: 'xsmall',
     },
   },
+  tip: {
+    content: {
+      // any Box props
+      background: {
+        color: neutralColors[1],
+        dark: false
+      },
+      elevation: 'small',
+      margin: 'xsmall',
+      pad: { vertical: 'xsmall', horizontal: 'small' },
+      round: 'small',
+      style: { boxShadow: '0 0 1px 1px #000, 0 0 5px 3px #000'}
+    },
+    drop: {
+      // any props for the drop
+      align: { top: 'bottom' }, // most common use case is Header with Buttons
+    },
+  },
 });
 
 export const customDefaultButtonStyles = deepMerge(grommet, {
