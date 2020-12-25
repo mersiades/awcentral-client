@@ -4,18 +4,21 @@ import React, { FC } from 'react';
 import { PlayBooks } from '../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
+import UniqueFormAngel from './UniqueFormAngel';
 import UniqueFormBrainer from './UniqueFormBrainer';
 
 interface PlaybookUniqueFormContainerProps {
   playbookType: PlayBooks;
   characterName: string;
   handleSubmitBrainerGear: (brainerGear: string[]) => void;
+  handleSubmitAngelKit: (stock: number) => void;
 }
 
 const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
   playbookType,
   characterName,
   handleSubmitBrainerGear,
+  handleSubmitAngelKit,
 }) => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType },
@@ -34,7 +37,13 @@ const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
   const renderForm = () => {
     switch (playbookType) {
       case PlayBooks.angel:
-        return null;
+        return (
+          <UniqueFormAngel
+            characterName={characterName}
+            playbookUniqueCreator={playbookUniqueCreator}
+            handleSubmitAngelKit={handleSubmitAngelKit}
+          />
+        );
       case PlayBooks.battlebabe:
         return null;
       case PlayBooks.brainer:

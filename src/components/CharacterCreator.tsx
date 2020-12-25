@@ -194,6 +194,8 @@ const CharacterCreator: FC = () => {
     }
   };
 
+  const handleSubmitAngelKit = (stock: number) => console.log('submitting');
+
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
   // -------------------------------------------------- UseEffects ---------------------------------------------------- //
@@ -334,6 +336,7 @@ const CharacterCreator: FC = () => {
           playbookType={character.playbook}
           characterName={character.name}
           handleSubmitBrainerGear={handleSubmitBrainerGear}
+          handleSubmitAngelKit={handleSubmitAngelKit}
         />
       )}
     </Box>

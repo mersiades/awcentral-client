@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import '../assets/styles/main.css'
 
-const brandColor = '#CD3F3E';
+export const brandColor = '#CD3F3E';
 
 export const accentColors = ['#698D70', '#CFCBBC', '#D66667', '#E0C5B6'];
 export const neutralColors = ['#4C684C', '#B1BAA3', '#614134', '#967F6B'];
