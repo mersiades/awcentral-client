@@ -163,34 +163,19 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
     <Box
       fill
       direction="column"
-      background="black"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
-      pad="24px"
+      pad="6px"
       align="center"
       justify="start"
     >
-      <Box width="70vw" height="70vh">
+      <Box width="70vw" height="100%" overflow="auto">
         <Heading
           level={2}
           textAlign="center"
           style={{ maxWidth: 'unset' }}
         >{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</Heading>
         <Text textAlign="center">Select an item to add, edit or delete it, or just type your own.</Text>
-        <Grid
-          fill
-          justifyContent="center"
-          rows={['60%', '20%', '10%', '10%']}
-          columns={['25%', '25%', '25%', '25%']}
-          gap="12px"
-          areas={[
-            { name: 'instructions-box', start: [0, 0], end: [1, 0] },
-            { name: 'gear-box', start: [2, 0], end: [3, 0] },
-            { name: 'text-box', start: [0, 1], end: [3, 1] },
-            { name: 'add-delete-box', start: [3, 1], end: [3, 1] },
-            { name: 'barter-box', start: [0, 2], end: [3, 2] },
-            { name: 'submit-box', start: [0, 3], end: [3, 3] },
-          ]}
-        >
+        <Box direction="row" flex="grow">
           <Box
             ref={instructionsBoxRef}
             fill
@@ -198,6 +183,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
             overflow="auto"
             onScroll={(e) => handleScroll(e)}
             style={showScrollDown ? { boxShadow: `0px -10px 10px -8px ${accentColors[0]} inset` } : undefined}
+            pad="6px"
           >
             <Heading level={4} alignSelf="center">
               Options
@@ -210,74 +196,72 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
             {renderChooseableGear()}
             {renderWithMC()}
           </Box>
-          <Box fill gridArea="gear-box" overflow="auto">
-            <Heading level={4} alignSelf="center">
-              Gear
-            </Heading>
-            {renderInAddition()}
-            <GearUL>
-              {gear.map((item, index) => (
-                <li
-                  key={index}
-                  // @ts-ignore
-                  onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
-                  // @ts-ignore
-                  onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
-                  onClick={(e: React.MouseEvent<HTMLLIElement>) => setValue(item)}
-                >
-                  {item}
-                </li>
-              ))}
-            </GearUL>
+          <Box fill gridArea="gear-box" pad="6px">
+            <Box fill="horizontal">
+              <Heading level={4} alignSelf="center">
+                Gear
+              </Heading>
+            </Box>
+            <Box flex="grow">
+              <GearUL>
+                {gear.map((item, index) => (
+                  <li
+                    key={index}
+                    // @ts-ignore
+                    onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
+                    // @ts-ignore
+                    onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
+                    onClick={(e: React.MouseEvent<HTMLLIElement>) => setValue(item)}
+                  >
+                    {item}
+                  </li>
+                ))}
+              </GearUL>
+            </Box>
+            <Box fill="horizontal">
+              <TextArea
+                placeholder="Edit or type item"
+                fill
+                value={value}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setValue(e.target.value)}
+              />
+            </Box>
+            <Box direction="row" fill="horizontal" gap="6px" margin={{ top: '6px' }}>
+              <Button
+                secondary
+                label="ADD"
+                disabled={!value || gear.includes(value)}
+                fill="horizontal"
+                style={{ outline: 'none', boxShadow: 'none' }}
+                onClick={() => {
+                  const newGear = [...gear, value];
+                  setGear(newGear);
+                  setValue('');
+                }}
+              />
+              <Button
+                label="REMOVE"
+                disabled={!gear.includes(value)}
+                fill="horizontal"
+                style={{ outline: 'none', boxShadow: 'none' }}
+                onClick={() => {
+                  const newGear = gear.filter((item) => item !== value);
+                  setGear(newGear);
+                  setValue('');
+                }}
+              />
+            </Box>
           </Box>
-          <Box gridArea="text-box" direction="row" gap="6px">
-            <TextArea
-              placeholder="Edit or type item"
-              fill
-              value={value}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setValue(e.target.value)}
-            />
-          </Box>
-          <Box gridArea="add-delete-box" direction="column" gap="6px">
-            <Button
-              secondary
-              label="ADD"
-              disabled={!value || gear.includes(value)}
-              fill="horizontal"
-              style={{ outline: 'none', boxShadow: 'none' }}
-              onClick={() => {
-                const newGear = [...gear, value];
-                setGear(newGear);
-                setValue('');
-              }}
-            />
-            <Button
-              label="REMOVE"
-              disabled={!gear.includes(value)}
-              fill="horizontal"
-              style={{ outline: 'none', boxShadow: 'none' }}
-              onClick={() => {
-                const newGear = gear.filter((item) => item !== value);
-                setGear(newGear);
-                setValue('');
-              }}
-            />
-          </Box>
-          <Box gridArea="barter-box">
-            <Paragraph
-              fill
-              textAlign="center"
-            >{`... and you get oddments worth ${pbCreator.gearInstructions.startingBarter}-barter`}</Paragraph>
-          </Box>
-          <Box gridArea="submit-box" direction="row" justify="end" gap="24px" fill>
-            <Button
-              primary
-              label="SET"
-              onClick={() => handleSubmitGear(gear)}
-              disabled={gear.length < 1 || JSON.stringify(gear) === JSON.stringify(existingGear)}
-            />
-          </Box>
-        </Grid>
+        </Box>
+        <Box direction="row" pad="6px" justify="between" align="center" style={{ minHeight: 52 }}>
+          <Paragraph textAlign="center">{`... and you get oddments worth ${pbCreator.gearInstructions.startingBarter}-barter`}</Paragraph>
+          <Button
+            primary
+            label="SET"
+            onClick={() => handleSubmitGear(gear)}
+            disabled={gear.length < 1 || JSON.stringify(gear) === JSON.stringify(existingGear)}
+          />
+        </Box>
       </Box>
     </Box>
   );
