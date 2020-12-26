@@ -22,13 +22,15 @@ import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
-import { Character, GameRole } from '../@types';
+import { Character, CharacterMove, GameRole } from '../@types';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
 import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mutations/setBrainerGear';
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/setAngelKit';
 import CharacterMovesForm from './CharacterMovesForm';
+import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
+import { omit } from 'lodash';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -74,6 +76,7 @@ const CharacterCreator: FC = () => {
   const [setCharacterGear] = useMutation<SetCharacterGearData, SetCharacterGearVars>(SET_CHARACTER_GEAR);
   const [setBrainerGear] = useMutation<SetBrainerGearData, SetBrainerGearVars>(SET_BRAINER_GEAR);
   const [setAngelKit] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
+  const [setCharacterMoves] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(SET_CHARACTER_MOVES);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.gameForPlayer;
@@ -221,6 +224,20 @@ const CharacterCreator: FC = () => {
 
   const handleSubmitCustomWeapons = () => console.log('submitting');
 
+  const handleSubmitCharacterMoves = async (moveIds: string[]) => {
+    if (!!gameRole && !!character) {
+      try {
+        await setCharacterMoves({
+          variables: { gameRoleId: gameRole.id, characterId: character.id, moveIds },
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+        });
+        setCreationStep((prevState) => prevState + 1);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
   // -------------------------------------------------- UseEffects ---------------------------------------------------- //
@@ -367,7 +384,11 @@ const CharacterCreator: FC = () => {
         />
       )}
       {creationStep === CharacterCreationSteps.selectMoves && character && character.name && character.playbook && (
-        <CharacterMovesForm playbookType={character.playbook} characterName={character.name} />
+        <CharacterMovesForm
+          playbookType={character.playbook}
+          characterName={character.name}
+          handleSubmitCharacterMoves={handleSubmitCharacterMoves}
+        />
       )}
     </Box>
   );

@@ -38,6 +38,22 @@ const GAME_FOR_PLAYER = gql`
             look
             category
           }
+          characterMoves {
+            id
+            isSelected
+            name
+            kind
+            description
+            playbook
+            stat
+            rollModifier {
+              id
+              movesToModify {
+                id
+              }
+              statToRollWith
+            }
+          }
           playbookUnique {
             id
             type
