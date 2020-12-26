@@ -58,6 +58,9 @@ export interface PlaybookCreator {
   looks: Look[]
   statsOptions: StatsOption[]
   playbookUniqueCreator: PlaybookUniqueCreator
+  playbookMoves: CharacterMove[]
+  defaultMoveCount: number
+  moveChoiceCount: number
 }
 
 interface RequestBody {
@@ -85,14 +88,18 @@ export interface GameResponse extends ResponseBody {
 }
 
 export interface Move {
-  id?: string
+  id: string
   name: string
   description: string
-  stat?: Stats
   kind: MoveKinds
-  playbook?: PlayBooks
+  playbook: PlayBooks
+  stat?: Stats
   statModifier?: StatModifier
   rollModifier?: RollModifier
+}
+
+export interface CharacterMove extends Move {
+  isSelected: boolean;
 }
 
 export interface StatModifier {
@@ -156,21 +163,13 @@ export interface CharacterStat {
 
 export interface GearInstructions {
   id: string
-
   youGet: string
-
   youGetItems : string[]
-
   inAddition: string
-
   introduceChoice: string
-
   numberCanChoose: number
-
   chooseableGear: string[]
-
   withMC: string
-
   startingBarter: number
 }
 

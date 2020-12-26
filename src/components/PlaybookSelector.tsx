@@ -47,7 +47,6 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
       className={startFadeOut ? 'fadeOut' : ''}
       fill
       direction="column"
-      background="black"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
       <Grid
@@ -79,7 +78,7 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
                 { name: 'text', start: [1, 0], end: [1, 0] },
               ]}
             >
-              <Box gridArea="image" background="black" animation="fadeIn" justify="center">
+              <Box gridArea="image" animation="fadeIn" justify="center">
                 <img
                   src={selectedPlaybook.playbookImageUrl}
                   alt={formatPlaybookType(selectedPlaybook.playbookType)}

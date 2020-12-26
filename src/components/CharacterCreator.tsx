@@ -28,6 +28,7 @@ import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '
 import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mutations/setBrainerGear';
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/setAngelKit';
+import CharacterMovesForm from './CharacterMovesForm';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -35,6 +36,14 @@ export const resetWarningBackground = {
   position: 'center bottom',
   size: 'cover',
   image: 'url(/images/background-image-6.jpg)',
+};
+
+export const background = {
+  color: 'black',
+  dark: true,
+  size: 'contain',
+  image: 'url(/images/landscape-smoke.jpg)',
+  position: 'top center',
 };
 
 const CharacterCreator: FC = () => {
@@ -236,16 +245,16 @@ const CharacterCreator: FC = () => {
         setCreationStep(4);
       } else if (!!character.statsBlock && character.statsBlock.stats.length === 5 && character.gear.length === 0) {
         setCreationStep(5);
-      } else if (!!character.gear && character.gear.length > 0) {
+      } else if (!!character.gear && character.gear.length > 0 && !character.playbookUnique) {
         setCreationStep(6);
+      } else if (!!character.playbookUnique /* TODO: add case where characterMoves are null */) {
+        setCreationStep(7);
       }
     }
   }, [character, creationStep]);
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
-  // console.log('playbooks', playbooks);
-  console.log('game', game);
   if (loadingPlaybooks || loadingGame || !playbooks || !game) {
     return (
       <Box fill background="black" justify="center" align="center">
@@ -253,10 +262,9 @@ const CharacterCreator: FC = () => {
       </Box>
     );
   }
-  // console.log('character', character);
-  // console.log('creationStep', creationStep);
+
   return (
-    <Box fill background="black">
+    <Box fill background={background} overflow={{ vertical: 'auto' }}>
       {!!showResetWarning && (
         <Layer onEsc={() => setShowResetWarning(undefined)} onClickOutside={() => setShowResetWarning(undefined)}>
           <Box
@@ -301,12 +309,14 @@ const CharacterCreator: FC = () => {
           </Box>
         </Layer>
       )}
+
       <CharacterCreationStepper
         character={character}
         playbookType={character?.playbook}
         currentStep={creationStep}
         setCreationStep={setCreationStep}
       />
+
       {creationStep === 0 && <NewGameIntro game={game} closeNewGameIntro={closeNewGameIntro} />}
       {creationStep === CharacterCreationSteps.selectPlaybook && (
         <PlaybooksSelector playbooks={playbooks} playbook={character?.playbook} checkPlaybookReset={checkPlaybookReset} />
@@ -355,6 +365,9 @@ const CharacterCreator: FC = () => {
           handleSubmitAngelKit={handleSubmitAngelKit}
           handleSubmitCustomWeapons={handleSubmitCustomWeapons}
         />
+      )}
+      {creationStep === CharacterCreationSteps.selectMoves && character && character.name && character.playbook && (
+        <CharacterMovesForm playbookType={character.playbook} characterName={character.name} />
       )}
     </Box>
   );

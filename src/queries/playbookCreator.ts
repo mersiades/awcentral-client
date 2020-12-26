@@ -49,6 +49,29 @@ const PLAYBOOK_CREATOR = gql`
         SHARP
         WEIRD
       }
+      defaultMoveCount
+      moveChoiceCount
+      playbookMoves {
+        id
+        isSelected
+        name
+        kind
+        description
+        playbook
+        stat
+        statModifier {
+          id
+          statToModify
+          modification
+        }
+        rollModifier {
+          id
+          movesToModify {
+            id
+          }
+          statToRollWith
+        }
+      }
       playbookUniqueCreator {
         id
         type

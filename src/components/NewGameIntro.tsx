@@ -43,8 +43,7 @@ const NewGameIntro: FC<NewGameIntroProps> = ({ game, closeNewGameIntro }) => {
   return (
     <Box
       direction="column"
-      fill
-      background="black"
+      // fill
       align="center"
       justify="center"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}

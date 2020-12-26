@@ -18,7 +18,6 @@ const boxShadow = {
 const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniqueCreator, handleSubmitAngelKit }) => {
   const { angelKitInstructions, startingStock } = playbookUniqueCreator.angelKitCreator;
   const [stock, setStock] = useState(startingStock);
-  console.log('playbookUniqueCreator', playbookUniqueCreator);
   return (
     <Box width="60vw" direction="column" align="start" justify="between" overflow="auto">
       <Heading level={2} alignSelf="center">{`${characterName.toUpperCase()}'S ANGEL KIT`}</Heading>

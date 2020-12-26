@@ -52,7 +52,8 @@ export enum CharacterCreationSteps {
   selectLooks = 3,
   selectStats = 4,
   selectGear = 5,
-  setUnique= 6
+  setUnique = 6,
+  selectMoves = 7
 }
 
 export enum LookCategories {

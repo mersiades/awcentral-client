@@ -16,13 +16,6 @@ interface CharacterCreationStepperProps {
   playbookType?: PlayBooks;
 }
 
-export const background = {
-  color: 'black',
-  dark: true,
-  size: 'contain',
-  image: 'url(/images/landscape-smoke.jpg)',
-};
-
 const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   currentStep,
   setCreationStep,
@@ -227,7 +220,38 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
     </Box>
   );
 
-  const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6];
+  const box5Step7 = (
+    <Box
+      margin={{ left: 'xsmall', right: 'xsmall' }}
+      justify="start"
+      width="11rem"
+      height="10rem"
+      gap="small"
+      align="center"
+      pad="small"
+      border
+      background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectMoves === currentStep ? 1 : 0.5 }}
+      onClick={(e: any) => {
+        e.currentTarget.blur();
+        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.selectMoves);
+      }}
+    >
+      <Text color="white" weight="bold" alignSelf="center">
+        Moves
+      </Text>
+      {/* {!!character && character.moves?.length > 0 ? (
+        <CustomUL>
+          {character.gear.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+        </CustomUL>
+      ) : (
+        <Text>...</Text>
+      )} */}
+    </Box>
+  );
+
+  const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7];
   const renderBoxesSmall = () => {
     switch (currentStep) {
       case 0:
@@ -269,38 +293,56 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
             {boxesArray[3]}
           </>
         );
+      case 3:
+        return (
+          <>
+            {boxesArray[0]}
+            {boxesArray[1]}
+            {boxesArray[2]}
+            {boxesArray[3]}
+          </>
+        );
+      case 4:
+        return (
+          <>
+            {boxesArray[0]}
+            {boxesArray[1]}
+            {boxesArray[2]}
+            {boxesArray[3]}
+          </>
+        );
 
       default:
         return (
           <>
+            {boxesArray[currentStep - 4]}
             {boxesArray[currentStep - 3]}
             {boxesArray[currentStep - 2]}
             {boxesArray[currentStep - 1]}
-            {boxesArray[currentStep]}
           </>
         );
     }
   };
 
   return (
-    <Box direction="row" fill="horizontal" background={background} justify="center" pad="24px" align="center">
+    <Box direction="row" fill="horizontal" justify="center" pad="24px" align="center">
       {currentStep > 1 ? (
         <Previous
           cursor="pointer"
           onClick={() => !!character?.name && !!character?.playbook && setCreationStep(currentStep - 1)}
           size="large"
-          color="neutral-1"
+          color="accent-1"
         />
       ) : (
         <div style={{ height: 48, width: 48, background: 'transparent' }} />
       )}
       {window.innerWidth < 800 ? renderBoxesSmall() : renderBoxes()}
-      {currentStep < 5 && currentStep > 1 && !!character?.name ? (
+      {currentStep < 7 && currentStep > 1 && !!character?.name ? (
         <Next
           cursor="pointer"
           onClick={() => !!character?.name && !!character?.playbook && setCreationStep(currentStep + 1)}
           size="large"
-          color="neutral-1"
+          color="accent-1"
         />
       ) : (
         <div style={{ height: 48, width: 48, background: 'transparent' }} />

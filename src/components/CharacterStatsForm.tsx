@@ -12,16 +12,6 @@ interface CharacterStatsFormProps {
   characterName: string;
 }
 
-export const background = `
-  background-color: #000;
-  background-image: url(/images/background-image-3.png);
-  background-position-x: right;
-  background-position-y: bottom;
-  background-repeat: no-repeat;
-  background-size: 25%;
-  background-opacity: 0.5;
-`;
-
 const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleSubmitStats, characterName }) => {
   const [selectedStatsOption, setSelectedStatsOption] = useState<StatsOption | undefined>();
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
@@ -49,7 +39,6 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
     <Box
       fill
       direction="column"
-      background={background}
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       pad="24px"
       align="center"
@@ -73,6 +62,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
               hoverIndicator={{ color: 'neutral-1', opacity: 0.4 }}
               onClick={() => setSelectedStatsOption(opt)}
               gap="6px"
+              style={{ minHeight: '52px' }}
             >
               <Box direction="row" align="center" gap="12px">
                 <Heading level={4}>COOL:</Heading>
@@ -106,15 +96,16 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
               </Box>
             </Box>
           ))}
+          <Box direction="row" justify="end" width="50vw" margin={{ top: '12px' }}>
+            <Button
+              primary
+              label="SET"
+              onClick={() => !!selectedStatsOption && handleSubmitStats(selectedStatsOption.id)}
+              disabled={!selectedStatsOption}
+              style={{ minHeight: '52px' }}
+            />
+          </Box>
         </Box>
-      </Box>
-      <Box direction="row" justify="end" gap="24px" width="50vw">
-        <Button
-          primary
-          label="SET"
-          onClick={() => !!selectedStatsOption && handleSubmitStats(selectedStatsOption.id)}
-          disabled={!selectedStatsOption}
-        />
       </Box>
     </Box>
   );
