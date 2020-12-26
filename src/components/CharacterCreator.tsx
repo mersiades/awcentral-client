@@ -8,8 +8,10 @@ import CharacterNameForm from './CharacterNameForm';
 import CharacterLooksForm from './CharacterLooksForm';
 import CharacterStatsForm from './CharacterStatsForm';
 import CharacterGearForm from './CharacterGearForm';
-import CharacterCreationStepper from './CharacterCreationStepper';
+import CharacterMovesForm from './CharacterMovesForm';
 import NewGameIntro from './NewGameIntro';
+import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
+import CharacterCreationStepper from './CharacterCreationStepper';
 import Spinner from './Spinner';
 import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../mutations/createCharacter';
 import SET_CHARACTER_PLAYBOOK, {
@@ -22,15 +24,12 @@ import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
-import { Character, CharacterMove, GameRole } from '../@types';
-import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
-import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mutations/setBrainerGear';
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/setAngelKit';
-import CharacterMovesForm from './CharacterMovesForm';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
-import { omit } from 'lodash';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import { Character, GameRole } from '../@types';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -67,6 +66,7 @@ const CharacterCreator: FC = () => {
   const { data: gameData, loading: loadingGame } = useQuery<GameForPlayerData, GameForPlayerVars>(GAME_FOR_PLAYER, {
     // @ts-ignore
     variables: { gameId, userId },
+    skip: !userId,
   });
   const [createCharacter] = useMutation<CreateCharacterData, CreateCharacterVars>(CREATE_CHARACTER);
   const [setCharacterPlaybook] = useMutation<SetCharacterPlaybookData, SetCharacterPlaybookVars>(SET_CHARACTER_PLAYBOOK);

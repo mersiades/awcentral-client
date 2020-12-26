@@ -96,7 +96,9 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       {reversedLooks.length > 0 ? (
         <CustomUL>
           {reversedLooks.map((look) => (
-            <li key={look}>{look}</li>
+            <li key={look} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {look}
+            </li>
           ))}
         </CustomUL>
       ) : (
@@ -156,7 +158,9 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       {!!character && character.gear?.length > 0 ? (
         <CustomUL>
           {character.gear.map((item, index) => (
-            <li key={index}>{item}</li>
+            <li key={index} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {item}
+            </li>
           ))}
         </CustomUL>
       ) : (
@@ -185,7 +189,9 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
             return (
               <CustomUL>
                 {concatGear.map((item, index) => (
-                  <li key={index}>{item[0]}</li>
+                  <li key={index} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {item[0]}
+                  </li>
                 ))}
               </CustomUL>
             );
@@ -239,15 +245,22 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       <Text color="white" weight="bold" alignSelf="center">
         Moves
       </Text>
-      {/* {!!character && character.moves?.length > 0 ? (
+      {!!character && !!character.characterMoves && character.characterMoves.length > 0 ? (
         <CustomUL>
-          {character.gear.map((item, index) => (
-            <li key={index}>{item}</li>
-          ))}
+          {character.characterMoves.map((move) => {
+            if (move.isSelected) {
+              return (
+                <li key={move.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {formatPlaybookType(move.name)}
+                </li>
+              );
+            }
+            return null;
+          })}
         </CustomUL>
       ) : (
         <Text>...</Text>
-      )} */}
+      )}
     </Box>
   );
 

@@ -37,6 +37,7 @@ export interface Character {
   looks?: Look[]
   statsBlock: StatsBlock
   playbookUnique?: PlaybookUnique
+  characterMoves?: CharacterMove[]
 }
 
 export interface GameRole {

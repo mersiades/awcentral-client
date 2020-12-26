@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Character, CharacterMove } from '../@types';
+import { Character } from '../@types';
 
 export interface SetCharacterMovesData {
   setCharacterMoves: Character

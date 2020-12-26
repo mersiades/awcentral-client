@@ -424,4 +424,5 @@ export const CustomUL = styled.ul`
   &::-webkit-scrollbar {
     display: none;
   }
+  
 `;

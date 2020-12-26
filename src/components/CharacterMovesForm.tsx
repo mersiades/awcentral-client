@@ -1,7 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Box, Button, CheckBox, CheckBoxGroup, CheckBoxProps, Heading, Text } from 'grommet';
-import { omit } from 'lodash';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { CharacterMove } from '../@types';
