@@ -71,6 +71,10 @@ const GAME_FOR_PLAYER = gql`
               hasSupplier
               supplierText
             }
+            customWeapons {
+              id
+              weapons
+            }
           }
         }
       }

@@ -183,6 +183,20 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
             );
           }
           return null;
+        case UniqueTypes.customWeapons:
+          if (!!character.playbookUnique.customWeapons) {
+            const { weapons } = character.playbookUnique.customWeapons;
+            return (
+              <CustomUL>
+                {weapons.map((weapon, index) => (
+                  <li key={index} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {weapon}
+                  </li>
+                ))}
+              </CustomUL>
+            );
+          }
+          return null;
         case UniqueTypes.brainerGear:
           if (!!character.playbookUnique.brainerGear) {
             const concatGear = character.playbookUnique.brainerGear.brainerGear.map((gear) => gear.split('('));
@@ -197,6 +211,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
             );
           }
           return null;
+
         default:
           return null;
       }

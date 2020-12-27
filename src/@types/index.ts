@@ -233,6 +233,7 @@ export interface PlaybookUnique {
   type: UniqueTypes
   brainerGear?: BrainerGear
   angelKit?: AngelKit
+  customWeapons: CustomWeapons
 }
 
 export interface BrainerGear {
@@ -247,4 +248,9 @@ export interface AngelKit {
   angelKitMoves: Move[] 
   hasSupplier: boolean
   supplierText: string
+}
+
+export interface CustomWeapons {
+  id: string
+  weapons: string[]
 }

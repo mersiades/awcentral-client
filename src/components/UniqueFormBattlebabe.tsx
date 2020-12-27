@@ -9,7 +9,7 @@ import { accentColors, brandColor, neutralColors } from '../config/grommetConfig
 interface UniqueFormBattlebabeProps {
   characterName: string;
   playbookUniqueCreator: PlaybookUniqueCreator;
-  handleSubmitCustomWeapons: () => void;
+  handleSubmitCustomWeapons: (weapons: string[]) => void;
 }
 
 const WeaponsUL = styled.ul`
@@ -278,7 +278,7 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
               ))}
             </WeaponsUL>
           </Box>
-          <Button label="SET" primary onClick={() => handleSubmitCustomWeapons()} />
+          <Button label="SET" primary onClick={() => handleSubmitCustomWeapons(weapons)} />
         </Box>
       </Box>
       <Box direction="row" height="300px" overflow={{ vertical: 'auto' }}>

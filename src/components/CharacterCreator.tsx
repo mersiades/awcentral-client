@@ -30,6 +30,7 @@ import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/se
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { Character, GameRole } from '../@types';
+import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -77,6 +78,7 @@ const CharacterCreator: FC = () => {
   const [setBrainerGear] = useMutation<SetBrainerGearData, SetBrainerGearVars>(SET_BRAINER_GEAR);
   const [setAngelKit] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
   const [setCharacterMoves] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(SET_CHARACTER_MOVES);
+  const [setCustomWeapons] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(SET_CUSTOM_WEAPONS);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.gameForPlayer;
@@ -222,7 +224,19 @@ const CharacterCreator: FC = () => {
     }
   };
 
-  const handleSubmitCustomWeapons = () => console.log('submitting');
+  const handleSubmitCustomWeapons = async (weapons: string[]) => {
+    if (!!gameRole && !!character) {
+      try {
+        await setCustomWeapons({
+          variables: { gameRoleId: gameRole.id, characterId: character.id, weapons },
+          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+        });
+        setCreationStep((prevState) => prevState + 1);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const handleSubmitCharacterMoves = async (moveIds: string[]) => {
     if (!!gameRole && !!character) {
