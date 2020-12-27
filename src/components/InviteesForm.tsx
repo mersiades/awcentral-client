@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { Form, Box, FormField, TextInput, Button, Heading, Paragraph, TextArea } from 'grommet';
+import { Form, Box, FormField, TextInput, TextArea } from 'grommet';
 
+import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 import { Game } from '../@types';
 import { copyToClipboard } from '../helpers/copyToClipboard';
@@ -53,13 +54,12 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
     <Box
       direction="column"
       fill
-      background="black"
       align="center"
       justify="center"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
       <Box width="50vw" height="70vh" align="center" direction="column" justify="start" overflow="auto">
-        <Heading level={1}>INVITE PLAYERS</Heading>
+        <HeadingWS level={1}>INVITE PLAYERS</HeadingWS>
         {hasSubmitted ? (
           <Box
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
@@ -67,17 +67,15 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
             align="center"
             width="100%"
           >
-            <Paragraph>
+            <ParagraphWS>
               Let your player know how to join your game. You can edit the instructions below (if you want) and then copy and
               paste into an email, Discord chat etc.
-            </Paragraph>
+            </ParagraphWS>
             <Box pad="12px" background="#CCCCCC" width="100%">
               {renderMessage()}
               <Box direction="row" width="100%" justify="between" gap="12px" margin={{ top: '12px' }}>
-                <Button secondary onClick={() => copyToClipboard(message)}>
-                  COPY TO CLIPBOARD
-                </Button>
-                <Button
+                <ButtonWS secondary label="COPY TO CLIPBOARD" onClick={() => copyToClipboard(message)} />
+                <ButtonWS
                   primary
                   label="INVITE ANOTHER"
                   onClick={() => {
@@ -90,7 +88,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
           </Box>
         ) : (
           <Box fill="horizontal" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
-            <Paragraph>First, add the player's email address to the game</Paragraph>
+            <ParagraphWS>First, add the player's email address to the game</ParagraphWS>
             <Form
               value={formValues}
               onChange={(nextValue: any) => setFormValues(nextValue)}
@@ -105,7 +103,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
                   <TextInput placeholder="Type player's email" type="email" name="email" size="xlarge" />
                 </FormField>
                 {game.invitees.length === 0 ? (
-                  <Button
+                  <ButtonWS
                     type="submit"
                     primary
                     value={validateEmail(formValues.email)}
@@ -113,7 +111,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
                     disabled={!formValues.email}
                   />
                 ) : (
-                  <Button
+                  <ButtonWS
                     type="submit"
                     secondary
                     value={validateEmail(formValues.email)}
@@ -133,14 +131,14 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
           margin={{ top: '12px' }}
         >
           {game.invitees.length === 0 ? (
-            <Button
+            <ButtonWS
               type="submit"
               value={validateEmail(formValues.email)}
               label="LATER"
               onClick={() => history.push(`/mc-game/${game.id}`)}
             />
           ) : (
-            <Button
+            <ButtonWS
               type="submit"
               value={validateEmail(formValues.email)}
               label="FINISH"

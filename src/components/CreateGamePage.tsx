@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box } from 'grommet';
-import { Close } from 'grommet-icons';
 
 import CommsForm from './CommsForm';
 import GameCreationStepper from './GameCreationStepper';
 import InviteesForm from './InviteesForm';
 import Spinner from './Spinner';
+import CloseButton from './CloseButton';
 import GAME, { GameData, GameVars } from '../queries/game';
 
 export const background = {
@@ -57,10 +57,8 @@ const CreateGamePage = () => {
   }
 
   return (
-    <Box fill background={background}>
-      <Box direction="row" align="center" pad="9px" fill="horizontal" height="40px">
-        <Close color="white" onClick={() => history.push('/menu')} cursor="pointer" />
-      </Box>
+    <Box fill background={background} pad="6px">
+      <CloseButton handleClose={() => history.push('/menu')} />
       <Box fill direction="column" justify="start">
         <GameCreationStepper setCreationStep={setCreationStep} currentStep={creationStep} game={game} />
         {creationStep === 0 && <CommsForm game={game} setCreationStep={setCreationStep} />}

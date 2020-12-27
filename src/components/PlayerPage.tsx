@@ -7,7 +7,7 @@ import { GameRole, Move } from '../@types';
 import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import ALL_MOVES from '../queries/allMoves';
-import GAME_FOR_PLAYER, { GameForPlayerData, GameForPlayerVars } from '../queries/gameForPlayer';
+import GAME, { GameData, GameVars } from '../queries/game';
 import MovesPanel from './MovesPanel';
 import { Footer, MainContainer, SidePanel } from './styledComponents';
 
@@ -33,17 +33,14 @@ const PlayerPage: FC = () => {
 
   const { gameId } = useParams<{ gameId: string }>();
 
-  const { data: gameData, loading: loadingGame } = useQuery<GameForPlayerData, GameForPlayerVars>(GAME_FOR_PLAYER, {
-    // @ts-ignore
-    variables: { gameId, userId },
-  });
+  const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
 
   // ------------------------------------------ Component functions ------------------------------------------- //
 
   // ------------------------------------------------ Render -------------------------------------------------- //
 
-  const game = gameData?.gameForPlayer;
+  const game = gameData?.game;
   const gameRoles = game?.gameRoles;
   const allMoves = allMovesData?.allMoves;
 

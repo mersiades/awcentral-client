@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Box, Button, FormField, Heading, TextInput } from 'grommet';
+import { Box, FormField, TextInput } from 'grommet';
 
 import { PlaybookUniqueCreator } from '../@types';
-import { brandColor } from '../config/grommetConfig';
+import { brandColor, ButtonWS, HeadingWS } from '../config/grommetConfig';
 
 interface UniqueFormAngelProps {
   characterName: string;
@@ -20,13 +20,13 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniq
   const [stock, setStock] = useState(startingStock);
   return (
     <Box width="60vw" direction="column" align="start" justify="between" overflow="auto">
-      <Heading level={2} alignSelf="center">{`${characterName.toUpperCase()}'S ANGEL KIT`}</Heading>
+      <HeadingWS level={2} alignSelf="center">{`${characterName.toUpperCase()}'S ANGEL KIT`}</HeadingWS>
       <Box flex="grow" direction="row" align="start">
         <Box fill="horizontal">
           <ReactMarkdown>{angelKitInstructions}</ReactMarkdown>
         </Box>
         <Box width="150px" align="center" pad="24px" margin={{ left: '24px', right: '5px', top: '18px' }} style={boxShadow}>
-          <Heading level={3}>Stock</Heading>
+          <HeadingWS level={3}>Stock</HeadingWS>
           <FormField>
             <TextInput
               type="number"
@@ -39,7 +39,7 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniq
         </Box>
       </Box>
       <Box fill direction="row" justify="end" align="center" style={{ minHeight: 52 }}>
-        <Button label="SET" primary onClick={() => handleSubmitAngelKit(startingStock, false)} margin={{ right: '5px' }} />
+        <ButtonWS label="SET" primary onClick={() => handleSubmitAngelKit(startingStock, false)} margin={{ right: '5px' }} />
       </Box>
     </Box>
   );

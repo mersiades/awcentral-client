@@ -1,8 +1,9 @@
 import { useQuery } from '@apollo/client';
-import { Box, Button, Heading } from 'grommet';
+import { Box } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
 import { PlaybookCreator, StatsOption } from '../@types';
 import { PlayBooks } from '../@types/enums';
+import { ButtonWS, HeadingWS } from '../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
 
@@ -45,13 +46,13 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
       justify="start"
     >
       <Box width="50vw" height="50vh">
-        <Heading
+        <HeadingWS
           level={2}
           textAlign="center"
-        >{`WHAT ARE ${characterName.toUpperCase()}'S STRENGTHS AND WEAKNESSES?`}</Heading>
-        <Heading level={4} textAlign="start">
+        >{`WHAT ARE ${characterName.toUpperCase()}'S STRENGTHS AND WEAKNESSES?`}</HeadingWS>
+        <HeadingWS level={4} textAlign="start">
           Choose a set:
-        </Heading>
+        </HeadingWS>
         <Box fill margin={{ bottom: '48px' }}>
           {pbCreator.statsOptions.map((opt) => (
             <Box
@@ -65,39 +66,39 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
               style={{ minHeight: '52px' }}
             >
               <Box direction="row" align="center" gap="12px">
-                <Heading level={4}>COOL:</Heading>
-                <Heading color="brand" level={3}>
+                <HeadingWS level={4}>COOL:</HeadingWS>
+                <HeadingWS color="brand" level={3}>
                   {opt.COOL}
-                </Heading>
+                </HeadingWS>
               </Box>
               <Box direction="row" align="center" gap="12px">
-                <Heading level={4}>HARD:</Heading>
-                <Heading color="brand" level={3}>
+                <HeadingWS level={4}>HARD:</HeadingWS>
+                <HeadingWS color="brand" level={3}>
                   {opt.HARD}
-                </Heading>
+                </HeadingWS>
               </Box>
               <Box direction="row" align="center" gap="12px">
-                <Heading level={4}>HOT:</Heading>
-                <Heading color="brand" level={3}>
+                <HeadingWS level={4}>HOT:</HeadingWS>
+                <HeadingWS color="brand" level={3}>
                   {opt.HOT}
-                </Heading>
+                </HeadingWS>
               </Box>
               <Box direction="row" align="center" gap="12px">
-                <Heading level={4}>SHARP:</Heading>
-                <Heading color="brand" level={3}>
+                <HeadingWS level={4}>SHARP:</HeadingWS>
+                <HeadingWS color="brand" level={3}>
                   {opt.SHARP}
-                </Heading>
+                </HeadingWS>
               </Box>
               <Box direction="row" align="center" gap="12px">
-                <Heading level={4}>WEIRD:</Heading>
-                <Heading color="brand" level={3}>
+                <HeadingWS level={4}>WEIRD:</HeadingWS>
+                <HeadingWS color="brand" level={3}>
                   {opt.WEIRD}
-                </Heading>
+                </HeadingWS>
               </Box>
             </Box>
           ))}
           <Box direction="row" justify="end" width="50vw" margin={{ top: '12px' }}>
-            <Button
+            <ButtonWS
               primary
               label="SET"
               onClick={() => !!selectedStatsOption && handleSubmitStats(selectedStatsOption.id)}

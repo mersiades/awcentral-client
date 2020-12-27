@@ -43,6 +43,7 @@ export interface Character {
 export interface GameRole {
   id: string;
   role: Roles;
+  userId: string
   game?: Game;
   characters?: Character[]
 }

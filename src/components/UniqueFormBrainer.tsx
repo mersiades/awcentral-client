@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
-import { Box, Button, CheckBoxGroup, CheckBoxProps, Heading, Paragraph, Text } from 'grommet';
+import { Box, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 
 import { PlaybookUniqueCreator } from '../@types';
-import { accentColors } from '../config/grommetConfig';
+import { accentColors, ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -46,8 +46,8 @@ const UniqueFormBrainer: FC<UniqueFormBrainerProps> = ({
 
   return (
     <Box width="70vw" height="575px" direction="column" align="center" justify="between">
-      <Heading level={2}>{`WHAT SPECIAL BRAINER GEAR DOES ${characterName.toUpperCase()} HAVE?`}</Heading>
-      <Paragraph size="large">Choose two</Paragraph>
+      <HeadingWS level={2}>{`WHAT SPECIAL BRAINER GEAR DOES ${characterName.toUpperCase()} HAVE?`}</HeadingWS>
+      <ParagraphWS size="large">Choose two</ParagraphWS>
       <CheckBoxGroup
         overflow="auto"
         options={renderOptions()}
@@ -56,7 +56,7 @@ const UniqueFormBrainer: FC<UniqueFormBrainerProps> = ({
         onChange={({ value, option }: any) => setSelectedGear(value)}
       />
       <Box fill="horizontal" direction="row" justify="end">
-        <Button
+        <ButtonWS
           label="SET"
           primary
           disabled={selectedGear.length !== 2}

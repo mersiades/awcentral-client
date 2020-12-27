@@ -24,7 +24,9 @@ const GAME = gql`
         displayName
       }
       gameRoles {
+        id
         role
+        userId
         npcs {
           id
         }
@@ -34,6 +36,59 @@ const GAME = gql`
         characters {
           id
           name
+          playbook
+          gear
+          statsBlock {
+            id
+            stats {
+              id
+              stat
+              value
+              isHighlighted
+            }
+          }
+          looks {
+            look
+            category
+          }
+          characterMoves {
+            id
+            isSelected
+            name
+            kind
+            description
+            playbook
+            stat
+            rollModifier {
+              id
+              movesToModify {
+                id
+              }
+              statToRollWith
+            }
+          }
+          playbookUnique {
+            id
+            type
+            brainerGear {
+              id
+              brainerGear
+            }
+            angelKit {
+              id
+              description
+              stock
+              angelKitMoves {
+                id
+              }
+              hasSupplier
+              supplierText
+            }
+            customWeapons {
+              id
+              weapons
+            }
+          }
         }
       }
   }

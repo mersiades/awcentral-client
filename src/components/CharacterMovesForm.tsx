@@ -1,11 +1,11 @@
 import { useQuery } from '@apollo/client';
-import { Box, Button, CheckBox, CheckBoxGroup, CheckBoxProps, Heading, Text } from 'grommet';
+import { Box, CheckBox, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { CharacterMove } from '../@types';
 import { PlayBooks } from '../@types/enums';
-import { accentColors } from '../config/grommetConfig';
+import { accentColors, ButtonWS, HeadingWS } from '../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
 
@@ -81,14 +81,18 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({ playbookType, charact
       justify="start"
     >
       <Box width="70vw">
-        <Heading level={2} textAlign="center">{`WHAT ARE ${characterName.toUpperCase()}'S MOVES?`}</Heading>
+        <HeadingWS
+          level={2}
+          textAlign="center"
+          style={{ maxWidth: 'unset' }}
+        >{`WHAT ARE ${characterName.toUpperCase()}'S MOVES?`}</HeadingWS>
         {defaultMoves.map((move) => {
           return (
             <CheckBox
               key={move.id}
               checked={move.isSelected}
               label={
-                <div style={{ marginBottom: '12px' }}>
+                <div>
                   <Text weight="bold">{move.name}</Text>
                   <StyledMarkdown>{move.description}</StyledMarkdown>
                 </div>
@@ -96,7 +100,7 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({ playbookType, charact
             />
           );
         })}
-        <Text size="large" weight="bold">
+        <Text size="large" weight="bold" margin={{ vertical: '12px' }}>
           Select {moveChoiceCount}
         </Text>
         <CheckBoxGroup
@@ -107,7 +111,7 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({ playbookType, charact
           onChange={({ value, option }: any) => setSelectedMoveIds(value)}
         />
         <Box direction="row" justify="end" gap="24px" margin={{ vertical: '12px' }}>
-          <Button
+          <ButtonWS
             primary
             label="SET"
             style={{ minHeight: '52px' }}

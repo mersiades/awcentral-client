@@ -1,8 +1,9 @@
 import { useQuery } from '@apollo/client';
-import { Box, Form, FormField, Heading, TextInput, Text } from 'grommet';
+import { Box, Form, FormField, TextInput, Text } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
 import { Look, PlaybookCreator } from '../@types';
 import { LookCategories, PlayBooks } from '../@types/enums';
+import { HeadingWS } from '../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import ActionButtons from './ActionButtons';
 import Spinner from './Spinner';
@@ -90,14 +91,19 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       align="center"
       justify="start"
     >
-      <Heading level={2}>{`WHAT DOES ${characterName.toUpperCase()} LOOK LIKE?`}</Heading>
+      <HeadingWS level={2}>{`WHAT DOES ${characterName.toUpperCase()} LOOK LIKE?`}</HeadingWS>
       <Box direction="row" justify="between" gap="24px">
         {steps.map((step, index) => {
           const isSelected = index === selectedStep;
           return (
-            <Heading key={index} level={4} color={isSelected ? 'accent-1' : 'white'} onClick={() => setSelectedStep(index)}>
+            <HeadingWS
+              key={index}
+              level={4}
+              color={isSelected ? 'accent-1' : 'white'}
+              onClick={() => setSelectedStep(index)}
+            >
               {step}
-            </Heading>
+            </HeadingWS>
           );
         })}
       </Box>

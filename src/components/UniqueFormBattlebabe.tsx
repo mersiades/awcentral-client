@@ -1,10 +1,10 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { startsWith } from 'lodash';
 import styled from 'styled-components';
-import { Box, Button, Heading, Text, TextArea, Tip } from 'grommet';
+import { Box, Button, Text, TextArea, Tip } from 'grommet';
 
 import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
-import { accentColors, brandColor, neutralColors } from '../config/grommetConfig';
+import { accentColors, brandColor, ButtonWS, HeadingWS, neutralColors } from '../config/grommetConfig';
 
 interface UniqueFormBattlebabeProps {
   characterName: string;
@@ -232,13 +232,13 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
 
   return (
     <Box width="60vw" direction="column" align="start" justify="between">
-      <Heading level={2} alignSelf="center">{`WHAT ARE ${characterName.toUpperCase()}'S TWO CUSTOM WEAPONS?`}</Heading>
+      <HeadingWS level={2} alignSelf="center">{`WHAT ARE ${characterName.toUpperCase()}'S TWO CUSTOM WEAPONS?`}</HeadingWS>
       <Text alignSelf="center">Mix'n'match. Edit directly if necessary.</Text>
       <Box fill="horizontal" direction="row" justify="start" height="145px">
         <Box height="145px" gap="6px" align="center" justify="between" width="60%">
           <TextArea size="large" value={value} onChange={(e) => setValue(e.target.value)} />
           <Box direction="row" fill="horizontal" gap="6px">
-            <Button
+            <ButtonWS
               fill="horizontal"
               label="RESET"
               disabled={!value}
@@ -248,8 +248,8 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
                 setCharacteristics([]);
               }}
             />
-            <Button fill="horizontal" label="REMOVE" disabled={!weapons.includes(value)} onClick={() => removeWeapon()} />
-            <Button
+            <ButtonWS fill="horizontal" label="REMOVE" disabled={!weapons.includes(value)} onClick={() => removeWeapon()} />
+            <ButtonWS
               fill="horizontal"
               secondary
               label="ADD"
@@ -285,9 +285,9 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
       </Box>
       <Box direction="row" height="300px" overflow={{ vertical: 'auto' }}>
         <Box height="300px" width="50%" pad="6px">
-          <Heading alignSelf="center" level={4}>
+          <HeadingWS alignSelf="center" level={4}>
             {firearmsTitle}
-          </Heading>
+          </HeadingWS>
           <Text weight="bold">{firearmsBaseInstructions}</Text>
           <Box direction="row" wrap>
             {firearmsBaseOptions.map((option) => renderBasePill(option))}
@@ -300,9 +300,9 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
           </Box>
         </Box>
         <Box height="300px" width="50%" pad="6px">
-          <Heading alignSelf="center" level={4}>
+          <HeadingWS alignSelf="center" level={4}>
             {handTitle}
-          </Heading>
+          </HeadingWS>
           <Text weight="bold">{handBaseInstructions}</Text>
           <Box direction="row">{handBaseOptions.map((option) => renderBasePill(option))}</Box>
           <Text weight="bold" margin={{ top: '6px' }}>

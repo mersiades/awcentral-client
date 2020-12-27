@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, Button, Heading, Layer, Paragraph } from 'grommet';
+import { Box, Layer, Paragraph } from 'grommet';
 
 import PlaybooksSelector from './PlaybookSelector';
 import CharacterNameForm from './CharacterNameForm';
@@ -13,24 +13,26 @@ import NewGameIntro from './NewGameIntro';
 import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
 import CharacterCreationStepper from './CharacterCreationStepper';
 import Spinner from './Spinner';
+import CloseButton from './CloseButton';
+import { ButtonWS, HeadingWS } from '../config/grommetConfig';
+import GAME, { GameData, GameVars } from '../queries/game';
+import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
 import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../mutations/createCharacter';
 import SET_CHARACTER_PLAYBOOK, {
   SetCharacterPlaybookData,
   SetCharacterPlaybookVars,
 } from '../mutations/setCharacterPlaybook';
-import GAME_FOR_PLAYER, { GameForPlayerData, GameForPlayerVars } from '../queries/gameForPlayer';
-import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
 import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '../mutations/setCharacterName';
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
-import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mutations/setBrainerGear';
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/setAngelKit';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
-import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import { Character, GameRole } from '../@types';
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
+import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
+import { Character, GameRole } from '../@types';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -61,14 +63,11 @@ const CharacterCreator: FC = () => {
   // -------------------------------------------------- Context hooks ---------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
   const { gameId } = useParams<{ gameId: string }>();
+  const history = useHistory();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
   const { data: playbooksData, loading: loadingPlaybooks } = useQuery<PlaybooksData>(PLAYBOOKS);
-  const { data: gameData, loading: loadingGame } = useQuery<GameForPlayerData, GameForPlayerVars>(GAME_FOR_PLAYER, {
-    // @ts-ignore
-    variables: { gameId, userId },
-    skip: !userId,
-  });
+  const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
   const [createCharacter] = useMutation<CreateCharacterData, CreateCharacterVars>(CREATE_CHARACTER);
   const [setCharacterPlaybook] = useMutation<SetCharacterPlaybookData, SetCharacterPlaybookVars>(SET_CHARACTER_PLAYBOOK);
   const [setCharacterName] = useMutation<SetCharacterNameData, SetCharacterNameVars>(SET_CHARACTER_NAME);
@@ -81,7 +80,7 @@ const CharacterCreator: FC = () => {
   const [setCustomWeapons] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(SET_CUSTOM_WEAPONS);
 
   const playbooks = playbooksData?.playbooks;
-  const game = gameData?.gameForPlayer;
+  const game = gameData?.game;
   const gameRoles = game?.gameRoles;
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
@@ -116,7 +115,7 @@ const CharacterCreator: FC = () => {
         try {
           await setCharacterPlaybook({
             variables: { gameRoleId: gameRole.id, characterId, playbookType },
-            refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+            refetchQueries: [{ query: GAME, variables: { gameId } }],
           });
         } catch (error) {
           console.error(error);
@@ -125,7 +124,7 @@ const CharacterCreator: FC = () => {
         try {
           await setCharacterPlaybook({
             variables: { gameRoleId: gameRole.id, characterId: gameRole.characters[0].id, playbookType },
-            refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+            refetchQueries: [{ query: GAME, variables: { gameId } }],
           });
         } catch (error) {
           console.error(error);
@@ -141,7 +140,7 @@ const CharacterCreator: FC = () => {
       try {
         await setCharacterName({
           variables: { gameRoleId: gameRole.id, characterId: character.id, name },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevStep) => prevStep + 1);
       } catch (error) {
@@ -155,7 +154,7 @@ const CharacterCreator: FC = () => {
       try {
         const data = await setCharacterLook({
           variables: { gameRoleId: gameRole.id, characterId: character.id, look, category },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
 
         if (data.data?.setCharacterLook.looks?.length === 5) {
@@ -168,12 +167,11 @@ const CharacterCreator: FC = () => {
   };
 
   const handleSubmitStats = async (statsOptionId: string) => {
-    console.log('statsOptionId', statsOptionId);
     if (!!gameRole && !!character) {
       try {
         await setCharacterStats({
           variables: { gameRoleId: gameRole.id, characterId: character.id, statsOptionId },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
       } catch (error) {
@@ -187,7 +185,7 @@ const CharacterCreator: FC = () => {
       try {
         await setCharacterGear({
           variables: { gameRoleId: gameRole.id, characterId: character.id, gear },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
       } catch (error) {
@@ -201,7 +199,7 @@ const CharacterCreator: FC = () => {
       try {
         await setBrainerGear({
           variables: { gameRoleId: gameRole.id, characterId: character.id, brainerGear },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
       } catch (error) {
@@ -215,7 +213,7 @@ const CharacterCreator: FC = () => {
       try {
         await setAngelKit({
           variables: { gameRoleId: gameRole.id, characterId: character.id, stock, hasSupplier },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
       } catch (error) {
@@ -229,7 +227,7 @@ const CharacterCreator: FC = () => {
       try {
         await setCustomWeapons({
           variables: { gameRoleId: gameRole.id, characterId: character.id, weapons },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
       } catch (error) {
@@ -243,7 +241,7 @@ const CharacterCreator: FC = () => {
       try {
         await setCharacterMoves({
           variables: { gameRoleId: gameRole.id, characterId: character.id, moveIds },
-          refetchQueries: [{ query: GAME_FOR_PLAYER, variables: { gameId, userId } }],
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
       } catch (error) {
@@ -257,12 +255,15 @@ const CharacterCreator: FC = () => {
   // -------------------------------------------------- UseEffects ---------------------------------------------------- //
   useEffect(() => {
     if (!!gameRoles && gameRoles.length > 0) {
-      setGameRole(gameRoles[0]);
-      if (!!gameRoles[0].characters && gameRoles[0].characters.length === 1) {
-        setCharacter(gameRoles[0].characters[0]);
+      const gameRole = gameRoles.find((gameRole) => gameRole.userId === userId);
+      setGameRole(gameRole);
+      if (!!gameRole?.characters && gameRole.characters.length === 1) {
+        setCharacter(gameRole.characters[0]);
       }
     }
-  }, [gameRoles]);
+  }, [gameRoles, userId]);
+
+  console.log('character', character);
 
   // If page is loading but character is already partially created,
   // set creationStep to appropriate step
@@ -296,6 +297,7 @@ const CharacterCreator: FC = () => {
 
   return (
     <Box fill background={background} overflow={{ vertical: 'auto' }}>
+      <CloseButton handleClose={() => history.push('/menu')} />
       {!!showResetWarning && (
         <Layer onEsc={() => setShowResetWarning(undefined)} onClickOutside={() => setShowResetWarning(undefined)}>
           <Box
@@ -310,32 +312,22 @@ const CharacterCreator: FC = () => {
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
             style={{ boxShadow: '0 0 15px 1px #000, 0 0 20px 3px #000' }}
           >
-            <Heading
-              level={4}
-              alignSelf="start"
-              style={{ textShadow: '0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000' }}
-            >
+            <HeadingWS level={4} alignSelf="start">
               Switch playbook?
-            </Heading>
+            </HeadingWS>
             <Paragraph style={{ textShadow: '0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000' }}>
               Changing the playbook will reset the character.
             </Paragraph>
             <Box fill="horizontal" direction="row" justify="end" gap="small">
-              <Button
+              <ButtonWS
                 label="CANCEL"
                 style={{
                   background: 'transparent',
                   textShadow: '0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000',
-                  boxShadow: '0 0 3px 1px #000, 0 0 5px 3px #000',
                 }}
                 onClick={() => setShowResetWarning(undefined)}
               />
-              <Button
-                label="SWITCH"
-                primary
-                style={{ boxShadow: '0 0 3px 1px #000, 0 0 5px 3px #000' }}
-                onClick={() => handlePlaybookSelect(showResetWarning)}
-              />
+              <ButtonWS label="SWITCH" primary onClick={() => handlePlaybookSelect(showResetWarning)} />
             </Box>
           </Box>
         </Layer>

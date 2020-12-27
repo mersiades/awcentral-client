@@ -1,9 +1,10 @@
 import { rgba } from 'polished';
 import { deepMerge } from 'grommet/utils';
 import { grommet } from 'grommet/themes/grommet';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import '../assets/styles/main.css'
+import { Button, ButtonProps, Heading, HeadingProps, Paragraph, ParagraphProps } from 'grommet';
 
 export const brandColor = '#CD3F3E';
 
@@ -426,3 +427,36 @@ export const CustomUL = styled.ul`
   }
   
 `;
+
+// Renders Grommet Heading with black text shadow
+export const HeadingWS = styled(Heading as React.FC<HeadingProps &
+  JSX.IntrinsicElements['h1'] & 
+  JSX.IntrinsicElements['h2'] &
+  JSX.IntrinsicElements['h3'] &
+  JSX.IntrinsicElements['h4'] &
+  JSX.IntrinsicElements['h5'] &
+  JSX.IntrinsicElements['h6']>)(
+    () => {
+      return css`
+        text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000;
+      `
+    }
+  )
+
+// Renders Grommet Paragraph with black text shadow
+export const ParagraphWS = styled(Paragraph as React.FC<ParagraphProps & JSX.IntrinsicElements['p']>)(
+  () => {
+    return css`
+      text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000;
+    `
+  }
+)
+
+// Renders Grommet Button with black text shadow
+export const ButtonWS = styled(Button as React.FC<ButtonProps & JSX.IntrinsicElements['button']>)(
+  () => {
+    return css`
+      box-shadow: 0 0 1px 1px #000, 0 0 3px 3px #000, 0 0 5px 5px #000;
+    `
+  }
+)

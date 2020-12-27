@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client';
-import { Box, Button, Heading, Paragraph, Text, TextArea } from 'grommet';
+import { Box, Paragraph, Text, TextArea } from 'grommet';
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { PlaybookCreator } from '../@types';
 import { PlayBooks } from '../@types/enums';
-import { accentColors } from '../config/grommetConfig';
+import { accentColors, ButtonWS, HeadingWS } from '../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
 
@@ -70,7 +70,6 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
 
   useEffect(() => {
     if (instructionsBoxRef.current) {
-      // contentRef.current.addEventListener('touchmove', (e: any) => onScroll(e));
       if (instructionsBoxRef.current.scrollHeight > instructionsBoxRef.current.offsetHeight) {
         setShowScrollDown(true);
       } else {
@@ -169,11 +168,11 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
       justify="start"
     >
       <Box width="70vw" height="100%" overflow="auto">
-        <Heading
+        <HeadingWS
           level={2}
           textAlign="center"
           style={{ maxWidth: 'unset' }}
-        >{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</Heading>
+        >{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</HeadingWS>
         <Text textAlign="center">Select an item to add, edit or delete it, or just type your own.</Text>
         <Box direction="row" flex="grow">
           <Box
@@ -185,9 +184,9 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
             style={showScrollDown ? { boxShadow: `0px -10px 10px -8px ${accentColors[0]} inset` } : undefined}
             pad="6px"
           >
-            <Heading level={4} alignSelf="center">
+            <HeadingWS level={4} alignSelf="center">
               Options
-            </Heading>
+            </HeadingWS>
             {renderYouGet()}
             {renderYouGetItem()}
             {renderInAddition()}
@@ -198,9 +197,9 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
           </Box>
           <Box fill gridArea="gear-box" pad="6px">
             <Box fill="horizontal">
-              <Heading level={4} alignSelf="center">
+              <HeadingWS level={4} alignSelf="center">
                 Gear
-              </Heading>
+              </HeadingWS>
             </Box>
             <Box flex="grow">
               <GearUL>
@@ -227,7 +226,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
               />
             </Box>
             <Box direction="row" fill="horizontal" gap="6px" margin={{ top: '6px' }}>
-              <Button
+              <ButtonWS
                 secondary
                 label="ADD"
                 disabled={!value || gear.includes(value)}
@@ -239,7 +238,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
                   setValue('');
                 }}
               />
-              <Button
+              <ButtonWS
                 label="REMOVE"
                 disabled={!gear.includes(value)}
                 fill="horizontal"
@@ -255,7 +254,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
         </Box>
         <Box direction="row" pad="6px" justify="between" align="center" style={{ minHeight: 52 }}>
           <Paragraph textAlign="center">{`... and you get oddments worth ${pbCreator.gearInstructions.startingBarter}-barter`}</Paragraph>
-          <Button
+          <ButtonWS
             primary
             label="SET"
             onClick={() => handleSubmitGear(gear)}
