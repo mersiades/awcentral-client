@@ -279,7 +279,45 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
     </Box>
   );
 
-  const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7];
+  const box6Step8 = (
+    <Box
+      margin={{ left: 'xsmall', right: 'xsmall' }}
+      justify="start"
+      width="11rem"
+      height="10rem"
+      gap="small"
+      align="center"
+      pad="small"
+      border
+      background={{ color: 'neutral-1', opacity: CharacterCreationSteps.setHx === currentStep ? 1 : 0.5 }}
+      onClick={(e: any) => {
+        e.currentTarget.blur();
+        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.setHx);
+      }}
+    >
+      <Text color="white" weight="bold" alignSelf="center">
+        Hx
+      </Text>
+      {/*!!character && !!character.characterMoves && character.characterMoves.length > 0 ? (
+        <CustomUL>
+          {character.characterMoves.map((move) => {
+            if (move.isSelected) {
+              return (
+                <li key={move.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {formatPlaybookType(move.name)}
+                </li>
+              );
+            }
+            return null;
+          })}
+        </CustomUL>
+      ) : (
+        <Text>...</Text>
+      )*/}
+    </Box>
+  );
+
+  const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8];
   const renderBoxesSmall = () => {
     switch (currentStep) {
       case 0:
@@ -337,6 +375,16 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
             {boxesArray[1]}
             {boxesArray[2]}
             {boxesArray[3]}
+          </>
+        );
+
+      case 8:
+        return (
+          <>
+            {boxesArray[3]}
+            {boxesArray[4]}
+            {boxesArray[5]}
+            {boxesArray[6]}
           </>
         );
 

@@ -255,3 +255,8 @@ export interface CustomWeapons {
   id: string
   weapons: string[]
 }
+
+export interface HxInput {
+  characterId: string
+  hxValue: number
+}

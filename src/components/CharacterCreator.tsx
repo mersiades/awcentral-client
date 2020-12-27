@@ -31,8 +31,9 @@ import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/se
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
 import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
-import { Character, GameRole } from '../@types';
+import { Character, GameRole, HxInput } from '../@types';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import CharacterHxForm from './CharacterHxForm';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -250,6 +251,12 @@ const CharacterCreator: FC = () => {
     }
   };
 
+  const handleSubmitCharacterHx = (hxInputs: HxInput[]) => {
+    console.log('hxInputs', hxInputs);
+  };
+
+  const handleFinishCreation = () => history.push(`/player-game/${gameId}`);
+
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
   // -------------------------------------------------- UseEffects ---------------------------------------------------- //
@@ -262,8 +269,6 @@ const CharacterCreator: FC = () => {
       }
     }
   }, [gameRoles, userId]);
-
-  console.log('character', character);
 
   // If page is loading but character is already partially created,
   // set creationStep to appropriate step
@@ -279,8 +284,10 @@ const CharacterCreator: FC = () => {
         setCreationStep(5);
       } else if (!!character.gear && character.gear.length > 0 && !character.playbookUnique) {
         setCreationStep(6);
-      } else if (!!character.playbookUnique /* TODO: add case where characterMoves are null */) {
+      } else if (!!character.playbookUnique && character.characterMoves?.length === 0) {
         setCreationStep(7);
+      } else if (!!character.characterMoves && character.characterMoves?.length > 0 /* TODO: case where no Hx */) {
+        setCreationStep(8);
       }
     }
   }, [character, creationStep]);
@@ -397,6 +404,19 @@ const CharacterCreator: FC = () => {
           handleSubmitCharacterMoves={handleSubmitCharacterMoves}
         />
       )}
+      {creationStep === CharacterCreationSteps.setHx &&
+        !!character &&
+        !!character.name &&
+        !!character.playbook &&
+        !!gameRoles && (
+          <CharacterHxForm
+            playbookType={character.playbook}
+            characterName={character.name}
+            gameRoles={gameRoles}
+            handleSubmitCharacterHx={handleSubmitCharacterHx}
+            handleFinishCreation={handleFinishCreation}
+          />
+        )}
     </Box>
   );
 };
