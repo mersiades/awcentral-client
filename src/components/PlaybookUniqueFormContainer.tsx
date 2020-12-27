@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { Box } from 'grommet';
 import React, { FC } from 'react';
+import { CustomWeapons } from '../@types';
 import { PlayBooks } from '../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
@@ -14,6 +15,7 @@ interface PlaybookUniqueFormContainerProps {
   handleSubmitBrainerGear: (brainerGear: string[]) => void;
   handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
   handleSubmitCustomWeapons: (weapons: string[]) => void;
+  customWeapons?: CustomWeapons;
 }
 
 const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
@@ -22,6 +24,7 @@ const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
   handleSubmitAngelKit,
   handleSubmitBrainerGear,
   handleSubmitCustomWeapons,
+  customWeapons,
 }) => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType },
@@ -53,6 +56,7 @@ const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
             characterName={characterName}
             playbookUniqueCreator={playbookUniqueCreator}
             handleSubmitCustomWeapons={handleSubmitCustomWeapons}
+            customWeapons={customWeapons}
           />
         );
       case PlayBooks.brainer:

@@ -395,6 +395,7 @@ const CharacterCreator: FC = () => {
           handleSubmitBrainerGear={handleSubmitBrainerGear}
           handleSubmitAngelKit={handleSubmitAngelKit}
           handleSubmitCustomWeapons={handleSubmitCustomWeapons}
+          customWeapons={character.playbookUnique?.customWeapons}
         />
       )}
       {creationStep === CharacterCreationSteps.selectMoves && character && character.name && character.playbook && (

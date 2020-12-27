@@ -3,13 +3,14 @@ import { startsWith } from 'lodash';
 import styled from 'styled-components';
 import { Box, Button, Heading, Text, TextArea, Tip } from 'grommet';
 
-import { ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
+import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
 import { accentColors, brandColor, neutralColors } from '../config/grommetConfig';
 
 interface UniqueFormBattlebabeProps {
   characterName: string;
   playbookUniqueCreator: PlaybookUniqueCreator;
   handleSubmitCustomWeapons: (weapons: string[]) => void;
+  customWeapons?: CustomWeapons;
 }
 
 const WeaponsUL = styled.ul`
@@ -25,11 +26,12 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
   characterName,
   playbookUniqueCreator,
   handleSubmitCustomWeapons,
+  customWeapons,
 }) => {
   const [baseValue, setBaseValue] = useState<TaggedItem | undefined>();
   const [characteristics, setCharacteristics] = useState<ItemCharacteristic[]>([]);
   const [value, setValue] = useState('');
-  const [weapons, setWeapons] = useState<string[]>([]);
+  const [weapons, setWeapons] = useState<string[]>(!!customWeapons ? [...customWeapons.weapons] : []);
 
   const {
     firearmsTitle,
