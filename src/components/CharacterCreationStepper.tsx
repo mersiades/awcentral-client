@@ -5,9 +5,10 @@ import { CharacterCreationSteps, PlayBooks, UniqueTypes } from '../@types/enums'
 import { Character } from '../@types';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import { CustomUL } from '../config/grommetConfig';
-import { Next, Previous } from 'grommet-icons';
+import { IconProps, Next, Previous } from 'grommet-icons';
 import { useQuery } from '@apollo/client';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import styled, { css } from 'styled-components';
 
 interface CharacterCreationStepperProps {
   currentStep: number;
@@ -15,6 +16,22 @@ interface CharacterCreationStepperProps {
   character?: Character;
   playbookType?: PlayBooks;
 }
+
+const NextWithHover = styled(Next as React.FC<IconProps & JSX.IntrinsicElements['svg']>)(() => {
+  return css`
+    &:hover {
+      stroke: #fff;
+    }
+  `;
+});
+
+const PreviousWithHover = styled(Previous as React.FC<IconProps & JSX.IntrinsicElements['svg']>)(() => {
+  return css`
+    &:hover {
+      stroke: #fff;
+    }
+  `;
+});
 
 const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   currentStep,
@@ -403,7 +420,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   return (
     <Box direction="row" fill="horizontal" justify="center" pad="24px" align="center">
       {currentStep > 1 ? (
-        <Previous
+        <PreviousWithHover
           cursor="pointer"
           onClick={() => !!character?.name && !!character?.playbook && setCreationStep(currentStep - 1)}
           size="large"
@@ -413,8 +430,8 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
         <div style={{ height: 48, width: 48, background: 'transparent' }} />
       )}
       {window.innerWidth < 800 ? renderBoxesSmall() : renderBoxes()}
-      {currentStep < 7 && currentStep > 1 && !!character?.name ? (
-        <Next
+      {currentStep < 8 && currentStep > 1 && !!character?.name ? (
+        <NextWithHover
           cursor="pointer"
           onClick={() => !!character?.name && !!character?.playbook && setCreationStep(currentStep + 1)}
           size="large"

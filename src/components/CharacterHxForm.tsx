@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import { Box, FormField, Text, TextInput } from 'grommet';
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Character, GameRole, HxInput } from '../@types';
 import { PlayBooks, Roles } from '../@types/enums';
