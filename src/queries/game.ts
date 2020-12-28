@@ -40,12 +40,9 @@ const GAME = gql`
           gear
           statsBlock {
             id
-            stats {
-              id
-              stat
-              value
-              isHighlighted
-            }
+            stat
+            value
+            isHighlighted
           }
           hxBlock {
             id

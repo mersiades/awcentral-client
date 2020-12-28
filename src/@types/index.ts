@@ -35,7 +35,7 @@ export interface Character {
   playbook?: PlayBooks
   gear: string[]
   looks?: Look[]
-  statsBlock: StatsBlock
+  statsBlock: CharacterStat[]
   hxBlock: HxStat[]
   playbookUnique?: PlaybookUnique
   characterMoves?: CharacterMove[]

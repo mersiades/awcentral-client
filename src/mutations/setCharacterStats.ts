@@ -17,19 +17,11 @@ const SET_CHARACTER_STATS = gql`
       id
       name
       playbook
-      gear
-      looks {
-        look
-        category
-      }
       statsBlock {
         id
-        stats {
-          id
-          stat
-          value
-          isHighlighted
-        }
+        stat
+        value
+        isHighlighted
       }
     }
   }

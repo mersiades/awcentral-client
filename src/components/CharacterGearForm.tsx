@@ -4,7 +4,7 @@ import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { PlaybookCreator } from '../@types';
 import { PlayBooks } from '../@types/enums';
-import { accentColors, ButtonWS, HeadingWS, TextWS } from '../config/grommetConfig';
+import { accentColors, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
 
@@ -174,7 +174,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
           style={{ maxWidth: 'unset' }}
         >{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</HeadingWS>
         <TextWS textAlign="center">Select an item to add, edit or delete it, or just type your own.</TextWS>
-        <Box direction="row" flex="grow">
+        <Box direction="row">
           <Box
             ref={instructionsBoxRef}
             fill
@@ -194,6 +194,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
             {renderIntroduceChoice()}
             {renderChooseableGear()}
             {renderWithMC()}
+            <ParagraphWS textAlign="end">{`... and you get oddments worth ${pbCreator.gearInstructions.startingBarter}-barter`}</ParagraphWS>
           </Box>
           <Box fill gridArea="gear-box" pad="6px">
             <Box fill="horizontal">
@@ -201,7 +202,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
                 Gear
               </HeadingWS>
             </Box>
-            <Box flex="grow">
+            <Box style={{ minHeight: '150px' }} margin={{ bottom: ' 6px' }}>
               <GearUL>
                 {gear.map((item, index) => (
                   <li
@@ -252,8 +253,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
             </Box>
           </Box>
         </Box>
-        <Box direction="row" pad="6px" justify="between" align="center" style={{ minHeight: 52 }}>
-          <Paragraph textAlign="center">{`... and you get oddments worth ${pbCreator.gearInstructions.startingBarter}-barter`}</Paragraph>
+        <Box direction="row" pad="6px" justify="end" align="center" style={{ minHeight: 52 }}>
           <ButtonWS
             primary
             label="SET"
