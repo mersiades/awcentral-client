@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Box, Button, Grid, Heading, Paragraph } from 'grommet';
+import { Box, Grid } from 'grommet';
 
 import { Playbook } from '../@types';
 import { PlayBooks } from '../@types/enums';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import '../assets/styles/transitions.css';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 
 interface PlaybookSelectorProps {
   playbooks: Playbook[];
@@ -44,9 +45,12 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
 
   return (
     <Box
-      className={startFadeOut ? 'fadeOut' : ''}
       fill
       direction="column"
+      background="transparent"
+      align="center"
+      justify="start"
+      className={startFadeOut ? 'fadeOut' : ''}
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
       <Grid
@@ -61,11 +65,11 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
         <Box gridArea="playbook-display" fill align="center" justify="center">
           {!selectedPlaybook && showIntro && (
             <>
-              <Heading level={2}>Choose your playbook</Heading>
-              <Paragraph>
+              <HeadingWS level={2}>Choose your playbook</HeadingWS>
+              <ParagraphWS>
                 You should probably wait for your MC and the rest of your crew, tho. No headstarts for nobody in Apocalypse
                 World.
-              </Paragraph>
+              </ParagraphWS>
             </>
           )}
           {!!selectedPlaybook && (
@@ -86,9 +90,9 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
                 />
               </Box>
               <Box gridArea="text" pad="24px" animation="fadeIn" justify="around" align="center">
-                <Heading level={2} alignSelf="center">
+                <HeadingWS level={2} alignSelf="center">
                   {formatPlaybookType(selectedPlaybook.playbookType)}
-                </Heading>
+                </HeadingWS>
                 <Box overflow="auto" style={{ maxWidth: '600px' }}>
                   <ReactMarkdown>{selectedPlaybook.intro}</ReactMarkdown>
                   <em>
@@ -97,7 +101,7 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
                 </Box>
 
                 {[PlayBooks.angel, PlayBooks.battlebabe, PlayBooks.brainer].includes(selectedPlaybook.playbookType) && (
-                  <Button
+                  <ButtonWS
                     label={`SELECT ${formatPlaybookType(selectedPlaybook.playbookType)}`}
                     primary
                     size="large"
@@ -105,6 +109,7 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
                       setStartFadeOut(true);
                       checkPlaybookReset(selectedPlaybook.playbookType);
                     }}
+                    margin="12px"
                   />
                 )}
               </Box>

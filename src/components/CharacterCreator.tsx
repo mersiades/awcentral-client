@@ -30,6 +30,7 @@ import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mut
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/setAngelKit';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
+import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
 import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
 import { Character, GameRole, HxInput } from '../@types';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
@@ -79,6 +80,7 @@ const CharacterCreator: FC = () => {
   const [setAngelKit] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
   const [setCharacterMoves] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(SET_CHARACTER_MOVES);
   const [setCustomWeapons] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(SET_CUSTOM_WEAPONS);
+  const [setCharacterHx] = useMutation<SetCharacterHxData, SetCharacterHxVars>(SET_CHARACTER_HX);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.game;
@@ -251,8 +253,18 @@ const CharacterCreator: FC = () => {
     }
   };
 
-  const handleSubmitCharacterHx = (hxInputs: HxInput[]) => {
+  const handleSubmitCharacterHx = async (hxInputs: HxInput[]) => {
     console.log('hxInputs', hxInputs);
+    if (!!gameRole && !!character) {
+      try {
+        await setCharacterHx({
+          variables: { gameRoleId: gameRole.id, characterId: character.id, hxStats: hxInputs },
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   const handleFinishCreation = () => history.push(`/player-game/${gameId}`);
@@ -397,26 +409,22 @@ const CharacterCreator: FC = () => {
           customWeapons={character.playbookUnique?.customWeapons}
         />
       )}
-      {creationStep === CharacterCreationSteps.selectMoves && character && character.name && character.playbook && (
+      {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (
         <CharacterMovesForm
           playbookType={character.playbook}
           characterName={character.name}
           handleSubmitCharacterMoves={handleSubmitCharacterMoves}
         />
       )}
-      {creationStep === CharacterCreationSteps.setHx &&
-        !!character &&
-        !!character.name &&
-        !!character.playbook &&
-        !!gameRoles && (
-          <CharacterHxForm
-            playbookType={character.playbook}
-            characterName={character.name}
-            gameRoles={gameRoles}
-            handleSubmitCharacterHx={handleSubmitCharacterHx}
-            handleFinishCreation={handleFinishCreation}
-          />
-        )}
+      {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && !!gameRoles && (
+        <CharacterHxForm
+          playbookType={character.playbook}
+          character={character}
+          gameRoles={gameRoles}
+          handleSubmitCharacterHx={handleSubmitCharacterHx}
+          handleFinishCreation={handleFinishCreation}
+        />
+      )}
     </Box>
   );
 };

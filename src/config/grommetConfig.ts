@@ -4,7 +4,7 @@ import { grommet } from 'grommet/themes/grommet';
 import styled, { css } from 'styled-components';
 
 import '../assets/styles/main.css'
-import { Button, ButtonProps, Heading, HeadingProps, Paragraph, ParagraphProps } from 'grommet';
+import { Button, ButtonProps, Heading, HeadingProps, Paragraph, ParagraphProps, Text, TextProps} from 'grommet';
 
 export const brandColor = '#CD3F3E';
 
@@ -452,11 +452,20 @@ export const ParagraphWS = styled(Paragraph as React.FC<ParagraphProps & JSX.Int
   }
 )
 
-// Renders Grommet Button with black text shadow
+// Renders Grommet Button with black box shadow
 export const ButtonWS = styled(Button as React.FC<ButtonProps & JSX.IntrinsicElements['button']>)(
   () => {
     return css`
-      box-shadow: 0 0 1px 1px #000, 0 0 3px 3px #000, 0 0 5px 5px #000;
+      box-shadow: 0 0 5px 1px #000;
+    `
+  }
+)
+
+// Renders Grommet Text with black text shadow
+export const TextWS = styled(Text as React.FC<TextProps & Omit<JSX.IntrinsicElements['span'], 'color'>>)(
+  () => {
+    return css`
+      text-shadow: 0 0 1px #000, 0 0 3px #000;
     `
   }
 )

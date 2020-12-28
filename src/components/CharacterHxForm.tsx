@@ -1,11 +1,11 @@
 import { useQuery } from '@apollo/client';
-import { Box, FormField, Text, TextInput } from 'grommet';
-import React, { FC, useState } from 'react';
+import { Box, FormField, TextInput } from 'grommet';
+import React, { FC, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { Character, GameRole, HxInput } from '../@types';
 import { PlayBooks, Roles } from '../@types/enums';
-import { accentColors, ButtonWS, HeadingWS } from '../config/grommetConfig';
+import { ButtonWS, HeadingWS, TextWS } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
@@ -14,13 +14,12 @@ import Spinner from './Spinner';
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
     margin: unset;
-    color: ${accentColors[0]};
   }
 `;
 
 interface CharacterHxFormProps {
   playbookType: PlayBooks;
-  characterName: string;
+  character: Character;
   gameRoles?: GameRole[];
   handleSubmitCharacterHx: (hxInputs: HxInput[]) => void;
   handleFinishCreation: () => void;
@@ -28,7 +27,7 @@ interface CharacterHxFormProps {
 
 const CharacterHxForm: FC<CharacterHxFormProps> = ({
   playbookType,
-  characterName,
+  character,
   gameRoles,
   handleSubmitCharacterHx,
   handleFinishCreation,
@@ -59,13 +58,23 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
   const filterSubmit = (hxInputs: HxInput[]) => {
     characters.forEach((char) => {
       const input = hxInputs.find((inp) => inp.characterId === char.id);
-      if (!input) {
-        hxInputs = [...hxInputs, { characterId: char.id, hxValue: 0 }];
+      if (!input && !!char.name) {
+        hxInputs = [...hxInputs, { characterId: char.id, characterName: char.name, hxValue: 0 }];
       }
     });
     handleSubmitCharacterHx(hxInputs);
     setHasSet(true);
   };
+
+  // Loads any existing HxStats into component state
+  useEffect(() => {
+    let initialValue: HxInput[] = [];
+    !!character.hxBlock &&
+      character.hxBlock.forEach(({ characterId, characterName, hxValue }) => {
+        initialValue = [...initialValue, { characterId, characterName, hxValue }];
+      });
+    setValue(initialValue);
+  }, [character, setValue]);
 
   if (loadingPbCreator || !hxInstructions) {
     return (
@@ -83,48 +92,72 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
       align="center"
       justify="start"
     >
-      <Box width="60vw">
+      <Box width="60vw" flex="grow">
         <HeadingWS
           level={2}
           textAlign="center"
           style={{ maxWidth: 'unset' }}
-        >{`WHAT HISTORY DOES ${characterName.toUpperCase()} HAVE?`}</HeadingWS>
+        >{`WHAT HISTORY DOES ${character.name?.toUpperCase()} HAVE?`}</HeadingWS>
         <Box direction="row" wrap justify="around">
-          {characters.map((character) => {
-            const looks = character.looks?.map((look) => look.look);
+          {characters.map((char) => {
+            const looks = char.looks?.map((look) => look.look);
+            const existingValue = character.hxBlock.find((hxStat) => hxStat.characterId === char.id)?.hxValue;
             return (
-              <Box key={character.id} border={{ color: 'brand' }} direction="row" width="350px" margin={{ right: '12px' }}>
-                <Box width="250px" pad="12px">
-                  <HeadingWS level={3} style={{ marginTop: '6px', marginBottom: '6px' }}>
-                    {character.name}
-                  </HeadingWS>
-                  {!!character.playbook && (
-                    <Text weight="bold" size="medium">
-                      {formatPlaybookType(character.playbook)}
-                    </Text>
-                  )}
-                  {!!looks && <Text size="small">{looks.join(', ')}</Text>}
+              !!char.name && (
+                <Box
+                  key={char.id}
+                  border={{ color: 'brand', size: 'small' }}
+                  style={{
+                    boxShadow: `0 0 5px 1px rgba(0, 0, 0, 0.3),
+                      0 0 10px 1px rgba(0, 0, 0, 0.2),
+                      0 0 5px 1px rgba(0, 0, 0, 0.3) inset,
+                      0 0 10px 1px rgba(0, 0, 0, 0.2) inset
+                      `,
+                  }}
+                  direction="row"
+                  width="350px"
+                  margin={{ right: '12px', bottom: '12px' }}
+                >
+                  <Box width="250px" pad="12px">
+                    <HeadingWS level={3} style={{ marginTop: '6px', marginBottom: '6px' }}>
+                      {char.name}
+                    </HeadingWS>
+                    {!!char.playbook && (
+                      <TextWS weight="bold" size="medium">
+                        {formatPlaybookType(char.playbook)}
+                      </TextWS>
+                    )}
+                    {!!looks && <TextWS size="small">{looks.join(', ')}</TextWS>}
+                  </Box>
+                  <Box pad="12px" fill="vertical" justify="center" width="100px">
+                    <FormField name={char.id} label="Hx">
+                      <TextInput
+                        name={char.id}
+                        type="number"
+                        size="xlarge"
+                        textAlign="center"
+                        defaultValue={existingValue || 0}
+                        onChange={(e) => {
+                          const existingInput = value.find((hxInput) => hxInput.characterId === char.id);
+                          if (!!existingInput) {
+                            const index = value.indexOf(existingInput);
+                            value.splice(index, 1);
+                          }
+                          !!char.name &&
+                            setValue([
+                              ...value,
+                              {
+                                characterId: char.id,
+                                characterName: char.name,
+                                hxValue: parseInt(e.target.value),
+                              },
+                            ]);
+                        }}
+                      />
+                    </FormField>
+                  </Box>
                 </Box>
-                <Box pad="12px" fill="vertical" justify="center" width="100px">
-                  <FormField name={character.id} label="Hx">
-                    <TextInput
-                      name={character.id}
-                      type="number"
-                      size="xlarge"
-                      textAlign="center"
-                      defaultValue={0}
-                      onChange={(e) => {
-                        const existingInput = value.find((hxInput) => hxInput.characterId === character.id);
-                        if (!!existingInput) {
-                          const index = value.indexOf(existingInput);
-                          value.splice(index, 1);
-                        }
-                        setValue([...value, { characterId: character.id, hxValue: parseInt(e.target.value) }]);
-                      }}
-                    />
-                  </FormField>
-                </Box>
-              </Box>
+              )
             );
           })}
         </Box>

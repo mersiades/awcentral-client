@@ -51,7 +51,6 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   if (!!character && !!character.looks) {
     reversedLooks = character.looks.map((look) => look.look).reverse();
   }
-  console.log('currentStep', currentStep);
 
   const box0Step1 = (
     <Box margin={{ left: 'xsmall', right: 'xsmall' }} justify="between" width="11em" height="10rem" gap="small">
@@ -91,6 +90,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       </Box>
     </Box>
   );
+
   const box1Step3 = (
     <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
@@ -123,6 +123,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       )}
     </Box>
   );
+
   const box2Step4 = (
     <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
@@ -153,6 +154,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       )}
     </Box>
   );
+
   const box3Step5 = (
     <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
@@ -315,26 +317,24 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       <Text color="white" weight="bold" alignSelf="center">
         Hx
       </Text>
-      {/*!!character && !!character.characterMoves && character.characterMoves.length > 0 ? (
+      {!!character && !!character.hxBlock && character.hxBlock.length > 0 ? (
         <CustomUL>
-          {character.characterMoves.map((move) => {
-            if (move.isSelected) {
-              return (
-                <li key={move.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {formatPlaybookType(move.name)}
-                </li>
-              );
-            }
-            return null;
+          {character.hxBlock.map((hxStat) => {
+            return (
+              <li key={hxStat.characterId}>{`${hxStat.characterName} ${'--'.repeat(10 - hxStat.characterName.length)} ${
+                hxStat.hxValue
+              }`}</li>
+            );
           })}
         </CustomUL>
       ) : (
         <Text>...</Text>
-      )*/}
+      )}
     </Box>
   );
 
   const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8];
+
   const renderBoxesSmall = () => {
     switch (currentStep) {
       case 0:
@@ -349,7 +349,14 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
             {boxesArray[2]}
           </>
         );
-
+      case 8:
+        return (
+          <>
+            {boxesArray[4]}
+            {boxesArray[5]}
+            {boxesArray[6]}
+          </>
+        );
       default:
         return (
           <>

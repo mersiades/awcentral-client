@@ -1,10 +1,10 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { startsWith } from 'lodash';
 import styled from 'styled-components';
-import { Box, Button, Text, TextArea, Tip } from 'grommet';
+import { Box, Text, TextArea, Tip } from 'grommet';
 
 import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
-import { accentColors, brandColor, ButtonWS, HeadingWS, neutralColors } from '../config/grommetConfig';
+import { accentColors, brandColor, ButtonWS, HeadingWS, neutralColors, TextWS } from '../config/grommetConfig';
 
 interface UniqueFormBattlebabeProps {
   characterName: string;
@@ -231,13 +231,13 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
   }, [baseValue, characteristics, getParsedValue]);
 
   return (
-    <Box width="60vw" direction="column" align="start" justify="between">
+    <Box width="60vw" direction="column" align="start" justify="between" flex="grow">
       <HeadingWS level={2} alignSelf="center">{`WHAT ARE ${characterName.toUpperCase()}'S TWO CUSTOM WEAPONS?`}</HeadingWS>
-      <Text alignSelf="center">Mix'n'match. Edit directly if necessary.</Text>
+      <TextWS alignSelf="center">Mix'n'match. Edit directly if necessary.</TextWS>
       <Box fill="horizontal" direction="row" justify="start" height="145px">
-        <Box height="145px" gap="6px" align="center" justify="between" width="60%">
+        <Box height="145px" gap="12px" align="center" justify="between" width="60%">
           <TextArea size="large" value={value} onChange={(e) => setValue(e.target.value)} />
-          <Box direction="row" fill="horizontal" gap="6px">
+          <Box direction="row" fill="horizontal" gap="12px">
             <ButtonWS
               fill="horizontal"
               label="RESET"
@@ -263,8 +263,14 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
             />
           </Box>
         </Box>
-        <Box height="145px" justify="between" width="40%" pad={{ horizontal: '6px' }} gap="6px">
-          <Box fill="vertical" border={{ color: brandColor }}>
+        <Box height="145px" justify="between" width="40%" pad={{ horizontal: '12px' }} gap="12px">
+          <Box
+            fill="vertical"
+            border={{ color: brandColor }}
+            style={{
+              boxShadow: '0 0 5px 1px #000, 0 0 5px 1px #000 inset',
+            }}
+          >
             <WeaponsUL>
               {weapons.map((weapon, index) => (
                 <li
@@ -280,7 +286,7 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
               ))}
             </WeaponsUL>
           </Box>
-          <Button label="SET" primary onClick={() => handleSubmitCustomWeapons(weapons)} />
+          <ButtonWS label="SET" primary onClick={() => handleSubmitCustomWeapons(weapons)} disabled={weapons.length === 0} />
         </Box>
       </Box>
       <Box direction="row" height="300px" overflow={{ vertical: 'auto' }}>
@@ -288,13 +294,13 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
           <HeadingWS alignSelf="center" level={4}>
             {firearmsTitle}
           </HeadingWS>
-          <Text weight="bold">{firearmsBaseInstructions}</Text>
+          <TextWS weight="bold">{firearmsBaseInstructions}</TextWS>
           <Box direction="row" wrap>
             {firearmsBaseOptions.map((option) => renderBasePill(option))}
           </Box>
-          <Text weight="bold" margin={{ top: '6px' }}>
+          <TextWS weight="bold" margin={{ top: '6px' }}>
             {firearmsOptionsInstructions}
-          </Text>
+          </TextWS>
           <Box direction="row" wrap>
             {firearmsOptionsOptions.map((option) => renderOptionPill(option))}
           </Box>
@@ -303,11 +309,11 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
           <HeadingWS alignSelf="center" level={4}>
             {handTitle}
           </HeadingWS>
-          <Text weight="bold">{handBaseInstructions}</Text>
+          <TextWS weight="bold">{handBaseInstructions}</TextWS>
           <Box direction="row">{handBaseOptions.map((option) => renderBasePill(option))}</Box>
-          <Text weight="bold" margin={{ top: '6px' }}>
+          <TextWS weight="bold" margin={{ top: '6px' }}>
             {handOptionsInstructions}
-          </Text>
+          </TextWS>
           <Box direction="row" wrap>
             {handOptionsOptions.map((option) => renderOptionPill(option))}
           </Box>

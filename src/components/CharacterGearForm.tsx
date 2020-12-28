@@ -4,7 +4,7 @@ import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { PlaybookCreator } from '../@types';
 import { PlayBooks } from '../@types/enums';
-import { accentColors, ButtonWS, HeadingWS } from '../config/grommetConfig';
+import { accentColors, ButtonWS, HeadingWS, TextWS } from '../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
 
@@ -167,13 +167,13 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
       align="center"
       justify="start"
     >
-      <Box width="70vw" height="100%" overflow="auto">
+      <Box width="70vw" flex="grow" overflow="auto">
         <HeadingWS
           level={2}
           textAlign="center"
           style={{ maxWidth: 'unset' }}
         >{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</HeadingWS>
-        <Text textAlign="center">Select an item to add, edit or delete it, or just type your own.</Text>
+        <TextWS textAlign="center">Select an item to add, edit or delete it, or just type your own.</TextWS>
         <Box direction="row" flex="grow">
           <Box
             ref={instructionsBoxRef}

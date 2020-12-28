@@ -19,7 +19,7 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniq
   const { angelKitInstructions, startingStock } = playbookUniqueCreator.angelKitCreator;
   const [stock, setStock] = useState(startingStock);
   return (
-    <Box width="60vw" direction="column" align="start" justify="between" overflow="auto">
+    <Box width="60vw" direction="column" align="start" justify="between" overflow="auto" flex="grow">
       <HeadingWS level={2} alignSelf="center">{`${characterName.toUpperCase()}'S ANGEL KIT`}</HeadingWS>
       <Box flex="grow" direction="row" align="start">
         <Box fill="horizontal">

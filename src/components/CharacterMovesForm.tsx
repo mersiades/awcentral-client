@@ -5,14 +5,14 @@ import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { CharacterMove } from '../@types';
 import { PlayBooks } from '../@types/enums';
-import { accentColors, ButtonWS, HeadingWS } from '../config/grommetConfig';
+import { ButtonWS, HeadingWS } from '../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import Spinner from './Spinner';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
     margin: unset;
-    color: ${accentColors[0]};
+    text-shadow: 0 0 1px #000, 0 0 3px #000;
   }
 `;
 
@@ -76,11 +76,12 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({ playbookType, charact
     <Box
       fill
       direction="column"
-      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+      background="transparent"
       align="center"
       justify="start"
+      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box width="70vw">
+      <Box width="70vw" flex="grow">
         <HeadingWS
           level={2}
           textAlign="center"

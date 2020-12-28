@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { Box, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 
 import { PlaybookUniqueCreator } from '../@types';
-import { accentColors, ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
     margin: unset;
-    color: ${accentColors[0]};
+    text-shadow: 0 0 1px #000, 0 0 3px #000;
   }
 `;
 
@@ -45,7 +45,7 @@ const UniqueFormBrainer: FC<UniqueFormBrainerProps> = ({
   };
 
   return (
-    <Box width="70vw" height="575px" direction="column" align="center" justify="between">
+    <Box width="70vw" flex="grow" direction="column" align="center" justify="between">
       <HeadingWS level={2}>{`WHAT SPECIAL BRAINER GEAR DOES ${characterName.toUpperCase()} HAVE?`}</HeadingWS>
       <ParagraphWS size="large">Choose two</ParagraphWS>
       <CheckBoxGroup

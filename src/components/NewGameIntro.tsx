@@ -1,6 +1,8 @@
-import { Anchor, Box, Button, Heading, Paragraph } from 'grommet';
 import React, { FC } from 'react';
+import { Anchor, Box } from 'grommet';
+
 import { Game } from '../@types';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 
 interface NewGameIntroProps {
   game: Game;
@@ -8,55 +10,59 @@ interface NewGameIntroProps {
 }
 
 const NewGameIntro: FC<NewGameIntroProps> = ({ game, closeNewGameIntro }) => {
-  console.log('game', game);
   const renderComms = () => {
     if (!!game.commsApp) {
       if (!!game.commsUrl) {
         return (
-          <Paragraph textAlign="center" size="medium">
+          <ParagraphWS textAlign="center" size="medium">
             If you haven't already, join the rest of your crew on{' '}
             <Anchor href={game.commsUrl} target="_blank" rel="noopener noreferrer">
               {game.commsApp}
             </Anchor>
             .
-          </Paragraph>
+          </ParagraphWS>
         );
       } else {
         return (
-          <Paragraph textAlign="center" size="medium">
+          <ParagraphWS textAlign="center" size="medium">
             {`If you haven't already, join the rest of your crew on ${game.commsApp}.`}
-          </Paragraph>
+          </ParagraphWS>
         );
       }
     } else if (!!game.commsUrl) {
       return (
-        <Paragraph textAlign="center" size="medium">
+        <ParagraphWS textAlign="center" size="medium">
           If you haven't already, join the rest of your crew{' '}
           <Anchor href={game.commsUrl} target="_blank" rel="noopener noreferrer">
             here
           </Anchor>
           .
-        </Paragraph>
+        </ParagraphWS>
       );
     }
   };
   return (
     <Box
+      fill
       direction="column"
-      // fill
+      background="transparent"
       align="center"
       justify="center"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Heading level={2}>NEW GAME</Heading>
-      <Paragraph textAlign="center" size="large">
-        Welcome to the jungle, baby.
-      </Paragraph>
-      {renderComms()}
-      <Paragraph textAlign="center" size="medium">
-        Once everyone's ready, punch NEXT to get started.
-      </Paragraph>
-      <Button label="NEXT" primary size="large" onClick={() => closeNewGameIntro()} margin="36px" />
+      <Box width="60vw" flex="grow" align="center">
+        <HeadingWS level={2} style={{ maxWidth: 'unset' }}>
+          NEW GAME
+        </HeadingWS>
+        <ParagraphWS textAlign="center" size="large">
+          Welcome to the jungle, baby.
+        </ParagraphWS>
+        {renderComms()}
+        <ParagraphWS textAlign="center" size="medium">
+          Once everyone's ready, punch NEXT to get started.
+        </ParagraphWS>
+        <ButtonWS label="NEXT" primary size="large" onClick={() => closeNewGameIntro()} margin="24px" />
+      </Box>
     </Box>
   );
 };

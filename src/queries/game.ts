@@ -47,6 +47,12 @@ const GAME = gql`
               isHighlighted
             }
           }
+          hxBlock {
+            id
+            characterId
+            characterName
+            hxValue
+          }
           looks {
             look
             category

@@ -36,6 +36,7 @@ export interface Character {
   gear: string[]
   looks?: Look[]
   statsBlock: StatsBlock
+  hxBlock: HxStat[]
   playbookUnique?: PlaybookUnique
   characterMoves?: CharacterMove[]
 }
@@ -156,6 +157,12 @@ export interface StatsBlock {
   stats: CharacterStat[]
 }
 
+export interface HxStat {
+  characterId: string
+  characterName: string
+  hxValue: number
+}
+
 export interface CharacterStat {
   id: string
   stat: Stats
@@ -258,5 +265,6 @@ export interface CustomWeapons {
 
 export interface HxInput {
   characterId: string
+  characterName: string
   hxValue: number
 }
