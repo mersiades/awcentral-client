@@ -101,6 +101,7 @@ const CharacterCreator: FC = () => {
       handlePlaybookSelect(playbookType);
     }
   };
+
   const handlePlaybookSelect = async (playbookType: PlayBooks) => {
     if (!!gameRole) {
       if (gameRole.characters?.length === 0) {
@@ -135,6 +136,7 @@ const CharacterCreator: FC = () => {
       }
       setShowResetWarning(undefined);
       setCreationStep((prevState) => prevState + 1);
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }
   };
 
@@ -146,6 +148,7 @@ const CharacterCreator: FC = () => {
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevStep) => prevStep + 1);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
       }
@@ -177,6 +180,7 @@ const CharacterCreator: FC = () => {
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
       }
@@ -191,6 +195,7 @@ const CharacterCreator: FC = () => {
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
       }
@@ -205,6 +210,7 @@ const CharacterCreator: FC = () => {
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
       }
@@ -219,6 +225,7 @@ const CharacterCreator: FC = () => {
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
       }
@@ -233,6 +240,7 @@ const CharacterCreator: FC = () => {
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
       }
@@ -247,6 +255,7 @@ const CharacterCreator: FC = () => {
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
       }
@@ -254,7 +263,6 @@ const CharacterCreator: FC = () => {
   };
 
   const handleSubmitCharacterHx = async (hxInputs: HxInput[]) => {
-    console.log('hxInputs', hxInputs);
     if (!!gameRole && !!character) {
       try {
         await setCharacterHx({

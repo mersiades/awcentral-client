@@ -18,20 +18,6 @@ const SET_ANGEL_KIT = gql`
       id
       name
       playbook
-      gear
-      looks {
-        look
-        category
-      }
-      statsBlock {
-        id
-        stats {
-          id
-          stat
-          value
-          isHighlighted
-        }
-      }
       playbookUnique {
         id
         type

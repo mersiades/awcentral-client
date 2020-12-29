@@ -17,20 +17,6 @@ const SET_BRAINER_GEAR = gql`
       id
       name
       playbook
-      gear
-      looks {
-        look
-        category
-      }
-      statsBlock {
-        id
-        stats {
-          id
-          stat
-          value
-          isHighlighted
-        }
-      }
       playbookUnique {
         id
         type
