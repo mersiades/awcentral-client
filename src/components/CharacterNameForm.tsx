@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { Box, Heading, TextInput, Text, Button, Form, FormField } from 'grommet';
+import { Box, TextInput, Text, Form, FormField } from 'grommet';
 
 import Spinner from './Spinner';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';

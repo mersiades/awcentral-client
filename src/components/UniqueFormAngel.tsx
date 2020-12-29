@@ -3,17 +3,13 @@ import ReactMarkdown from 'react-markdown';
 import { Box, FormField, TextInput } from 'grommet';
 
 import { PlaybookUniqueCreator } from '../@types';
-import { brandColor, ButtonWS, HeadingWS, RedBox } from '../config/grommetConfig';
+import { ButtonWS, HeadingWS, RedBox } from '../config/grommetConfig';
 
 interface UniqueFormAngelProps {
   characterName: string;
   playbookUniqueCreator: PlaybookUniqueCreator;
   handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
 }
-
-const boxShadow = {
-  boxShadow: `0px 0px 1px 1px ${brandColor}, 0px 0px 3px 3px ${brandColor}, 0px 0px 5px 5px ${brandColor}`,
-};
 
 const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniqueCreator, handleSubmitAngelKit }) => {
   const { angelKitInstructions, startingStock } = playbookUniqueCreator.angelKitCreator;

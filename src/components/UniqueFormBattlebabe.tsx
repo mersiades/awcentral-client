@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Box, Text, TextArea, Tip } from 'grommet';
 
 import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
-import { accentColors, brandColor, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../config/grommetConfig';
+import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../config/grommetConfig';
 
 interface UniqueFormBattlebabeProps {
   characterName: string;

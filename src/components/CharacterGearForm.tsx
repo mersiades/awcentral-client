@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Box, Paragraph, Text, TextArea } from 'grommet';
+import { Box, TextArea } from 'grommet';
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { PlaybookCreator } from '../@types';
