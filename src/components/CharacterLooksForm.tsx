@@ -92,7 +92,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       justify="start"
     >
       <HeadingWS level={2}>{`WHAT DOES ${characterName.toUpperCase()} LOOK LIKE?`}</HeadingWS>
-      <Box direction="row" justify="between" gap="24px">
+      <Box direction="row" justify="between" gap="24px" flex="grow">
         {steps.map((step, index) => {
           const isSelected = index === selectedStep;
           return (
@@ -101,6 +101,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
               level={4}
               color={isSelected ? 'accent-1' : 'white'}
               onClick={() => setSelectedStep(index)}
+              style={{ cursor: 'pointer' }}
             >
               {step}
             </HeadingWS>
@@ -116,14 +117,15 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
         >
           <Box
             width="50vw"
-            height="30vh"
+            flex="grow"
+            margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >
             <FormField name="gender" width="100%">
               <TextInput placeholder="Type or select" name="gender" size="xxlarge" />
             </FormField>
-            <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
+            <Box direction="row" margin={{ top: '3px' }} wrap>
               {pbCreator.looks
                 .filter((look) => look.category === LookCategories.gender)
                 .map((look) => renderPill(look, setGenderValue, 'gender'))}
@@ -141,7 +143,8 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
         >
           <Box
             width="50vw"
-            height="30vh"
+            flex="grow"
+            margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >
@@ -166,7 +169,8 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
         >
           <Box
             width="50vw"
-            height="30vh"
+            flex="grow"
+            margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >
@@ -191,7 +195,8 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
         >
           <Box
             width="50vw"
-            height="30vh"
+            flex="grow"
+            margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >
@@ -216,7 +221,8 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
         >
           <Box
             width="50vw"
-            height="30vh"
+            flex="grow"
+            margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >

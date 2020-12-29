@@ -43,9 +43,9 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
           gridArea="name-box"
           align="center"
           justify="start"
-          background={{ color: 'neutral-1', opacity: 0.5 }}
-          border
           pad="12px"
+          border
+          background={{ color: 'neutral-1', opacity: 0.5 }}
         >
           <Text color="white" weight="bold">
             Name
@@ -53,14 +53,14 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
           {!!game.name ? <Text>{game.name}</Text> : <Text>...</Text>}
         </Box>
         <Box
-          fill
           gridArea="channel-box"
+          fill
           align="center"
           justify="start"
-          background={{ color: 'neutral-1', opacity: currentStep === 0 ? 1 : 0.5 }}
-          border
-          onClick={() => setCreationStep(0)}
           pad="12px"
+          border
+          background={{ color: 'neutral-1', opacity: currentStep === 0 ? 1 : 0.5 }}
+          onClick={() => setCreationStep(0)}
         >
           <Text color="white" weight="bold">
             Channel
@@ -68,14 +68,14 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
           <Box width="100%">{renderComms()}</Box>
         </Box>
         <Box
-          fill
           gridArea="invitations-box"
+          fill
           align="center"
           justify="start"
-          background={{ color: 'neutral-1', opacity: currentStep === 1 ? 1 : 0.5 }}
-          border
-          onClick={() => setCreationStep(1)}
           pad="12px"
+          border
+          background={{ color: 'neutral-1', opacity: currentStep === 1 ? 1 : 0.5 }}
+          onClick={() => setCreationStep(1)}
         >
           <Text color="white" weight="bold">
             Invitations

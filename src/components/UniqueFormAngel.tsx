@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { Box, FormField, TextInput } from 'grommet';
 
 import { PlaybookUniqueCreator } from '../@types';
-import { brandColor, ButtonWS, HeadingWS } from '../config/grommetConfig';
+import { brandColor, ButtonWS, HeadingWS, RedBox } from '../config/grommetConfig';
 
 interface UniqueFormAngelProps {
   characterName: string;
@@ -25,7 +25,13 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniq
         <Box fill="horizontal">
           <ReactMarkdown>{angelKitInstructions}</ReactMarkdown>
         </Box>
-        <Box width="150px" align="center" pad="24px" margin={{ left: '24px', right: '5px', top: '18px' }} style={boxShadow}>
+        <RedBox
+          width="150px"
+          align="center"
+          justify="between"
+          pad="24px"
+          margin={{ left: '24px', right: '5px', top: '18px' }}
+        >
           <HeadingWS level={3}>Stock</HeadingWS>
           <FormField>
             <TextInput
@@ -36,7 +42,7 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniq
               onChange={(e) => setStock(parseInt(e.target.value))}
             />
           </FormField>
-        </Box>
+        </RedBox>
       </Box>
       <Box fill direction="row" justify="end" align="center" style={{ minHeight: 52 }}>
         <ButtonWS label="SET" primary onClick={() => handleSubmitAngelKit(startingStock, false)} margin={{ right: '5px' }} />

@@ -1,15 +1,15 @@
 import React, { FC, useState } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
-import { Button, Box, Image, Heading, FormField, TextInput, Text, Grid } from 'grommet';
-import { Close } from 'grommet-icons';
-import '../assets/styles/transitions.css';
-import CreateGameForm from './CreateGameForm';
-import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useQuery } from '@apollo/client';
-import GamesList from './GamesList';
-import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
 import { useHistory } from 'react-router-dom';
-import { background } from '../config/grommetConfig';
+import { Box, Image, Grid } from 'grommet';
+
+import CreateGameForm from './CreateGameForm';
+import GamesList from './GamesList';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
+import { background, ButtonWS, HeadingWS, StyledClose } from '../config/grommetConfig';
+import '../assets/styles/transitions.css';
 
 const MenuPage: FC = () => {
   // ---------------------------------- Accessing React context -------------------------------------------- //
@@ -56,7 +56,7 @@ const MenuPage: FC = () => {
       >
         <Box gridArea="leftMargin" />
         <Box gridArea="centerTop">
-          <Heading level="4">{username && `Welcome, ${username}`}</Heading>
+          <HeadingWS level="4">{username && `Welcome, ${username}`}</HeadingWS>
         </Box>
         <Box gridArea="centerBottom">
           <Grid
@@ -79,7 +79,7 @@ const MenuPage: FC = () => {
                 <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
                   <Box gap="small">
                     {!!gameRoles && gameRoles.length > 0 && (
-                      <Button
+                      <ButtonWS
                         label="RETURN TO GAME"
                         primary
                         size="large"
@@ -88,7 +88,7 @@ const MenuPage: FC = () => {
                         onClick={() => setButtonsContainer(1)}
                       />
                     )}
-                    <Button
+                    <ButtonWS
                       label="JOIN GAME"
                       secondary
                       size="large"
@@ -96,15 +96,15 @@ const MenuPage: FC = () => {
                       fill
                       onClick={() => history.push('/join-game')}
                     />
-                    <Button
+                    <ButtonWS
                       label="CREATE GAME"
                       secondary
                       size="large"
                       alignSelf="center"
                       fill
-                      onClick={() => setButtonsContainer(3)}
+                      onClick={() => setButtonsContainer(2)}
                     />
-                    <Button
+                    <ButtonWS
                       label="LOG OUT"
                       size="large"
                       alignSelf="center"
@@ -130,12 +130,12 @@ const MenuPage: FC = () => {
                     ]}
                   >
                     <Box gridArea="header-left" align="start" alignContent="center">
-                      <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
+                      <StyledClose color="accent-1" onClick={() => setButtonsContainer(0)} />
                     </Box>
                     <Box gridArea="header-right">
-                      <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                      <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                         YOUR GAMES
-                      </Heading>
+                      </HeadingWS>
                     </Box>
                   </Grid>
                   <GamesList gameRoles={gameRoles} />
@@ -154,44 +154,12 @@ const MenuPage: FC = () => {
                     ]}
                   >
                     <Box gridArea="header-left" align="start" alignContent="center">
-                      <Close color="accent-1" onClick={() => setButtonsContainer(0)} />
+                      <StyledClose color="accent-1" onClick={() => setButtonsContainer(0)} cursor="pointer" />
                     </Box>
                     <Box gridArea="header-right">
-                      <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
-                        JOIN GAME
-                      </Heading>
-                    </Box>
-                  </Grid>
-                  <Box gap="small">
-                    <FormField label="Game code">
-                      <TextInput placeholder="Enter code" />
-                    </FormField>
-                    <Text color="accent-1" margin={{ top: 'xsmall' }}>
-                      Don't have a game code? Ask your game's MC for it
-                    </Text>
-                    <Button label="SUBMIT" primary size="large" alignSelf="center" fill />
-                  </Box>
-                </Box>
-              )}
-              {buttonsContainer === 3 && (
-                <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
-                  <Grid
-                    rows={['xsmall']}
-                    columns={['xxsmall', 'small']}
-                    justifyContent="between"
-                    align="center"
-                    areas={[
-                      { name: 'header-left', start: [0, 0], end: [0, 0] },
-                      { name: 'header-right', start: [1, 0], end: [1, 0] },
-                    ]}
-                  >
-                    <Box gridArea="header-left" align="start" alignContent="center">
-                      <Close color="accent-1" onClick={() => setButtonsContainer(0)} cursor="pointer" />
-                    </Box>
-                    <Box gridArea="header-right">
-                      <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                      <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                         CREATE GAME
-                      </Heading>
+                      </HeadingWS>
                     </Box>
                   </Grid>
                   <CreateGameForm />

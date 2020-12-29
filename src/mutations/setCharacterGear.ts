@@ -18,19 +18,6 @@ const SET_CHARACTER_GEAR = gql`
       name
       playbook
       gear
-      looks {
-        look
-        category
-      }
-      statsBlock {
-        id
-        stats {
-          id
-          stat
-          value
-          isHighlighted
-        }
-      }
     }
   }
 `

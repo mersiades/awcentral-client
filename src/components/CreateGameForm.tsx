@@ -1,12 +1,13 @@
 import React, { FC, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { FormField, TextInput, Text, Button, Box, Form } from 'grommet';
+import { FormField, TextInput, Box, Form } from 'grommet';
 
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 // import { useWebsocketContext } from '../contexts/websocketContext';
 import CREATE_GAME, { CreateGameData, CreateGameVars } from '../mutations/createGame';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
+import { ButtonWS, TextWS } from '../config/grommetConfig';
 // import { GameRequestBody } from '../@types';
 // import { WebsocketRequests } from '../@types/enums';
 // import { GameRequest, GameResponse } from '../@types';
@@ -46,10 +47,10 @@ const CreateGameForm: FC = () => {
         <FormField name="name" label="Name" htmlFor="text-input-id">
           <TextInput id="text-input-id" name="name" size="xlarge" placeholder={`${displayName}'s game`} />
         </FormField>
-        <Text color="accent-1" margin={{ top: 'xsmall' }}>
+        <TextWS color="accent-1" margin={{ top: 'xsmall' }}>
           Create a game with you as the MC
-        </Text>
-        <Button type="submit" label="SUBMIT" primary size="large" alignSelf="center" fill />
+        </TextWS>
+        <ButtonWS type="submit" label="SUBMIT" primary size="large" alignSelf="center" fill />
       </Box>
     </Form>
   );

@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
-import { Button, Box, Image, Heading, Grid } from 'grommet';
-import { Close } from 'grommet-icons';
-import '../assets/styles/transitions.css';
-import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useQuery } from '@apollo/client';
-// import GamesList from './GamesList';
 import { useHistory } from 'react-router-dom';
-import GAMES_FOR_INVITEE, { GamesForInviteeData, GamesForInviteeVars } from '../queries/gamesForInvitee';
+import { Box, Image, Heading, Grid } from 'grommet';
+
 import InvitationsList from './InvitationsList';
+import GAMES_FOR_INVITEE, { GamesForInviteeData, GamesForInviteeVars } from '../queries/gamesForInvitee';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import { ButtonWS, HeadingWS, StyledClose } from '../config/grommetConfig';
+import '../assets/styles/transitions.css';
 
 const background = {
   color: 'black',
@@ -91,17 +91,17 @@ const MenuPage: FC = () => {
                       ]}
                     >
                       <Box gridArea="header-left" align="start" alignContent="center">
-                        <Close color="accent-1" onClick={() => history.push('/')} cursor="pointer" />
+                        <StyledClose color="accent-1" onClick={() => history.push('/')} cursor="pointer" />
                       </Box>
                       <Box gridArea="header-right">
-                        <Heading level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                        <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                           YOUR INVITATIONS
-                        </Heading>
+                        </HeadingWS>
                       </Box>
                     </Grid>
                     <InvitationsList games={games} />
                   </Box>
-                  <Button label="MAIN MENU" size="large" alignSelf="center" fill onClick={() => history.push('/menu')} />
+                  <ButtonWS label="MAIN MENU" size="large" alignSelf="center" fill onClick={() => history.push('/menu')} />
                 </Box>
               </Box>
             </Box>

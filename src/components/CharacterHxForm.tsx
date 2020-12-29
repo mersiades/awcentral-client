@@ -5,7 +5,7 @@ import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { Character, GameRole, HxInput } from '../@types';
 import { PlayBooks, Roles } from '../@types/enums';
-import { ButtonWS, HeadingWS, TextWS } from '../config/grommetConfig';
+import { ButtonWS, HeadingWS, RedBox, TextWS } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
@@ -104,20 +104,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
             const existingValue = character.hxBlock.find((hxStat) => hxStat.characterId === char.id)?.hxValue;
             return (
               !!char.name && (
-                <Box
-                  key={char.id}
-                  border={{ color: 'brand', size: 'small' }}
-                  style={{
-                    boxShadow: `0 0 5px 1px rgba(0, 0, 0, 0.3),
-                      0 0 10px 1px rgba(0, 0, 0, 0.2),
-                      0 0 5px 1px rgba(0, 0, 0, 0.3) inset,
-                      0 0 10px 1px rgba(0, 0, 0, 0.2) inset
-                      `,
-                  }}
-                  direction="row"
-                  width="350px"
-                  margin={{ right: '12px', bottom: '12px' }}
-                >
+                <RedBox key={char.id} direction="row" width="350px" margin={{ right: '12px', bottom: '12px' }}>
                   <Box width="250px" pad="12px">
                     <HeadingWS level={3} style={{ marginTop: '6px', marginBottom: '6px' }}>
                       {char.name}
@@ -156,7 +143,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
                       />
                     </FormField>
                   </Box>
-                </Box>
+                </RedBox>
               )
             );
           })}

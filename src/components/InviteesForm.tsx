@@ -58,7 +58,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
       justify="center"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box width="50vw" height="70vh" align="center" direction="column" justify="start" overflow="auto">
+      <Box width="50vw" flex="grow" align="center" direction="column" justify="start">
         <HeadingWS level={1}>INVITE PLAYERS</HeadingWS>
         {hasSubmitted ? (
           <Box
@@ -71,7 +71,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
               Let your player know how to join your game. You can edit the instructions below (if you want) and then copy and
               paste into an email, Discord chat etc.
             </ParagraphWS>
-            <Box pad="12px" background="#CCCCCC" width="100%">
+            <Box pad="12px" width="100%">
               {renderMessage()}
               <Box direction="row" width="100%" justify="between" gap="12px" margin={{ top: '12px' }}>
                 <ButtonWS secondary label="COPY TO CLIPBOARD" onClick={() => copyToClipboard(message)} />

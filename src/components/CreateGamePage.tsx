@@ -57,7 +57,7 @@ const CreateGamePage = () => {
   }
 
   return (
-    <Box fill background={background} pad="6px">
+    <Box fill background={background} pad="6px" overflow={{ vertical: 'auto' }}>
       <CloseButton handleClose={() => history.push('/menu')} />
       <Box fill direction="column" justify="start">
         <GameCreationStepper setCreationStep={setCreationStep} currentStep={creationStep} game={game} />

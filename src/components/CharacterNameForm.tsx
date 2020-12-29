@@ -7,6 +7,7 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../q
 import { PlaybookCreator } from '../@types';
 import { PlayBooks } from '../@types/enums';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
+import { ButtonWS, HeadingWS } from '../config/grommetConfig';
 
 interface CharacterNameFormProps {
   playbookType: PlayBooks;
@@ -52,7 +53,7 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
         onSubmit={({ value }: any) => handleSubmitName(value.characterName)}
       >
         <Box width="50vw" height="50vh" align="center">
-          <Heading level={2}>{`WHAT IS THE ${formatPlaybookType(playbookType).toUpperCase()} CALLED?`}</Heading>
+          <HeadingWS level={2}>{`WHAT IS THE ${formatPlaybookType(playbookType).toUpperCase()} CALLED?`}</HeadingWS>
           <FormField name="characterName" width="100%">
             <TextInput placeholder="Type or select name" name="characterName" size="xxlarge" />
           </FormField>
@@ -76,8 +77,8 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
           </Box>
         </Box>
         <Box direction="row" justify="end" gap="12px" margin={{ top: '12px' }}>
-          <Button type="reset" label="CLEAR" />
-          <Button type="submit" primary label="SET" />
+          <ButtonWS type="reset" label="CLEAR" />
+          <ButtonWS type="submit" primary label="SET" />
         </Box>
       </Form>
     </Box>

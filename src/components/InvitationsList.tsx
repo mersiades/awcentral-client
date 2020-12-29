@@ -1,9 +1,10 @@
 import { useMutation } from '@apollo/client';
-import { Box, Button, Text } from 'grommet';
+import { Box } from 'grommet';
 import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Game } from '../@types';
 import { Roles } from '../@types/enums';
+import { ButtonWS, TextWS } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import ADD_USER_TO_GAME, { AddUserToGameData, AddUserToGameVars } from '../mutations/addUserToGame';
 import Spinner from './Spinner';
@@ -16,8 +17,6 @@ const InvitationsList: FC<InvitationsListProps> = ({ games }) => {
   const history = useHistory();
   const { id: userId, username: displayName, email } = useKeycloakUser();
   const [addUserToGame, { loading }] = useMutation<AddUserToGameData, AddUserToGameVars>(ADD_USER_TO_GAME);
-
-  console.log('games', games);
 
   const handleJoinGame = async (gameId: string) => {
     // @ts-ignore
@@ -52,16 +51,20 @@ const InvitationsList: FC<InvitationsListProps> = ({ games }) => {
         return (
           <Box key={game.id} direction="row" justify="between" align="center">
             <Box direction="column" fill="horizontal">
-              <Text weight="bold" size="xlarge" truncate>
+              <TextWS weight="bold" size="xlarge" truncate>
                 {game.name}
-              </Text>
-              <Text size="small" truncate>
+              </TextWS>
+              <TextWS size="small" truncate>
                 {getPlayersString(game)}
-              </Text>
+              </TextWS>
             </Box>
-            <Button secondary onClick={() => handleJoinGame(game.id)} disabled={loading} focusIndicator={false}>
-              {loading ? <Spinner fillColor="#FFF" /> : 'JOIN'}
-            </Button>
+            <ButtonWS
+              secondary
+              onClick={() => handleJoinGame(game.id)}
+              disabled={loading}
+              focusIndicator={false}
+              label={loading ? <Spinner fillColor="#FFF" /> : 'JOIN'}
+            />
           </Box>
         );
       })}

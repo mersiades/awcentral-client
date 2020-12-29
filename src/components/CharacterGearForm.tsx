@@ -84,13 +84,13 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
 
   const renderInAddition = () => {
     if (!!pbCreator?.gearInstructions.inAddition) {
-      return <Text>{pbCreator.gearInstructions.inAddition}</Text>;
+      return <TextWS>{pbCreator.gearInstructions.inAddition}</TextWS>;
     }
   };
 
   const renderYouGet = () => {
     if (!!pbCreator?.gearInstructions.youGet) {
-      return <Text>{pbCreator.gearInstructions.youGet}</Text>;
+      return <TextWS>{pbCreator.gearInstructions.youGet}</TextWS>;
     }
   };
 
@@ -118,7 +118,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
   const renderIntroduceChoice = () => {
     if (!!pbCreator?.gearInstructions.introduceChoice) {
       return (
-        <Text>{`${pbCreator.gearInstructions.introduceChoice} (choose ${pbCreator.gearInstructions.numberCanChoose}):`}</Text>
+        <TextWS>{`${pbCreator.gearInstructions.introduceChoice} (choose ${pbCreator.gearInstructions.numberCanChoose}):`}</TextWS>
       );
     }
   };
@@ -146,7 +146,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
 
   const renderWithMC = () => {
     if (!!pbCreator?.gearInstructions.withMC) {
-      return <Paragraph>{pbCreator.gearInstructions.withMC}</Paragraph>;
+      return <ParagraphWS>{pbCreator.gearInstructions.withMC}</ParagraphWS>;
     }
   };
 

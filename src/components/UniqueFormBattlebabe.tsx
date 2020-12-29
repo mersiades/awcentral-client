@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Box, Text, TextArea, Tip } from 'grommet';
 
 import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
-import { accentColors, brandColor, ButtonWS, HeadingWS, neutralColors, TextWS } from '../config/grommetConfig';
+import { accentColors, brandColor, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../config/grommetConfig';
 
 interface UniqueFormBattlebabeProps {
   characterName: string;
@@ -235,7 +235,7 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
       <HeadingWS level={2} alignSelf="center">{`WHAT ARE ${characterName.toUpperCase()}'S TWO CUSTOM WEAPONS?`}</HeadingWS>
       <TextWS alignSelf="center">Mix'n'match. Edit directly if necessary.</TextWS>
       <Box fill="horizontal" direction="row" justify="start" height="145px">
-        <Box height="145px" gap="12px" align="center" justify="between" width="60%">
+        <Box height="152px" gap="12px" align="center" justify="between" width="60%">
           <TextArea size="large" value={value} onChange={(e) => setValue(e.target.value)} />
           <Box direction="row" fill="horizontal" gap="12px">
             <ButtonWS
@@ -263,14 +263,8 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
             />
           </Box>
         </Box>
-        <Box height="145px" justify="between" width="40%" pad={{ horizontal: '12px' }} gap="12px">
-          <Box
-            fill="vertical"
-            border={{ color: brandColor }}
-            style={{
-              boxShadow: '0 0 5px 1px #000, 0 0 5px 1px #000 inset',
-            }}
-          >
+        <Box height="152px" justify="between" width="40%" pad={{ horizontal: '12px' }} gap="12px">
+          <RedBox fill="vertical">
             <WeaponsUL>
               {weapons.map((weapon, index) => (
                 <li
@@ -285,7 +279,7 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
                 </li>
               ))}
             </WeaponsUL>
-          </Box>
+          </RedBox>
           <ButtonWS label="SET" primary onClick={() => handleSubmitCustomWeapons(weapons)} disabled={weapons.length === 0} />
         </Box>
       </Box>
