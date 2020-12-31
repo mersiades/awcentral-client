@@ -78,7 +78,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
 
   if (loadingPbCreator || !hxInstructions) {
     return (
-      <Box fill justify="center" align="center">
+      <Box fill background="transparent" justify="center" align="center">
         <Spinner />
       </Box>
     );

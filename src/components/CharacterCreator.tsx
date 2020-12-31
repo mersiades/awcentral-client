@@ -316,7 +316,7 @@ const CharacterCreator: FC = () => {
 
   if (loadingPlaybooks || loadingGame || !playbooks || !game) {
     return (
-      <Box fill background="black" justify="center" align="center">
+      <Box fill background={background} justify="center" align="center">
         <Spinner />
       </Box>
     );

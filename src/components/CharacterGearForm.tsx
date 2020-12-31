@@ -152,7 +152,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
 
   if (loadingPbCreator || !pbCreatorData || !pbCreator) {
     return (
-      <Box fill background="black" justify="center" align="center">
+      <Box fill background="transparent" justify="center" align="center">
         <Spinner />
       </Box>
     );

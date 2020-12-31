@@ -31,7 +31,7 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
 
   if (loadingPbCreator || !pbCreatorData || !pbCreator) {
     return (
-      <Box fill background="black" justify="center" align="center">
+      <Box fill background="transparent" justify="center" align="center">
         <Spinner />
       </Box>
     );
@@ -41,10 +41,11 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
     <Box
       fill
       direction="column"
-      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+      background="transparent"
       pad="24px"
       align="center"
       justify="start"
+      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
       <Form
         value={value}

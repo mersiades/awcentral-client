@@ -66,7 +66,7 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({ playbookType, charact
     !defaultMoveIds
   ) {
     return (
-      <Box fill justify="center" align="center">
+      <Box fill background="transparent" justify="center" align="center">
         <Spinner />
       </Box>
     );
