@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import {
   Box,
@@ -143,6 +143,15 @@ const MCPage = () => {
 
   const game = gameData?.game;
   const allMoves = allMovesData?.allMoves;
+
+  useEffect(() => {
+    if (!!game && !!userId) {
+      if (game.mc.id !== userId) {
+        history.push('/menu');
+      }
+    }
+  }, [game, userId, history]);
+
   if (loadingGame || !game) {
     return <div> Loading </div>;
   }

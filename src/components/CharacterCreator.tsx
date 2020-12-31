@@ -312,6 +312,15 @@ const CharacterCreator: FC = () => {
     }
   }, [character, creationStep]);
 
+  useEffect(() => {
+    if (!!game && !!userId) {
+      const memberIds = game?.players.map((player) => player.id);
+      if (!memberIds.includes(userId)) {
+        history.push('/menu');
+      }
+    }
+  }, [game, userId, history]);
+
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
   if (loadingPlaybooks || loadingGame || !playbooks || !game) {

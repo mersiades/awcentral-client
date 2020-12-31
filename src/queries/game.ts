@@ -18,9 +18,11 @@ const GAME = gql`
       commsApp
       commsUrl
       mc {
+        id
         displayName
       }
       players {
+        id
         displayName
       }
       gameRoles {

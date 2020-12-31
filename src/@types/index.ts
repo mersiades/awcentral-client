@@ -18,8 +18,8 @@ export interface Game {
   name: string;
   commsApp: string
   commsUrl: string
-  mc: { displayName: string }
-  players: { displayName: string }[]
+  mc: { displayName: string, id: string }
+  players: { displayName: string, id: string }[]
   gameRoles: GameRole[]
   invitees: string[]
 }

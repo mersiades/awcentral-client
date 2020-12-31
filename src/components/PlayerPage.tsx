@@ -50,15 +50,21 @@ const PlayerPage: FC = () => {
     }
   }, [gameRoles]);
 
+  useEffect(() => {
+    if (!!game && !!userId) {
+      const memberIds = game?.players.map((player) => player.id);
+      if (!memberIds.includes(userId)) {
+        history.push('/menu');
+      }
+    }
+  }, [game, userId, history]);
+
   if (loadingGame || !game || !userId || !gameRole) {
     return <div> Loading </div>;
   }
 
   // Redirect if new game/ no character
   // Also, may need to create gameRole
-
-  console.log('gameRole', gameRole);
-  console.log('gameRole.characters.length', gameRole && gameRole.characters && gameRole.characters.length);
   return (
     <>
       <Header background="neutral-1">
