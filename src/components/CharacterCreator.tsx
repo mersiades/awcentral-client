@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, Layer, Paragraph } from 'grommet';
@@ -35,6 +35,7 @@ import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enu
 import { Character, GameRole, HxInput } from '../@types';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import CharacterHxForm from './CharacterHxForm';
+import ScrollableIndicator from './ScrollableIndicator';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -54,13 +55,14 @@ export const background = {
 
 const CharacterCreator: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
-  /**
-   * Step 0 = Choose a playbook
-   */
   const [creationStep, setCreationStep] = useState<number>(0);
   const [character, setCharacter] = useState<Character | undefined>();
   const [gameRole, setGameRole] = useState<GameRole | undefined>();
   const [showResetWarning, setShowResetWarning] = useState<PlayBooks | undefined>();
+  const [showScrollable, setShowScrollable] = useState(false);
+
+  // ------------------------------------------------------- Refs -------------------------------------------------------- //
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // -------------------------------------------------- Context hooks ---------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
@@ -279,6 +281,26 @@ const CharacterCreator: FC = () => {
 
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
+  const handleScroll = (e: any) => {
+    if (!e.currentTarget) {
+      return;
+    }
+    if (e.currentTarget.scrollHeight <= e.currentTarget.offsetHeight) {
+      setShowScrollable(false);
+      return;
+    }
+
+    if (e.currentTarget.scrollTop > 0) {
+      setShowScrollable(false);
+      return;
+    }
+
+    if (e.currentTarget.scrollTop === 0) {
+      setShowScrollable(true);
+      return;
+    }
+  };
+
   // -------------------------------------------------- UseEffects ---------------------------------------------------- //
   useEffect(() => {
     if (!!gameRoles && gameRoles.length > 0) {
@@ -321,6 +343,20 @@ const CharacterCreator: FC = () => {
     }
   }, [game, userId, history]);
 
+  useEffect(() => {
+    if (!!containerRef.current) {
+      containerRef.current.addEventListener('scroll', (e) => handleScroll(e));
+      console.log('containerRef.current.scrollHeight', containerRef.current.scrollHeight);
+      console.log('containerRef.current.offsetHeight', containerRef.current.offsetHeight);
+      if (containerRef.current.scrollHeight > containerRef.current.offsetHeight) {
+        setShowScrollable(true);
+      } else {
+        setShowScrollable(false);
+      }
+      containerRef.current.scrollTop = 0;
+    }
+  }, [containerRef, creationStep]);
+
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
   if (loadingPlaybooks || loadingGame || !playbooks || !game) {
@@ -332,7 +368,8 @@ const CharacterCreator: FC = () => {
   }
 
   return (
-    <Box fill background={background} overflow={{ vertical: 'auto' }}>
+    <Box ref={containerRef} fill background={background} overflow={{ vertical: 'auto' }}>
+      <ScrollableIndicator show={showScrollable} />
       <CloseButton handleClose={() => history.push('/menu')} />
       {!!showResetWarning && (
         <Layer onEsc={() => setShowResetWarning(undefined)} onClickOutside={() => setShowResetWarning(undefined)}>
