@@ -6,7 +6,7 @@ import { Box, Image, Heading, Grid } from 'grommet';
 import InvitationsList from './InvitationsList';
 import GAMES_FOR_INVITEE, { GamesForInviteeData, GamesForInviteeVars } from '../queries/gamesForInvitee';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import { ButtonWS, HeadingWS, StyledClose } from '../config/grommetConfig';
+import { HeadingWS, StyledClose } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
 
 const background = {
@@ -78,7 +78,7 @@ const MenuPage: FC = () => {
             <Box gridArea="gamesContainer" alignSelf="end">
               <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
                 <Box gap="small">
-                  <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
+                  <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} pad={{ bottom: '96px' }}>
                     <Grid
                       fill
                       rows={['xsmall']}
@@ -101,7 +101,6 @@ const MenuPage: FC = () => {
                     </Grid>
                     <InvitationsList games={games} />
                   </Box>
-                  <ButtonWS label="MAIN MENU" size="large" alignSelf="center" fill onClick={() => history.push('/menu')} />
                 </Box>
               </Box>
             </Box>

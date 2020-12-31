@@ -45,6 +45,20 @@ const InvitationsList: FC<InvitationsListProps> = ({ games }) => {
     return string;
   };
 
+  if (games.length === 0) {
+    return (
+      <Box>
+        <Box direction="row" justify="between" align="center">
+          <Box direction="column" fill="horizontal">
+            <TextWS weight="bold" size="xlarge" truncate>
+              No invitations yet
+            </TextWS>
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
+
   return (
     <Box>
       {games.map((game) => {

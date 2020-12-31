@@ -118,7 +118,7 @@ const MenuPage: FC = () => {
                 </Box>
               )}
               {buttonsContainer === 1 && (
-                <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
+                <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} pad={{ bottom: '96px' }}>
                   <Grid
                     rows={['xsmall']}
                     columns={['xxsmall', 'small']}
