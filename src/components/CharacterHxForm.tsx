@@ -152,7 +152,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
           <StyledMarkdown>{hxInstructions}</StyledMarkdown>
         </Box>
 
-        <Box direction="row" justify="end" gap="24px" margin={{ vertical: '12px' }}>
+        <Box direction="row" justify="end" gap="12px" margin={{ vertical: '12px' }}>
           <ButtonWS
             primary={!hasSet}
             secondary={hasSet}

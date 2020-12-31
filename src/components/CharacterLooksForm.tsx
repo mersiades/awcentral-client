@@ -86,13 +86,15 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
     <Box
       fill
       direction="column"
-      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+      background="transparent"
       pad="24px"
       align="center"
       justify="start"
+      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
+      {/* <Box flex="grow"> */}
       <HeadingWS level={2}>{`WHAT DOES ${characterName.toUpperCase()} LOOK LIKE?`}</HeadingWS>
-      <Box direction="row" justify="between" gap="24px" flex="grow">
+      <Box direction="row" justify="between" gap="24px" style={{ minHeight: '70px' }}>
         {steps.map((step, index) => {
           const isSelected = index === selectedStep;
           return (
@@ -151,7 +153,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
             <FormField name="clothes" width="100%">
               <TextInput placeholder="Type or select" name="clothes" size="xxlarge" />
             </FormField>
-            <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
+            <Box direction="row" margin={{ top: '3px' }} wrap>
               {pbCreator.looks
                 .filter((look) => look.category === LookCategories.clothes)
                 .map((look) => renderPill(look, setClothesValue, 'clothes'))}
@@ -238,6 +240,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           <ActionButtons value={bodyValue.body} primaryLabel="SET" />
         </Form>
       )}
+      {/* </Box> */}
     </Box>
   );
 };
