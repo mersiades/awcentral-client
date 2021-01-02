@@ -10,6 +10,7 @@ import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
 import { background, ButtonWS, HeadingWS, StyledClose } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
+import Spinner from './Spinner';
 
 const MenuPage: FC = () => {
   // ---------------------------------- Accessing React context -------------------------------------------- //
@@ -22,7 +23,7 @@ const MenuPage: FC = () => {
   const { keycloak } = useKeycloak();
 
   // -------------------------------- Hooking in to Apollo graphql ----------------------------------------- //
-  const { data, loading } = useQuery<GameRolesByUserIdData, GameRolesByUserIdVars>(GAMEROLES_BY_USER_ID, {
+  const { data } = useQuery<GameRolesByUserIdData, GameRolesByUserIdVars>(GAMEROLES_BY_USER_ID, {
     // @ts-ignore
     variables: { id: keycloakId },
     skip: !keycloakId,
@@ -34,12 +35,63 @@ const MenuPage: FC = () => {
   const history = useHistory();
 
   // ------------------------------------- Render component ---------------------------------------------- //
-  if (loading || !gameRoles) {
-    return <Box fill background={background} />;
-  }
+
+  const renderMenuButtons = () => {
+    if (!gameRoles) {
+      return null;
+    } else {
+      return (
+        <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
+          <Box gap="small">
+            {gameRoles.length > 0 && (
+              <ButtonWS
+                label="RETURN TO GAME"
+                primary
+                size="large"
+                alignSelf="center"
+                fill
+                onClick={() => setButtonsContainer(1)}
+              />
+            )}
+            <ButtonWS
+              label="JOIN GAME"
+              secondary
+              size="large"
+              alignSelf="center"
+              fill
+              onClick={() => history.push('/join-game')}
+            />
+            <ButtonWS
+              label="CREATE GAME"
+              secondary
+              size="large"
+              alignSelf="center"
+              fill
+              onClick={() => setButtonsContainer(2)}
+            />
+            <ButtonWS
+              label="LOG OUT"
+              size="large"
+              alignSelf="center"
+              fill
+              onClick={() => {
+                history.push('/');
+                keycloak.logout();
+              }}
+            />
+          </Box>
+        </Box>
+      );
+    }
+  };
 
   return (
     <Box fill background={background}>
+      {!gameRoles && (
+        <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
+          <Spinner />
+        </div>
+      )}
       <Grid
         rows={['49%', '49%', '2%']}
         columns={['18%', 'auto', '18%']}
@@ -75,48 +127,7 @@ const MenuPage: FC = () => {
             ]}
           >
             <Box gridArea="buttonsContainer" alignSelf="end">
-              {buttonsContainer === 0 && (
-                <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
-                  <Box gap="small">
-                    {!!gameRoles && gameRoles.length > 0 && (
-                      <ButtonWS
-                        label="RETURN TO GAME"
-                        primary
-                        size="large"
-                        alignSelf="center"
-                        fill
-                        onClick={() => setButtonsContainer(1)}
-                      />
-                    )}
-                    <ButtonWS
-                      label="JOIN GAME"
-                      secondary
-                      size="large"
-                      alignSelf="center"
-                      fill
-                      onClick={() => history.push('/join-game')}
-                    />
-                    <ButtonWS
-                      label="CREATE GAME"
-                      secondary
-                      size="large"
-                      alignSelf="center"
-                      fill
-                      onClick={() => setButtonsContainer(2)}
-                    />
-                    <ButtonWS
-                      label="LOG OUT"
-                      size="large"
-                      alignSelf="center"
-                      fill
-                      onClick={() => {
-                        history.push('/');
-                        keycloak.logout();
-                      }}
-                    />
-                  </Box>
-                </Box>
-              )}
+              {buttonsContainer === 0 && renderMenuButtons()}
               {buttonsContainer === 1 && (
                 <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} pad={{ bottom: '96px' }}>
                   <Grid
@@ -138,7 +149,7 @@ const MenuPage: FC = () => {
                       </HeadingWS>
                     </Box>
                   </Grid>
-                  <GamesList gameRoles={gameRoles} />
+                  {!!gameRoles ? <GamesList gameRoles={gameRoles} /> : null}
                 </Box>
               )}
               {buttonsContainer === 2 && (

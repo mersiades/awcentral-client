@@ -13,13 +13,7 @@ import PlayerPage from '../components/PlayerPage';
 import MCPage from '../components/MCPage';
 import JoinGamePage from '../components/JoinGamePage';
 import CreateGamePage from '../components/CreateGamePage';
-
-const background = {
-  color: 'black',
-  dark: true,
-  size: 'contain',
-  image: 'url(/images/cover-background.jpg)',
-};
+import { TextWS } from '../config/grommetConfig';
 
 const AppRouter = () => {
   const [user, setUser] = useState<KeycloakUser | undefined>();
@@ -37,7 +31,11 @@ const AppRouter = () => {
   }, [keycloak, initialized]);
 
   if (!initialized) {
-    return <Box fill background={background} />;
+    return (
+      <Box fill background="black" justify="center" align="center">
+        <TextWS>initializing...</TextWS>
+      </Box>
+    );
   }
 
   return (
