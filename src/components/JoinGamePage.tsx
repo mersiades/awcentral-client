@@ -8,6 +8,7 @@ import GAMES_FOR_INVITEE, { GamesForInviteeData, GamesForInviteeVars } from '../
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { HeadingWS, StyledClose } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
+import Spinner from './Spinner';
 
 const background = {
   color: 'black',
@@ -21,7 +22,7 @@ const MenuPage: FC = () => {
   const { username, email } = useKeycloakUser();
 
   // -------------------------------- Hooking in to Apollo graphql ----------------------------------------- //
-  const { data, loading } = useQuery<GamesForInviteeData, GamesForInviteeVars>(GAMES_FOR_INVITEE, {
+  const { data } = useQuery<GamesForInviteeData, GamesForInviteeVars>(GAMES_FOR_INVITEE, {
     skip: !email,
     // @ts-ignore
     variables: { email },
@@ -33,14 +34,13 @@ const MenuPage: FC = () => {
   const history = useHistory();
 
   // ------------------------------------- Render component ---------------------------------------------- //
-  if (loading || !games) {
-    return <Box fill background={background} />;
-  }
-
-  console.log('games', games);
-
   return (
     <Box fill background={background}>
+      {!games && (
+        <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
+          <Spinner />
+        </div>
+      )}
       <Grid
         rows={['49%', '49%', '2%']}
         columns={['18%', 'auto', '18%']}
@@ -75,35 +75,23 @@ const MenuPage: FC = () => {
               { name: 'titleContainer', start: [2, 0], end: [2, 0] },
             ]}
           >
-            <Box gridArea="gamesContainer" alignSelf="end">
-              <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
-                <Box gap="small">
-                  <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} pad={{ bottom: '96px' }}>
-                    <Grid
-                      fill
-                      rows={['xsmall']}
-                      columns={['10%', '90%']}
-                      justifyContent="between"
-                      align="center"
-                      areas={[
-                        { name: 'header-left', start: [0, 0], end: [0, 0] },
-                        { name: 'header-right', start: [1, 0], end: [1, 0] },
-                      ]}
-                    >
-                      <Box gridArea="header-left" align="start" alignContent="center">
-                        <StyledClose color="accent-1" onClick={() => history.push('/')} cursor="pointer" />
-                      </Box>
-                      <Box gridArea="header-right">
-                        <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
-                          YOUR INVITATIONS
-                        </HeadingWS>
-                      </Box>
-                    </Grid>
-                    <InvitationsList games={games} />
+            {!!games ? (
+              <Box gridArea="gamesContainer" alignSelf="end" gap="small" style={{ minHeight: '300px' }}>
+                <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} gap="12px">
+                  <Box direction="row" align="center" justify="between">
+                    <Box gridArea="header-left" align="start" alignContent="center">
+                      <StyledClose color="accent-1" onClick={() => history.push('/')} cursor="pointer" />
+                    </Box>
+                    <Box gridArea="header-right">
+                      <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                        YOUR INVITATIONS
+                      </HeadingWS>
+                    </Box>
                   </Box>
+                  <InvitationsList games={games} />
                 </Box>
               </Box>
-            </Box>
+            ) : null}
             <Box gridArea="spacer" alignSelf="end" />
             <Box gridArea="titleContainer" alignSelf="end">
               <Box>
