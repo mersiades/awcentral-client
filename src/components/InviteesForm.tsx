@@ -10,7 +10,7 @@ import { copyToClipboard } from '../helpers/copyToClipboard';
 import { validateEmail } from '../helpers/validateEmail';
 
 interface InviteesFormProps {
-  game: Game;
+  game?: Game;
 }
 
 const baseUrl = process.env.REACT_APP_ROOT_URL;
@@ -41,15 +41,17 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
   };
 
   const handleAddInvitee = (email: string) => {
-    if (!game?.invitees.includes(email)) {
+    if (!!game && !game?.invitees.includes(email)) {
       addInvitee({ variables: { gameId: game.id, email } });
     }
   };
 
   useEffect(() => {
-    const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${baseUrl}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${game.name}`;
-    hasSubmitted && setMessage(defaultMessage);
-  }, [hasSubmitted, game.name, game.id, formValues, setMessage]);
+    if (!!game) {
+      const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${baseUrl}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${game.name}`;
+      hasSubmitted && setMessage(defaultMessage);
+    }
+  }, [hasSubmitted, game, game, formValues, setMessage]);
 
   return (
     <Box
@@ -103,7 +105,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
                 <FormField name="email" width="100%">
                   <TextInput placeholder="Type player's email" type="email" name="email" size="xlarge" />
                 </FormField>
-                {game.invitees.length === 0 ? (
+                {!!game && game.invitees.length === 0 ? (
                   <ButtonWS
                     type="submit"
                     primary
@@ -117,7 +119,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
                     secondary
                     value={validateEmail(formValues.email)}
                     label="ADD"
-                    disabled={!formValues.email}
+                    disabled={!formValues.email || !game}
                   />
                 )}
               </Box>
@@ -131,18 +133,11 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
           justify="end"
           margin={{ top: '12px' }}
         >
-          {game.invitees.length === 0 ? (
+          {!!game && (
             <ButtonWS
               type="submit"
               value={validateEmail(formValues.email)}
-              label="LATER"
-              onClick={() => history.push(`/mc-game/${game.id}`)}
-            />
-          ) : (
-            <ButtonWS
-              type="submit"
-              value={validateEmail(formValues.email)}
-              label="FINISH"
+              label={game.invitees.length === 0 ? 'LATER' : 'FINISH'}
               onClick={() => history.push(`/mc-game/${game.id}`)}
             />
           )}

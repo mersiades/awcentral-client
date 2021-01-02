@@ -7,23 +7,24 @@ import { CustomUL } from '../config/grommetConfig';
 interface GameCreationStepperProps {
   currentStep: number;
   setCreationStep: (step: number) => void;
-  game: Game;
+  game?: Game;
 }
 
 const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCreationStep, game }) => {
   const renderComms = () => {
-    if (!!game.commsApp) {
+    if (!!game && !!game.commsApp) {
       if (!!game.commsUrl) {
         return <Text truncate>{`${game.commsApp} @ ${game.commsUrl}`}</Text>;
       } else {
         return <Text truncate>{game.commsApp}</Text>;
       }
-    } else if (!!game.commsUrl) {
+    } else if (!!game && !!game.commsUrl) {
       return <Text truncate>{game.commsUrl}</Text>;
     } else {
       return <Text alignSelf="center">...</Text>;
     }
   };
+
   return (
     <Box direction="row" fill="horizontal" justify="center" align="center" height="195px" pad={{ bottom: '12px' }}>
       <Grid
@@ -50,7 +51,7 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
           <Text color="white" weight="bold">
             Name
           </Text>
-          {!!game.name ? <Text>{game.name}</Text> : <Text>...</Text>}
+          {!!game?.name ? <Text>{game.name}</Text> : <Text>...</Text>}
         </Box>
         <Box
           gridArea="channel-box"
@@ -59,8 +60,8 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
           justify="start"
           pad="12px"
           border
-          background={{ color: 'neutral-1', opacity: currentStep === 0 ? 1 : 0.5 }}
-          onClick={() => setCreationStep(0)}
+          background={{ color: 'neutral-1', opacity: currentStep === 1 ? 1 : 0.5 }}
+          onClick={() => setCreationStep(1)}
         >
           <Text color="white" weight="bold">
             Channel
@@ -74,13 +75,13 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
           justify="start"
           pad="12px"
           border
-          background={{ color: 'neutral-1', opacity: currentStep === 1 ? 1 : 0.5 }}
-          onClick={() => setCreationStep(1)}
+          background={{ color: 'neutral-1', opacity: currentStep === 2 ? 1 : 0.5 }}
+          onClick={() => setCreationStep(2)}
         >
           <Text color="white" weight="bold">
             Invitations
           </Text>
-          {game.invitees.length > 0 ? (
+          {!!game && game.invitees.length > 0 ? (
             <CustomUL>
               {game.invitees.map((invitee) => (
                 <li key={invitee}>{invitee}</li>

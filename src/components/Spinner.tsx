@@ -3,9 +3,11 @@ import React, { FC } from 'react';
 
 interface SpinnerProps {
   fillColor?: string;
+  width?: string;
+  height?: string;
 }
 
-const Spinner: FC<SpinnerProps> = ({ fillColor = '#4C684C' }) => {
+const Spinner: FC<SpinnerProps> = ({ fillColor = '#4C684C', width = '28px', height = '28px' }) => {
   const spinning = (
     <svg version="1.1" viewBox="0 0 32 32" width="28px" height="28px" fill={fillColor}>
       <path opacity=".25" d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4" />
@@ -24,7 +26,7 @@ const Spinner: FC<SpinnerProps> = ({ fillColor = '#4C684C' }) => {
 
   return (
     <div>
-      <Box align="center" justify="center">
+      <Box align="center" justify="center" width={width} height={height}>
         {spinning}
       </Box>
     </div>

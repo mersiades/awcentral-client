@@ -82,7 +82,6 @@ const MenuPage: FC = () => {
                     <Box align="start" alignContent="center">
                       <StyledClose color="accent-1" onClick={() => history.push('/')} cursor="pointer" />
                     </Box>
-
                     <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                       YOUR INVITATIONS
                     </HeadingWS>

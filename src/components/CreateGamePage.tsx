@@ -39,30 +39,27 @@ const CreateGamePage = () => {
   useEffect(() => {
     if (!!game) {
       if (!game.commsApp || !game.commsUrl) {
-        setCreationStep(0);
-      } else {
         setCreationStep(1);
+      } else {
+        setCreationStep(2);
       }
     }
   }, [gameId, game, setCreationStep]);
 
   // -------------------------------------------------- Render component ---------------------------------------------------- //
 
-  if (loadingGame || !game) {
-    return (
-      <Box fill background="black">
-        <Spinner />
-      </Box>
-    );
-  }
-
   return (
     <Box fill background={background} pad="6px" overflow={{ vertical: 'auto' }}>
+      {!game && (
+        <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
+          <Spinner />
+        </div>
+      )}
       <CloseButton handleClose={() => history.push('/menu')} />
       <Box fill direction="column" justify="start">
         <GameCreationStepper setCreationStep={setCreationStep} currentStep={creationStep} game={game} />
-        {creationStep === 0 && <CommsForm game={game} setCreationStep={setCreationStep} />}
-        {creationStep === 1 && <InviteesForm game={game} />}
+        {creationStep === 1 && <CommsForm game={game} setCreationStep={setCreationStep} />}
+        {creationStep === 2 && <InviteesForm game={game} />}
       </Box>
     </Box>
   );

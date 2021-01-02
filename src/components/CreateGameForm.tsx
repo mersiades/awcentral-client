@@ -42,7 +42,7 @@ const CreateGameForm: FC = () => {
       value={gameName}
       onChange={(nextName: any) => setGameName(nextName)}
       onReset={() => setGameName({ name: '' })}
-      onSubmit={async ({ value: { name } }: any) => !!userId && sendNewGameRequest(userId, name)}
+      onSubmit={async ({ value: { name } }: any) => !!userId && !loadingCreateGame && sendNewGameRequest(userId, name)}
     >
       <Box gap="small">
         <FormField name="name" label="Name" htmlFor="text-input-id">
