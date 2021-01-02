@@ -8,11 +8,12 @@ import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInv
 import { Game } from '../@types';
 import { copyToClipboard } from '../helpers/copyToClipboard';
 import { validateEmail } from '../helpers/validateEmail';
-import { BASE_URL } from '../config/constants';
 
 interface InviteesFormProps {
   game: Game;
 }
+
+const baseUrl = process.env.REACT_APP_ROOT_URL;
 
 const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
   // ------------------------------------------------- Component state --------------------------------------------------- //
@@ -46,7 +47,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
   };
 
   useEffect(() => {
-    const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${BASE_URL}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${game.name}`;
+    const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${baseUrl}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${game.name}`;
     hasSubmitted && setMessage(defaultMessage);
   }, [hasSubmitted, game.name, game.id, formValues, setMessage]);
 

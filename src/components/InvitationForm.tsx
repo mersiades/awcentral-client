@@ -5,7 +5,7 @@ import ActionButtons from './ActionButtons';
 import { ShowInvitation } from './MCPage';
 import { copyToClipboard } from '../helpers/copyToClipboard';
 import { validateEmail } from '../helpers/validateEmail';
-import { BASE_URL } from '../config/constants';
+// import { BASE_URL } from '../config/constants';
 
 interface InvitationFormProps {
   gameName: string;
@@ -15,6 +15,8 @@ interface InvitationFormProps {
   existingEmail?: string;
   showMessageOnly?: boolean;
 }
+
+const baseUrl = process.env.REACT_APP_ROOT_URL;
 
 const InvitationForm: FC<InvitationFormProps> = ({
   gameName,
@@ -41,7 +43,7 @@ const InvitationForm: FC<InvitationFormProps> = ({
   };
 
   useEffect(() => {
-    const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${BASE_URL}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${gameName}`;
+    const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${baseUrl}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${gameName}`;
     hasSubmitted && setMessage(defaultMessage);
   }, [hasSubmitted, gameName, gameId, formValues, setMessage]);
 
