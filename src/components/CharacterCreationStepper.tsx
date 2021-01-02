@@ -425,7 +425,15 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   };
 
   return (
-    <Box direction="row" fill="horizontal" justify="center" pad="24px" align="center">
+    <Box
+      direction="row"
+      fill="horizontal"
+      justify="center"
+      pad="12px"
+      align="center"
+      flex="grow"
+      style={{ maxHeight: '180px' }}
+    >
       {currentStep > 1 ? (
         <PreviousWithHover
           cursor="pointer"

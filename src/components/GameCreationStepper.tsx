@@ -7,10 +7,11 @@ import { CustomUL } from '../config/grommetConfig';
 interface GameCreationStepperProps {
   currentStep: number;
   setCreationStep: (step: number) => void;
+  setHasSkippedComms: (skipped: boolean) => void;
   game?: Game;
 }
 
-const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCreationStep, game }) => {
+const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCreationStep, setHasSkippedComms, game }) => {
   const renderComms = () => {
     if (!!game && !!game.commsApp) {
       if (!!game.commsUrl) {
@@ -61,7 +62,10 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
           pad="12px"
           border
           background={{ color: 'neutral-1', opacity: currentStep === 1 ? 1 : 0.5 }}
-          onClick={() => setCreationStep(1)}
+          onClick={() => {
+            setCreationStep(1);
+            setHasSkippedComms(false);
+          }}
         >
           <Text color="white" weight="bold">
             Channel

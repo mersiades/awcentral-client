@@ -7,27 +7,27 @@ import { PlayBooks } from '../@types/enums';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import '../assets/styles/transitions.css';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
+import Spinner from './Spinner';
 
 interface PlaybookSelectorProps {
-  playbooks: Playbook[];
+  creatingCharacter: boolean;
+  settingPlaybook: boolean;
   checkPlaybookReset: (playbookType: PlayBooks) => void;
+  playbooks?: Playbook[];
   playbook?: PlayBooks;
 }
 
-const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookReset, playbook }) => {
+const PlaybookSelector: FC<PlaybookSelectorProps> = ({
+  settingPlaybook,
+  creatingCharacter,
+  checkPlaybookReset,
+  playbooks,
+  playbook,
+}) => {
   const [selectedPlaybook, setSelectedPlaybook] = useState<Playbook | undefined>();
   const [showIntro, setShowIntro] = useState(true);
   const [startFadeOut, setStartFadeOut] = useState(false);
-
-  const sortedPlaybooks = [...playbooks].sort((a, b) => {
-    const nameA = a.playbookType.toLowerCase();
-    const nameB = b.playbookType.toLowerCase();
-    if (nameA < nameB) {
-      return -1;
-    } else {
-      return 1;
-    }
-  });
+  const [sortedPlaybooks, setSortedPlaybooks] = useState<Playbook[]>([]);
 
   const handlePlaybookClick = (playbook: Playbook) => {
     setShowIntro(false);
@@ -35,9 +35,24 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
     setTimeout(() => setSelectedPlaybook(playbook), 0);
   };
 
+  useEffect(() => {
+    if (!!playbooks) {
+      const sortedPlaybooks = [...playbooks].sort((a, b) => {
+        const nameA = a.playbookType.toLowerCase();
+        const nameB = b.playbookType.toLowerCase();
+        if (nameA < nameB) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+      setSortedPlaybooks(sortedPlaybooks);
+    }
+  }, [playbooks]);
+
   // If the playbook has already been set, show that playbook to the User
   useEffect(() => {
-    if (!!playbook) {
+    if (!!playbook && playbooks) {
       const setPlaybook = playbooks.filter((pb) => pb.playbookType === playbook)[0];
       setSelectedPlaybook(setPlaybook);
     }
@@ -102,7 +117,13 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
 
                 {[PlayBooks.angel, PlayBooks.battlebabe, PlayBooks.brainer].includes(selectedPlaybook.playbookType) && (
                   <ButtonWS
-                    label={`SELECT ${formatPlaybookType(selectedPlaybook.playbookType)}`}
+                    label={
+                      settingPlaybook || creatingCharacter ? (
+                        <Spinner fillColor="#FFF" width="200px" height="36px" />
+                      ) : (
+                        `SELECT ${formatPlaybookType(selectedPlaybook.playbookType)}`
+                      )
+                    }
                     primary
                     size="large"
                     onClick={() => {
@@ -117,22 +138,24 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({ playbooks, checkPlaybookR
           )}
         </Box>
         <Box gridArea="playbook-previews" direction="row" justify="around" pad="3px">
-          {sortedPlaybooks.map((playbook) => (
-            <Box
-              key={playbook.playbookImageUrl}
-              onClick={() => handlePlaybookClick(playbook)}
-              hoverIndicator={{ color: 'brand', opacity: 0.4 }}
-              height="95%"
-              justify="center"
-              align="center"
-            >
-              <img
-                src={playbook.playbookImageUrl}
-                alt={formatPlaybookType(playbook.playbookType)}
-                style={{ objectFit: 'contain', maxHeight: '98%', maxWidth: '96%' }}
-              />
-            </Box>
-          ))}
+          {sortedPlaybooks.length > 0
+            ? sortedPlaybooks.map((playbook) => (
+                <Box
+                  key={playbook.playbookImageUrl}
+                  onClick={() => handlePlaybookClick(playbook)}
+                  hoverIndicator={{ color: 'brand', opacity: 0.4 }}
+                  height="95%"
+                  justify="center"
+                  align="center"
+                >
+                  <img
+                    src={playbook.playbookImageUrl}
+                    alt={formatPlaybookType(playbook.playbookType)}
+                    style={{ objectFit: 'contain', maxHeight: '98%', maxWidth: '96%' }}
+                  />
+                </Box>
+              ))
+            : null}
         </Box>
       </Grid>
     </Box>

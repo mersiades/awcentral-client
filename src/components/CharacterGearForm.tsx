@@ -10,6 +10,7 @@ import Spinner from './Spinner';
 
 interface CharacterGearFormProps {
   existingGear: string[];
+  settingGear: boolean;
   playbookType: PlayBooks;
   characterName: string;
   handleSubmitGear: (gear: string[]) => void;
@@ -24,6 +25,7 @@ const GearUL = styled.ul`
 
 const CharacterGearForm: FC<CharacterGearFormProps> = ({
   existingGear = [],
+  settingGear,
   playbookType,
   characterName,
   handleSubmitGear,
@@ -256,7 +258,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
         <Box direction="row" pad="6px" justify="end" align="center" style={{ minHeight: 52 }}>
           <ButtonWS
             primary
-            label="SET"
+            label={settingGear ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
             onClick={() => handleSubmitGear(gear)}
             disabled={gear.length < 1 || JSON.stringify(gear) === JSON.stringify(existingGear)}
           />

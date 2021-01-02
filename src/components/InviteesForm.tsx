@@ -20,7 +20,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
   // ------------------------------------------------- Component state --------------------------------------------------- //
   const [formValues, setFormValues] = useState<{ email: string }>({ email: '' });
   const [message, setMessage] = useState('');
-  const [hasSubmitted, setHasSubmitted] = useState(true);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const history = useHistory();
 

@@ -3,8 +3,9 @@ import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { Box, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 
-import { PlaybookUniqueCreator } from '../@types';
+import Spinner from './Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
+import { PlaybookUniqueCreator } from '../@types';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -15,12 +16,14 @@ const StyledMarkdown = styled(ReactMarkdown)`
 
 interface UniqueFormBrainerProps {
   characterName: string;
+  settingBrainerGear: boolean;
   playbookUniqueCreator: PlaybookUniqueCreator;
   handleSubmitBrainerGear: (brainerGear: string[]) => void;
 }
 
 const UniqueFormBrainer: FC<UniqueFormBrainerProps> = ({
   characterName,
+  settingBrainerGear,
   playbookUniqueCreator,
   handleSubmitBrainerGear,
 }) => {
@@ -57,10 +60,10 @@ const UniqueFormBrainer: FC<UniqueFormBrainerProps> = ({
       />
       <Box fill="horizontal" direction="row" justify="end">
         <ButtonWS
-          label="SET"
+          label={settingBrainerGear ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
           primary
           disabled={selectedGear.length !== 2}
-          onClick={() => handleSubmitBrainerGear(selectedGear)}
+          onClick={() => !settingBrainerGear && handleSubmitBrainerGear(selectedGear)}
         />
       </Box>
     </Box>

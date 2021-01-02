@@ -85,6 +85,8 @@ const MenuPage: FC = () => {
     }
   };
 
+  console.log('gameRoles', gameRoles);
+
   return (
     <Box fill background={background}>
       {!gameRoles && (

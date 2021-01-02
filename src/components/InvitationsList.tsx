@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Game } from '../@types';
 import { Roles } from '../@types/enums';
-import { ButtonWS, TextWS } from '../config/grommetConfig';
+import { brandColor, ButtonWS, TextWS } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import ADD_USER_TO_GAME, { AddUserToGameData, AddUserToGameVars } from '../mutations/addUserToGame';
 import Spinner from './Spinner';
@@ -77,7 +77,7 @@ const InvitationsList: FC<InvitationsListProps> = ({ games }) => {
               onClick={() => handleJoinGame(game.id)}
               disabled={loading}
               focusIndicator={false}
-              label={loading ? <Spinner fillColor="#FFF" /> : 'JOIN'}
+              label={loading ? <Spinner fillColor={brandColor} /> : 'JOIN'}
             />
           </Box>
         );

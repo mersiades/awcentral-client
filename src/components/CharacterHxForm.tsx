@@ -1,15 +1,16 @@
-import { useQuery } from '@apollo/client';
-import { Box, FormField, TextInput } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
+import { useQuery } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
+import { Box, FormField, TextInput } from 'grommet';
+
+import Spinner from './Spinner';
+import { ButtonWS, HeadingWS, RedBox, TextWS } from '../config/grommetConfig';
 import { Character, GameRole, HxInput } from '../@types';
 import { PlayBooks, Roles } from '../@types/enums';
-import { ButtonWS, HeadingWS, RedBox, TextWS } from '../config/grommetConfig';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
-import Spinner from './Spinner';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -20,17 +21,19 @@ const StyledMarkdown = styled(ReactMarkdown)`
 interface CharacterHxFormProps {
   playbookType: PlayBooks;
   character: Character;
-  gameRoles?: GameRole[];
+  settingHx: boolean;
   handleSubmitCharacterHx: (hxInputs: HxInput[]) => void;
   handleFinishCreation: () => void;
+  gameRoles?: GameRole[];
 }
 
 const CharacterHxForm: FC<CharacterHxFormProps> = ({
   playbookType,
   character,
-  gameRoles,
+  settingHx,
   handleSubmitCharacterHx,
   handleFinishCreation,
+  gameRoles,
 }) => {
   const [value, setValue] = useState<HxInput[]>([]);
   const [hasSet, setHasSet] = useState(false);
@@ -156,10 +159,10 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
           <ButtonWS
             primary={!hasSet}
             secondary={hasSet}
-            label="SET"
+            label={settingHx ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
             style={{ minHeight: '52px' }}
             disabled={value.length === 0}
-            onClick={() => filterSubmit(value)}
+            onClick={() => !settingHx && filterSubmit(value)}
           />
           {hasSet && (
             <ButtonWS

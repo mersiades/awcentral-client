@@ -21,6 +21,7 @@ export const background = {
 const CreateGamePage = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [creationStep, setCreationStep] = useState<number>(0);
+  const [hasSkippedComms, setHasSkippedComms] = useState(false);
 
   // -------------------------------------------------- Context hooks ---------------------------------------------------- //
   const { gameId } = useParams<{ gameId: string }>();
@@ -38,13 +39,14 @@ const CreateGamePage = () => {
   // ---------------------------------------------------- UseEffects  ------------------------------------------------------ //
   useEffect(() => {
     if (!!game) {
-      if (!game.commsApp || !game.commsUrl) {
+      console.log('hasSkippedComms', hasSkippedComms);
+      if ((!game.commsApp || !game.commsUrl) && !hasSkippedComms) {
         setCreationStep(1);
       } else {
         setCreationStep(2);
       }
     }
-  }, [gameId, game, setCreationStep]);
+  }, [gameId, game, hasSkippedComms, setCreationStep]);
 
   // -------------------------------------------------- Render component ---------------------------------------------------- //
 
@@ -57,8 +59,15 @@ const CreateGamePage = () => {
       )}
       <CloseButton handleClose={() => history.push('/menu')} />
       <Box fill direction="column" justify="start">
-        <GameCreationStepper setCreationStep={setCreationStep} currentStep={creationStep} game={game} />
-        {creationStep === 1 && <CommsForm game={game} setCreationStep={setCreationStep} />}
+        <GameCreationStepper
+          setCreationStep={setCreationStep}
+          currentStep={creationStep}
+          game={game}
+          setHasSkippedComms={setHasSkippedComms}
+        />
+        {creationStep === 1 && (
+          <CommsForm game={game} setCreationStep={setCreationStep} setHasSkippedComms={setHasSkippedComms} />
+        )}
         {creationStep === 2 && <InviteesForm game={game} />}
       </Box>
     </Box>

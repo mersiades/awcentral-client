@@ -3,17 +3,18 @@ import { useMutation } from '@apollo/client';
 import { Box, Button, Select, Heading, Text, TextArea } from 'grommet';
 
 import Spinner from './Spinner';
+import { ButtonWS, ParagraphWS } from '../config/grommetConfig';
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
 import { Game } from '../@types';
-import { ButtonWS, ParagraphWS } from '../config/grommetConfig';
 
 interface CommsFormProps {
   game?: Game;
   setCreationStep: (step: number) => void;
+  setHasSkippedComms: (skipped: boolean) => void;
 }
 
-const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
+const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedComms }) => {
   // ------------------------------------------------- Component state --------------------------------------------------- //
   const [app, setApp] = useState(game?.commsApp || '');
   const [url, setUrl] = useState(game?.commsUrl || '');
@@ -144,7 +145,10 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
                 primary={!!game.commsApp && !!game.commsUrl}
                 size="large"
                 alignSelf="end"
-                onClick={() => setCreationStep(2)}
+                onClick={() => {
+                  setCreationStep(2);
+                  (!game.commsApp || !game.commsUrl) && setHasSkippedComms(true);
+                }}
               />
             )}
           </Box>

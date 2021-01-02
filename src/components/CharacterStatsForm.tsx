@@ -9,11 +9,17 @@ import Spinner from './Spinner';
 
 interface CharacterStatsFormProps {
   playbookType: PlayBooks;
+  settingStats: boolean;
   handleSubmitStats: (statsOptionId: string) => void;
   characterName: string;
 }
 
-const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleSubmitStats, characterName }) => {
+const CharacterStatsForm: FC<CharacterStatsFormProps> = ({
+  playbookType,
+  settingStats,
+  handleSubmitStats,
+  characterName,
+}) => {
   const [selectedStatsOption, setSelectedStatsOption] = useState<StatsOption | undefined>();
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
 
@@ -45,7 +51,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
       align="center"
       justify="start"
     >
-      <Box width="50vw" height="50vh">
+      <Box width="50vw" flex="grow">
         <HeadingWS
           level={2}
           textAlign="center"
@@ -100,7 +106,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({ playbookType, handleS
           <Box direction="row" justify="end" width="50vw" margin={{ top: '12px' }}>
             <ButtonWS
               primary
-              label="SET"
+              label={settingStats ? <Spinner fillColor="#FFF" /> : 'SET'}
               onClick={() => !!selectedStatsOption && handleSubmitStats(selectedStatsOption.id)}
               disabled={!selectedStatsOption}
               style={{ minHeight: '52px' }}

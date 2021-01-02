@@ -53,7 +53,7 @@ const CreateGameForm: FC = () => {
         </TextWS>
         <ButtonWS
           type="submit"
-          label={loadingCreateGame ? <Spinner fillColor="#FFF" /> : 'SUBMIT'}
+          label={loadingCreateGame ? <Spinner fillColor="#FFF" fillHorizontal /> : 'SUBMIT'}
           primary
           size="large"
           alignSelf="center"

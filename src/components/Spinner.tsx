@@ -5,9 +5,17 @@ interface SpinnerProps {
   fillColor?: string;
   width?: string;
   height?: string;
+  fillHorizontal?: boolean;
+  fillVertical?: boolean;
 }
 
-const Spinner: FC<SpinnerProps> = ({ fillColor = '#4C684C', width = '28px', height = '28px' }) => {
+const Spinner: FC<SpinnerProps> = ({
+  fillColor = '#4C684C',
+  width = '28px',
+  height = '28px',
+  fillHorizontal = false,
+  fillVertical = false,
+}) => {
   const spinning = (
     <svg version="1.1" viewBox="0 0 32 32" width="28px" height="28px" fill={fillColor}>
       <path opacity=".25" d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4" />
@@ -24,9 +32,25 @@ const Spinner: FC<SpinnerProps> = ({ fillColor = '#4C684C', width = '28px', heig
     </svg>
   );
 
+  const getFill = () => {
+    let fill: boolean | 'horizontal' | 'vertical' = false;
+    if (fillHorizontal) {
+      fill = 'horizontal';
+    }
+
+    if (fillVertical) {
+      fill = 'vertical';
+    }
+
+    if (fillHorizontal && fillVertical) {
+      fill = true;
+    }
+    return fill;
+  };
+
   return (
     <div>
-      <Box align="center" justify="center" width={width} height={height}>
+      <Box fill={getFill()} align="center" justify="center" width={width} height={height}>
         {spinning}
       </Box>
     </div>

@@ -11,6 +11,7 @@ import Spinner from './Spinner';
 interface CharacterLooksFormProps {
   playbookType: PlayBooks;
   characterName: string;
+  settingLooks: boolean;
   handleSubmitLook: (look: string, category: LookCategories) => void;
   existingLooks: {
     gender: string;
@@ -24,6 +25,7 @@ interface CharacterLooksFormProps {
 const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
   playbookType,
   characterName,
+  settingLooks,
   handleSubmitLook,
   existingLooks,
 }) => {
@@ -92,7 +94,6 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       justify="start"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      {/* <Box flex="grow"> */}
       <HeadingWS level={2}>{`WHAT DOES ${characterName.toUpperCase()} LOOK LIKE?`}</HeadingWS>
       <Box direction="row" justify="between" gap="24px" style={{ minHeight: '70px' }}>
         {steps.map((step, index) => {
@@ -219,7 +220,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           value={bodyValue}
           onChange={(nextValue: any) => setBodyValue(nextValue)}
           onReset={() => setBodyValue({ body: '' })}
-          onSubmit={({ value }: any) => handleSetClick(value.body, LookCategories.body)}
+          onSubmit={({ value }: any) => !settingLooks && handleSetClick(value.body, LookCategories.body)}
         >
           <Box
             width="50vw"
@@ -237,10 +238,9 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
                 .map((look) => renderPill(look, setBodyValue, 'body'))}
             </Box>
           </Box>
-          <ActionButtons value={bodyValue.body} primaryLabel="SET" />
+          <ActionButtons value={bodyValue.body} primaryLabel={settingLooks ? <Spinner fillColor="#FFF" /> : 'SET'} />
         </Form>
       )}
-      {/* </Box> */}
     </Box>
   );
 };
