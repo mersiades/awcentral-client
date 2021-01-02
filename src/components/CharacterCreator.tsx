@@ -12,6 +12,8 @@ import CharacterMovesForm from './CharacterMovesForm';
 import NewGameIntro from './NewGameIntro';
 import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
 import CharacterCreationStepper from './CharacterCreationStepper';
+import CharacterHxForm from './CharacterHxForm';
+import ScrollableIndicator from './ScrollableIndicator';
 import Spinner from './Spinner';
 import CloseButton from './CloseButton';
 import { ButtonWS, HeadingWS } from '../config/grommetConfig';
@@ -34,8 +36,6 @@ import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mut
 import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
 import { Character, GameRole, HxInput } from '../@types';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import CharacterHxForm from './CharacterHxForm';
-import ScrollableIndicator from './ScrollableIndicator';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -70,19 +70,38 @@ const CharacterCreator: FC = () => {
   const history = useHistory();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const { data: playbooksData, loading: loadingPlaybooks } = useQuery<PlaybooksData>(PLAYBOOKS);
-  const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
-  const [createCharacter] = useMutation<CreateCharacterData, CreateCharacterVars>(CREATE_CHARACTER);
-  const [setCharacterPlaybook] = useMutation<SetCharacterPlaybookData, SetCharacterPlaybookVars>(SET_CHARACTER_PLAYBOOK);
-  const [setCharacterName] = useMutation<SetCharacterNameData, SetCharacterNameVars>(SET_CHARACTER_NAME);
-  const [setCharacterLook] = useMutation<SetCharacterLookData, SetCharacterLookVars>(SET_CHARACTER_LOOK);
-  const [setCharacterStats] = useMutation<SetCharacterStatsData, SetCharacterStatsVars>(SET_CHARACTER_STATS);
-  const [setCharacterGear] = useMutation<SetCharacterGearData, SetCharacterGearVars>(SET_CHARACTER_GEAR);
-  const [setBrainerGear] = useMutation<SetBrainerGearData, SetBrainerGearVars>(SET_BRAINER_GEAR);
-  const [setAngelKit] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
-  const [setCharacterMoves] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(SET_CHARACTER_MOVES);
-  const [setCustomWeapons] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(SET_CUSTOM_WEAPONS);
-  const [setCharacterHx] = useMutation<SetCharacterHxData, SetCharacterHxVars>(SET_CHARACTER_HX);
+  const { data: playbooksData } = useQuery<PlaybooksData>(PLAYBOOKS);
+  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
+  const [createCharacter, { loading: creatingCharacter }] = useMutation<CreateCharacterData, CreateCharacterVars>(
+    CREATE_CHARACTER
+  );
+  const [setCharacterPlaybook, { loading: settingPlaybook }] = useMutation<
+    SetCharacterPlaybookData,
+    SetCharacterPlaybookVars
+  >(SET_CHARACTER_PLAYBOOK);
+  const [setCharacterName, { loading: settingName }] = useMutation<SetCharacterNameData, SetCharacterNameVars>(
+    SET_CHARACTER_NAME
+  );
+  const [setCharacterLook, { loading: settingLooks }] = useMutation<SetCharacterLookData, SetCharacterLookVars>(
+    SET_CHARACTER_LOOK
+  );
+  const [setCharacterStats, { loading: settingStats }] = useMutation<SetCharacterStatsData, SetCharacterStatsVars>(
+    SET_CHARACTER_STATS
+  );
+  const [setCharacterGear, { loading: settingGear }] = useMutation<SetCharacterGearData, SetCharacterGearVars>(
+    SET_CHARACTER_GEAR
+  );
+  const [setBrainerGear, { loading: settingBrainerGear }] = useMutation<SetBrainerGearData, SetBrainerGearVars>(
+    SET_BRAINER_GEAR
+  );
+  const [setAngelKit, { loading: settingAngelKit }] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
+  const [setCustomWeapons, { loading: settingCustomWeapons }] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(
+    SET_CUSTOM_WEAPONS
+  );
+  const [setCharacterMoves, { loading: settingMoves }] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(
+    SET_CHARACTER_MOVES
+  );
+  const [setCharacterHx, { loading: settingHx }] = useMutation<SetCharacterHxData, SetCharacterHxVars>(SET_CHARACTER_HX);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.game;
@@ -359,16 +378,14 @@ const CharacterCreator: FC = () => {
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
-  if (loadingPlaybooks || loadingGame || !playbooks || !game) {
-    return (
-      <Box fill background={background} justify="center" align="center">
-        <Spinner />
-      </Box>
-    );
-  }
-
   return (
     <Box ref={containerRef} fill background={background} overflow={{ vertical: 'auto' }}>
+      {!playbooks ||
+        (!game && (
+          <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
+            <Spinner />
+          </div>
+        ))}
       <ScrollableIndicator show={showScrollable} />
       <CloseButton handleClose={() => history.push('/menu')} />
       {!!showResetWarning && (
@@ -412,73 +429,89 @@ const CharacterCreator: FC = () => {
         currentStep={creationStep}
         setCreationStep={setCreationStep}
       />
-
-      {creationStep === 0 && <NewGameIntro game={game} closeNewGameIntro={closeNewGameIntro} />}
-      {creationStep === CharacterCreationSteps.selectPlaybook && (
-        <PlaybooksSelector playbooks={playbooks} playbook={character?.playbook} checkPlaybookReset={checkPlaybookReset} />
-      )}
-      {creationStep === CharacterCreationSteps.selectName && character && character.playbook && (
-        <CharacterNameForm
-          playbookType={character?.playbook}
-          handleSubmitName={handleSubmitName}
-          existingName={character.name}
-        />
-      )}
-      {creationStep === CharacterCreationSteps.selectLooks && character && character.name && character.playbook && (
-        <CharacterLooksForm
-          playbookType={character?.playbook}
-          characterName={character.name}
-          handleSubmitLook={handleSubmitLook}
-          existingLooks={{
-            gender: character.looks?.filter((look) => look.category === LookCategories.gender)[0]?.look || '',
-            clothes: character.looks?.filter((look) => look.category === LookCategories.clothes)[0]?.look || '',
-            face: character.looks?.filter((look) => look.category === LookCategories.face)[0]?.look || '',
-            eyes: character.looks?.filter((look) => look.category === LookCategories.eyes)[0]?.look || '',
-            body: character.looks?.filter((look) => look.category === LookCategories.body)[0]?.look || '',
-          }}
-        />
-      )}
-      {creationStep === CharacterCreationSteps.selectStats && character && character.name && character.playbook && (
-        <CharacterStatsForm
-          characterName={character.name}
-          playbookType={character?.playbook}
-          handleSubmitStats={handleSubmitStats}
-        />
-      )}
-      {creationStep === CharacterCreationSteps.selectGear && character && character.name && character.playbook && (
-        <CharacterGearForm
-          existingGear={character.gear}
-          characterName={character.name}
-          playbookType={character?.playbook}
-          handleSubmitGear={handleSubmitGear}
-        />
-      )}
-      {creationStep === CharacterCreationSteps.setUnique && character && character.name && character.playbook && (
-        <PlaybookUniqueFormContainer
-          playbookType={character.playbook}
-          characterName={character.name}
-          handleSubmitBrainerGear={handleSubmitBrainerGear}
-          handleSubmitAngelKit={handleSubmitAngelKit}
-          handleSubmitCustomWeapons={handleSubmitCustomWeapons}
-          customWeapons={character.playbookUnique?.customWeapons}
-        />
-      )}
-      {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (
-        <CharacterMovesForm
-          playbookType={character.playbook}
-          characterName={character.name}
-          handleSubmitCharacterMoves={handleSubmitCharacterMoves}
-        />
-      )}
-      {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && !!gameRoles && (
-        <CharacterHxForm
-          playbookType={character.playbook}
-          character={character}
-          gameRoles={gameRoles}
-          handleSubmitCharacterHx={handleSubmitCharacterHx}
-          handleFinishCreation={handleFinishCreation}
-        />
-      )}
+      <Box flex="grow">
+        {creationStep === 0 && !!game && <NewGameIntro game={game} closeNewGameIntro={closeNewGameIntro} />}
+        {creationStep === CharacterCreationSteps.selectPlaybook && (
+          <PlaybooksSelector
+            playbooks={playbooks}
+            playbook={character?.playbook}
+            checkPlaybookReset={checkPlaybookReset}
+            settingPlaybook={settingPlaybook}
+            creatingCharacter={creatingCharacter}
+          />
+        )}
+        {creationStep === CharacterCreationSteps.selectName && character && character.playbook && (
+          <CharacterNameForm
+            playbookType={character?.playbook}
+            settingName={settingName}
+            handleSubmitName={handleSubmitName}
+            existingName={character.name}
+          />
+        )}
+        {creationStep === CharacterCreationSteps.selectLooks && character && character.name && character.playbook && (
+          <CharacterLooksForm
+            playbookType={character?.playbook}
+            characterName={character.name}
+            settingLooks={settingLooks}
+            handleSubmitLook={handleSubmitLook}
+            existingLooks={{
+              gender: character.looks?.filter((look) => look.category === LookCategories.gender)[0]?.look || '',
+              clothes: character.looks?.filter((look) => look.category === LookCategories.clothes)[0]?.look || '',
+              face: character.looks?.filter((look) => look.category === LookCategories.face)[0]?.look || '',
+              eyes: character.looks?.filter((look) => look.category === LookCategories.eyes)[0]?.look || '',
+              body: character.looks?.filter((look) => look.category === LookCategories.body)[0]?.look || '',
+            }}
+          />
+        )}
+        {creationStep === CharacterCreationSteps.selectStats && character && character.name && character.playbook && (
+          <CharacterStatsForm
+            characterName={character.name}
+            settingStats={settingStats}
+            playbookType={character?.playbook}
+            handleSubmitStats={handleSubmitStats}
+          />
+        )}
+        {creationStep === CharacterCreationSteps.selectGear && character && character.name && character.playbook && (
+          <CharacterGearForm
+            existingGear={character.gear}
+            characterName={character.name}
+            settingGear={settingGear}
+            playbookType={character?.playbook}
+            handleSubmitGear={handleSubmitGear}
+          />
+        )}
+        {creationStep === CharacterCreationSteps.setUnique && character && character.name && character.playbook && (
+          <PlaybookUniqueFormContainer
+            playbookType={character.playbook}
+            characterName={character.name}
+            settingAngelKit={settingAngelKit}
+            settingBrainerGear={settingBrainerGear}
+            settingCustomWeapons={settingCustomWeapons}
+            handleSubmitBrainerGear={handleSubmitBrainerGear}
+            handleSubmitAngelKit={handleSubmitAngelKit}
+            handleSubmitCustomWeapons={handleSubmitCustomWeapons}
+            customWeapons={character.playbookUnique?.customWeapons}
+          />
+        )}
+        {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (
+          <CharacterMovesForm
+            playbookType={character.playbook}
+            characterName={character.name}
+            settingMoves={settingMoves}
+            handleSubmitCharacterMoves={handleSubmitCharacterMoves}
+          />
+        )}
+        {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && !!gameRoles && (
+          <CharacterHxForm
+            playbookType={character.playbook}
+            character={character}
+            gameRoles={gameRoles}
+            settingHx={settingHx}
+            handleSubmitCharacterHx={handleSubmitCharacterHx}
+            handleFinishCreation={handleFinishCreation}
+          />
+        )}
+      </Box>
     </Box>
   );
 };

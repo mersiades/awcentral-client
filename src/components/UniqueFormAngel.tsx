@@ -2,16 +2,23 @@ import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Box, FormField, TextInput } from 'grommet';
 
-import { PlaybookUniqueCreator } from '../@types';
+import Spinner from './Spinner';
 import { ButtonWS, HeadingWS, RedBox } from '../config/grommetConfig';
+import { PlaybookUniqueCreator } from '../@types';
 
 interface UniqueFormAngelProps {
   characterName: string;
+  settingAngelKit: boolean;
   playbookUniqueCreator: PlaybookUniqueCreator;
   handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
 }
 
-const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniqueCreator, handleSubmitAngelKit }) => {
+const UniqueFormAngel: FC<UniqueFormAngelProps> = ({
+  characterName,
+  settingAngelKit,
+  playbookUniqueCreator,
+  handleSubmitAngelKit,
+}) => {
   const { angelKitInstructions, startingStock } = playbookUniqueCreator.angelKitCreator;
   const [stock, setStock] = useState(startingStock);
   return (
@@ -41,7 +48,12 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({ characterName, playbookUniq
         </RedBox>
       </Box>
       <Box fill direction="row" justify="end" align="center" style={{ minHeight: 52 }}>
-        <ButtonWS label="SET" primary onClick={() => handleSubmitAngelKit(startingStock, false)} margin={{ right: '5px' }} />
+        <ButtonWS
+          label={settingAngelKit ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+          primary
+          onClick={() => !settingAngelKit && handleSubmitAngelKit(startingStock, false)}
+          margin={{ right: '5px' }}
+        />
       </Box>
     </Box>
   );

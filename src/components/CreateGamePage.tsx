@@ -21,13 +21,14 @@ export const background = {
 const CreateGamePage = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [creationStep, setCreationStep] = useState<number>(0);
+  const [hasSkippedComms, setHasSkippedComms] = useState(false);
 
   // -------------------------------------------------- Context hooks ---------------------------------------------------- //
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(
+  const { data: gameData } = useQuery<GameData, GameVars>(
     GAME,
     //@ts-ignore
     { variables: { gameId }, skip: !gameId }
@@ -38,31 +39,36 @@ const CreateGamePage = () => {
   // ---------------------------------------------------- UseEffects  ------------------------------------------------------ //
   useEffect(() => {
     if (!!game) {
-      if (!game.commsApp || !game.commsUrl) {
-        setCreationStep(0);
-      } else {
+      console.log('hasSkippedComms', hasSkippedComms);
+      if ((!game.commsApp || !game.commsUrl) && !hasSkippedComms) {
         setCreationStep(1);
+      } else {
+        setCreationStep(2);
       }
     }
-  }, [gameId, game, setCreationStep]);
+  }, [gameId, game, hasSkippedComms, setCreationStep]);
 
   // -------------------------------------------------- Render component ---------------------------------------------------- //
 
-  if (loadingGame || !game) {
-    return (
-      <Box fill background="black">
-        <Spinner />
-      </Box>
-    );
-  }
-
   return (
     <Box fill background={background} pad="6px" overflow={{ vertical: 'auto' }}>
+      {!game && (
+        <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
+          <Spinner />
+        </div>
+      )}
       <CloseButton handleClose={() => history.push('/menu')} />
       <Box fill direction="column" justify="start">
-        <GameCreationStepper setCreationStep={setCreationStep} currentStep={creationStep} game={game} />
-        {creationStep === 0 && <CommsForm game={game} setCreationStep={setCreationStep} />}
-        {creationStep === 1 && <InviteesForm game={game} />}
+        <GameCreationStepper
+          setCreationStep={setCreationStep}
+          currentStep={creationStep}
+          game={game}
+          setHasSkippedComms={setHasSkippedComms}
+        />
+        {creationStep === 1 && (
+          <CommsForm game={game} setCreationStep={setCreationStep} setHasSkippedComms={setHasSkippedComms} />
+        )}
+        {creationStep === 2 && <InviteesForm game={game} />}
       </Box>
     </Box>
   );

@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 
 interface ActionButtonsProps {
   value: string;
-  primaryLabel: string;
+  primaryLabel: string | JSX.Element;
 }
 
 const ActionButtons: FC<ActionButtonsProps> = ({ value, primaryLabel }) => (

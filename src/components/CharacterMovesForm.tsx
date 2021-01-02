@@ -19,10 +19,16 @@ const StyledMarkdown = styled(ReactMarkdown)`
 interface CharacterMovesFormProps {
   playbookType: PlayBooks;
   characterName: string;
+  settingMoves: boolean;
   handleSubmitCharacterMoves: (moveIds: string[]) => void;
 }
 
-const CharacterMovesForm: FC<CharacterMovesFormProps> = ({ playbookType, characterName, handleSubmitCharacterMoves }) => {
+const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
+  playbookType,
+  characterName,
+  settingMoves,
+  handleSubmitCharacterMoves,
+}) => {
   const [selectedMoveIds, setSelectedMoveIds] = useState<string[]>([]);
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
@@ -114,10 +120,10 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({ playbookType, charact
         <Box direction="row" justify="end" gap="24px" margin={{ vertical: '12px' }}>
           <ButtonWS
             primary
-            label="SET"
+            label={settingMoves ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
             style={{ minHeight: '52px' }}
             disabled={selectedMoveIds.length !== moveChoiceCount}
-            onClick={() => handleSubmitCharacterMoves([...selectedMoveIds, ...defaultMoveIds])}
+            onClick={() => !settingMoves && handleSubmitCharacterMoves([...selectedMoveIds, ...defaultMoveIds])}
           />
         </Box>
       </Box>

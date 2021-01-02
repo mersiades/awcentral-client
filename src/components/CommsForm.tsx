@@ -1,34 +1,34 @@
 import React, { FC, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Box, Button, Select, Heading, Paragraph, Text, TextArea } from 'grommet';
+import { Box, Button, Select, Heading, Text, TextArea } from 'grommet';
 
+import Spinner from './Spinner';
+import { ButtonWS, ParagraphWS } from '../config/grommetConfig';
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
 import { Game } from '../@types';
 
 interface CommsFormProps {
-  game: Game;
+  game?: Game;
   setCreationStep: (step: number) => void;
+  setHasSkippedComms: (skipped: boolean) => void;
 }
 
-const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
+const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedComms }) => {
   // ------------------------------------------------- Component state --------------------------------------------------- //
-  const [app, setApp] = useState(game.commsApp || '');
-  const [url, setUrl] = useState(game.commsUrl || '');
+  const [app, setApp] = useState(game?.commsApp || '');
+  const [url, setUrl] = useState(game?.commsUrl || '');
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const [addCommsApp] = useMutation<AddCommsAppData, AddCommsAppVars>(ADD_COMMS_APP, {
-    variables: { gameId: game.id, app },
-  });
-  const [addCommsUrl] = useMutation<AddCommsUrlData, AddCommsUrlVars>(ADD_COMMS_URL, {
-    variables: { gameId: game.id, url },
-  });
+
+  const [addCommsApp, { loading: loadingCommsApp }] = useMutation<AddCommsAppData, AddCommsAppVars>(ADD_COMMS_APP);
+  const [addCommsUrl, { loading: loadingCommsUrl }] = useMutation<AddCommsUrlData, AddCommsUrlVars>(ADD_COMMS_URL);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const appOptions = ['Discord', 'Zoom', 'Skype', 'FaceTime', 'WhatsApp', 'Google Hangouts', 'Talky', 'ooVoo', 'other'];
 
   const handleSetApp = () => {
-    if (!!app) {
+    if (!!app && !!game) {
       try {
         addCommsApp({ variables: { gameId: game.id, app } });
       } catch (e) {
@@ -38,7 +38,7 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
   };
 
   const handleSetUrl = () => {
-    if (!!url) {
+    if (!!url && !!game) {
       try {
         addCommsUrl({ variables: { gameId: game.id, url } });
       } catch (e) {
@@ -69,16 +69,16 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
         <Heading level={2}>COMMS</Heading>
         <Box direction="row" justify="evenly" gap="48px" height="400px">
           <Box direction="column" fill="vertical">
-            <Paragraph textAlign="center" size="large">
+            <ParagraphWS textAlign="center" size="large">
               How will you talk to your players?
-            </Paragraph>
-            <Paragraph textAlign="center" size="medium">
+            </ParagraphWS>
+            <ParagraphWS textAlign="center" size="medium">
               AW Central can manage playbooks, threats, dice rolls etc, but you'll need to use some other app to talk with
               your players.
-            </Paragraph>
-            <Paragraph textAlign="center" size="medium">
+            </ParagraphWS>
+            <ParagraphWS textAlign="center" size="medium">
               If you know your voice comms details, add them here to make it easier for your players to join you.
-            </Paragraph>
+            </ParagraphWS>
           </Box>
           <Box direction="column" fill="vertical" justify="around">
             <Box direction="column">
@@ -93,24 +93,18 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
                   children={(option) => renderOption(option)}
                 />
 
-                {!!game.commsApp ? (
-                  <Button
-                    label="SET"
-                    secondary
+                {!!game ? (
+                  <ButtonWS
+                    label={loadingCommsApp ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+                    secondary={!!game.commsApp}
+                    primary={!game.commsApp}
                     size="large"
                     alignSelf="center"
                     onClick={() => handleSetApp()}
                     disabled={!app}
                   />
                 ) : (
-                  <Button
-                    label="SET"
-                    primary
-                    size="large"
-                    alignSelf="center"
-                    onClick={() => handleSetApp()}
-                    disabled={!app}
-                  />
+                  <ButtonWS label="Set" primary disabled size="large" />
                 )}
               </Box>
               <Text color="accent-1" weight="bold" margin={{ top: 'xsmall' }}>
@@ -127,35 +121,35 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="https://"
                 />
-
-                {!!game.commsUrl ? (
-                  <Button
-                    label="SET"
-                    secondary
+                {!!game ? (
+                  <ButtonWS
+                    label={loadingCommsUrl ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+                    secondary={!!game.commsUrl}
+                    primary={!game.commsUrl}
                     size="large"
                     alignSelf="center"
                     onClick={() => handleSetUrl()}
-                    disabled={!url}
+                    disabled={!app}
                   />
                 ) : (
-                  <Button
-                    label="SET"
-                    primary
-                    size="large"
-                    alignSelf="center"
-                    onClick={() => handleSetUrl()}
-                    disabled={!url}
-                  />
+                  <ButtonWS label="Set" primary disabled size="large" alignSelf="center" />
                 )}
               </Box>
               <Text color="accent-1" weight="bold" margin={{ top: 'xsmall' }}>
                 Url to video chat group, meeting, channel etc
               </Text>
             </Box>
-            {!!game.commsApp && !!game.commsUrl ? (
-              <Button label="NEXT" primary size="large" alignSelf="end" onClick={() => setCreationStep(2)} />
-            ) : (
-              <Button label="LATER" size="large" alignSelf="end" onClick={() => setCreationStep(2)} />
+            {!!game && (
+              <Button
+                label={!!game.commsApp && !!game.commsUrl ? 'NEXT' : 'LATER'}
+                primary={!!game.commsApp && !!game.commsUrl}
+                size="large"
+                alignSelf="end"
+                onClick={() => {
+                  setCreationStep(2);
+                  (!game.commsApp || !game.commsUrl) && setHasSkippedComms(true);
+                }}
+              />
             )}
           </Box>
         </Box>

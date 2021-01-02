@@ -3,11 +3,13 @@ import { startsWith } from 'lodash';
 import styled from 'styled-components';
 import { Box, Text, TextArea, Tip } from 'grommet';
 
-import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
+import Spinner from './Spinner';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../config/grommetConfig';
+import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
 
 interface UniqueFormBattlebabeProps {
   characterName: string;
+  settingCustomWeapons: boolean;
   playbookUniqueCreator: PlaybookUniqueCreator;
   handleSubmitCustomWeapons: (weapons: string[]) => void;
   customWeapons?: CustomWeapons;
@@ -24,6 +26,7 @@ const WeaponsUL = styled.ul`
 
 const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
   characterName,
+  settingCustomWeapons,
   playbookUniqueCreator,
   handleSubmitCustomWeapons,
   customWeapons,
@@ -280,7 +283,12 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
               ))}
             </WeaponsUL>
           </RedBox>
-          <ButtonWS label="SET" primary onClick={() => handleSubmitCustomWeapons(weapons)} disabled={weapons.length === 0} />
+          <ButtonWS
+            label={settingCustomWeapons ? <Spinner fillColor="#FFF" fillHorizontal height="36px" /> : 'SET'}
+            primary
+            onClick={() => !settingCustomWeapons && handleSubmitCustomWeapons(weapons)}
+            disabled={weapons.length === 0}
+          />
         </Box>
       </Box>
       <Box direction="row" height="300px" overflow={{ vertical: 'auto' }}>

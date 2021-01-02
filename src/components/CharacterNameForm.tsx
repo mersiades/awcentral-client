@@ -11,11 +11,12 @@ import { ButtonWS, HeadingWS } from '../config/grommetConfig';
 
 interface CharacterNameFormProps {
   playbookType: PlayBooks;
+  settingName: boolean;
   handleSubmitName: (name: string) => void;
   existingName?: string;
 }
 
-const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSubmitName, existingName }) => {
+const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, settingName, handleSubmitName, existingName }) => {
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
   const [value, setValue] = useState({ characterName: existingName || '' });
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
@@ -79,7 +80,11 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, handleSub
         </Box>
         <Box direction="row" justify="end" gap="12px" margin={{ top: '12px' }}>
           <ButtonWS type="reset" label="CLEAR" />
-          <ButtonWS type="submit" primary label="SET" />
+          <ButtonWS
+            type="submit"
+            primary
+            label={settingName ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+          />
         </Box>
       </Form>
     </Box>

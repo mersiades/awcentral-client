@@ -460,7 +460,7 @@ export const ButtonWS = styled(Button as FC<ButtonProps & JSX.IntrinsicElements[
   ({primary, secondary}) => {
     return css`
       box-shadow: 0 0 5px 1px #000${ !primary ? ", 0 0 5px 1px #000 inset" : ""};
-      text-shadow: ${!primary ? "0 0 1px #000, 0 0 3px #000" : ""};
+      text-shadow: ${!primary ? "0 0 2px #000, 0 0 4px #000" : ""};
       &:focus {
         outline: 0;
         box-shadow: none;
