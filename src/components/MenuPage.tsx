@@ -6,11 +6,11 @@ import { Box, Image, Grid } from 'grommet';
 
 import CreateGameForm from './CreateGameForm';
 import GamesList from './GamesList';
+import Spinner from './Spinner';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
 import { background, ButtonWS, HeadingWS, StyledClose } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
-import Spinner from './Spinner';
 
 const MenuPage: FC = () => {
   // ---------------------------------- Accessing React context -------------------------------------------- //
@@ -129,50 +129,28 @@ const MenuPage: FC = () => {
             <Box gridArea="buttonsContainer" alignSelf="end">
               {buttonsContainer === 0 && renderMenuButtons()}
               {buttonsContainer === 1 && (
-                <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} pad={{ bottom: '96px' }}>
-                  <Grid
-                    rows={['xsmall']}
-                    columns={['xxsmall', 'small']}
-                    justifyContent="between"
-                    align="center"
-                    areas={[
-                      { name: 'header-left', start: [0, 0], end: [0, 0] },
-                      { name: 'header-right', start: [1, 0], end: [1, 0] },
-                    ]}
-                  >
-                    <Box gridArea="header-left" align="start" alignContent="center">
+                <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} style={{ minHeight: '300px' }}>
+                  <Box direction="row" align="center" justify="between">
+                    <Box align="start" alignContent="center">
                       <StyledClose color="accent-1" onClick={() => setButtonsContainer(0)} />
                     </Box>
-                    <Box gridArea="header-right">
-                      <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
-                        YOUR GAMES
-                      </HeadingWS>
-                    </Box>
-                  </Grid>
+                    <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                      YOUR GAMES
+                    </HeadingWS>
+                  </Box>
                   {!!gameRoles ? <GamesList gameRoles={gameRoles} /> : null}
                 </Box>
               )}
               {buttonsContainer === 2 && (
-                <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }}>
-                  <Grid
-                    rows={['xsmall']}
-                    columns={['xxsmall', 'small']}
-                    justifyContent="between"
-                    align="center"
-                    areas={[
-                      { name: 'header-left', start: [0, 0], end: [0, 0] },
-                      { name: 'header-right', start: [1, 0], end: [1, 0] },
-                    ]}
-                  >
-                    <Box gridArea="header-left" align="start" alignContent="center">
+                <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} style={{ minHeight: '300px' }}>
+                  <Box direction="row" align="center" justify="between">
+                    <Box align="start" alignContent="center">
                       <StyledClose color="accent-1" onClick={() => setButtonsContainer(0)} cursor="pointer" />
                     </Box>
-                    <Box gridArea="header-right">
-                      <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
-                        CREATE GAME
-                      </HeadingWS>
-                    </Box>
-                  </Grid>
+                    <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                      CREATE GAME
+                    </HeadingWS>
+                  </Box>
                   <CreateGameForm />
                 </Box>
               )}

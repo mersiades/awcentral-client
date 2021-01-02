@@ -79,14 +79,13 @@ const MenuPage: FC = () => {
               <Box gridArea="gamesContainer" alignSelf="end" gap="small" style={{ minHeight: '300px' }}>
                 <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} gap="12px">
                   <Box direction="row" align="center" justify="between">
-                    <Box gridArea="header-left" align="start" alignContent="center">
+                    <Box align="start" alignContent="center">
                       <StyledClose color="accent-1" onClick={() => history.push('/')} cursor="pointer" />
                     </Box>
-                    <Box gridArea="header-right">
-                      <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
-                        YOUR INVITATIONS
-                      </HeadingWS>
-                    </Box>
+
+                    <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                      YOUR INVITATIONS
+                    </HeadingWS>
                   </Box>
                   <InvitationsList games={games} />
                 </Box>
