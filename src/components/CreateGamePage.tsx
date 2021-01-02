@@ -27,7 +27,7 @@ const CreateGamePage = () => {
   const history = useHistory();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(
+  const { data: gameData } = useQuery<GameData, GameVars>(
     GAME,
     //@ts-ignore
     { variables: { gameId }, skip: !gameId }

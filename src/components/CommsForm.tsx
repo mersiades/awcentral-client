@@ -1,11 +1,11 @@
 import React, { FC, useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { Box, Button, Select, Heading, Paragraph, Text, TextArea } from 'grommet';
+import { Box, Button, Select, Heading, Text, TextArea } from 'grommet';
 
+import Spinner from './Spinner';
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
 import { Game } from '../@types';
-import Spinner from './Spinner';
 import { ButtonWS, ParagraphWS } from '../config/grommetConfig';
 
 interface CommsFormProps {
@@ -19,12 +19,6 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep }) => {
   const [url, setUrl] = useState(game?.commsUrl || '');
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  // const [addCommsApp] = useMutation<AddCommsAppData, AddCommsAppVars>(ADD_COMMS_APP, {
-  //   variables: { gameId: game.id, app },
-  // });
-  // const [addCommsUrl] = useMutation<AddCommsUrlData, AddCommsUrlVars>(ADD_COMMS_URL, {
-  //   variables: { gameId: game.id, url },
-  // });
 
   const [addCommsApp, { loading: loadingCommsApp }] = useMutation<AddCommsAppData, AddCommsAppVars>(ADD_COMMS_APP);
   const [addCommsUrl, { loading: loadingCommsUrl }] = useMutation<AddCommsUrlData, AddCommsUrlVars>(ADD_COMMS_URL);

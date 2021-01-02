@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { Form, Box, FormField, TextInput, TextArea } from 'grommet';
 
+import Spinner from './Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 import { Game } from '../@types';
@@ -19,12 +20,12 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
   // ------------------------------------------------- Component state --------------------------------------------------- //
   const [formValues, setFormValues] = useState<{ email: string }>({ email: '' });
   const [message, setMessage] = useState('');
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(true);
 
   const history = useHistory();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const [addInvitee] = useMutation<AddInviteeData, AddInviteeVars>(ADD_INVITEE);
+  const [addInvitee, { loading: loadingAddInvitee }] = useMutation<AddInviteeData, AddInviteeVars>(ADD_INVITEE);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
@@ -32,7 +33,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
     return (
       <TextArea
         resize={false}
-        style={{ height: '15vh', borderRadius: 'unset' }}
+        style={{ height: '20vh', borderRadius: 'unset' }}
         fill
         value={message}
         onChange={(e) => setMessage(e.target.value)}
@@ -51,7 +52,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
       const defaultMessage = `Hi. Please join our Apocalypse World game on AW Central.\n\n- Go to ${baseUrl}/join-game\n- Log in (or register) with ${formValues.email}\n- Join the game called ${game.name}`;
       hasSubmitted && setMessage(defaultMessage);
     }
-  }, [hasSubmitted, game, game, formValues, setMessage]);
+  }, [hasSubmitted, game, formValues, setMessage]);
 
   return (
     <Box
@@ -70,13 +71,13 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
             align="center"
             width="100%"
           >
-            <ParagraphWS>
+            <ParagraphWS style={{ maxWidth: 'unset' }}>
               Let your player know how to join your game. You can edit the instructions below (if you want) and then copy and
               paste into an email, Discord chat etc.
             </ParagraphWS>
-            <Box pad="12px" width="100%">
+            <Box gap="12px" width="100%">
               {renderMessage()}
-              <Box direction="row" width="100%" justify="between" gap="12px" margin={{ top: '12px' }}>
+              <Box direction="row" width="100%" justify="between" gap="12px">
                 <ButtonWS secondary label="COPY TO CLIPBOARD" onClick={() => copyToClipboard(message)} />
                 <ButtonWS
                   primary
@@ -105,22 +106,17 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
                 <FormField name="email" width="100%">
                   <TextInput placeholder="Type player's email" type="email" name="email" size="xlarge" />
                 </FormField>
-                {!!game && game.invitees.length === 0 ? (
+                {!!game ? (
                   <ButtonWS
                     type="submit"
-                    primary
+                    primary={game.invitees.length === 0}
+                    secondary={game.invitees.length !== 0}
                     value={validateEmail(formValues.email)}
-                    label="ADD"
+                    label={loadingAddInvitee ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'ADD'}
                     disabled={!formValues.email}
                   />
                 ) : (
-                  <ButtonWS
-                    type="submit"
-                    secondary
-                    value={validateEmail(formValues.email)}
-                    label="ADD"
-                    disabled={!formValues.email || !game}
-                  />
+                  <ButtonWS label="Set" primary disabled />
                 )}
               </Box>
             </Form>
