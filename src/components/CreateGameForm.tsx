@@ -8,6 +8,7 @@ import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import CREATE_GAME, { CreateGameData, CreateGameVars } from '../mutations/createGame';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import { ButtonWS, TextWS } from '../config/grommetConfig';
+import Spinner from './Spinner';
 // import { GameRequestBody } from '../@types';
 // import { WebsocketRequests } from '../@types/enums';
 // import { GameRequest, GameResponse } from '../@types';
@@ -17,7 +18,7 @@ const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
   const { id: userId, username: displayName, email } = useKeycloakUser();
   // const { stompClient, handleGame } = useWebsocketContext();
-  const [createGame] = useMutation<CreateGameData, CreateGameVars>(CREATE_GAME);
+  const [createGame, { loading: loadingCreateGame }] = useMutation<CreateGameData, CreateGameVars>(CREATE_GAME);
   const history = useHistory();
 
   const sendNewGameRequest = async (userId: string, name: string) => {
@@ -50,7 +51,14 @@ const CreateGameForm: FC = () => {
         <TextWS color="accent-1" margin={{ top: 'xsmall' }}>
           Create a game with you as the MC
         </TextWS>
-        <ButtonWS type="submit" label="SUBMIT" primary size="large" alignSelf="center" fill />
+        <ButtonWS
+          type="submit"
+          label={loadingCreateGame ? <Spinner fillColor="#FFF" /> : 'SUBMIT'}
+          primary
+          size="large"
+          alignSelf="center"
+          fill
+        />
       </Box>
     </Form>
   );
