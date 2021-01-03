@@ -1,13 +1,15 @@
-import { useQuery } from '@apollo/client';
-import { Box, CheckBox, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 import React, { FC, useState } from 'react';
+import { useQuery } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
-import { CharacterMove } from '../@types';
-import { PlayBooks } from '../@types/enums';
-import { ButtonWS, HeadingWS } from '../config/grommetConfig';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import { Box, CheckBox, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
+
 import Spinner from './Spinner';
+import { ButtonWS, HeadingWS } from '../config/grommetConfig';
+import { PlayBooks } from '../@types/enums';
+import { CharacterMove } from '../@types';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import { useFonts } from '../contexts/fontContext';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -30,6 +32,9 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
   handleSubmitCharacterMoves,
 }) => {
   const [selectedMoveIds, setSelectedMoveIds] = useState<string[]>([]);
+
+  const { crustReady } = useFonts();
+
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
     {
@@ -90,6 +95,7 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
       <Box width="70vw" flex="grow">
         <HeadingWS
           level={2}
+          crustReady={crustReady}
           textAlign="center"
           style={{ maxWidth: 'unset' }}
         >{`WHAT ARE ${characterName.toUpperCase()}'S MOVES?`}</HeadingWS>

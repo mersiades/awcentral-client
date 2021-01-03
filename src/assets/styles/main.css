@@ -11,3 +11,17 @@
   src: local('crust_clean'), url('../fonts/crustype_clean.woff') format('woff'),
     url('../fonts/crustype_clean.ttf') format('truetype');
 }
+
+/* html.vtks-ready {
+  font-family: 'Vtks good luck for you';
+  /* font-size: 18px; */
+/* }
+html.crust-ready {
+  font-family: 'crust_clean';
+  /* font-size: 18px; */
+/* } */
+
+/* html.fonts-loading {
+  font-family: serif;
+  font-size: 18px;
+/* } */

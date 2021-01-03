@@ -6,10 +6,11 @@ import { Box, FormField, TextInput } from 'grommet';
 
 import Spinner from './Spinner';
 import { ButtonWS, HeadingWS, RedBox, TextWS } from '../config/grommetConfig';
-import { Character, GameRole, HxInput } from '../@types';
 import { PlayBooks, Roles } from '../@types/enums';
+import { Character, GameRole, HxInput } from '../@types';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import { useFonts } from '../contexts/fontContext';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 
 const StyledMarkdown = styled(ReactMarkdown)`
@@ -40,6 +41,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
 
   // -------------------------------------------------- Context hooks ---------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
+  const { crustReady } = useFonts();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
@@ -98,6 +100,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
       <Box width="60vw" flex="grow">
         <HeadingWS
           level={2}
+          crustReady={crustReady}
           textAlign="center"
           style={{ maxWidth: 'unset' }}
         >{`WHAT HISTORY DOES ${character.name?.toUpperCase()} HAVE?`}</HeadingWS>
@@ -109,7 +112,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
               !!char.name && (
                 <RedBox key={char.id} direction="row" width="350px" margin={{ right: '12px', bottom: '12px' }}>
                   <Box width="250px" pad="12px">
-                    <HeadingWS level={3} style={{ marginTop: '6px', marginBottom: '6px' }}>
+                    <HeadingWS crustReady={crustReady} level={3} style={{ marginTop: '6px', marginBottom: '6px' }}>
                       {char.name}
                     </HeadingWS>
                     {!!char.playbook && (

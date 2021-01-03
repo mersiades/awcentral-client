@@ -9,6 +9,7 @@ import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInv
 import { Game } from '../@types';
 import { copyToClipboard } from '../helpers/copyToClipboard';
 import { validateEmail } from '../helpers/validateEmail';
+import { useFonts } from '../contexts/fontContext';
 
 interface InviteesFormProps {
   game?: Game;
@@ -23,6 +24,7 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
   const history = useHistory();
+  const { vtksReady } = useFonts();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
   const [addInvitee, { loading: loadingAddInvitee }] = useMutation<AddInviteeData, AddInviteeVars>(ADD_INVITEE);
@@ -63,7 +65,9 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
       <Box width="50vw" flex="grow" align="center" direction="column" justify="start">
-        <HeadingWS level={1}>INVITE PLAYERS</HeadingWS>
+        <HeadingWS vtksReady={vtksReady} level={1}>
+          INVITE PLAYERS
+        </HeadingWS>
         {hasSubmitted ? (
           <Box
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}

@@ -6,6 +6,7 @@ import { Box, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 import Spinner from './Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 import { PlaybookUniqueCreator } from '../@types';
+import { useFonts } from '../contexts/fontContext';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -29,6 +30,8 @@ const UniqueFormBrainer: FC<UniqueFormBrainerProps> = ({
 }) => {
   const [selectedGear, setSelectedGear] = useState([]);
 
+  const { crustReady } = useFonts();
+
   const renderOptions = () => {
     let optionsArray: CheckBoxProps[] = [];
     playbookUniqueCreator.brainerGearCreator.gear.forEach((item, index) => {
@@ -49,7 +52,10 @@ const UniqueFormBrainer: FC<UniqueFormBrainerProps> = ({
 
   return (
     <Box width="70vw" flex="grow" direction="column" align="center" justify="between">
-      <HeadingWS level={2}>{`WHAT SPECIAL BRAINER GEAR DOES ${characterName.toUpperCase()} HAVE?`}</HeadingWS>
+      <HeadingWS
+        crustReady={crustReady}
+        level={2}
+      >{`WHAT SPECIAL BRAINER GEAR DOES ${characterName.toUpperCase()} HAVE?`}</HeadingWS>
       <ParagraphWS size="large">Choose two</ParagraphWS>
       <CheckBoxGroup
         overflow="auto"
