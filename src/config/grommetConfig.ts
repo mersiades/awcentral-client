@@ -3,6 +3,7 @@ import { deepMerge } from 'grommet/utils';
 import { grommet } from 'grommet/themes/grommet';
 import styled, { css } from 'styled-components';
 
+
 import '../assets/styles/main.css'
 import { Box, BoxProps, Button, ButtonProps, Heading, HeadingProps, Paragraph, ParagraphProps, Text, TextProps} from 'grommet';
 import { Close, IconProps } from 'grommet-icons';
@@ -114,7 +115,10 @@ const fontSizing = (factor: number) => {
   };
 };
 
-export const theme = deepMerge(grommet, {
+
+
+export const theme = (vtksReady: boolean, crustReady: boolean) => {
+  return deepMerge(grommet, {
   global: {
     font: {
       family: "'chaparral pro', sans-serif",
@@ -248,7 +252,9 @@ export const theme = deepMerge(grommet, {
       extend: 'font-weight: 500;'
     },
 
-    extend: "font-family: 'Vtks good luck for you', sans-serif; font-size: 36px; line-height: 36px;",
+    extend: vtksReady 
+      ? "font-family: 'Vtks good luck for you', sans-serif; font-size: 36px; line-height: 36px;" 
+      : "font-family: sans-serif; font-size: 28px; line-height: 36px; font-weight: 600; letter-spacing: -3px;"
   },
   heading: {
     font: {
@@ -348,7 +354,7 @@ export const theme = deepMerge(grommet, {
       align: { top: 'bottom' }, // most common use case is Header with Buttons
     },
   },
-});
+})};
 
 export const customDefaultButtonStyles = deepMerge(grommet, {
   button: {
@@ -437,11 +443,63 @@ export const HeadingWS = styled(Heading as React.FC<HeadingProps &
   JSX.IntrinsicElements['h3'] &
   JSX.IntrinsicElements['h4'] &
   JSX.IntrinsicElements['h5'] &
-  JSX.IntrinsicElements['h6']>)(
-    () => {
+  JSX.IntrinsicElements['h6'] & 
+  {vtksReady?: boolean, crustReady?: boolean}>)(
+    ({level, vtksReady, crustReady}) => {
+
+      const setFontFamily = () => {
+        console.log('level', level)
+        console.log('crustReady', crustReady)
+        switch (level) {
+          case 1:
+            return vtksReady ? null : "sans serif"
+          case 2:
+            return crustReady ? null : "sans serif"
+          case 3:
+            return crustReady ? null : "sans serif"
+        }
+      }
+
+      const setFontWeight = () => {
+        switch (level) {
+          case 1:
+            return vtksReady ? null : 600
+          case 2:
+            // Deliberately falls through
+          case 3:
+            return crustReady ? null : 600
+        }
+      }
+
+      const setFontSize = () => {
+        switch (level) {
+          case 1:
+            return vtksReady ? null : "28px"
+          case 2:
+            return crustReady ? null : "30px"
+          case 3:
+            return crustReady ? null : "24px"
+        }
+      }
+
+      const setLetterSpacing = () => {
+        switch (level) {
+          case 1:
+            return vtksReady ? null : "-3px"
+          case 2:
+            return crustReady ? null : "-3px"
+          case 3:
+            return crustReady ? null : "-1.5px"
+        }
+      }
+
       return css`
         text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000;
         cursor: default;
+        font-family: ${setFontFamily()};
+        font-weight: ${setFontWeight()};
+        font-size: ${setFontSize()};
+        letter-spacing: ${setLetterSpacing()};
       `
     }
   )

@@ -2,12 +2,13 @@ import React, { FC, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Box, Grid } from 'grommet';
 
+import Spinner from './Spinner';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 import { Playbook } from '../@types';
 import { PlayBooks } from '../@types/enums';
+import { useFonts } from '../contexts/fontContext';
 import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import '../assets/styles/transitions.css';
-import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
-import Spinner from './Spinner';
 
 interface PlaybookSelectorProps {
   creatingCharacter: boolean;
@@ -28,6 +29,8 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({
   const [showIntro, setShowIntro] = useState(true);
   const [startFadeOut, setStartFadeOut] = useState(false);
   const [sortedPlaybooks, setSortedPlaybooks] = useState<Playbook[]>([]);
+
+  const { crustReady } = useFonts();
 
   const handlePlaybookClick = (playbook: Playbook) => {
     setShowIntro(false);
@@ -80,7 +83,9 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({
         <Box gridArea="playbook-display" fill align="center" justify="center">
           {!selectedPlaybook && showIntro && (
             <>
-              <HeadingWS level={2}>Choose your playbook</HeadingWS>
+              <HeadingWS crustReady={crustReady} level={2}>
+                Choose your playbook
+              </HeadingWS>
               <ParagraphWS>
                 You should probably wait for your MC and the rest of your crew, tho. No headstarts for nobody in Apocalypse
                 World.
@@ -105,7 +110,7 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({
                 />
               </Box>
               <Box gridArea="text" pad="24px" animation="fadeIn" justify="around" align="center">
-                <HeadingWS level={2} alignSelf="center">
+                <HeadingWS crustReady={crustReady} level={2} alignSelf="center">
                   {formatPlaybookType(selectedPlaybook.playbookType)}
                 </HeadingWS>
                 <Box overflow="auto" style={{ maxWidth: '600px' }}>

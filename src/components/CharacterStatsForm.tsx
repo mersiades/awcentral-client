@@ -1,11 +1,13 @@
+import React, { FC, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from 'grommet';
-import React, { FC, useEffect, useState } from 'react';
-import { PlaybookCreator, StatsOption } from '../@types';
-import { PlayBooks } from '../@types/enums';
-import { ButtonWS, HeadingWS } from '../config/grommetConfig';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+
 import Spinner from './Spinner';
+import { ButtonWS, HeadingWS } from '../config/grommetConfig';
+import { PlayBooks } from '../@types/enums';
+import { PlaybookCreator, StatsOption } from '../@types';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import { useFonts } from '../contexts/fontContext';
 
 interface CharacterStatsFormProps {
   playbookType: PlayBooks;
@@ -22,6 +24,8 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({
 }) => {
   const [selectedStatsOption, setSelectedStatsOption] = useState<StatsOption | undefined>();
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
+
+  const { crustReady } = useFonts();
 
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
@@ -54,6 +58,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({
       <Box width="50vw" flex="grow">
         <HeadingWS
           level={2}
+          crustReady={crustReady}
           textAlign="center"
         >{`WHAT ARE ${characterName.toUpperCase()}'S STRENGTHS AND WEAKNESSES?`}</HeadingWS>
         <HeadingWS level={4} textAlign="start">
@@ -73,31 +78,31 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({
             >
               <Box direction="row" align="center" gap="12px">
                 <HeadingWS level={4}>COOL:</HeadingWS>
-                <HeadingWS color="brand" level={3}>
+                <HeadingWS crustReady={crustReady} color="brand" level={3}>
                   {opt.COOL}
                 </HeadingWS>
               </Box>
               <Box direction="row" align="center" gap="12px">
                 <HeadingWS level={4}>HARD:</HeadingWS>
-                <HeadingWS color="brand" level={3}>
+                <HeadingWS crustReady={crustReady} color="brand" level={3}>
                   {opt.HARD}
                 </HeadingWS>
               </Box>
               <Box direction="row" align="center" gap="12px">
                 <HeadingWS level={4}>HOT:</HeadingWS>
-                <HeadingWS color="brand" level={3}>
+                <HeadingWS crustReady={crustReady} color="brand" level={3}>
                   {opt.HOT}
                 </HeadingWS>
               </Box>
               <Box direction="row" align="center" gap="12px">
                 <HeadingWS level={4}>SHARP:</HeadingWS>
-                <HeadingWS color="brand" level={3}>
+                <HeadingWS crustReady={crustReady} color="brand" level={3}>
                   {opt.SHARP}
                 </HeadingWS>
               </Box>
               <Box direction="row" align="center" gap="12px">
                 <HeadingWS level={4}>WEIRD:</HeadingWS>
-                <HeadingWS color="brand" level={3}>
+                <HeadingWS crustReady={crustReady} color="brand" level={3}>
                   {opt.WEIRD}
                 </HeadingWS>
               </Box>

@@ -3,11 +3,12 @@ import { useQuery } from '@apollo/client';
 import { Box, TextInput, Text, Form, FormField } from 'grommet';
 
 import Spinner from './Spinner';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
-import { PlaybookCreator } from '../@types';
-import { PlayBooks } from '../@types/enums';
-import { formatPlaybookType } from '../helpers/formatPlaybookType';
 import { ButtonWS, HeadingWS } from '../config/grommetConfig';
+import { PlayBooks } from '../@types/enums';
+import { PlaybookCreator } from '../@types';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import { useFonts } from '../contexts/fontContext';
+import { formatPlaybookType } from '../helpers/formatPlaybookType';
 
 interface CharacterNameFormProps {
   playbookType: PlayBooks;
@@ -19,6 +20,9 @@ interface CharacterNameFormProps {
 const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, settingName, handleSubmitName, existingName }) => {
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
   const [value, setValue] = useState({ characterName: existingName || '' });
+
+  const { crustReady } = useFonts();
+
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
     {
@@ -55,7 +59,9 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, settingNa
         onSubmit={({ value }: any) => handleSubmitName(value.characterName)}
       >
         <Box width="50vw" flex="grow" align="center">
-          <HeadingWS level={2}>{`WHAT IS THE ${formatPlaybookType(playbookType).toUpperCase()} CALLED?`}</HeadingWS>
+          <HeadingWS crustReady={crustReady} level={2}>{`WHAT IS THE ${formatPlaybookType(
+            playbookType
+          ).toUpperCase()} CALLED?`}</HeadingWS>
           <FormField name="characterName" width="100%">
             <TextInput placeholder="Type or select name" name="characterName" size="xxlarge" />
           </FormField>

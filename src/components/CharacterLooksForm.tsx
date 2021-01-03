@@ -1,12 +1,14 @@
+import React, { FC, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box, Form, FormField, TextInput, Text } from 'grommet';
-import React, { FC, useEffect, useState } from 'react';
-import { Look, PlaybookCreator } from '../@types';
-import { LookCategories, PlayBooks } from '../@types/enums';
-import { HeadingWS } from '../config/grommetConfig';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+
 import ActionButtons from './ActionButtons';
 import Spinner from './Spinner';
+import { HeadingWS } from '../config/grommetConfig';
+import { LookCategories, PlayBooks } from '../@types/enums';
+import { Look, PlaybookCreator } from '../@types';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import { useFonts } from '../contexts/fontContext';
 
 interface CharacterLooksFormProps {
   playbookType: PlayBooks;
@@ -37,6 +39,9 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
   const [faceValue, setFaceValue] = useState({ face: existingLooks.face });
   const [eyesValue, setEyesValue] = useState({ eyes: existingLooks.eyes });
   const [bodyValue, setBodyValue] = useState({ body: existingLooks.body });
+
+  const { crustReady } = useFonts();
+
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
     {
@@ -94,7 +99,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       justify="start"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <HeadingWS level={2}>{`WHAT DOES ${characterName.toUpperCase()} LOOK LIKE?`}</HeadingWS>
+      <HeadingWS crustReady={crustReady} level={2}>{`WHAT DOES ${characterName.toUpperCase()} LOOK LIKE?`}</HeadingWS>
       <Box direction="row" justify="between" gap="24px" style={{ minHeight: '70px' }}>
         {steps.map((step, index) => {
           const isSelected = index === selectedStep;

@@ -5,6 +5,7 @@ import { Box, FormField, TextInput } from 'grommet';
 import Spinner from './Spinner';
 import { ButtonWS, HeadingWS, RedBox } from '../config/grommetConfig';
 import { PlaybookUniqueCreator } from '../@types';
+import { useFonts } from '../contexts/fontContext';
 
 interface UniqueFormAngelProps {
   characterName: string;
@@ -21,9 +22,16 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({
 }) => {
   const { angelKitInstructions, startingStock } = playbookUniqueCreator.angelKitCreator;
   const [stock, setStock] = useState(startingStock);
+
+  const { crustReady } = useFonts();
+
   return (
     <Box width="60vw" direction="column" align="start" justify="between" overflow="auto" flex="grow">
-      <HeadingWS level={2} alignSelf="center">{`${characterName.toUpperCase()}'S ANGEL KIT`}</HeadingWS>
+      <HeadingWS
+        crustReady={crustReady}
+        level={2}
+        alignSelf="center"
+      >{`${characterName.toUpperCase()}'S ANGEL KIT`}</HeadingWS>
       <Box flex="grow" direction="row" align="start">
         <Box fill="horizontal">
           <ReactMarkdown>{angelKitInstructions}</ReactMarkdown>
@@ -35,7 +43,9 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({
           pad="24px"
           margin={{ left: '24px', right: '5px', top: '18px' }}
         >
-          <HeadingWS level={3}>Stock</HeadingWS>
+          <HeadingWS crustReady={crustReady} level={3}>
+            Stock
+          </HeadingWS>
           <FormField>
             <TextInput
               type="number"

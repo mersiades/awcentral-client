@@ -11,6 +11,7 @@ import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
 import { background, ButtonWS, HeadingWS, StyledClose } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
+import { useFonts } from '../contexts/fontContext';
 
 const MenuPage: FC = () => {
   // ---------------------------------- Accessing React context -------------------------------------------- //
@@ -18,6 +19,7 @@ const MenuPage: FC = () => {
 
   // ---------------------------------- Accessing React context -------------------------------------------- //
   const { username, id: keycloakId } = useKeycloakUser();
+  const { vtksReady } = useFonts();
 
   // ---------------------------------- Hooking in to Keycloak  -------------------------------------------- //
   const { keycloak } = useKeycloak();
@@ -136,7 +138,7 @@ const MenuPage: FC = () => {
                     <Box align="start" alignContent="center">
                       <StyledClose color="accent-1" onClick={() => setButtonsContainer(0)} />
                     </Box>
-                    <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                    <HeadingWS vtksReady={vtksReady} level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                       YOUR GAMES
                     </HeadingWS>
                   </Box>
@@ -149,7 +151,7 @@ const MenuPage: FC = () => {
                     <Box align="start" alignContent="center">
                       <StyledClose color="accent-1" onClick={() => setButtonsContainer(0)} cursor="pointer" />
                     </Box>
-                    <HeadingWS level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
+                    <HeadingWS vtksReady={vtksReady} level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                       CREATE GAME
                     </HeadingWS>
                   </Box>

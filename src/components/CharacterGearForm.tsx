@@ -1,12 +1,14 @@
-import { useQuery } from '@apollo/client';
-import { Box, TextArea } from 'grommet';
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { PlaybookCreator } from '../@types';
-import { PlayBooks } from '../@types/enums';
-import { accentColors, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../config/grommetConfig';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import { useQuery } from '@apollo/client';
+import { Box, TextArea } from 'grommet';
+
 import Spinner from './Spinner';
+import { accentColors, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../config/grommetConfig';
+import { PlayBooks } from '../@types/enums';
+import { PlaybookCreator } from '../@types';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import { useFonts } from '../contexts/fontContext';
 
 interface CharacterGearFormProps {
   existingGear: string[];
@@ -36,6 +38,8 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
   const [showScrollDown, setShowScrollDown] = useState(false);
 
   const instructionsBoxRef = useRef<HTMLDivElement>(null);
+
+  const { crustReady } = useFonts();
 
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
@@ -172,6 +176,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
       <Box width="70vw" flex="grow" overflow="auto">
         <HeadingWS
           level={2}
+          crustReady={crustReady}
           textAlign="center"
           style={{ maxWidth: 'unset' }}
         >{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</HeadingWS>

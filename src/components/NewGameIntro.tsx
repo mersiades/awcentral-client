@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { Anchor, Box } from 'grommet';
 
-import { Game } from '../@types';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
+import { Game } from '../@types';
+import { useFonts } from '../contexts/fontContext';
 
 interface NewGameIntroProps {
   closeNewGameIntro: () => void;
@@ -10,6 +11,8 @@ interface NewGameIntroProps {
 }
 
 const NewGameIntro: FC<NewGameIntroProps> = ({ game, closeNewGameIntro }) => {
+  const { crustReady } = useFonts();
+
   const renderComms = () => {
     if (!!game) {
       if (!!game.commsApp) {
@@ -57,7 +60,7 @@ const NewGameIntro: FC<NewGameIntroProps> = ({ game, closeNewGameIntro }) => {
     >
       <Box width="60vw" flex="grow" align="center" justify="between">
         <div>
-          <HeadingWS textAlign="center" level={2} style={{ maxWidth: 'unset' }}>
+          <HeadingWS crustReady={crustReady} textAlign="center" level={2} style={{ maxWidth: 'unset' }}>
             NEW GAME
           </HeadingWS>
           <ParagraphWS textAlign="center" size="large">

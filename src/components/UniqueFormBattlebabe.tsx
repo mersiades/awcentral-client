@@ -6,6 +6,7 @@ import { Box, Text, TextArea, Tip } from 'grommet';
 import Spinner from './Spinner';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../config/grommetConfig';
 import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
+import { useFonts } from '../contexts/fontContext';
 
 interface UniqueFormBattlebabeProps {
   characterName: string;
@@ -35,6 +36,8 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
   const [characteristics, setCharacteristics] = useState<ItemCharacteristic[]>([]);
   const [value, setValue] = useState('');
   const [weapons, setWeapons] = useState<string[]>(!!customWeapons ? [...customWeapons.weapons] : []);
+
+  const { crustReady } = useFonts();
 
   const {
     firearmsTitle,
@@ -235,7 +238,11 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
 
   return (
     <Box width="60vw" direction="column" align="start" justify="between" flex="grow">
-      <HeadingWS level={2} alignSelf="center">{`WHAT ARE ${characterName.toUpperCase()}'S TWO CUSTOM WEAPONS?`}</HeadingWS>
+      <HeadingWS
+        crustReady={crustReady}
+        level={2}
+        alignSelf="center"
+      >{`WHAT ARE ${characterName.toUpperCase()}'S TWO CUSTOM WEAPONS?`}</HeadingWS>
       <TextWS alignSelf="center">Mix'n'match. Edit directly if necessary.</TextWS>
       <Box fill="horizontal" direction="row" justify="start" height="145px">
         <Box height="152px" gap="12px" align="center" justify="between" width="60%">
