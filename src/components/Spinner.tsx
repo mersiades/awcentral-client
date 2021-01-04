@@ -49,11 +49,11 @@ const Spinner: FC<SpinnerProps> = ({
   };
 
   return (
-    <div>
-      <Box fill={getFill()} align="center" justify="center" width={width} height={height}>
-        {spinning}
-      </Box>
-    </div>
+    // <div>
+    <Box data-testid="spinner" fill={getFill()} align="center" justify="center" width={width} height={height}>
+      {spinning}
+    </Box>
+    // </div>
   );
 };
 

@@ -1,5 +1,12 @@
-export const createKeycloakStub = () => ({
-  init: jest.fn().mockResolvedValue(true),
+/**
+ * Creates a mock Keycloak object for testing.
+ * Defaults to an initialized and authenticated state (via TestRoot.tsx),
+ * but the optional parameters allow testing of other states
+ * @param isInitialized 
+ * @param isAuthenticated 
+ */
+export const createKeycloakStub = (isInitialized: boolean, isAuthenticated: boolean) => ({
+  init: jest.fn().mockResolvedValue(isInitialized),
   updateToken: jest.fn(),
   login: jest.fn(),
   logout: jest.fn(),
@@ -15,20 +22,5 @@ export const createKeycloakStub = () => ({
   hasResourceRole: jest.fn(),
   loadUserProfile: jest.fn(),
   loadUserInfo: jest.fn(),
-  authenticated: true
+  authenticated: isAuthenticated
 });
-
-let mockInitialized = true;
-
-// const web = () => {
-//   const originalModule = jest.requireActual('@react-keycloak/web');
-//   return {
-//     ...originalModule,
-//     // useKeycloak: () => [createKeycloakStub(), mockInitialized],
-//     useKeycloak: { keycloak: createKeycloakStub(), initialilized: mockInitialized },
-//     // ReactKeycloakProvider: jest.fn()
-//   };
-// }
-
-
-// export default web
