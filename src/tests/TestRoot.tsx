@@ -4,11 +4,9 @@ import { MockedProvider } from '@apollo/client/testing';
 import { Grommet } from 'grommet';
 import { theme } from '../config/grommetConfig';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import { createKeycloakStub } from '../../__mocks__/@react-keycloak/web';
+import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
 
 interface KeycloakStubOptions {
-  // Has the keycloak client initialized?
-  isInitialized: boolean;
   // Is the User authenticated?
   isAuthenticated: boolean;
 }
@@ -28,7 +26,6 @@ interface TestRootProps {
 }
 
 const defaultKeycloakStubOptions = {
-  isInitialized: true,
   isAuthenticated: true,
 };
 
@@ -44,14 +41,19 @@ const defaultGrommetOptions = {
  */
 const TestRoot: FC<TestRootProps> = ({
   children,
-  keycloakStubOptions: { isInitialized, isAuthenticated } = defaultKeycloakStubOptions,
+  keycloakStubOptions: { isAuthenticated } = defaultKeycloakStubOptions,
   grommetOptions: { vtksReady, crustReady } = defaultGrommetOptions,
 }) => {
   return (
     <BrowserRouter>
       <MockedProvider>
         <Grommet theme={theme(vtksReady, crustReady)} full>
-          <ReactKeycloakProvider authClient={createKeycloakStub(isInitialized, isAuthenticated)}>
+          <ReactKeycloakProvider
+            authClient={mockKeycloakStub(isAuthenticated)}
+            initOptions={{
+              onLoad: 'login-required',
+            }}
+          >
             {children}
           </ReactKeycloakProvider>
         </Grommet>

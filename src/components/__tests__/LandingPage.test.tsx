@@ -4,10 +4,10 @@ import { screen } from '@testing-library/react';
 import LandingPage from '../LandingPage';
 import TestRoot from '../../tests/TestRoot';
 
-describe('Rendering Landing Page', () => {
+describe('Rendering LandingPage', () => {
   test('should render LandingPage with User unauthorised', () => {
     render(
-      <TestRoot keycloakStubOptions={{ isInitialized: true, isAuthenticated: false }}>
+      <TestRoot keycloakStubOptions={{ isAuthenticated: false }}>
         <LandingPage />
       </TestRoot>
     );

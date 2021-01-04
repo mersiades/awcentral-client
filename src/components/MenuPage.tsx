@@ -20,6 +20,7 @@ const MenuPage: FC = () => {
   // ---------------------------------- Accessing React context -------------------------------------------- //
   const { username, id: keycloakId } = useKeycloakUser();
   const { vtksReady } = useFonts();
+  console.log('vtksReady', vtksReady);
 
   // ---------------------------------- Hooking in to Keycloak  -------------------------------------------- //
   const { keycloak } = useKeycloak();
@@ -90,7 +91,7 @@ const MenuPage: FC = () => {
   console.log('gameRoles', gameRoles);
 
   return (
-    <Box fill background={background}>
+    <Box data-testid="menu-page" fill background={background}>
       {!gameRoles && (
         <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
           <Spinner />
