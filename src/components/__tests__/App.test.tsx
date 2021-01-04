@@ -21,7 +21,7 @@ jest.mock('../../contexts/fontContext', () => {
 });
 
 describe('Rendering App', () => {
-  test('renders nothing worth testing yet', () => {
+  test('should render App and AppRouter without error', () => {
     render(
       <TestRoot>
         <App />

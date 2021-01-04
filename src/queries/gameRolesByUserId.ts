@@ -14,12 +14,10 @@ const GAMEROLES_BY_USER_ID = gql`
     gameRolesByUserId(id: $id) {
       id
       role
-          role
-          game {
-              id
-              name
-          }
-      
+      game {
+        id
+        name
+      }
     }
   }
 `

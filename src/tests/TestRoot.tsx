@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { BrowserRouter } from 'react-router-dom';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { Grommet } from 'grommet';
 import { theme } from '../config/grommetConfig';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
@@ -23,6 +23,7 @@ interface TestRootProps {
   children: JSX.Element;
   keycloakStubOptions?: KeycloakStubOptions;
   grommetOptions?: GrommetOptions;
+  apolloMocks?: MockedResponse[];
 }
 
 const defaultKeycloakStubOptions = {
@@ -43,10 +44,11 @@ const TestRoot: FC<TestRootProps> = ({
   children,
   keycloakStubOptions: { isAuthenticated } = defaultKeycloakStubOptions,
   grommetOptions: { vtksReady, crustReady } = defaultGrommetOptions,
+  apolloMocks = [],
 }) => {
   return (
     <BrowserRouter>
-      <MockedProvider>
+      <MockedProvider mocks={apolloMocks} addTypename={false}>
         <Grommet theme={theme(vtksReady, crustReady)} full>
           <ReactKeycloakProvider
             authClient={mockKeycloakStub(isAuthenticated)}

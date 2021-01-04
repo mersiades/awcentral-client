@@ -20,13 +20,12 @@ const MenuPage: FC = () => {
   // ---------------------------------- Accessing React context -------------------------------------------- //
   const { username, id: keycloakId } = useKeycloakUser();
   const { vtksReady } = useFonts();
-  console.log('vtksReady', vtksReady);
 
   // ---------------------------------- Hooking in to Keycloak  -------------------------------------------- //
   const { keycloak } = useKeycloak();
 
   // -------------------------------- Hooking in to Apollo graphql ----------------------------------------- //
-  const { data } = useQuery<GameRolesByUserIdData, GameRolesByUserIdVars>(GAMEROLES_BY_USER_ID, {
+  const { data, loading } = useQuery<GameRolesByUserIdData, GameRolesByUserIdVars>(GAMEROLES_BY_USER_ID, {
     // @ts-ignore
     variables: { id: keycloakId },
     skip: !keycloakId,
@@ -88,8 +87,6 @@ const MenuPage: FC = () => {
     }
   };
 
-  console.log('gameRoles', gameRoles);
-
   return (
     <Box data-testid="menu-page" fill background={background}>
       {!gameRoles && (
@@ -150,7 +147,12 @@ const MenuPage: FC = () => {
                 <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} style={{ minHeight: '300px' }}>
                   <Box direction="row" align="center" justify="between">
                     <Box align="start" alignContent="center">
-                      <StyledClose color="accent-1" onClick={() => setButtonsContainer(0)} cursor="pointer" />
+                      <StyledClose
+                        data-testid="create-game-close-icon"
+                        color="accent-1"
+                        onClick={() => setButtonsContainer(0)}
+                        cursor="pointer"
+                      />
                     </Box>
                     <HeadingWS vtksReady={vtksReady} level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                       CREATE GAME
