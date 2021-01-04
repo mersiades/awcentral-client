@@ -3,12 +3,12 @@ import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { Box, Image, Heading, Grid } from 'grommet';
 
-import InvitationsList from './InvitationsList';
+import InvitationsList from '../components/InvitationsList';
 import GAMES_FOR_INVITEE, { GamesForInviteeData, GamesForInviteeVars } from '../queries/gamesForInvitee';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { HeadingWS, StyledClose } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
-import Spinner from './Spinner';
+import Spinner from '../components/Spinner';
 import { useFonts } from '../contexts/fontContext';
 
 const background = {

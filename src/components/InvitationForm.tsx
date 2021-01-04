@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { Box, Form, FormField, Heading, Paragraph, TextInput, Button, TextArea } from 'grommet';
 
 import ActionButtons from './ActionButtons';
-import { ShowInvitation } from './MCPage';
+import { ShowInvitation } from '../pages/MCPage';
 import { copyToClipboard } from '../helpers/copyToClipboard';
 import { validateEmail } from '../helpers/validateEmail';
 // import { BASE_URL } from '../config/constants';

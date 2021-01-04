@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '../../utils/test-utils';
 import { screen } from '@testing-library/react';
-import LandingPage from '../LandingPage';
+import LandingPage from '../../pages/LandingPage';
 import TestRoot from '../../tests/TestRoot';
 
 describe('Rendering LandingPage', () => {

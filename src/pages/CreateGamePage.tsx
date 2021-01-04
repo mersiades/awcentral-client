@@ -3,11 +3,11 @@ import { useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box } from 'grommet';
 
-import CommsForm from './CommsForm';
-import GameCreationStepper from './GameCreationStepper';
-import InviteesForm from './InviteesForm';
-import Spinner from './Spinner';
-import CloseButton from './CloseButton';
+import CommsForm from '../components/CommsForm';
+import GameCreationStepper from '../components/GameCreationStepper';
+import InviteesForm from '../components/InviteesForm';
+import Spinner from '../components/Spinner';
+import CloseButton from '../components/CloseButton';
 import GAME, { GameData, GameVars } from '../queries/game';
 
 export const background = {

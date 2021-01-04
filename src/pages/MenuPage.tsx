@@ -4,9 +4,9 @@ import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { Box, Image, Grid } from 'grommet';
 
-import CreateGameForm from './CreateGameForm';
-import GamesList from './GamesList';
-import Spinner from './Spinner';
+import CreateGameForm from '../components/CreateGameForm';
+import GamesList from '../components/GamesList';
+import Spinner from '../components/Spinner';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
 import { background, ButtonWS, HeadingWS, StyledClose } from '../config/grommetConfig';

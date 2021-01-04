@@ -1,7 +1,7 @@
 import React from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 import { Box } from 'grommet';
-import Spinner from './Spinner';
+import Spinner from '../components/Spinner';
 
 const LandingPage = () => {
   // --------------------------------------- Hooking into contexts ---------------------------------------------- //
