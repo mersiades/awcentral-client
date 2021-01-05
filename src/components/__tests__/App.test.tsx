@@ -1,8 +1,7 @@
 import React from 'react';
-import { render } from '../../utils/test-utils';
+import { renderWithRouter } from '../../tests/test-utils';
 import { screen } from '@testing-library/react';
 import App from '../App';
-import TestRoot from '../../tests/TestRoot';
 import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
 import { mockKeycloakUserInfo } from '../../tests/mocks';
 
@@ -14,21 +13,11 @@ jest.mock('@react-keycloak/web', () => {
   };
 });
 
-jest.mock('../../contexts/fontContext', () => {
-  return {
-    useFonts: () => ({ vtksReady: true, crustReady: true }),
-  };
-});
-
 describe('Rendering App', () => {
-  test('should render App and AppRouter without error', () => {
-    render(
-      <TestRoot>
-        <App />
-      </TestRoot>
-    );
+  test('should render App and AppRouter without error', async () => {
+    renderWithRouter(<App />, '/menu', { isAuthenticated: true });
 
-    const MenuPageBox = screen.getByTestId('menu-page');
+    const MenuPageBox = await screen.findByTestId('menu-page');
     expect(MenuPageBox).toBeInTheDocument();
   });
 });

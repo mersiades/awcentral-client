@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '../utils/test-utils';
+import { renderWithRouter } from './test-utils';
 import { getAllByRole, getByTestId, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TestRoot from './TestRoot';
@@ -16,41 +16,16 @@ jest.mock('@react-keycloak/web', () => {
   };
 });
 
-jest.mock('../contexts/fontContext', () => {
-  return {
-    useFonts: () => ({ vtksReady: true, crustReady: true }),
-  };
-});
-
-// jest.mock('../contexts/keycloakUserContext', () => {
-//   return {
-//     useKeycloakUser: () => ({
-//       id: mockKeycloakUserInfo.sub,
-//       username: mockKeycloakUserInfo.preferred_username,
-//       email: mockKeycloakUserInfo.email,
-//     }),
-//   };
-// });
-
 describe('Testing flow for creating a game', () => {
   test('should render and submit create game form', async () => {
-    // React and I are having issues with act() warnings. This disables them.
-    // See https://github.com/facebook/react/issues/15379
-    const consoleError = console.error;
-    jest.spyOn(console, 'error').mockImplementation((...args) => {
-      if (!args[0].includes('Warning: An update to %s inside a test was not wrapped in act')) {
-        consoleError(...args);
-      }
+    renderWithRouter(<App />, '/menu', {
+      isAuthenticated: true,
+      apolloMocks: [mockGameRolesByUserId, mockCreateGame],
     });
 
-    render(
-      <TestRoot apolloMocks={[mockGameRolesByUserId, mockCreateGame]}>
-        <App />
-      </TestRoot>
-    );
-    screen.debug();
-
     const button = await screen.findByRole('button', { name: /CREATE GAME/i });
+
+    // screen.debug();
 
     // userEvent.click(button);
     // const closeIcon = screen.getByTestId('create-game-close-icon');

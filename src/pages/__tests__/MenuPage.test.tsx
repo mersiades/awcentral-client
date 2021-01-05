@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '../../utils/test-utils';
+import { customRenderForComponent, render, renderWithRouter } from '../../tests/test-utils';
 import { getAllByRole, getByTestId, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import TestRoot from '../../tests/TestRoot';
@@ -7,6 +7,7 @@ import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
 import { mockKeycloakUser1, mockKeycloakUserInfo, mockNewGameName } from '../../tests/mocks';
 import MenuPage from '../MenuPage';
 import { mockCreateGame, mockGameRolesByUserId } from '../../tests/mockQueries';
+import App from '../../components/App';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
@@ -16,31 +17,14 @@ jest.mock('@react-keycloak/web', () => {
   };
 });
 
-jest.mock('../../contexts/fontContext', () => {
-  return {
-    useFonts: () => ({ vtksReady: true, crustReady: true }),
-  };
-});
-
-jest.mock('../../contexts/keycloakUserContext', () => {
-  return {
-    useKeycloakUser: () => ({
-      id: mockKeycloakUserInfo.sub,
-      username: mockKeycloakUserInfo.preferred_username,
-      email: mockKeycloakUserInfo.email,
-    }),
-  };
-});
-
 describe('Rendering MenuPage', () => {
-  test('should render spinner when no gameRoles', () => {
-    render(
-      <TestRoot>
-        <MenuPage />
-      </TestRoot>
-    );
+  test('should render spinner when no gameRoles', async () => {
+    customRenderForComponent(<MenuPage />, {
+      isAuthenticated: true,
+      apolloMocks: [],
+    });
 
-    const welcomeHeading = screen.getByRole('heading');
+    const welcomeHeading = await screen.findByRole('heading');
     expect(welcomeHeading.textContent).toEqual(`Welcome, ${mockKeycloakUserInfo.preferred_username}`);
     const titleImage = screen.getByRole('img');
     expect(titleImage.getAttribute('alt')).toEqual('D. Vincent Baker & Meguey Baker Apocalypse World');
@@ -49,11 +33,10 @@ describe('Rendering MenuPage', () => {
   });
 
   test('should render buttons when gameRoles', async () => {
-    render(
-      <TestRoot apolloMocks={[mockGameRolesByUserId]}>
-        <MenuPage />
-      </TestRoot>
-    );
+    customRenderForComponent(<MenuPage />, {
+      isAuthenticated: true,
+      apolloMocks: [mockGameRolesByUserId, mockCreateGame],
+    });
 
     const buttons = await screen.findAllByRole('button');
     expect(buttons[0].textContent).toEqual('RETURN TO GAME');
@@ -63,11 +46,10 @@ describe('Rendering MenuPage', () => {
   });
 
   test('should render and submit create game form', async () => {
-    render(
-      <TestRoot apolloMocks={[mockGameRolesByUserId, mockCreateGame]}>
-        <MenuPage />
-      </TestRoot>
-    );
+    customRenderForComponent(<MenuPage />, {
+      isAuthenticated: true,
+      apolloMocks: [mockGameRolesByUserId, mockCreateGame],
+    });
 
     const button = await screen.findByRole('button', { name: /CREATE GAME/i });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '../../utils/test-utils';
+import { render } from '../../tests/test-utils';
 import { screen } from '@testing-library/react';
 import LandingPage from '../LandingPage';
 import TestRoot from '../../tests/TestRoot';
