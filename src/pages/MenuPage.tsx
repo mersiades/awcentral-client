@@ -30,8 +30,10 @@ const MenuPage: FC = () => {
     variables: { id: keycloakId },
     skip: !keycloakId,
   });
+  console.log('loading', loading);
 
   const gameRoles = data?.gameRolesByUserId;
+  console.log('gameRoles', gameRoles);
 
   // -------------------------------- Hooking in to react-router ----------------------------------------- //
   const history = useHistory();

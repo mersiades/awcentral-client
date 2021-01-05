@@ -19,7 +19,7 @@ const Root: FC<RootProps> = ({ children }) => {
   const [crustReady, setCrustReady] = useState(false);
 
   const vtksFont = new FontFaceObserver('Vtks good luck for you');
-  const crustFont = new FontFaceObserver('Vtks good luck for you');
+  const crustFont = new FontFaceObserver('crust_clean');
 
   vtksFont.load(null, 15000).then(
     () => setVtksReady(true),

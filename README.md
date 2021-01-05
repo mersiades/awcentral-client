@@ -11,4 +11,6 @@ To run this app locally, for development purposes, you'll need to take the follo
 
 ### Running tests
 
+`npm test -- --coverage --watchAll=false`
+
 ### Production deployment
