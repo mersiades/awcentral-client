@@ -42,8 +42,6 @@ const App: FC = () => {
     );
   }
 
-  console.log('user', user);
-
   return (
     <KeycloakUserContext.Provider value={{ ...user }}>
       <AppRouter />

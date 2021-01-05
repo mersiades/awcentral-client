@@ -28,13 +28,16 @@ const CreateGamePage = () => {
   const history = useHistory();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const { data: gameData } = useQuery<GameData, GameVars>(
+  const { data: gameData, loading } = useQuery<GameData, GameVars>(
     GAME,
     //@ts-ignore
     { variables: { gameId }, skip: !gameId }
   );
 
   const game = gameData?.game;
+  console.log('gameId', gameId);
+  console.log('loading', loading);
+  console.log('game', game);
 
   // ---------------------------------------------------- UseEffects  ------------------------------------------------------ //
   useEffect(() => {
@@ -51,7 +54,7 @@ const CreateGamePage = () => {
   // -------------------------------------------------- Render component ---------------------------------------------------- //
 
   return (
-    <Box fill background={background} pad="6px" overflow={{ vertical: 'auto' }}>
+    <Box data-testid="create-game-page" fill background={background} pad="6px" overflow={{ vertical: 'auto' }}>
       {!game && (
         <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
           <Spinner />

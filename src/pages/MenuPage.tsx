@@ -20,7 +20,6 @@ const MenuPage: FC = () => {
   // ---------------------------------- Accessing React context -------------------------------------------- //
   const { username, id: keycloakId } = useKeycloakUser();
   const { vtksReady } = useFonts();
-  console.log('useKeycloakUser', useKeycloakUser);
 
   // ---------------------------------- Hooking in to Keycloak  -------------------------------------------- //
   const { keycloak } = useKeycloak();
@@ -31,16 +30,13 @@ const MenuPage: FC = () => {
     variables: { id: keycloakId },
     skip: !keycloakId,
   });
-  console.log('loading', loading);
 
   const gameRoles = data?.gameRolesByUserId;
-  console.log('gameRoles', gameRoles);
 
   // -------------------------------- Hooking in to react-router ----------------------------------------- //
   const history = useHistory();
 
   // ------------------------------------- Render component ---------------------------------------------- //
-  console.log('keycloakId', keycloakId);
 
   const renderMenuButtons = () => {
     if (!gameRoles) {

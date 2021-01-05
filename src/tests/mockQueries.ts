@@ -1,5 +1,8 @@
 import { MockedResponse } from "@apollo/client/testing";
+import { Roles } from "../@types/enums";
+import ADD_COMMS_APP from "../mutations/addCommsApp";
 import CREATE_GAME from "../mutations/createGame";
+import GAME from "../queries/game";
 import GAMEROLES_BY_USER_ID from "../queries/gameRolesByUserId";
 import { mockGame1, mockGame2, mockGame3, mockGameRole1, mockGameRole2, mockKeycloakUser1, mockNewGameName } from "./mocks";
 
@@ -51,6 +54,62 @@ export const mockCreateGame: MockedResponse = {
         mc: mockGame3.mc,
         players: mockGame3.players,
         gameRoles: mockGame3.gameRoles
+      }
+    }
+  }
+}
+
+export const mockGameForNewGame: MockedResponse = {
+  request: {
+    query: GAME,
+    variables: { gameId: mockGame3.id }
+  },
+  result: {
+    data: {
+      game: {
+        id: mockGame3.id,
+        name: mockGame3.name,
+        invitees: mockGame3.invitees,
+        commsApp: mockGame3.commsApp,
+        commsUrl: mockGame3.commsUrl,
+        mc: {
+          id: mockGame3.mc.id,
+          displayName: mockGame3.mc.displayName
+        },
+        players: [],
+        gameRoles: [
+          { 
+            id: mockGame3.gameRoles[0].id,
+            role: mockGame3.gameRoles[0].role,
+            userId: mockGame3.gameRoles[0].userId,
+            npcs: [],
+            threats: [],
+            characters: []
+          }
+        ]
+      }
+    }
+  }
+}
+
+export const mockAddCommsApp: MockedResponse = {
+  request: {
+    query: ADD_COMMS_APP,
+    variables: { gameId: mockGame3.id, app: "Discord" }
+  },
+  result: {
+    data: {
+      game: {
+        id: mockGame3.id,
+        name: mockGame3.name,
+        invitees: mockGame3.invitees,
+        commsApp: "Discord",
+        commsUrl: mockGame3.commsUrl,
+        mc: {
+          id: mockGame3.mc.id,
+          displayName: mockGame3.mc.displayName
+        },
+        
       }
     }
   }
