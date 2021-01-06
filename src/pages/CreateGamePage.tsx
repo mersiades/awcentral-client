@@ -3,11 +3,11 @@ import { useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 import { Box } from 'grommet';
 
-import CommsForm from './CommsForm';
-import GameCreationStepper from './GameCreationStepper';
-import InviteesForm from './InviteesForm';
-import Spinner from './Spinner';
-import CloseButton from './CloseButton';
+import CommsForm from '../components/CommsForm';
+import GameCreationStepper from '../components/GameCreationStepper';
+import InviteesForm from '../components/InviteesForm';
+import Spinner from '../components/Spinner';
+import CloseButton from '../components/CloseButton';
 import GAME, { GameData, GameVars } from '../queries/game';
 
 export const background = {
@@ -39,7 +39,6 @@ const CreateGamePage = () => {
   // ---------------------------------------------------- UseEffects  ------------------------------------------------------ //
   useEffect(() => {
     if (!!game) {
-      console.log('hasSkippedComms', hasSkippedComms);
       if ((!game.commsApp || !game.commsUrl) && !hasSkippedComms) {
         setCreationStep(1);
       } else {
@@ -51,7 +50,7 @@ const CreateGamePage = () => {
   // -------------------------------------------------- Render component ---------------------------------------------------- //
 
   return (
-    <Box fill background={background} pad="6px" overflow={{ vertical: 'auto' }}>
+    <Box data-testid="create-game-page" fill background={background} pad="6px" overflow={{ vertical: 'auto' }}>
       {!game && (
         <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
           <Spinner />

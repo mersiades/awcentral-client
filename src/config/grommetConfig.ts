@@ -446,10 +446,7 @@ export const HeadingWS = styled(Heading as React.FC<HeadingProps &
   JSX.IntrinsicElements['h6'] & 
   {vtksReady?: boolean, crustReady?: boolean}>)(
     ({level, vtksReady, crustReady}) => {
-
       const setFontFamily = () => {
-        console.log('level', level)
-        console.log('crustReady', crustReady)
         switch (level) {
           case 1:
             return vtksReady ? null : "sans serif"

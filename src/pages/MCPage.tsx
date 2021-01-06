@@ -17,9 +17,9 @@ import {
 import styled, { css } from 'styled-components';
 import { useMutation, useQuery } from '@apollo/client';
 
-import GamePanel from './GamePanel';
-import MovesPanel from './MovesPanel';
-import { Footer, MainContainer, SidePanel } from './styledComponents';
+import GamePanel from '../components/GamePanel';
+import MovesPanel from '../components/MovesPanel';
+import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
 import GAME, { GameData, GameVars } from '../queries/game';
@@ -30,10 +30,10 @@ import '../assets/styles/transitions.css';
 // import { useWebsocketContext } from '../contexts/websocketContext';
 import { useKeycloak } from '@react-keycloak/web';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
-import InvitationForm from './InvitationForm';
+import InvitationForm from '../components/InvitationForm';
 import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
-import CommsFormShort from './CommsFormShort';
+import CommsFormShort from '../components/CommsFormShort';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -156,8 +156,6 @@ const MCPage = () => {
     return <div> Loading </div>;
   }
 
-  console.log('game', game);
-
   return (
     <>
       {showCommsForm && (
@@ -220,7 +218,7 @@ const MCPage = () => {
           <Button label="Threat map" />
         </ThemeContext.Extend>
       </Header>
-      <div>
+      <div data-testid="mc-page">
         <Collapsible direction="horizontal" open={sidePanel < 3}>
           <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
             {sidePanel === 0 && (

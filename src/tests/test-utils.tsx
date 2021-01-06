@@ -1,0 +1,120 @@
+import React from 'react';
+import { render, RenderOptions } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { Grommet } from 'grommet';
+
+import { KeycloakUser } from '../@types';
+import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
+import { FontContext } from '../contexts/fontContext';
+import { KeycloakUserContext } from '../contexts/keycloakUserContext';
+import { theme } from '../config/grommetConfig';
+import { mockKeycloakUser1 } from './mocks';
+
+interface CustomRenderOptions {
+  isAuthenticated?: boolean;
+  vtksReady?: boolean;
+  crustReady?: boolean;
+  apolloMocks?: MockedResponse[];
+  keycloakUser?: KeycloakUser;
+}
+
+// All the providers for unit tests
+const ComponentProviders = ({
+  children,
+  isAuthenticated = true,
+  vtksReady = true,
+  crustReady = true,
+  apolloMocks = [],
+  keycloakUser = mockKeycloakUser1,
+}: any) => {
+  return (
+    <BrowserRouter>
+      <MockedProvider mocks={apolloMocks} addTypename={false}>
+        <FontContext.Provider value={{ vtksReady, crustReady }}>
+          <Grommet theme={theme(vtksReady, crustReady)} full>
+            <ReactKeycloakProvider
+              authClient={mockKeycloakStub(isAuthenticated)}
+              initOptions={{
+                onLoad: 'login-required',
+              }}
+            >
+              <KeycloakUserContext.Provider value={{ ...keycloakUser }}>{children}</KeycloakUserContext.Provider>
+            </ReactKeycloakProvider>
+          </Grommet>
+        </FontContext.Provider>
+      </MockedProvider>
+    </BrowserRouter>
+  );
+};
+
+// All the providers for App, for integration tests
+const AppProviders = ({ children, isAuthenticated = true, vtksReady = true, crustReady = true, apolloMocks = [] }: any) => {
+  return (
+    <BrowserRouter>
+      <MockedProvider mocks={apolloMocks} addTypename={false}>
+        <FontContext.Provider value={{ vtksReady, crustReady }}>
+          <Grommet theme={theme(vtksReady, crustReady)} full>
+            <ReactKeycloakProvider
+              authClient={mockKeycloakStub(isAuthenticated)}
+              initOptions={{
+                onLoad: 'login-required',
+              }}
+            >
+              {children}
+            </ReactKeycloakProvider>
+          </Grommet>
+        </FontContext.Provider>
+      </MockedProvider>
+    </BrowserRouter>
+  );
+};
+
+/**
+ * Wraps all the providers around the test render method, except for KeycloakUserContext.Provider
+ * To be used for integration tests, where <App/> is the ui param
+ * @param ui
+ * @param options
+ */
+const customRenderForApp = (ui: React.ReactElement, options?: Omit<RenderOptions, 'queries'> & CustomRenderOptions) =>
+  render(ui, {
+    wrapper: (props: any) => <AppProviders {...props} {...options} />,
+    ...options,
+  });
+
+// Re-export everything
+export * from '@testing-library/react';
+
+export { customRenderForApp as render };
+
+/**
+ * Wraps all the providers around the test render method,
+ * To be used for unit tests, where the ui param is a standalone component
+ * @param ui
+ * @param options
+ */
+export const customRenderForComponent = (
+  ui: React.ReactElement,
+  options?: Omit<RenderOptions, 'queries'> & CustomRenderOptions
+) =>
+  render(ui, {
+    wrapper: (props: any) => <ComponentProviders {...props} {...options} />,
+    ...options,
+  });
+
+/**
+ * Adds a route option to customRenderforApp
+ * This shoud be the default renderer for integration tests
+ * @param ui
+ * @param route
+ * @param options
+ */
+export const renderWithRouter = (
+  ui: React.ReactElement,
+  route: string = '/',
+  options?: Omit<RenderOptions, 'queries'> & CustomRenderOptions
+) => {
+  window.history.pushState({}, 'Menu Page', route);
+  return customRenderForApp(ui, options);
+};

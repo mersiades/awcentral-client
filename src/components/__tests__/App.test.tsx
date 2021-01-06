@@ -1,8 +1,23 @@
-import React from "react";
-import { render } from "../../utils/test-utils";
-import { screen } from "@testing-library/react";
-import App from "../App";
+import React from 'react';
+import { renderWithRouter } from '../../tests/test-utils';
+import { screen } from '@testing-library/react';
+import App from '../App';
+import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
+import { mockKeycloakUserInfo } from '../../tests/mocks';
 
-test("renders nothing worth testing yet", () => {
-  const { getByText } = render(<App />);
+jest.mock('@react-keycloak/web', () => {
+  const originalModule = jest.requireActual('@react-keycloak/web');
+  return {
+    ...originalModule,
+    useKeycloak: () => ({ keycloak: mockKeycloakStub(true, mockKeycloakUserInfo), initialized: true }),
+  };
+});
+
+describe('Rendering App', () => {
+  test('should render App and AppRouter without error', async () => {
+    renderWithRouter(<App />, '/menu', { isAuthenticated: true });
+
+    const MenuPageBox = await screen.findByTestId('menu-page');
+    expect(MenuPageBox).toBeInTheDocument();
+  });
 });

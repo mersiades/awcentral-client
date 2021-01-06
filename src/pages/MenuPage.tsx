@@ -4,9 +4,9 @@ import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { Box, Image, Grid } from 'grommet';
 
-import CreateGameForm from './CreateGameForm';
-import GamesList from './GamesList';
-import Spinner from './Spinner';
+import CreateGameForm from '../components/CreateGameForm';
+import GamesList from '../components/GamesList';
+import Spinner from '../components/Spinner';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } from '../queries/gameRolesByUserId';
 import { background, ButtonWS, HeadingWS, StyledClose } from '../config/grommetConfig';
@@ -87,10 +87,8 @@ const MenuPage: FC = () => {
     }
   };
 
-  console.log('gameRoles', gameRoles);
-
   return (
-    <Box fill background={background}>
+    <Box data-testid="menu-page" fill background={background}>
       {!gameRoles && (
         <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
           <Spinner />
@@ -149,7 +147,12 @@ const MenuPage: FC = () => {
                 <Box animation={{ type: 'slideUp', size: 'large', duration: 750 }} style={{ minHeight: '300px' }}>
                   <Box direction="row" align="center" justify="between">
                     <Box align="start" alignContent="center">
-                      <StyledClose color="accent-1" onClick={() => setButtonsContainer(0)} cursor="pointer" />
+                      <StyledClose
+                        data-testid="create-game-close-icon"
+                        color="accent-1"
+                        onClick={() => setButtonsContainer(0)}
+                        cursor="pointer"
+                      />
                     </Box>
                     <HeadingWS vtksReady={vtksReady} level={1} margin={{ vertical: 'small' }} size="small" textAlign="end">
                       CREATE GAME

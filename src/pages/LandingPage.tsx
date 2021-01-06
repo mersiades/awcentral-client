@@ -1,7 +1,7 @@
 import React from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 import { Box } from 'grommet';
-import Spinner from './Spinner';
+import Spinner from '../components/Spinner';
 
 const LandingPage = () => {
   // --------------------------------------- Hooking into contexts ---------------------------------------------- //
@@ -9,7 +9,7 @@ const LandingPage = () => {
 
   // ----------------------------------------- Render component  ------------------------------------------------ //
   return (
-    <Box fill background="black" justify="center" align="center">
+    <Box data-testid="landing-page-box" fill background="black" justify="center" align="center">
       {!keycloak.authenticated && <Spinner />}
     </Box>
   );

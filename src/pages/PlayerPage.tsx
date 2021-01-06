@@ -8,8 +8,8 @@ import { customDefaultButtonStyles, customTabStyles } from '../config/grommetCon
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import ALL_MOVES from '../queries/allMoves';
 import GAME, { GameData, GameVars } from '../queries/game';
-import MovesPanel from './MovesPanel';
-import { Footer, MainContainer, SidePanel } from './styledComponents';
+import MovesPanel from '../components/MovesPanel';
+import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 
 interface AllMovesData {
   allMoves: Move[];

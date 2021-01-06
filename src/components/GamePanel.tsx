@@ -3,7 +3,7 @@ import { Box, Button, Text, Heading } from 'grommet';
 import { Close, Copy, Edit, Trash } from 'grommet-icons';
 import { Game } from '../@types';
 import { Roles } from '../@types/enums';
-import { ShowInvitation } from './MCPage';
+import { ShowInvitation } from '../pages/MCPage';
 import { copyToClipboard } from '../helpers/copyToClipboard';
 
 interface GamePanelProps {
