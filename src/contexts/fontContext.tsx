@@ -1,4 +1,4 @@
-import { createContext, FC, useContext, useState } from 'react';
+import { FC, useState } from 'react';
 import FontFaceObserver from 'fontfaceobserver';
 import { createGenericContext } from './createGenericContext';
 
@@ -16,8 +16,6 @@ interface FontsProviderProps {
   // Dependency injection for testing
   isCrustReady?: boolean;
 }
-
-// export const FontContext = createContext<IFontContext>({ vtksReady: false, crustReady: false})
 // Using createGenericContext wraps createContext in a checker for undefined
 // https://medium.com/@rivoltafilippo/typing-react-context-to-avoid-an-undefined-default-value-2c7c5a7d5947
 const [useFonts, GenericProvider, FontsConsumer] = createGenericContext<IFontContext>();
@@ -40,7 +38,5 @@ const FontsProvider: FC<FontsProviderProps> = ({ children, isVtksReady = false, 
   );
   return <GenericProvider value={{ vtksReady, crustReady }}>{children}</GenericProvider>;
 };
-
-// export const useFonts = () => useContext(FontContext)
 
 export { useFonts, FontsProvider, FontsConsumer };
