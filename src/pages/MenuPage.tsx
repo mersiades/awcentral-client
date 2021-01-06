@@ -25,7 +25,7 @@ const MenuPage: FC = () => {
   const { keycloak } = useKeycloak();
 
   // -------------------------------- Hooking in to Apollo graphql ----------------------------------------- //
-  const { data, loading } = useQuery<GameRolesByUserIdData, GameRolesByUserIdVars>(GAMEROLES_BY_USER_ID, {
+  const { data } = useQuery<GameRolesByUserIdData, GameRolesByUserIdVars>(GAMEROLES_BY_USER_ID, {
     // @ts-ignore
     variables: { id: keycloakId },
     skip: !keycloakId,

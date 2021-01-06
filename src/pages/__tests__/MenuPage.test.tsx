@@ -2,7 +2,6 @@ import React from 'react';
 import { customRenderForComponent, render, renderWithRouter } from '../../tests/test-utils';
 import { getAllByRole, getByTestId, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import TestRoot from '../../tests/TestRoot';
 import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
 import { mockKeycloakUser1, mockKeycloakUserInfo, mockNewGameName } from '../../tests/mocks';
 import MenuPage from '../MenuPage';

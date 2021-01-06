@@ -48,7 +48,7 @@ export const mockGame2: Game = {
   id: 'mock-game-id-2',
   name: 'Mock Game 2',
   commsApp: 'Zoom',
-  commsUrl: 'https://zoom.com/urltodiscordchannel',
+  commsUrl: 'https://zoom.com/urltozoomchannel',
   mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2'},
   players: [{ displayName: 'mock-user-1', id: 'mock-keycloak-id-1'}],
   gameRoles: [{

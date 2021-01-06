@@ -28,21 +28,17 @@ const CreateGamePage = () => {
   const history = useHistory();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const { data: gameData, loading } = useQuery<GameData, GameVars>(
+  const { data: gameData } = useQuery<GameData, GameVars>(
     GAME,
     //@ts-ignore
     { variables: { gameId }, skip: !gameId }
   );
 
   const game = gameData?.game;
-  console.log('gameId', gameId);
-  console.log('loading', loading);
-  console.log('game', game);
 
   // ---------------------------------------------------- UseEffects  ------------------------------------------------------ //
   useEffect(() => {
     if (!!game) {
-      console.log('hasSkippedComms', hasSkippedComms);
       if ((!game.commsApp || !game.commsUrl) && !hasSkippedComms) {
         setCreationStep(1);
       } else {

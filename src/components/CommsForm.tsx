@@ -7,6 +7,7 @@ import { ButtonWS, ParagraphWS } from '../config/grommetConfig';
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
 import { Game } from '../@types';
+import GAME from '../queries/game';
 
 interface CommsFormProps {
   game?: Game;
@@ -27,10 +28,13 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedCom
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const appOptions = ['Discord', 'Zoom', 'Skype', 'FaceTime', 'WhatsApp', 'Google Hangouts', 'Talky', 'ooVoo', 'other'];
 
-  const handleSetApp = () => {
+  const handleSetApp = async () => {
     if (!!app && !!game) {
       try {
-        addCommsApp({ variables: { gameId: game.id, app } });
+        await addCommsApp({
+          variables: { gameId: game.id, app },
+          refetchQueries: [{ query: GAME, variables: { gameId: game.id } }],
+        });
       } catch (e) {
         console.warn(e);
       }
@@ -40,7 +44,10 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedCom
   const handleSetUrl = () => {
     if (!!url && !!game) {
       try {
-        addCommsUrl({ variables: { gameId: game.id, url } });
+        addCommsUrl({
+          variables: { gameId: game.id, url },
+          refetchQueries: [{ query: GAME, variables: { gameId: game.id } }],
+        });
       } catch (e) {
         console.warn(e);
       }
@@ -95,6 +102,7 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedCom
 
                 {!!game ? (
                   <ButtonWS
+                    data-testid="button-set-app"
                     label={loadingCommsApp ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
                     secondary={!!game.commsApp}
                     primary={!game.commsApp}
@@ -114,6 +122,7 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedCom
             <Box direction="column">
               <Box gap="small" direction="row" justify="between">
                 <TextArea
+                  aria-label="comms-url-input"
                   id="url-input"
                   name="url"
                   size="large"
@@ -123,6 +132,7 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedCom
                 />
                 {!!game ? (
                   <ButtonWS
+                    data-testid="button-set-url"
                     label={loadingCommsUrl ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
                     secondary={!!game.commsUrl}
                     primary={!game.commsUrl}

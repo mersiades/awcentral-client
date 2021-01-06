@@ -42,6 +42,7 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
       >
         <Box
           fill
+          data-testid="name-box"
           gridArea="name-box"
           align="center"
           justify="start"
@@ -55,6 +56,7 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
           {!!game?.name ? <Text>{game.name}</Text> : <Text>...</Text>}
         </Box>
         <Box
+          data-testid="channel-box"
           gridArea="channel-box"
           fill
           align="center"
@@ -73,6 +75,7 @@ const GameCreationStepper: FC<GameCreationStepperProps> = ({ currentStep, setCre
           <Box width="100%">{renderComms()}</Box>
         </Box>
         <Box
+          data-testid="invitations-box"
           gridArea="invitations-box"
           fill
           align="center"

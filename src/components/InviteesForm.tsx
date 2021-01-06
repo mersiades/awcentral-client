@@ -6,6 +6,7 @@ import { Form, Box, FormField, TextInput, TextArea } from 'grommet';
 import Spinner from './Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
+import GAME from '../queries/game';
 import { Game } from '../@types';
 import { copyToClipboard } from '../helpers/copyToClipboard';
 import { validateEmail } from '../helpers/validateEmail';
@@ -45,7 +46,10 @@ const InviteesForm: FC<InviteesFormProps> = ({ game }) => {
 
   const handleAddInvitee = (email: string) => {
     if (!!game && !game?.invitees.includes(email)) {
-      addInvitee({ variables: { gameId: game.id, email } });
+      addInvitee({
+        variables: { gameId: game.id, email },
+        refetchQueries: [{ query: GAME, variables: { gameId: game.id } }],
+      });
     }
   };
 

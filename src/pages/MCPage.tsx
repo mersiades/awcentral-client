@@ -156,8 +156,6 @@ const MCPage = () => {
     return <div> Loading </div>;
   }
 
-  console.log('game', game);
-
   return (
     <>
       {showCommsForm && (
@@ -220,7 +218,7 @@ const MCPage = () => {
           <Button label="Threat map" />
         </ThemeContext.Extend>
       </Header>
-      <div>
+      <div data-testid="mc-page">
         <Collapsible direction="horizontal" open={sidePanel < 3}>
           <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
             {sidePanel === 0 && (

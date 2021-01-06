@@ -1,16 +1,13 @@
 import React from 'react';
-import { render } from '../../tests/test-utils';
+import { customRenderForComponent, render } from '../../tests/test-utils';
 import { screen } from '@testing-library/react';
 import LandingPage from '../LandingPage';
-import TestRoot from '../../tests/TestRoot';
 
 describe('Rendering LandingPage', () => {
   test('should render LandingPage with User unauthorised', () => {
-    render(
-      <TestRoot keycloakStubOptions={{ isAuthenticated: false }}>
-        <LandingPage />
-      </TestRoot>
-    );
+    customRenderForComponent(<LandingPage />, {
+      isAuthenticated: false,
+    });
 
     const Box = screen.getByTestId('landing-page-box');
     const spinner = screen.getByTestId('spinner');
@@ -19,11 +16,9 @@ describe('Rendering LandingPage', () => {
   });
 
   test('should render LandingPage with User authorised', () => {
-    render(
-      <TestRoot>
-        <LandingPage />
-      </TestRoot>
-    );
+    customRenderForComponent(<LandingPage />, {
+      isAuthenticated: true,
+    });
 
     const Box = screen.getByTestId('landing-page-box');
     expect(Box).toBeInTheDocument();
