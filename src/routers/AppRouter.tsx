@@ -20,7 +20,7 @@ const AppRouter = () => {
       <PrivateRoute path="/create-game/:gameId" component={CreateGamePage} />
       <PrivateRoute path="/player-game/:gameId" component={PlayerPage} />
       <PrivateRoute path="/mc-game/:gameId" component={MCPage} />
-      <PrivateRoute path="/new-game/:gameId" component={CharacterCreator} />
+      <PrivateRoute path="/character-creation/:gameId" component={CharacterCreator} />
     </Switch>
   );
 };
