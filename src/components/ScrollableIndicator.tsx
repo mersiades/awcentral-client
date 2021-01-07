@@ -73,7 +73,6 @@ interface ScrollableIndicatorProps {
 }
 
 const ScrollableIndicator: FC<ScrollableIndicatorProps> = ({ show }) => {
-  console.log('show', show);
   return (
     <ContainerBox className={show ? 'fadeInSlow' : 'fadeOutSlow'}>
       <Chevron className={show ? 'fadeInSlow' : 'fadeOutSlow'} />

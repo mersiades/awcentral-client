@@ -25,6 +25,12 @@ export const mockKeycloakUser2: KeycloakUser = {
   email: 'mockUser2@email.com'
 }
 
+export const mockKeycloakUser3: KeycloakUser = {
+  id: 'mock-keycloak-id-3',
+  username: 'mock-user-3',
+  email: 'mockUser3@email.com'
+}
+
 export const mockGame1: Game = {
   id: 'mock-game-id-1',
   name: 'Mock Game 1',
@@ -76,6 +82,29 @@ export const mockGame3: Game = {
     userId: 'mock-keycloak-id-1'
   }],
   invitees: []
+}
+
+export const mockGame4: Game = {
+  id: 'mock-game-id-4',
+  name: "Mock Game 4 - Join Me",
+  commsApp: "Discord",
+  commsUrl: "https://discord.com/urltodiscordchannel",
+  mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2'},
+  players: [{ id: 'mock-keycloak-id-3', displayName: 'mock-user-3'}],
+  gameRoles: [
+    {
+    id: "mock-gamerole-id-6",
+    role: Roles.mc,
+    userId: 'mock-keycloak-id-2'
+  },
+  {
+    id: "mock-gamerole-id-7",
+    role: Roles.player,
+    userId: 'mock-keycloak-id-3'
+  },
+  
+],
+  invitees: ['mockUser1@email.com']
 }
 
 export const mockGameRole1: GameRole = {

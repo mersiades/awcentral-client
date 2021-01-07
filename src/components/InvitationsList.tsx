@@ -63,7 +63,7 @@ const InvitationsList: FC<InvitationsListProps> = ({ games }) => {
     <Box>
       {games.map((game) => {
         return (
-          <Box key={game.id} direction="row" justify="between" align="center">
+          <Box data-testid="invitation-list-item" key={game.id} direction="row" justify="between" align="center">
             <Box direction="column" fill="horizontal">
               <TextWS weight="bold" size="xlarge" truncate>
                 {game.name}

@@ -3,10 +3,12 @@ import { Roles } from "../@types/enums";
 import ADD_COMMS_APP from "../mutations/addCommsApp";
 import ADD_COMMS_URL from "../mutations/addCommsUrl";
 import ADD_INVITEE from "../mutations/addInvitee";
+import ADD_USER_TO_GAME from "../mutations/addUserToGame";
 import CREATE_GAME from "../mutations/createGame";
 import GAME from "../queries/game";
 import GAMEROLES_BY_USER_ID from "../queries/gameRolesByUserId";
-import { mockGame1, mockGame2, mockGame3, mockGameRole1, mockGameRole2, mockKeycloakUser1, mockNewGameName } from "./mocks";
+import GAMES_FOR_INVITEE, { GamesForInviteeData, GamesForInviteeVars } from "../queries/gamesForInvitee";
+import { mockGame1, mockGame2, mockGame3, mockGame4, mockGameRole1, mockGameRole2, mockGameRole4, mockKeycloakUser1, mockNewGameName } from "./mocks";
 
 export const mockGameRolesByUserId: MockedResponse = {
   request: {
@@ -333,6 +335,53 @@ export const mockGameAfterAddInvitee2: MockedResponse = {
           }
         ]
       }
+    }
+  }
+}
+
+export const mockGamesForInvitee: MockedResponse = {
+  request: {
+    query: GAMES_FOR_INVITEE,
+    variables: { email: mockKeycloakUser1.email }
+  },
+  result:  {
+    data: {
+      gamesForInvitee: [{
+        id: mockGame4.id,
+        name: mockGame4.name,
+        mc: mockGame4.mc,
+        players: mockGame4.players,
+      }]
+    }
+  }
+}
+
+export const mockAddUserToGame: MockedResponse = {
+  request: {
+    query: ADD_USER_TO_GAME,
+    variables: { 
+      userId: mockKeycloakUser1.id,
+      displayName: mockKeycloakUser1.username,
+      email: mockKeycloakUser1.email,
+      gameId: mockGame4.id }
+  },
+  result:  {
+    data: {
+      addUserToGame: [{
+        id: mockGame4.id,
+        name: mockGame4.name,
+        mc: {
+          displayName: mockGame4.mc.displayName
+        },
+        players: [
+          { displayName: mockGame4.players[0].displayName}
+        ],
+        gameRoles: [...mockGame4.gameRoles, {
+          id: "mock-gamerole-id-8",
+          role: Roles.player,
+          userId: 'mock-keycloak-id-1'
+        }]
+      }]
     }
   }
 }

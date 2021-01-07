@@ -37,7 +37,7 @@ const MenuPage: FC = () => {
 
   // ------------------------------------- Render component ---------------------------------------------- //
   return (
-    <Box fill background={background}>
+    <Box data-testid="join-game-page" fill background={background}>
       {!games && (
         <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
           <Spinner />

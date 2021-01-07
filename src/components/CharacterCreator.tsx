@@ -365,8 +365,6 @@ const CharacterCreator: FC = () => {
   useEffect(() => {
     if (!!containerRef.current) {
       containerRef.current.addEventListener('scroll', (e) => handleScroll(e));
-      console.log('containerRef.current.scrollHeight', containerRef.current.scrollHeight);
-      console.log('containerRef.current.offsetHeight', containerRef.current.offsetHeight);
       if (containerRef.current.scrollHeight > containerRef.current.offsetHeight) {
         setShowScrollable(true);
       } else {
@@ -379,7 +377,13 @@ const CharacterCreator: FC = () => {
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
   return (
-    <Box ref={containerRef} fill background={background} overflow={{ vertical: 'auto' }}>
+    <Box
+      data-testid="character-creation-page"
+      ref={containerRef}
+      fill
+      background={background}
+      overflow={{ vertical: 'auto' }}
+    >
       {!playbooks ||
         (!game && (
           <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
