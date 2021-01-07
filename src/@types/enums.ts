@@ -67,14 +67,24 @@ export enum LookCategories {
 
 export enum UniqueTypes {
   angelKit = 'ANGEL_KIT',
-    customWeapons = 'CUSTOM_WEAPONS',
-    brainerGear = 'BRAINER_GEAR',
-    gang = 'GANG',
-    car = 'CAR',
-    weapons = 'WEAPONS',
-    holding = 'HOLDING',
-    followers = 'FOLLOWERS',
-    establishment = 'ESTABLISHMENT',
-    workspace = 'WORKSPACE',
-    skinnerGear = 'SKINNER_GEAR'
+  customWeapons = 'CUSTOM_WEAPONS',
+  brainerGear = 'BRAINER_GEAR',
+  gang = 'GANG',
+  car = 'CAR',
+  weapons = 'WEAPONS',
+  holding = 'HOLDING',
+  followers = 'FOLLOWERS',
+  establishment = 'ESTABLISHMENT',
+  workspace = 'WORKSPACE',
+  skinnerGear = 'SKINNER_GEAR'
+}
+
+export enum Threats {
+  'WARLORD',
+  'GROTESQUE',
+  'BRUTE',
+  'AFFLICTION',
+  'LANDSCAPE',
+  'TERRAIN',
+  'VEHICLE',   
 }

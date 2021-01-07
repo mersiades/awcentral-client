@@ -71,7 +71,7 @@ const CharacterCreationPage: FC = () => {
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
   const { data: playbooksData } = useQuery<PlaybooksData>(PLAYBOOKS);
-  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
+  const { data: gameData, loading } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
   const [createCharacter, { loading: creatingCharacter }] = useMutation<CreateCharacterData, CreateCharacterVars>(
     CREATE_CHARACTER
   );
@@ -106,6 +106,8 @@ const CharacterCreationPage: FC = () => {
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.game;
   const gameRoles = game?.gameRoles;
+  console.log('game', game);
+  console.log('loading', loading);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 

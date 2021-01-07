@@ -8,7 +8,8 @@ import CREATE_GAME from "../mutations/createGame";
 import GAME from "../queries/game";
 import GAMEROLES_BY_USER_ID from "../queries/gameRolesByUserId";
 import GAMES_FOR_INVITEE, { GamesForInviteeData, GamesForInviteeVars } from "../queries/gamesForInvitee";
-import { mockGame1, mockGame2, mockGame3, mockGame4, mockGameRole1, mockGameRole2, mockGameRole4, mockKeycloakUser1, mockNewGameName } from "./mocks";
+import PLAYBOOKS from "../queries/playbooks";
+import { mockCharacter1, mockCharacterMoveAngel3, mockGame1, mockGame2, mockGame3, mockGame4, mockGame5, mockGameRole1, mockGameRole2, mockGameRole4, mockKeycloakUser1, mockNewGameName, mockPlaybooks } from "./mocks";
 
 export const mockGameRolesByUserId: MockedResponse = {
   request: {
@@ -382,6 +383,86 @@ export const mockAddUserToGame: MockedResponse = {
           userId: 'mock-keycloak-id-1'
         }]
       }]
+    }
+  }
+}
+
+export const mockGameForCharacterCreation1: MockedResponse = {
+  request: {
+    query: GAME,
+    variables: { gameId: mockGame5.id }
+  },
+  result: () =>  {
+    console.log('mockGameForCharacterCreation1')
+    return {
+    data: {
+      game: {
+        id: mockGame5.id,
+        name: mockGame5.name,
+        invitees: [],
+        commsApp: mockGame5.commsApp,
+        commsUrl: mockGame5.commsUrl,
+        mc: mockGame5.mc,
+        players: mockGame5.players,
+        gameRoles: mockGame5.gameRoles
+        // mc: {
+        //   id: mockGame5.mc.id,
+        //   displayName: mockGame5.mc.displayName
+        // },
+        // players: [{ id: 'mock-keycloak-id-3', displayName: 'mock-user-3'}, { id: 'mock-keycloak-id-1', displayName: 'mock-user-1'} ],
+        // gameRoles: [
+        //   {
+        //     id: "mock-gamerole-id-6",
+        //     role: Roles.mc,
+        //     userId: 'mock-keycloak-id-2',
+        //   },
+        //   {
+        //     id: "mock-gamerole-id-7",
+        //     role: Roles.player,
+        //     userId: 'mock-keycloak-id-3',
+        //     characters: [
+        //       {
+        //         id: mockCharacter1.id,
+        //         name: mockCharacter1.name,
+        //         playbook: mockCharacter1.playbook,
+        //         gear: mockCharacter1.gear,
+        //         statsBlock: mockCharacter1.statsBlock,
+        //         hxBlock: mockCharacter1.hxBlock,
+        //         looks: mockCharacter1.looks,
+        //         characterMoves: mockCharacter1.characterMoves,
+        //         playbookUnique: mockCharacter1.playbookUnique
+        //       }
+        //     ]
+        //   },
+        //   {
+        //     id: "mock-gamerole-id-8",
+        //     role: Roles.player,
+        //     userId: 'mock-keycloak-id-1',
+        //     characters: []
+        //   },
+        // ]
+        // [
+        //   { 
+        //     id: mockGame3.gameRoles[0].id,
+        //     role: mockGame3.gameRoles[0].role,
+        //     userId: mockGame3.gameRoles[0].userId,
+        //     npcs: [],
+        //     threats: [],
+        //     characters: []
+        //   }
+        // ]
+      }
+    }
+  }}
+}
+
+export const mockPlaybooksQuery: MockedResponse = {
+  request: {
+    query: PLAYBOOKS,
+  },
+  result:  {
+    data: {
+      playbooks: mockPlaybooks
     }
   }
 }
