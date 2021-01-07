@@ -55,6 +55,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   const box0Step1 = (
     <Box margin={{ left: 'xsmall', right: 'xsmall' }} justify="between" width="11em" height="10rem" gap="small">
       <Box
+        data-testid="playbook-box"
         align="center"
         fill="horizontal"
         pad="small"

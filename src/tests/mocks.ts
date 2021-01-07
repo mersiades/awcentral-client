@@ -83,7 +83,13 @@ export const mockCharacterMoveAngel1 = {
       }
     ],
     statToRollWith: Stats.sharp
-  }
+  },
+  statModifier: {
+    id: "dummy",
+    statToModify: Stats.sharp,
+    modification: 0
+  },
+  isSelected: false
 }
 
 export const mockCharacterMoveAngel2 = {
@@ -104,8 +110,14 @@ export const mockCharacterMoveAngel2 = {
         playbook: PlayBooks.angel
       }
     ],
-    statToRollWith: Stats.sharp
-  }
+    statToRollWith: Stats.sharp,
+  },
+  statModifier: {
+    id: "dummy",
+    statToModify: Stats.sharp,
+    modification: 0
+  },
+  isSelected: false
 }
 
 export const mockCharacterMoveAngel3 = {
@@ -114,11 +126,24 @@ export const mockCharacterMoveAngel3 = {
   description: "you can roll+sharp instead of roll+Hx when you help someone who’s rolling.",
   kind: MoveKinds.character,
   playbook: PlayBooks.angel,
+  stat: "dummy",
   rollModifier: {
     id: 'mock roll-modifier-id-1',
-    movesToModify: ["OPEN YOUR BRAIN"],
+    movesToModify: [{
+      id: 'open-your-brain-move-id',
+      name: "OPEN YOUR BRAIN",
+      description: "Open your brain to the maelstrom",
+      kid: MoveKinds.basic,
+      playbook: PlayBooks.angel
+    }],
     statToRollWith: Stats.sharp
-  }
+  },
+  statModifier: {
+    id: "dummy",
+    statToModify: Stats.sharp,
+    modification: 0
+  },
+  isSelected: false
 }
 
 export const mockNameAngel1 = {
@@ -223,6 +248,26 @@ export const mockCharacter1: Character = {
   name: "Mock Character 1",
   playbook: PlayBooks.battlebabe,
   gear: ['leather jacket', 'Timberland boots'],
+  statsBlock: mockStatsBlock1,
+  hxBlock: [],
+  looks: [
+    {
+      look: mockLookAngel1.look, // TODO: change to battlebabe looks
+      category: mockLookAngel1.category
+    },
+    {
+      look: mockLookAngel3.look,
+      category: mockLookAngel3.category
+    }
+  ],
+  characterMoves: [ mockCharacterMoveAngel1, mockCharacterMoveAngel2 ]
+}
+
+export const mockCharacter2: Character = {
+  id: 'mock-character-id-2',
+  name: "Mock Character 2",
+  playbook: PlayBooks.angel,
+  gear: ['9mm (2-harm close loud)', 'Grimey green raincoat'],
   statsBlock: mockStatsBlock1,
   hxBlock: [],
   looks: [
@@ -384,7 +429,8 @@ export const mockGameRole4: GameRole = {
 export const mockgearInstructionsAngel = {
   id: "angel-gear-instructions-id",
   youGet: "You get:",
-  youGetItems : ["fashion suitable to your look, including at your option a piece worth 1-armor (you detail)"],
+  youGetItems: ["fashion suitable to your look, including at your option a piece worth 1-armor (you detail)"],
+  inAddition: "dummy",
   introduceChoice: "Small practical weapons",
   numberCanChoose: 1,
   chooseableGear: [".38 revolver (2-harm close reload loud)",

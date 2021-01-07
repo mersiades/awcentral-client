@@ -1,15 +1,18 @@
 import { MockedResponse } from "@apollo/client/testing";
-import { Roles } from "../@types/enums";
+import { PlayBooks, Roles } from "../@types/enums";
 import ADD_COMMS_APP from "../mutations/addCommsApp";
 import ADD_COMMS_URL from "../mutations/addCommsUrl";
 import ADD_INVITEE from "../mutations/addInvitee";
 import ADD_USER_TO_GAME from "../mutations/addUserToGame";
+import CREATE_CHARACTER from "../mutations/createCharacter";
 import CREATE_GAME from "../mutations/createGame";
+import SET_CHARACTER_PLAYBOOK from "../mutations/setCharacterPlaybook";
 import GAME from "../queries/game";
 import GAMEROLES_BY_USER_ID from "../queries/gameRolesByUserId";
 import GAMES_FOR_INVITEE, { GamesForInviteeData, GamesForInviteeVars } from "../queries/gamesForInvitee";
+import PLAYBOOK_CREATOR from "../queries/playbookCreator";
 import PLAYBOOKS from "../queries/playbooks";
-import { mockCharacter1, mockCharacterMoveAngel3, mockGame1, mockGame2, mockGame3, mockGame4, mockGame5, mockGameRole1, mockGameRole2, mockGameRole4, mockKeycloakUser1, mockNewGameName, mockPlaybooks } from "./mocks";
+import { mockCharacter1, mockCharacter2, mockCharacterMoveAngel3, mockGame1, mockGame2, mockGame3, mockGame4, mockGame5, mockGameRole1, mockGameRole2, mockGameRole4, mockKeycloakUser1, mockNewGameName, mockPlaybookCreatorAngel, mockPlaybooks } from "./mocks";
 
 export const mockGameRolesByUserId: MockedResponse = {
   request: {
@@ -392,9 +395,7 @@ export const mockGameForCharacterCreation1: MockedResponse = {
     query: GAME,
     variables: { gameId: mockGame5.id }
   },
-  result: () =>  {
-    console.log('mockGameForCharacterCreation1')
-    return {
+  result:  {
     data: {
       game: {
         id: mockGame5.id,
@@ -405,55 +406,9 @@ export const mockGameForCharacterCreation1: MockedResponse = {
         mc: mockGame5.mc,
         players: mockGame5.players,
         gameRoles: mockGame5.gameRoles
-        // mc: {
-        //   id: mockGame5.mc.id,
-        //   displayName: mockGame5.mc.displayName
-        // },
-        // players: [{ id: 'mock-keycloak-id-3', displayName: 'mock-user-3'}, { id: 'mock-keycloak-id-1', displayName: 'mock-user-1'} ],
-        // gameRoles: [
-        //   {
-        //     id: "mock-gamerole-id-6",
-        //     role: Roles.mc,
-        //     userId: 'mock-keycloak-id-2',
-        //   },
-        //   {
-        //     id: "mock-gamerole-id-7",
-        //     role: Roles.player,
-        //     userId: 'mock-keycloak-id-3',
-        //     characters: [
-        //       {
-        //         id: mockCharacter1.id,
-        //         name: mockCharacter1.name,
-        //         playbook: mockCharacter1.playbook,
-        //         gear: mockCharacter1.gear,
-        //         statsBlock: mockCharacter1.statsBlock,
-        //         hxBlock: mockCharacter1.hxBlock,
-        //         looks: mockCharacter1.looks,
-        //         characterMoves: mockCharacter1.characterMoves,
-        //         playbookUnique: mockCharacter1.playbookUnique
-        //       }
-        //     ]
-        //   },
-        //   {
-        //     id: "mock-gamerole-id-8",
-        //     role: Roles.player,
-        //     userId: 'mock-keycloak-id-1',
-        //     characters: []
-        //   },
-        // ]
-        // [
-        //   { 
-        //     id: mockGame3.gameRoles[0].id,
-        //     role: mockGame3.gameRoles[0].role,
-        //     userId: mockGame3.gameRoles[0].userId,
-        //     npcs: [],
-        //     threats: [],
-        //     characters: []
-        //   }
-        // ]
       }
     }
-  }}
+  }
 }
 
 export const mockPlaybooksQuery: MockedResponse = {
@@ -463,6 +418,140 @@ export const mockPlaybooksQuery: MockedResponse = {
   result:  {
     data: {
       playbooks: mockPlaybooks
+    }
+  }
+}
+
+export const mockCreateCharacter: MockedResponse = {
+  request: {
+    query: CREATE_CHARACTER,
+    variables: { gameRoleId: mockGame5.gameRoles[2].id}
+  },
+  result:  {
+    data: {
+      createCharacter: {
+        id: mockCharacter2.id
+      }
+    }
+  }
+}
+
+export const mockSetCharacterPlaybook: MockedResponse = {
+  request: {
+    query: SET_CHARACTER_PLAYBOOK,
+    variables: { gameRoleId: mockGame5.gameRoles[2].id, characterId: mockCharacter2.id, playbookType: PlayBooks.angel }
+  },
+  result:  {
+    data: {
+      setCharacterPlaybook: {
+        id: mockCharacter2.id,
+        playbook: mockCharacter2.playbook,
+        name: "",
+        gear: [],
+        looks: []
+      }
+    }
+  }
+}
+
+export const mockGameForCharacterCreation2: MockedResponse = {
+  request: {
+    query: GAME,
+    variables: { gameId: mockGame5.id }
+  },
+  result: {
+    data: {
+      game: {
+        ...mockGame5,
+        gameRoles: [
+          mockGame5.gameRoles[0],
+          mockGame5.gameRoles[1],
+          { 
+            id: mockGame5.gameRoles[2].id,
+            role: mockGame5.gameRoles[2].role,
+            userId: mockGame5.gameRoles[2].userId,
+            npcs: mockGame5.gameRoles[2].npcs,
+            threats: mockGame5.gameRoles[2].threats,
+            characters: [
+              {
+                id: mockCharacter2.id,
+                playbook: mockCharacter2.playbook,
+                name: "",
+                gear: [],
+                statsBlock: [],
+                hxBlock: [],
+                looks: [],
+                characterMoves: []
+              }
+            ]
+           }
+        ]
+      }
+    }
+  }
+}
+
+export const mockPlaybookCreator: MockedResponse = {
+  request: {
+    query: PLAYBOOK_CREATOR,
+    variables: { playbookType: PlayBooks.angel }
+  },
+  result: {
+    data: {
+      // playbookCreator:  mockPlaybookCreatorAngel
+      playbookCreator: {
+        id: mockPlaybookCreatorAngel.id,
+        playbookType: mockPlaybookCreatorAngel.playbookType,
+        gearInstructions: mockPlaybookCreatorAngel.gearInstructions,
+        improvementInstructions: mockPlaybookCreatorAngel.improvementInstructions,
+        movesInstructions: mockPlaybookCreatorAngel.movesInstructions,
+        hxInstructions: mockPlaybookCreatorAngel.hxInstructions,
+        looks: mockPlaybookCreatorAngel.looks,
+        names: mockPlaybookCreatorAngel.names,
+        statsOptions: mockPlaybookCreatorAngel.statsOptions,
+        defaultMoveCount: mockPlaybookCreatorAngel.defaultMoveCount,
+        moveChoiceCount: mockPlaybookCreatorAngel.moveChoiceCount,
+        playbookMoves: mockPlaybookCreatorAngel.playbookMoves,
+        // playbookUniqueCreator: mockPlaybookCreatorAngel.playbookUniqueCreator,
+        playbookUniqueCreator: {
+          id: mockPlaybookCreatorAngel.playbookUniqueCreator.id,
+          type: mockPlaybookCreatorAngel.playbookUniqueCreator.type,
+          angelKitCreator: mockPlaybookCreatorAngel.playbookUniqueCreator.angelKitCreator,
+          customWeaponsCreator: {
+            id: "dummy",
+            firearmsTitle: "dummy",
+            firearmsBaseInstructions: "dummy",
+            firearmsBaseOptions: {
+              id: "dummy",
+              description: "dummy",
+              tags: ["dummy"]
+            },
+            firearmsOptionsInstructions: "dummy",
+            firearmsOptionsOptions: {
+              id: "dummy",
+              description: "dummy",
+              tag: "dummy",
+            },
+            handTitle: "dummy",
+            handBaseInstructions: "dummy",
+            handBaseOptions: {
+              id: "dummy",
+              description: "dummy",
+              tags: "dummy",
+            },
+            handOptionsInstructions: "dummy",
+            handOptionsOptions: {
+              id: "dummy",
+              description: "dummy",
+              tag: "dummy"
+            }
+          },
+          brainerGearCreator: {
+            id: "dummy",
+            gear: ["dummy"]
+          }
+        },
+      }
     }
   }
 }

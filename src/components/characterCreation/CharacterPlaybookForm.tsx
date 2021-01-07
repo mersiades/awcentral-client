@@ -146,6 +146,7 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
           {sortedPlaybooks.length > 0
             ? sortedPlaybooks.map((playbook) => (
                 <Box
+                  data-testid={`${playbook.playbookType.toLowerCase()}-button`}
                   key={playbook.playbookImageUrl}
                   onClick={() => handlePlaybookClick(playbook)}
                   hoverIndicator={{ color: 'brand', opacity: 0.4 }}

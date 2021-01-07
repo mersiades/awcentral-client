@@ -101,6 +101,7 @@ export interface Move {
   stat?: Stats
   statModifier?: StatModifier
   rollModifier?: RollModifier
+  isSelected?: boolean
 }
 
 export interface CharacterMove extends Move {
