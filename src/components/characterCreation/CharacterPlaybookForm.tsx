@@ -2,15 +2,15 @@ import React, { FC, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Box, Grid } from 'grommet';
 
-import Spinner from './Spinner';
-import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
-import { Playbook } from '../@types';
-import { PlayBooks } from '../@types/enums';
-import { useFonts } from '../contexts/fontContext';
-import { formatPlaybookType } from '../helpers/formatPlaybookType';
-import '../assets/styles/transitions.css';
+import Spinner from '../Spinner';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
+import { Playbook } from '../../@types';
+import { PlayBooks } from '../../@types/enums';
+import { useFonts } from '../../contexts/fontContext';
+import { formatPlaybookType } from '../../helpers/formatPlaybookType';
+import '../../assets/styles/transitions.css';
 
-interface PlaybookSelectorProps {
+interface CharacterPlaybookProps {
   creatingCharacter: boolean;
   settingPlaybook: boolean;
   checkPlaybookReset: (playbookType: PlayBooks) => void;
@@ -18,7 +18,7 @@ interface PlaybookSelectorProps {
   playbook?: PlayBooks;
 }
 
-const PlaybookSelector: FC<PlaybookSelectorProps> = ({
+const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
   settingPlaybook,
   creatingCharacter,
   checkPlaybookReset,
@@ -167,4 +167,4 @@ const PlaybookSelector: FC<PlaybookSelectorProps> = ({
   );
 };
 
-export default PlaybookSelector;
+export default CharacterPlaybookForm;

@@ -2,19 +2,19 @@ import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Box, FormField, TextInput } from 'grommet';
 
-import Spinner from './Spinner';
-import { ButtonWS, HeadingWS, RedBox } from '../config/grommetConfig';
-import { PlaybookUniqueCreator } from '../@types';
-import { useFonts } from '../contexts/fontContext';
+import Spinner from '../../Spinner';
+import { ButtonWS, HeadingWS, RedBox } from '../../../config/grommetConfig';
+import { PlaybookUniqueCreator } from '../../../@types';
+import { useFonts } from '../../../contexts/fontContext';
 
-interface UniqueFormAngelProps {
+interface AngelKitFormProps {
   characterName: string;
   settingAngelKit: boolean;
   playbookUniqueCreator: PlaybookUniqueCreator;
   handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
 }
 
-const UniqueFormAngel: FC<UniqueFormAngelProps> = ({
+const AngelKitForm: FC<AngelKitFormProps> = ({
   characterName,
   settingAngelKit,
   playbookUniqueCreator,
@@ -69,4 +69,4 @@ const UniqueFormAngel: FC<UniqueFormAngelProps> = ({
   );
 };
 
-export default UniqueFormAngel;
+export default AngelKitForm;

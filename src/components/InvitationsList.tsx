@@ -21,7 +21,7 @@ const InvitationsList: FC<InvitationsListProps> = ({ games }) => {
   const handleJoinGame = async (gameId: string) => {
     // @ts-ignore
     await addUserToGame({ variables: { userId, displayName, email, gameId }, skip: !userId });
-    history.push(`/new-game/${gameId}`, { role: Roles.player });
+    history.push(`/character-creation/${gameId}`, { role: Roles.player });
   };
 
   const getPlayersString = (game: Game) => {

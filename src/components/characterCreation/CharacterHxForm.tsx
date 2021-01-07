@@ -4,14 +4,14 @@ import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { Box, FormField, TextInput } from 'grommet';
 
-import Spinner from './Spinner';
-import { ButtonWS, HeadingWS, RedBox, TextWS } from '../config/grommetConfig';
-import { PlayBooks, Roles } from '../@types/enums';
-import { Character, GameRole, HxInput } from '../@types';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
-import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import { useFonts } from '../contexts/fontContext';
-import { formatPlaybookType } from '../helpers/formatPlaybookType';
+import Spinner from '../Spinner';
+import { ButtonWS, HeadingWS, RedBox, TextWS } from '../../config/grommetConfig';
+import { PlayBooks, Roles } from '../../@types/enums';
+import { Character, GameRole, HxInput } from '../../@types';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
+import { useKeycloakUser } from '../../contexts/keycloakUserContext';
+import { useFonts } from '../../contexts/fontContext';
+import { formatPlaybookType } from '../../helpers/formatPlaybookType';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {

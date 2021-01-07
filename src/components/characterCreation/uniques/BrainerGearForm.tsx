@@ -3,10 +3,10 @@ import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { Box, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 
-import Spinner from './Spinner';
-import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
-import { PlaybookUniqueCreator } from '../@types';
-import { useFonts } from '../contexts/fontContext';
+import Spinner from '../../Spinner';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../../../config/grommetConfig';
+import { PlaybookUniqueCreator } from '../../../@types';
+import { useFonts } from '../../../contexts/fontContext';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -15,14 +15,14 @@ const StyledMarkdown = styled(ReactMarkdown)`
   }
 `;
 
-interface UniqueFormBrainerProps {
+interface BrainerGearFormProps {
   characterName: string;
   settingBrainerGear: boolean;
   playbookUniqueCreator: PlaybookUniqueCreator;
   handleSubmitBrainerGear: (brainerGear: string[]) => void;
 }
 
-const UniqueFormBrainer: FC<UniqueFormBrainerProps> = ({
+const BrainerGearForm: FC<BrainerGearFormProps> = ({
   characterName,
   settingBrainerGear,
   playbookUniqueCreator,
@@ -76,4 +76,4 @@ const UniqueFormBrainer: FC<UniqueFormBrainerProps> = ({
   );
 };
 
-export default UniqueFormBrainer;
+export default BrainerGearForm;

@@ -42,7 +42,7 @@ const GamesList: FC<GamesListProps> = ({ gameRoles }) => {
       data={transformGames()}
       onClickItem={(e: any) => {
         if (e.item.role === Roles.player && e.item.numberOfCharacters === 0) {
-          history.push(`/new-game/${e.item.gameId}`, { role: e.item.role });
+          history.push(`/character-creation/${e.item.gameId}`, { role: e.item.role });
         } else if (e.item.role === Roles.player) {
           history.push(`/player-game/${e.item.gameId}`);
         } else {

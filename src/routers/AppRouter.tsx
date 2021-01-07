@@ -6,7 +6,7 @@ import PublicRoute from './PublicRoute';
 import LandingPage from '../pages/LandingPage';
 import MenuPage from '../pages/MenuPage';
 import JoinGamePage from '../pages/JoinGamePage';
-import CharacterCreator from '../components/CharacterCreator';
+import CharacterCreationPage from '../pages/CharacterCreationPage';
 import PlayerPage from '../pages/PlayerPage';
 import MCPage from '../pages/MCPage';
 import CreateGamePage from '../pages/CreateGamePage';
@@ -20,7 +20,7 @@ const AppRouter = () => {
       <PrivateRoute path="/create-game/:gameId" component={CreateGamePage} />
       <PrivateRoute path="/player-game/:gameId" component={PlayerPage} />
       <PrivateRoute path="/mc-game/:gameId" component={MCPage} />
-      <PrivateRoute path="/new-game/:gameId" component={CharacterCreator} />
+      <PrivateRoute path="/character-creation/:gameId" component={CharacterCreationPage} />
     </Switch>
   );
 };

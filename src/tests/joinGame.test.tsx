@@ -32,10 +32,10 @@ describe('Testing flow for joining a game', () => {
     expect(listItem.textContent).toContain(mockGame4.mc.displayName);
     mockGame4.players.forEach((player) => expect(listItem.textContent).toContain(player.displayName));
 
-    // Click JOIN to join game and navigate to /new-game/:gameId
+    // Click JOIN to join game and navigate to /character-creation/:gameId
     userEvent.click(screen.getByRole('button', { name: /JOIN/i }));
 
-    // Check have navigated to /new-game/:gameId
+    // Check have navigated to /character-creation/:gameId
     await screen.findByTestId('character-creation-page');
   });
 });

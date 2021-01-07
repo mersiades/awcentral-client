@@ -1,13 +1,13 @@
 import React, { FC } from 'react';
 import { Box, Text } from 'grommet';
 
-import { CharacterCreationSteps, PlayBooks, UniqueTypes } from '../@types/enums';
-import { Character } from '../@types';
-import { formatPlaybookType } from '../helpers/formatPlaybookType';
-import { CustomUL } from '../config/grommetConfig';
+import { CharacterCreationSteps, PlayBooks, UniqueTypes } from '../../@types/enums';
+import { Character } from '../../@types';
+import { formatPlaybookType } from '../../helpers/formatPlaybookType';
+import { CustomUL } from '../../config/grommetConfig';
 import { IconProps, Next, Previous } from 'grommet-icons';
 import { useQuery } from '@apollo/client';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import styled, { css } from 'styled-components';
 
 interface CharacterCreationStepperProps {
