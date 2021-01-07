@@ -1,6 +1,5 @@
 import { KeycloakUser, KeycloakUserInfo } from '../@types';
 import { createContext, FC, useCallback, useContext, useEffect, useState } from 'react';
-import { createGenericContext } from './createGenericContext';
 import { useKeycloak } from '@react-keycloak/web';
 
 interface KeycloakUserProviderProps {

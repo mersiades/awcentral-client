@@ -1,6 +1,5 @@
 import { createContext, FC, useContext, useState } from 'react';
 import FontFaceObserver from 'fontfaceobserver';
-import { createGenericContext } from './createGenericContext';
 
 export interface IFontContext {
   vtksReady: boolean;
