@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { useQuery } from '@apollo/client';
 import { Box, TextArea } from 'grommet';
 
-import Spinner from './Spinner';
-import { accentColors, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../config/grommetConfig';
-import { PlayBooks } from '../@types/enums';
-import { PlaybookCreator } from '../@types';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
-import { useFonts } from '../contexts/fontContext';
+import Spinner from '../Spinner';
+import { accentColors, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../../config/grommetConfig';
+import { PlayBooks } from '../../@types/enums';
+import { PlaybookCreator } from '../../@types';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
+import { useFonts } from '../../contexts/fontContext';
 
 interface CharacterGearFormProps {
   existingGear: string[];

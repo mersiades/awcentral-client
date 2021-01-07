@@ -2,15 +2,15 @@ import React, { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from 'grommet';
 
-import Spinner from './Spinner';
-import UniqueFormAngel from './UniqueFormAngel';
-import UniqueFormBattlebabe from './UniqueFormBattlebabe';
-import UniqueFormBrainer from './UniqueFormBrainer';
-import { CustomWeapons } from '../@types';
-import { PlayBooks } from '../@types/enums';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
+import Spinner from '../Spinner';
+import AngelKitForm from './uniques/AngelKitForm';
+import CustomWeaponsForm from './uniques/CustomWeaponsForm';
+import BrainerGearForm from './uniques/BrainerGearForm';
+import { CustomWeapons } from '../../@types';
+import { PlayBooks } from '../../@types/enums';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 
-interface PlaybookUniqueFormContainerProps {
+interface PlaybookUniqueRouterProps {
   playbookType: PlayBooks;
   characterName: string;
   settingAngelKit: boolean;
@@ -22,7 +22,17 @@ interface PlaybookUniqueFormContainerProps {
   customWeapons?: CustomWeapons;
 }
 
-const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
+/**
+ * This component acts as a router/switcher, to render the correct
+ * PlaybookUnique form for the given PlaybookType.
+ *
+ * Each PlaybookType has its own property that is unique to it. These are
+ * called PlayBookUniques and a different form is required for each one.
+ *
+ * For example, only the BATTLEBABE has a Custom Weapons property,
+ * so only the BATTLEBABE needs a CustomWeaponsForm.
+ */
+const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
   playbookType,
   characterName,
   settingAngelKit,
@@ -51,7 +61,7 @@ const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
     switch (playbookType) {
       case PlayBooks.angel:
         return (
-          <UniqueFormAngel
+          <AngelKitForm
             characterName={characterName}
             settingAngelKit={settingAngelKit}
             playbookUniqueCreator={playbookUniqueCreator}
@@ -60,7 +70,7 @@ const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
         );
       case PlayBooks.battlebabe:
         return (
-          <UniqueFormBattlebabe
+          <CustomWeaponsForm
             characterName={characterName}
             settingCustomWeapons={settingCustomWeapons}
             playbookUniqueCreator={playbookUniqueCreator}
@@ -70,7 +80,7 @@ const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
         );
       case PlayBooks.brainer:
         return (
-          <UniqueFormBrainer
+          <BrainerGearForm
             characterName={characterName}
             settingBrainerGear={settingBrainerGear}
             playbookUniqueCreator={playbookUniqueCreator}
@@ -96,4 +106,4 @@ const PlaybookUniqueFormContainer: FC<PlaybookUniqueFormContainerProps> = ({
   );
 };
 
-export default PlaybookUniqueFormContainer;
+export default PlaybookUniqueRouter;

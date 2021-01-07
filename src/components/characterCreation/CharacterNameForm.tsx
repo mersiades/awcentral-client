@@ -2,13 +2,13 @@ import React, { FC, useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box, TextInput, Text, Form, FormField } from 'grommet';
 
-import Spinner from './Spinner';
-import { ButtonWS, HeadingWS } from '../config/grommetConfig';
-import { PlayBooks } from '../@types/enums';
-import { PlaybookCreator } from '../@types';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
-import { useFonts } from '../contexts/fontContext';
-import { formatPlaybookType } from '../helpers/formatPlaybookType';
+import Spinner from '../Spinner';
+import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
+import { PlayBooks } from '../../@types/enums';
+import { PlaybookCreator } from '../../@types';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
+import { useFonts } from '../../contexts/fontContext';
+import { formatPlaybookType } from '../../helpers/formatPlaybookType';
 
 interface CharacterNameFormProps {
   playbookType: PlayBooks;

@@ -4,12 +4,12 @@ import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { Box, CheckBox, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 
-import Spinner from './Spinner';
-import { ButtonWS, HeadingWS } from '../config/grommetConfig';
-import { PlayBooks } from '../@types/enums';
-import { CharacterMove } from '../@types';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../queries/playbookCreator';
-import { useFonts } from '../contexts/fontContext';
+import Spinner from '../Spinner';
+import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
+import { PlayBooks } from '../../@types/enums';
+import { CharacterMove } from '../../@types';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
+import { useFonts } from '../../contexts/fontContext';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {

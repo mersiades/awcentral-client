@@ -3,19 +3,19 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, Layer, Paragraph } from 'grommet';
 
-import PlaybooksSelector from './PlaybookSelector';
-import CharacterNameForm from './CharacterNameForm';
-import CharacterLooksForm from './CharacterLooksForm';
-import CharacterStatsForm from './CharacterStatsForm';
-import CharacterGearForm from './CharacterGearForm';
-import CharacterMovesForm from './CharacterMovesForm';
-import NewGameIntro from './NewGameIntro';
-import PlaybookUniqueFormContainer from './PlaybookUniqueFormContainer';
-import CharacterCreationStepper from './CharacterCreationStepper';
-import CharacterHxForm from './CharacterHxForm';
-import ScrollableIndicator from './ScrollableIndicator';
-import Spinner from './Spinner';
-import CloseButton from './CloseButton';
+import PlaybooksSelector from '../components/characterCreation/CharacterPlaybookForm';
+import CharacterNameForm from '../components/characterCreation/CharacterNameForm';
+import CharacterLooksForm from '../components/characterCreation/CharacterLooksForm';
+import CharacterStatsForm from '../components/characterCreation/CharacterStatsForm';
+import CharacterGearForm from '../components/characterCreation/CharacterGearForm';
+import CharacterMovesForm from '../components/characterCreation/CharacterMovesForm';
+import NewGameIntro from '../components/NewGameIntro';
+import PlaybookUniqueRouter from '../components/characterCreation/PlaybookUniqueRouter';
+import CharacterCreationStepper from '../components/characterCreation/CharacterCreationStepper';
+import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
+import ScrollableIndicator from '../components/ScrollableIndicator';
+import Spinner from '../components/Spinner';
+import CloseButton from '../components/CloseButton';
 import { ButtonWS, HeadingWS } from '../config/grommetConfig';
 import GAME, { GameData, GameVars } from '../queries/game';
 import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
@@ -53,7 +53,7 @@ export const background = {
   position: 'top center',
 };
 
-const CharacterCreator: FC = () => {
+const CharacterCreationPage: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [creationStep, setCreationStep] = useState<number>(0);
   const [character, setCharacter] = useState<Character | undefined>();
@@ -485,7 +485,7 @@ const CharacterCreator: FC = () => {
           />
         )}
         {creationStep === CharacterCreationSteps.setUnique && character && character.name && character.playbook && (
-          <PlaybookUniqueFormContainer
+          <PlaybookUniqueRouter
             playbookType={character.playbook}
             characterName={character.name}
             settingAngelKit={settingAngelKit}
@@ -520,4 +520,4 @@ const CharacterCreator: FC = () => {
   );
 };
 
-export default CharacterCreator;
+export default CharacterCreationPage;

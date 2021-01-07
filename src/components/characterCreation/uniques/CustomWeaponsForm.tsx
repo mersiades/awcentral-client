@@ -3,12 +3,12 @@ import { startsWith } from 'lodash';
 import styled from 'styled-components';
 import { Box, Text, TextArea, Tip } from 'grommet';
 
-import Spinner from './Spinner';
-import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../config/grommetConfig';
-import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../@types';
-import { useFonts } from '../contexts/fontContext';
+import Spinner from '../../Spinner';
+import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
+import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../../../@types';
+import { useFonts } from '../../../contexts/fontContext';
 
-interface UniqueFormBattlebabeProps {
+interface CustomWeaponsFormProps {
   characterName: string;
   settingCustomWeapons: boolean;
   playbookUniqueCreator: PlaybookUniqueCreator;
@@ -25,7 +25,7 @@ const WeaponsUL = styled.ul`
   cursor: default;
 `;
 
-const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
+const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
   characterName,
   settingCustomWeapons,
   playbookUniqueCreator,
@@ -332,4 +332,4 @@ const UniqueFormBattlebabe: FC<UniqueFormBattlebabeProps> = ({
   );
 };
 
-export default UniqueFormBattlebabe;
+export default CustomWeaponsForm;
