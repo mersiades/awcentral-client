@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { createContext, FC, useContext, useState } from 'react';
 import FontFaceObserver from 'fontfaceobserver';
 import { createGenericContext } from './createGenericContext';
 
@@ -16,11 +16,20 @@ interface FontsProviderProps {
   // Dependency injection for testing
   isCrustReady?: boolean;
 }
-// Using createGenericContext wraps createContext in a checker for undefined
-// https://medium.com/@rivoltafilippo/typing-react-context-to-avoid-an-undefined-default-value-2c7c5a7d5947
-const [useFonts, GenericProvider, FontsConsumer] = createGenericContext<IFontContext>();
 
-const FontsProvider: FC<FontsProviderProps> = ({ children, isVtksReady = false, isCrustReady = false }) => {
+/**
+ * FontsContext uses the fontfaceobserver library to to keep track of whether
+ * the two custom fonts - "Vtks good luck for you" and "crust_clean" have
+ * loaded or not. This is used for rendering a fallback font and styling
+ * to minimise the impact of flash-of-unstyled-text (FOUT)
+ */
+const FontsContext = createContext<IFontContext>({ vtksReady: false, crustReady: false });
+
+export const useFonts = () => useContext(FontsContext);
+
+export const FontsConsumer = FontsContext.Consumer;
+
+export const FontsProvider: FC<FontsProviderProps> = ({ children, isVtksReady = false, isCrustReady = false }) => {
   const [vtksReady, setVtksReady] = useState(isVtksReady);
   const [crustReady, setCrustReady] = useState(isCrustReady);
 
@@ -29,14 +38,12 @@ const FontsProvider: FC<FontsProviderProps> = ({ children, isVtksReady = false, 
 
   vtksFont.load(null, 15000).then(
     () => setVtksReady(true),
-    () => console.log('vtks failed to load')
+    () => console.warn('vtks failed to load')
   );
 
   crustFont.load(null, 15000).then(
     () => setCrustReady(true),
-    () => console.log('crust failed to load')
+    () => console.warn('crust failed to load')
   );
-  return <GenericProvider value={{ vtksReady, crustReady }}>{children}</GenericProvider>;
+  return <FontsContext.Provider value={{ vtksReady, crustReady }}>{children}</FontsContext.Provider>;
 };
-
-export { useFonts, FontsProvider, FontsConsumer };

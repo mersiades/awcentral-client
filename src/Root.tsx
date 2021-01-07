@@ -14,6 +14,9 @@ interface RootProps {
   children: JSX.Element;
 }
 
+/**
+ * This component wraps <App/> with all the Providers it needs.
+ */
 const Root: FC<RootProps> = ({ children }) => {
   return (
     <BrowserRouter>
@@ -21,10 +24,9 @@ const Root: FC<RootProps> = ({ children }) => {
         <FontsProvider>
           <FontsConsumer>
             {(context) => {
-              const isVtksReady = context?.vtksReady || false;
-              const isCrustReady = context?.crustReady || false;
+              // The Grommet theme needs the font values, so using the Consumer here immediately.
               return (
-                <Grommet theme={theme(isVtksReady, isCrustReady)} full>
+                <Grommet theme={theme(context.vtksReady, context.crustReady)} full>
                   <ReactKeycloakProvider
                     authClient={keycloak}
                     initOptions={{
