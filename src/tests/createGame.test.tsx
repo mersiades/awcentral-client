@@ -74,6 +74,8 @@ describe('Testing flow for creating a game', () => {
 
     // Check the game's name is in the GameCreationStepper
     const nameBox = await screen.findByTestId('name-box');
+    await screen.findByTestId('channel-box'); // For some reason I need to advance by two 'ticks' here
+    await screen.findByTestId('channel-box'); // It's related to adding createGenericContext
     expect(nameBox.textContent).toEqual('Name' + mockNewGameName);
 
     // Open the comms app drop list

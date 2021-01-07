@@ -7,8 +7,8 @@ import { Grommet } from 'grommet';
 
 import { KeycloakUser } from '../@types';
 import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
-import { FontContext } from '../contexts/fontContext';
-import { KeycloakUserContext } from '../contexts/keycloakUserContext';
+import { FontsProvider } from '../contexts/fontContext';
+import { KeycloakUserProvider } from '../contexts/keycloakUserContext';
 import { theme } from '../config/grommetConfig';
 import { mockKeycloakUser1 } from './mocks';
 
@@ -32,7 +32,7 @@ const ComponentProviders = ({
   return (
     <BrowserRouter>
       <MockedProvider mocks={apolloMocks} addTypename={false}>
-        <FontContext.Provider value={{ vtksReady, crustReady }}>
+        <FontsProvider isVtksReady={vtksReady} isCrustReady={crustReady}>
           <Grommet theme={theme(vtksReady, crustReady)} full>
             <ReactKeycloakProvider
               authClient={mockKeycloakStub(isAuthenticated)}
@@ -40,21 +40,28 @@ const ComponentProviders = ({
                 onLoad: 'login-required',
               }}
             >
-              <KeycloakUserContext.Provider value={{ ...keycloakUser }}>{children}</KeycloakUserContext.Provider>
+              <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
             </ReactKeycloakProvider>
           </Grommet>
-        </FontContext.Provider>
+        </FontsProvider>
       </MockedProvider>
     </BrowserRouter>
   );
 };
 
 // All the providers for App, for integration tests
-const AppProviders = ({ children, isAuthenticated = true, vtksReady = true, crustReady = true, apolloMocks = [] }: any) => {
+const AppProviders = ({
+  children,
+  isAuthenticated = true,
+  vtksReady = true,
+  crustReady = true,
+  apolloMocks = [],
+  keycloakUser = mockKeycloakUser1,
+}: any) => {
   return (
     <BrowserRouter>
       <MockedProvider mocks={apolloMocks} addTypename={false}>
-        <FontContext.Provider value={{ vtksReady, crustReady }}>
+        <FontsProvider isVtksReady={vtksReady} isCrustReady={crustReady}>
           <Grommet theme={theme(vtksReady, crustReady)} full>
             <ReactKeycloakProvider
               authClient={mockKeycloakStub(isAuthenticated)}
@@ -62,10 +69,10 @@ const AppProviders = ({ children, isAuthenticated = true, vtksReady = true, crus
                 onLoad: 'login-required',
               }}
             >
-              {children}
+              <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
             </ReactKeycloakProvider>
           </Grommet>
-        </FontContext.Provider>
+        </FontsProvider>
       </MockedProvider>
     </BrowserRouter>
   );
