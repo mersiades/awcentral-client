@@ -106,6 +106,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
         <GearUL>
           {pbCreator.gearInstructions.youGetItems.map((item, index) => (
             <li
+              data-testid={`${item}-listitem`}
               key={index}
               // @ts-ignore
               onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
@@ -135,6 +136,7 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
         <GearUL>
           {pbCreator.gearInstructions.chooseableGear.map((item, index) => (
             <li
+              data-testid={`${item}-chooseable-listitem`}
               key={index}
               // @ts-ignore
               onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
@@ -210,9 +212,10 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
               </HeadingWS>
             </Box>
             <Box style={{ minHeight: '150px' }} margin={{ bottom: ' 6px' }}>
-              <GearUL>
+              <GearUL data-testid="interim-gear-list">
                 {gear.map((item, index) => (
                   <li
+                    data-testid={`${item}-interim-listitem`}
                     key={index}
                     // @ts-ignore
                     onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}

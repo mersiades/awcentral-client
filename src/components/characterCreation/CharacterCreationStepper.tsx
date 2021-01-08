@@ -73,6 +73,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
         {!!character?.playbook ? <Text>{formatPlaybookType(character?.playbook)}</Text> : <Text>...</Text>}
       </Box>
       <Box
+        data-testid="name-box"
         align="center"
         fill="horizontal"
         pad="small"
@@ -94,6 +95,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
 
   const box1Step3 = (
     <Box
+      data-testid="looks-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
       width="11rem"
@@ -127,6 +129,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
 
   const box2Step4 = (
     <Box
+      data-testid="stats-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
       width="11rem"
@@ -158,6 +161,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
 
   const box3Step5 = (
     <Box
+      data-testid="gear-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
       width="11rem"
@@ -196,7 +200,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
           if (!!character.playbookUnique.angelKit) {
             const { stock, hasSupplier } = character.playbookUnique.angelKit;
             return (
-              <CustomUL>
+              <CustomUL data-testid="angel-kit-box">
                 <li key={1}>{`Stock: ${stock}`}</li>
                 <li key={2}>{hasSupplier ? 'Has supplier' : 'No supplier yet'}</li>
               </CustomUL>
@@ -263,6 +267,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
 
   const box5Step7 = (
     <Box
+      data-testid="moves-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
       width="11rem"

@@ -1,4 +1,4 @@
-import { Character, Game, GameRole, KeycloakUser, KeycloakUserInfo } from "../@types";
+import { BrainerGear, Character, Game, GameRole, KeycloakUser, KeycloakUserInfo } from "../@types";
 import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, UniqueTypes } from "../@types/enums";
 
 export const mockNewGameName = 'My new mock game'
@@ -64,85 +64,71 @@ export const mockStatsBlock1 = [
   },
 ]
 
+export const dummyRollModifier = {
+  id: 'dummy',
+  movesToModify: [
+    {
+      id: 'dummy',
+      name: 'dummy',
+      description: 'dummy',
+      kind: MoveKinds.basic,
+      playbook: PlayBooks.angel
+    }
+  ],
+  statToRollWith: Stats.sharp,
+}
+
+export const dummyStatModifier = {
+  id: "dummy",
+  statToModify: Stats.sharp,
+  modification: 0
+}
+
 export const mockCharacterMoveAngel1 = {
   id: 'angel-move-id-1',
+  name: "ANGEL SPECIAL",
+  description: "If you and another character have sex,",
+  kind: MoveKinds.character,
+  playbook: PlayBooks.angel,
+  stat: Stats.hx,
+  rollModifier: dummyRollModifier,
+  statModifier: dummyStatModifier,
+  isSelected: true
+}
+
+export const mockCharacterMoveAngel2 = {
+  id: 'angel-move-id-2',
   name: "SIXTH SENSE",
   kind: MoveKinds.character,
   description: "when you open your brain to the world’s psychic maelstrom...",
   playbook: PlayBooks.angel,
   stat: Stats.sharp,
-  rollModifier: {
-    id: 'dummy',
-    movesToModify: [
-      {
-        id: 'dummy',
-        name: 'dummy',
-        description: 'dummy',
-        kind: MoveKinds.basic,
-        playbook: PlayBooks.angel
-      }
-    ],
-    statToRollWith: Stats.sharp
-  },
-  statModifier: {
-    id: "dummy",
-    statToModify: Stats.sharp,
-    modification: 0
-  },
-  isSelected: false
-}
-
-export const mockCharacterMoveAngel2 = {
-  id: 'angel-move-id-2',
-  name: "INFIRMARY",
-  description: "you get an infirmary, a workspace with life support...",
-  kind: MoveKinds.character,
-  playbook: PlayBooks.angel,
-  stat: Stats.sharp,
-  rollModifier: {
-    id: 'dummy',
-    movesToModify: [
-      {
-        id: 'dummy',
-        name: 'dummy',
-        description: 'dummy',
-        kind: MoveKinds.basic,
-        playbook: PlayBooks.angel
-      }
-    ],
-    statToRollWith: Stats.sharp,
-  },
-  statModifier: {
-    id: "dummy",
-    statToModify: Stats.sharp,
-    modification: 0
-  },
+  rollModifier: dummyRollModifier,
+  statModifier: dummyStatModifier,
   isSelected: false
 }
 
 export const mockCharacterMoveAngel3 = {
   id: 'angel-move-id-3',
+  name: "INFIRMARY",
+  description: "you get an infirmary, a workspace with life support...",
+  kind: MoveKinds.character,
+  playbook: PlayBooks.angel,
+  stat: Stats.sharp,
+  rollModifier: dummyRollModifier,
+  statModifier: dummyStatModifier,
+  isSelected: false
+}
+
+export const mockCharacterMoveAngel4 = {
+  id: 'angel-move-id-4',
   name: "PROFESSIONAL COMPASSION",
   description: "you can roll+sharp instead of roll+Hx when you help someone who’s rolling.",
   kind: MoveKinds.character,
   playbook: PlayBooks.angel,
-  stat: "dummy",
-  rollModifier: {
-    id: 'mock roll-modifier-id-1',
-    movesToModify: [{
-      id: 'open-your-brain-move-id',
-      name: "OPEN YOUR BRAIN",
-      description: "Open your brain to the maelstrom",
-      kid: MoveKinds.basic,
-      playbook: PlayBooks.angel
-    }],
-    statToRollWith: Stats.sharp
-  },
-  statModifier: {
-    id: "dummy",
-    statToModify: Stats.sharp,
-    modification: 0
-  },
+  stat: Stats.hx,
+  rollModifier: dummyRollModifier,
+  statModifier: dummyStatModifier,
   isSelected: false
 }
 
@@ -164,7 +150,7 @@ export const mockLookAngel1 = {
 
 export const mockLookAngel2 = {
   id: 'mock-angel-look-id-2',
-  look: 'man',
+  look: 'woman',
   category: LookCategories.gender
 }
 
@@ -243,7 +229,68 @@ export const mockStatsOptionsAngel3 = {
   WEIRD: 1,
 }
 
-export const mockCharacter1: Character = {
+export const mockCustomWeapons = {
+  id: 'mock-custom-weapons-id',
+  weapons: ['custom weapon 1', 'custom weapons 2']
+}
+
+export const dummyCustomWeapons = {
+  id: 'dummy',
+  weapons: ["dummy"]
+}
+
+export const dummyBrainerGear: BrainerGear = {
+  id: "dummy",
+  brainerGear: ["dummy"]
+}
+
+export const dummyAngelKitMove = {
+  id: "dummy",
+  name: "dummy",
+  description: "dummy",
+  kind: MoveKinds.character,
+  playbook: PlayBooks.angel,
+  stat: Stats.cool,
+  statModifier: dummyStatModifier,
+  rollModifier: dummyRollModifier,
+  isSelected: false
+}
+
+export const dummyAngelKit =  {
+  id: "dummy",
+  description: "dummy",
+  stock: 0,
+  hasSupplier: false,
+  supplierText: "dummy",
+  angelKitMoves: [dummyAngelKitMove]
+}
+
+export const mockPlaybookUniqueBattlebabe = {
+  id: 'mock-battlebabe-unique-id',
+  type: UniqueTypes.customWeapons,
+  customWeapons: mockCustomWeapons,
+  brainerGear: dummyBrainerGear,
+  angelKit: dummyAngelKit
+}
+
+export const mockAngelKit =  {
+  id: "mock-angel-kit-id",
+  description: "Your angel kit has all kinds of crap in it...",
+  stock: 6,
+  hasSupplier: false,
+  supplierText: "mock-supplier-text",
+  angelKitMoves: [dummyAngelKitMove]
+}
+
+export const mockPlaybookUniqueAngel = {
+  id: 'mock-angle-unique-id',
+  type: UniqueTypes.angelKit,
+  customWeapons: dummyCustomWeapons,
+  brainerGear: dummyBrainerGear,
+  angelKit: mockAngelKit
+}
+
+export const mockCharacter1 = {
   id: 'mock-character-id-1',
   name: "Mock Character 1",
   playbook: PlayBooks.battlebabe,
@@ -260,16 +307,21 @@ export const mockCharacter1: Character = {
       category: mockLookAngel3.category
     }
   ],
-  characterMoves: [ mockCharacterMoveAngel1, mockCharacterMoveAngel2 ]
+  characterMoves: [ mockCharacterMoveAngel1, {...mockCharacterMoveAngel2, isSelected: true}, {...mockCharacterMoveAngel3, isSelected: true} ], // TODO: change to battlebabe moves
+  playbookUnique: mockPlaybookUniqueBattlebabe
 }
 
-export const mockCharacter2: Character = {
+export const mockCharacter2 = {
   id: 'mock-character-id-2',
   name: "Mock Character 2",
   playbook: PlayBooks.angel,
-  gear: ['9mm (2-harm close loud)', 'Grimey green raincoat'],
+  gear: ['Grimey green raincoat', '9mm (2-harm close loud)'],
   statsBlock: mockStatsBlock1,
-  hxBlock: [],
+  hxBlock: [{
+    characterId: mockCharacter1.id,
+    characterName: mockCharacter1.name,
+    hxValue: 1
+  }],
   looks: [
     {
       look: mockLookAngel1.look,
@@ -278,9 +330,22 @@ export const mockCharacter2: Character = {
     {
       look: mockLookAngel3.look,
       category: mockLookAngel3.category
+    },
+    {
+      look: mockLookAngel5.look,
+      category: mockLookAngel5.category
+    },
+    {
+      look: mockLookAngel7.look,
+      category: mockLookAngel7.category
+    },
+    {
+      look: mockLookAngel9.look,
+      category: mockLookAngel9.category
     }
   ],
-  characterMoves: [ {...mockCharacterMoveAngel1, isSelected: true}, {...mockCharacterMoveAngel2, isSelected: false} ]
+  characterMoves: [ {...mockCharacterMoveAngel1, isSelected: true}, {...mockCharacterMoveAngel2, isSelected: true}, {...mockCharacterMoveAngel3, isSelected: true} ],
+  playbookUnique: mockPlaybookUniqueAngel
 } 
 
 export const mockGame1: Game = {
@@ -468,7 +533,7 @@ export const mockPlaybookCreatorAngel = {
           mockLookAngel6, mockLookAngel7, mockLookAngel8, mockLookAngel9, mockLookAngel10],
   statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
   playbookUniqueCreator: mockUniqueCreatorAngel,
-  playbookMoves: [mockCharacterMoveAngel1, mockCharacterMoveAngel2, mockCharacterMoveAngel3],
+  playbookMoves: [mockCharacterMoveAngel1, mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
   defaultMoveCount: 1,
   moveChoiceCount: 2
 }
@@ -483,3 +548,9 @@ export const mockPlaybookAngel = {
 }
 
 export const mockPlaybooks = [mockPlaybookAngel]
+
+export const mockHxInput = {
+  characterId: mockCharacter1.id,
+  characterName: mockCharacter1.name,
+  hxValue: 1
+}

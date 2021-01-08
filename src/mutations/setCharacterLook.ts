@@ -19,7 +19,6 @@ const SET_CHARACTER_LOOK = gql`
       id
       name
       playbook
-      gear
       looks {
         look
         category

@@ -107,6 +107,7 @@ const CharacterCreationPage: FC = () => {
   const game = gameData?.game;
   const gameRoles = game?.gameRoles;
   // console.log('game', game);
+  // console.log('gameRoles[3]', gameRoles && gameRoles[2].characters);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 

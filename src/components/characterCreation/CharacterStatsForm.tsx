@@ -67,6 +67,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({
         <Box fill margin={{ bottom: '48px' }}>
           {pbCreator.statsOptions.map((opt) => (
             <Box
+              data-testid={`${opt.id}-stats-option-box`}
               key={opt.id}
               direction="row"
               justify="around"

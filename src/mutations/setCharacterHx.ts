@@ -17,11 +17,6 @@ const SET_CHARACTER_HX = gql`
       id
       name
       playbook
-      gear
-      looks {
-        look
-        category
-      }
       hxBlock {
         characterId
         characterName

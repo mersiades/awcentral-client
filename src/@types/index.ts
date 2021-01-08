@@ -244,7 +244,7 @@ export interface PlaybookUnique {
   type: UniqueTypes
   brainerGear?: BrainerGear
   angelKit?: AngelKit
-  customWeapons: CustomWeapons
+  customWeapons?: CustomWeapons
 }
 
 export interface BrainerGear {

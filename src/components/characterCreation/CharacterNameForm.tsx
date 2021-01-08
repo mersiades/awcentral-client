@@ -68,6 +68,7 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, settingNa
           <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
             {pbCreator.names.map((name) => (
               <Box
+                data-testid={`${name.name}-pill`}
                 key={name.id}
                 background="#4C684C"
                 round="medium"
