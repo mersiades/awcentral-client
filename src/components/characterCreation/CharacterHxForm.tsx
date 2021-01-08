@@ -11,7 +11,7 @@ import { Character, GameRole, HxInput } from '../../@types';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useKeycloakUser } from '../../contexts/keycloakUserContext';
 import { useFonts } from '../../contexts/fontContext';
-import { formatPlaybookType } from '../../helpers/formatPlaybookType';
+import { decapitalize } from '../../helpers/decapitalize';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -123,7 +123,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
                     </HeadingWS>
                     {!!char.playbook && (
                       <TextWS weight="bold" size="medium">
-                        {formatPlaybookType(char.playbook)}
+                        {decapitalize(char.playbook)}
                       </TextWS>
                     )}
                     {!!looks && <TextWS size="small">{looks.join(', ')}</TextWS>}

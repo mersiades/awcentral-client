@@ -3,7 +3,7 @@ import { Box, Text } from 'grommet';
 
 import { CharacterCreationSteps, PlayBooks, UniqueTypes } from '../../@types/enums';
 import { Character } from '../../@types';
-import { formatPlaybookType } from '../../helpers/formatPlaybookType';
+import { decapitalize } from '../../helpers/decapitalize';
 import { CustomUL } from '../../config/grommetConfig';
 import { IconProps, Next, Previous } from 'grommet-icons';
 import { useQuery } from '@apollo/client';
@@ -70,7 +70,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
         <Text color="white" weight="bold">
           Playbook
         </Text>
-        {!!character?.playbook ? <Text>{formatPlaybookType(character?.playbook)}</Text> : <Text>...</Text>}
+        {!!character?.playbook ? <Text>{decapitalize(character?.playbook)}</Text> : <Text>...</Text>}
       </Box>
       <Box
         data-testid="name-box"
@@ -259,7 +259,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       }}
     >
       <Text color="white" weight="bold" alignSelf="center">
-        {!!pbCreator ? formatPlaybookType(pbCreator.playbookUniqueCreator.type) : '...'}
+        {!!pbCreator ? decapitalize(pbCreator.playbookUniqueCreator.type) : '...'}
       </Text>
       {!!character && !!character.playbookUnique ? renderUnique() : <Text>...</Text>}
     </Box>
@@ -291,7 +291,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
             if (move.isSelected) {
               return (
                 <li key={move.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {formatPlaybookType(move.name)}
+                  {decapitalize(move.name)}
                 </li>
               );
             }

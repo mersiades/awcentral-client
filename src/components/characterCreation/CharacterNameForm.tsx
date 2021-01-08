@@ -8,7 +8,7 @@ import { PlayBooks } from '../../@types/enums';
 import { PlaybookCreator } from '../../@types';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
-import { formatPlaybookType } from '../../helpers/formatPlaybookType';
+import { decapitalize } from '../../helpers/decapitalize';
 
 interface CharacterNameFormProps {
   playbookType: PlayBooks;
@@ -59,7 +59,7 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, settingNa
         onSubmit={({ value }: any) => handleSubmitName(value.characterName)}
       >
         <Box width="50vw" flex="grow" align="center">
-          <HeadingWS crustReady={crustReady} level={2}>{`WHAT IS THE ${formatPlaybookType(
+          <HeadingWS crustReady={crustReady} level={2}>{`WHAT IS THE ${decapitalize(
             playbookType
           ).toUpperCase()} CALLED?`}</HeadingWS>
           <FormField name="characterName" width="100%">
