@@ -1,3 +1,15 @@
+jobs:
+  install-node:
+    docker:
+      - image: cimg/node:14.10.1
+        auth:
+          username: qdfn3af9be
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - node/install:
+          install-yarn: true
+      - run: node --version
 orbs:
   node: circleci/node@4.0.0
 
@@ -6,4 +18,5 @@ version: 2.1
 workflows:
   app-tests:
     jobs:
+      - install-node
       - node/test
