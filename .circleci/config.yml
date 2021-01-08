@@ -12,9 +12,10 @@ jobs:
       - run: pwd
       - run: ls
   test:
-    - run: node --version
-    - run: pwd
-    - run: ls
+    steps:
+      - run: node --version
+      - run: pwd
+      - run: ls
 
 workflows:
   app-tests:
