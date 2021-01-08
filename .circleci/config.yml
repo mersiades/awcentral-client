@@ -8,7 +8,8 @@ jobs:
           password: $DOCKERHUB_PASSWORD # context / project UI env-var reference
     steps:
       - checkout # check out the code in the project directory
-      - run: node --version
+      - run: yarn install
+      - run: yarn run build
   test:
     docker:
       - image: cimg/node:14.10.1
@@ -19,6 +20,9 @@ jobs:
       - run: yarn test
 
 workflows:
-  test:
+  build_and_test:
     jobs:
-      - test
+      - build
+      - test:
+          - requires:
+              - build
