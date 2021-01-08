@@ -11,7 +11,7 @@ import { Character, GameRole, HxInput } from '../../@types';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useKeycloakUser } from '../../contexts/keycloakUserContext';
 import { useFonts } from '../../contexts/fontContext';
-import { formatPlaybookType } from '../../helpers/formatPlaybookType';
+import { decapitalize } from '../../helpers/decapitalize';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -110,14 +110,20 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
             const existingValue = character.hxBlock.find((hxStat) => hxStat.characterId === char.id)?.hxValue;
             return (
               !!char.name && (
-                <RedBox key={char.id} direction="row" width="350px" margin={{ right: '12px', bottom: '12px' }}>
+                <RedBox
+                  data-testid={`${char.name}-hx-box`}
+                  key={char.id}
+                  direction="row"
+                  width="350px"
+                  margin={{ right: '12px', bottom: '12px' }}
+                >
                   <Box width="250px" pad="12px">
                     <HeadingWS crustReady={crustReady} level={3} style={{ marginTop: '6px', marginBottom: '6px' }}>
                       {char.name}
                     </HeadingWS>
                     {!!char.playbook && (
                       <TextWS weight="bold" size="medium">
-                        {formatPlaybookType(char.playbook)}
+                        {decapitalize(char.playbook)}
                       </TextWS>
                     )}
                     {!!looks && <TextWS size="small">{looks.join(', ')}</TextWS>}

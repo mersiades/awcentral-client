@@ -99,4 +99,5 @@ const GAME = gql`
   }
 }
 `;
+
 export default GAME;

@@ -15,9 +15,6 @@ const PLAYBOOK_CREATOR = gql`
     playbookCreator(playbookType: $playbookType) {
       id
       playbookType
-      playbook {
-        id
-      }
       gearInstructions {
         id
         youGet
@@ -117,4 +114,5 @@ const PLAYBOOK_CREATOR = gql`
     }
   }
 `;
+
 export default PLAYBOOK_CREATOR;

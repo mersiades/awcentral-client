@@ -3,7 +3,7 @@ import { Box, Text } from 'grommet';
 
 import { CharacterCreationSteps, PlayBooks, UniqueTypes } from '../../@types/enums';
 import { Character } from '../../@types';
-import { formatPlaybookType } from '../../helpers/formatPlaybookType';
+import { decapitalize } from '../../helpers/decapitalize';
 import { CustomUL } from '../../config/grommetConfig';
 import { IconProps, Next, Previous } from 'grommet-icons';
 import { useQuery } from '@apollo/client';
@@ -55,6 +55,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
   const box0Step1 = (
     <Box margin={{ left: 'xsmall', right: 'xsmall' }} justify="between" width="11em" height="10rem" gap="small">
       <Box
+        data-testid="playbook-box"
         align="center"
         fill="horizontal"
         pad="small"
@@ -69,9 +70,10 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
         <Text color="white" weight="bold">
           Playbook
         </Text>
-        {!!character?.playbook ? <Text>{formatPlaybookType(character?.playbook)}</Text> : <Text>...</Text>}
+        {!!character?.playbook ? <Text>{decapitalize(character?.playbook)}</Text> : <Text>...</Text>}
       </Box>
       <Box
+        data-testid="name-box"
         align="center"
         fill="horizontal"
         pad="small"
@@ -93,6 +95,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
 
   const box1Step3 = (
     <Box
+      data-testid="looks-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
       width="11rem"
@@ -126,6 +129,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
 
   const box2Step4 = (
     <Box
+      data-testid="stats-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
       width="11rem"
@@ -157,6 +161,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
 
   const box3Step5 = (
     <Box
+      data-testid="gear-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
       width="11rem"
@@ -195,7 +200,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
           if (!!character.playbookUnique.angelKit) {
             const { stock, hasSupplier } = character.playbookUnique.angelKit;
             return (
-              <CustomUL>
+              <CustomUL data-testid="angel-kit-box">
                 <li key={1}>{`Stock: ${stock}`}</li>
                 <li key={2}>{hasSupplier ? 'Has supplier' : 'No supplier yet'}</li>
               </CustomUL>
@@ -254,7 +259,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       }}
     >
       <Text color="white" weight="bold" alignSelf="center">
-        {!!pbCreator ? formatPlaybookType(pbCreator.playbookUniqueCreator.type) : '...'}
+        {!!pbCreator ? decapitalize(pbCreator.playbookUniqueCreator.type) : '...'}
       </Text>
       {!!character && !!character.playbookUnique ? renderUnique() : <Text>...</Text>}
     </Box>
@@ -262,6 +267,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
 
   const box5Step7 = (
     <Box
+      data-testid="moves-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
       width="11rem"
@@ -285,7 +291,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
             if (move.isSelected) {
               return (
                 <li key={move.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {formatPlaybookType(move.name)}
+                  {decapitalize(move.name)}
                 </li>
               );
             }

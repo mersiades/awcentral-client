@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { Anchor, Box } from 'grommet';
 
-import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
-import { Game } from '../@types';
-import { useFonts } from '../contexts/fontContext';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
+import { Game } from '../../@types';
+import { useFonts } from '../../contexts/fontContext';
 
 interface NewGameIntroProps {
   closeNewGameIntro: () => void;

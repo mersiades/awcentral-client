@@ -9,7 +9,7 @@ import CharacterLooksForm from '../components/characterCreation/CharacterLooksFo
 import CharacterStatsForm from '../components/characterCreation/CharacterStatsForm';
 import CharacterGearForm from '../components/characterCreation/CharacterGearForm';
 import CharacterMovesForm from '../components/characterCreation/CharacterMovesForm';
-import NewGameIntro from '../components/NewGameIntro';
+import NewGameIntro from '../components/characterCreation/NewGameIntro';
 import PlaybookUniqueRouter from '../components/characterCreation/PlaybookUniqueRouter';
 import CharacterCreationStepper from '../components/characterCreation/CharacterCreationStepper';
 import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
@@ -106,6 +106,8 @@ const CharacterCreationPage: FC = () => {
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.game;
   const gameRoles = game?.gameRoles;
+  // console.log('game', game);
+  // console.log('gameRoles[3]', gameRoles && gameRoles[2].characters);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 

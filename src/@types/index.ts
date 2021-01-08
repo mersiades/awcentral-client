@@ -1,5 +1,5 @@
 
-import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, UniqueTypes, WebsocketRequests, WebsocketResponses } from './enums';
+import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, Threats, UniqueTypes, WebsocketRequests, WebsocketResponses } from './enums';
 
 export interface Tokens {
   accessToken: string;
@@ -47,6 +47,8 @@ export interface GameRole {
   userId: string
   game?: Game;
   characters?: Character[]
+  npcs?: Npc[]
+  threats?: Threat[]
 }
 
 export interface PlaybookCreator {
@@ -99,6 +101,7 @@ export interface Move {
   stat?: Stats
   statModifier?: StatModifier
   rollModifier?: RollModifier
+  isSelected?: boolean
 }
 
 export interface CharacterMove extends Move {
@@ -107,14 +110,14 @@ export interface CharacterMove extends Move {
 
 export interface StatModifier {
   id: string
-    statToModify: Stats
-    modification: number
+  statToModify: Stats
+  modification: number
 }
 
 export interface RollModifier {
   id: string
-    movesToModify: Move[]
-    statToRollWith: Stats[]
+  movesToModify: Move[]
+  statToRollWith: Stats
 }
 
 export interface User {
@@ -138,7 +141,7 @@ export interface Name {
 }
 
 export interface Look {
-  id: string
+  id?: string
   look: string
   category: LookCategories
 }
@@ -146,10 +149,10 @@ export interface Look {
 export interface StatsOption {
   id: string
   COOL: number
-        HARD: number
-        HOT: number
-        SHARP: number
-        WEIRD: number
+  HARD: number
+  HOT: number
+  SHARP: number
+  WEIRD: number
 }
 
 export interface StatsBlock {
@@ -174,7 +177,7 @@ export interface GearInstructions {
   id: string
   youGet: string
   youGetItems : string[]
-  inAddition: string
+  inAddition?: string
   introduceChoice: string
   numberCanChoose: number
   chooseableGear: string[]
@@ -241,7 +244,7 @@ export interface PlaybookUnique {
   type: UniqueTypes
   brainerGear?: BrainerGear
   angelKit?: AngelKit
-  customWeapons: CustomWeapons
+  customWeapons?: CustomWeapons
 }
 
 export interface BrainerGear {
@@ -267,4 +270,19 @@ export interface HxInput {
   characterId: string
   characterName: string
   hxValue: number
+}
+
+export interface Npc {
+  id: string
+  name: string
+  description: string
+}
+
+export interface Threat {
+  id: string
+  name: string
+  threatKind: Threats
+  impulse: string
+  description: string
+  stakes: string
 }

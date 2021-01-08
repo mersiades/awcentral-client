@@ -85,7 +85,7 @@ const PlayerPage: FC = () => {
           />
         </ThemeContext.Extend>
       </Header>
-      <div>
+      <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
             {sidePanel === 0 && gameRole && gameRole.characters?.length === 1 && <p>Character Panel</p>}

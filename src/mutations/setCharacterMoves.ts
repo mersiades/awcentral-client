@@ -17,11 +17,6 @@ const SET_CHARACTER_MOVES = gql`
       id
       name
       playbook
-      gear
-      looks {
-        look
-        category
-      }
       characterMoves {
         id
         isSelected

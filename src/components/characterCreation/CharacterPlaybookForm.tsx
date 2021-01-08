@@ -7,7 +7,7 @@ import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
 import { Playbook } from '../../@types';
 import { PlayBooks } from '../../@types/enums';
 import { useFonts } from '../../contexts/fontContext';
-import { formatPlaybookType } from '../../helpers/formatPlaybookType';
+import { decapitalize } from '../../helpers/decapitalize';
 import '../../assets/styles/transitions.css';
 
 interface CharacterPlaybookProps {
@@ -105,13 +105,13 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
               <Box gridArea="image" animation="fadeIn" justify="center">
                 <img
                   src={selectedPlaybook.playbookImageUrl}
-                  alt={formatPlaybookType(selectedPlaybook.playbookType)}
+                  alt={decapitalize(selectedPlaybook.playbookType)}
                   style={{ objectFit: 'contain', maxHeight: '60vh' }}
                 />
               </Box>
               <Box gridArea="text" pad="24px" animation="fadeIn" justify="around" align="center">
                 <HeadingWS crustReady={crustReady} level={2} alignSelf="center">
-                  {formatPlaybookType(selectedPlaybook.playbookType)}
+                  {decapitalize(selectedPlaybook.playbookType)}
                 </HeadingWS>
                 <Box overflow="auto" style={{ maxWidth: '600px' }}>
                   <ReactMarkdown>{selectedPlaybook.intro}</ReactMarkdown>
@@ -126,7 +126,7 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
                       settingPlaybook || creatingCharacter ? (
                         <Spinner fillColor="#FFF" width="200px" height="36px" />
                       ) : (
-                        `SELECT ${formatPlaybookType(selectedPlaybook.playbookType)}`
+                        `SELECT ${decapitalize(selectedPlaybook.playbookType)}`
                       )
                     }
                     primary
@@ -146,6 +146,7 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
           {sortedPlaybooks.length > 0
             ? sortedPlaybooks.map((playbook) => (
                 <Box
+                  data-testid={`${playbook.playbookType.toLowerCase()}-button`}
                   key={playbook.playbookImageUrl}
                   onClick={() => handlePlaybookClick(playbook)}
                   hoverIndicator={{ color: 'brand', opacity: 0.4 }}
@@ -155,7 +156,7 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
                 >
                   <img
                     src={playbook.playbookImageUrl}
-                    alt={formatPlaybookType(playbook.playbookType)}
+                    alt={decapitalize(playbook.playbookType)}
                     style={{ objectFit: 'contain', maxHeight: '98%', maxWidth: '96%' }}
                   />
                 </Box>

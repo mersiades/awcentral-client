@@ -25,11 +25,11 @@ const SET_ANGEL_KIT = gql`
           id
           description
           stock
+          hasSupplier
+          supplierText
           angelKitMoves {
             id
           }
-          hasSupplier
-          supplierText
         }
       }
     }

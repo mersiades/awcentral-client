@@ -74,6 +74,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
 
   const renderPill = (look: Look, onClick: any, field: string) => (
     <Box
+      data-testid={`${look.look}-pill`}
       key={look.id}
       background="#4C684C"
       round="medium"
