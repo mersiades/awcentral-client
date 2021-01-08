@@ -17,3 +17,8 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     steps:
       - run: yarn test
+
+workflows:
+  test:
+    jobs:
+      - test
