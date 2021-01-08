@@ -9,7 +9,7 @@ import CharacterLooksForm from '../components/characterCreation/CharacterLooksFo
 import CharacterStatsForm from '../components/characterCreation/CharacterStatsForm';
 import CharacterGearForm from '../components/characterCreation/CharacterGearForm';
 import CharacterMovesForm from '../components/characterCreation/CharacterMovesForm';
-import NewGameIntro from '../components/NewGameIntro';
+import NewGameIntro from '../components/characterCreation/NewGameIntro';
 import PlaybookUniqueRouter from '../components/characterCreation/PlaybookUniqueRouter';
 import CharacterCreationStepper from '../components/characterCreation/CharacterCreationStepper';
 import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
