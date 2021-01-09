@@ -34,7 +34,8 @@ import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } fro
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
 import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
-import { Character, GameRole, HxInput } from '../@types';
+import { HxInput } from '../@types';
+import { Character, GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 
 export const resetWarningBackground = {
@@ -106,8 +107,6 @@ const CharacterCreationPage: FC = () => {
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.game;
   const gameRoles = game?.gameRoles;
-  // console.log('game', game);
-  // console.log('gameRoles[3]', gameRoles && gameRoles[2].characters);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Grid, Text } from 'grommet';
 
-import { Game } from '../@types';
+import { Game } from '../@types/dataInterfaces';
 import { CustomUL } from '../config/grommetConfig';
 
 interface GameCreationStepperProps {

@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Box, Select, Button, TextArea } from 'grommet';
 
-import { Game } from '../@types';
+import { Game } from '../@types/dataInterfaces';
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
 

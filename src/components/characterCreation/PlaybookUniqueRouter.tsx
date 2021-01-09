@@ -6,7 +6,7 @@ import Spinner from '../Spinner';
 import AngelKitForm from './uniques/AngelKitForm';
 import CustomWeaponsForm from './uniques/CustomWeaponsForm';
 import BrainerGearForm from './uniques/BrainerGearForm';
-import { CustomWeapons } from '../../@types';
+import { CustomWeapons } from '../../@types/dataInterfaces';
 import { PlayBooks } from '../../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 

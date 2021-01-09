@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { PlaybookCreator } from '../@types';
+import { PlaybookCreator } from '../@types/staticDataInterfaces';
 import { PlayBooks } from '../@types/enums';
 
 export interface PlaybookCreatorData {

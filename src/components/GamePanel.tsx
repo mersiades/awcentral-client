@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Button, Text, Heading } from 'grommet';
 import { Close, Copy, Edit, Trash } from 'grommet-icons';
-import { Game } from '../@types';
+import { Game } from '../@types/dataInterfaces';
 import { Roles } from '../@types/enums';
 import { ShowInvitation } from '../pages/MCPage';
 import { copyToClipboard } from '../helpers/copyToClipboard';

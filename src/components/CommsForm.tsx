@@ -6,7 +6,7 @@ import Spinner from './Spinner';
 import { ButtonWS, ParagraphWS } from '../config/grommetConfig';
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
-import { Game } from '../@types';
+import { Game } from '../@types/dataInterfaces';
 import GAME from '../queries/game';
 
 interface CommsFormProps {

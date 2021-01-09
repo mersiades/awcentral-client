@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Game } from '../@types';
+import { Game } from '../@types/dataInterfaces';
 
 export interface GameData {
   game: Game

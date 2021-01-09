@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Box, Text } from 'grommet';
 
 import { CharacterCreationSteps, PlayBooks, UniqueTypes } from '../../@types/enums';
-import { Character } from '../../@types';
+import { Character } from '../../@types/dataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
 import { CustomUL } from '../../config/grommetConfig';
 import { IconProps, Next, Previous } from 'grommet-icons';

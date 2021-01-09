@@ -5,7 +5,7 @@ import { Box, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
 
 import Spinner from '../../Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../../config/grommetConfig';
-import { PlaybookUniqueCreator } from '../../../@types';
+import { PlaybookUniqueCreator } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 
 const StyledMarkdown = styled(ReactMarkdown)`
@@ -34,7 +34,7 @@ const BrainerGearForm: FC<BrainerGearFormProps> = ({
 
   const renderOptions = () => {
     let optionsArray: CheckBoxProps[] = [];
-    playbookUniqueCreator.brainerGearCreator.gear.forEach((item, index) => {
+    playbookUniqueCreator.brainerGearCreator?.gear.forEach((item, index) => {
       const splitItem = item.split(')');
       const option: CheckBoxProps = {
         id: item,

@@ -16,10 +16,10 @@ import SET_CHARACTER_PLAYBOOK from "../mutations/setCharacterPlaybook";
 import SET_CHARACTER_STATS from "../mutations/setCharacterStats";
 import GAME from "../queries/game";
 import GAMEROLES_BY_USER_ID from "../queries/gameRolesByUserId";
-import GAMES_FOR_INVITEE, { GamesForInviteeData, GamesForInviteeVars } from "../queries/gamesForInvitee";
+import GAMES_FOR_INVITEE from "../queries/gamesForInvitee";
 import PLAYBOOK_CREATOR from "../queries/playbookCreator";
 import PLAYBOOKS from "../queries/playbooks";
-import { dummyAngelKitMove, mockCharacter1, mockCharacter2, mockCharacterMoveAngel3, mockGame1, mockGame2, mockGame3, mockGame4, mockGame5, mockGameRole1, mockGameRole2, mockGameRole4, mockHxInput, mockKeycloakUser1, mockNewGameName, mockPlaybookCreatorAngel, mockPlaybooks } from "./mocks";
+import { dummyAngelKitMove, mockCharacter2,  mockGame1, mockGame2, mockGame3, mockGame4, mockGame5, mockGameRole1, mockGameRole2,  mockHxInput, mockKeycloakUser1, mockNewGameName, mockPlaybookCreatorAngel, mockPlaybooks } from "./mocks";
 
 export const mockGameRolesByUserId: MockedResponse = {
   request: {
@@ -1215,7 +1215,7 @@ export const mockSetAngelKit: MockedResponse = {
     variables: {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
-      stock: mockPlaybookCreatorAngel.playbookUniqueCreator.angelKitCreator.startingStock,
+      stock: mockPlaybookCreatorAngel.playbookUniqueCreator.angelKitCreator?.startingStock,
       hasSupplier: false
     }
   },

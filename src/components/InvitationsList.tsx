@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client';
 import { Box } from 'grommet';
 import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Game } from '../@types';
+import { Game } from '../@types/dataInterfaces';
 import { Roles } from '../@types/enums';
 import { brandColor, ButtonWS, TextWS } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';

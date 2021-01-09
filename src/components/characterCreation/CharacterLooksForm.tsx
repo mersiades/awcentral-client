@@ -6,7 +6,7 @@ import ActionButtons from '../ActionButtons';
 import Spinner from '../Spinner';
 import { HeadingWS } from '../../config/grommetConfig';
 import { LookCategories, PlayBooks } from '../../@types/enums';
-import { Look, PlaybookCreator } from '../../@types';
+import { Look, PlaybookCreator } from '../../@types/staticDataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
 

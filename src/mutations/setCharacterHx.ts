@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
-import { Character, HxInput } from '../@types';
+import { HxInput } from '../@types';
+import { Character } from '../@types/dataInterfaces';
 
 export interface SetCharacterHxData {
   setCharacterHx: Character

@@ -6,7 +6,7 @@ import { Box, TextArea } from 'grommet';
 import Spinner from '../Spinner';
 import { accentColors, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../../config/grommetConfig';
 import { PlayBooks } from '../../@types/enums';
-import { PlaybookCreator } from '../../@types';
+import { PlaybookCreator } from '../../@types/staticDataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
 

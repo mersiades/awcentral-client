@@ -1,7 +1,8 @@
 import React from 'react';
-import { customRenderForComponent, render } from '../../tests/test-utils';
 import { screen } from '@testing-library/react';
+
 import LandingPage from '../LandingPage';
+import { customRenderForComponent } from '../../tests/test-utils';
 
 describe('Rendering LandingPage', () => {
   test('should render LandingPage with User unauthorised', () => {
