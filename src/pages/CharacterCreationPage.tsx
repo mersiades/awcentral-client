@@ -107,7 +107,6 @@ const CharacterCreationPage: FC = () => {
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.game;
   const gameRoles = game?.gameRoles;
-  gameRoles?.forEach((gr) => console.log('gr.characters', gr.characters));
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
