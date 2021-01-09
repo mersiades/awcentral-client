@@ -10,6 +10,7 @@ jobs:
       - checkout
       - run: node --version
       - run: pwd
+      - run: yarn install
       - run: ls
       - run: yarn test
 
