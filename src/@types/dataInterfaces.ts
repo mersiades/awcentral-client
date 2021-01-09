@@ -21,6 +21,7 @@ export interface Game {
   name: string;
   commsApp: string
   commsUrl: string
+  hasFinishedPreGame: boolean
   mc: { displayName: string, id: string }
   players: { displayName: string, id: string }[]
   gameRoles: GameRole[]

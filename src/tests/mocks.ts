@@ -349,6 +349,7 @@ export const mockGame1: Game = {
   name: 'Mock Game 1',
   commsApp: 'Discord',
   commsUrl: 'https://discord.com/urltodiscordchannel',
+  hasFinishedPreGame: false,
   mc: { displayName: 'mock-user-1', id: 'mock-keycloak-id-1'},
   players: [{ displayName: 'mock-user-2', id: 'mock-keycloak-id-2'}],
   gameRoles: [{
@@ -374,6 +375,7 @@ export const mockGame2: Game = {
   name: 'Mock Game 2',
   commsApp: 'Zoom',
   commsUrl: 'https://zoom.com/urltozoomchannel',
+  hasFinishedPreGame: false,
   mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2'},
   players: [{ displayName: 'mock-user-1', id: 'mock-keycloak-id-1'}],
   gameRoles: [{
@@ -399,6 +401,7 @@ export const mockGame3: Game = {
   name: mockNewGameName,
   commsApp: "",
   commsUrl: "",
+  hasFinishedPreGame: false,
   mc: { displayName: 'mock-user-1', id: 'mock-keycloak-id-1'},
   players: [],
   gameRoles: [{
@@ -418,6 +421,7 @@ export const mockGame4: Game = {
   name: "Mock Game 4 - Join Me",
   commsApp: "Discord",
   commsUrl: "https://discord.com/urltodiscordchannel",
+  hasFinishedPreGame: false,
   mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2'},
   players: [{ id: 'mock-keycloak-id-3', displayName: 'mock-user-3'}],
   gameRoles: [
@@ -447,6 +451,7 @@ export const mockGame5: Game = {
   name: "Mock Game 5",
   commsApp: "Discord",
   commsUrl: "https://discord.com/urltodiscordchannel",
+  hasFinishedPreGame: false,
   mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2'},
   players: [{ id: 'mock-keycloak-id-3', displayName: 'mock-user-3'}, { id: 'mock-keycloak-id-1', displayName: 'mock-user-1'} ],
   gameRoles: [

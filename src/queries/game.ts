@@ -17,6 +17,7 @@ const GAME = gql`
       invitees
       commsApp
       commsUrl
+      hasFinishedPreGame
       mc {
         id
         displayName
