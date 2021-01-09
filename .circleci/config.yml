@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build_and_test:
+  build:
     docker:
       - image: cimg/node:12.16.2
         auth:
@@ -10,3 +10,8 @@ jobs:
       - checkout
       - run: yarn install
       - run: yarn test
+
+workflow:
+  jobs:
+    build_and_test:
+      - build
