@@ -1,5 +1,5 @@
 import React from 'react';
-import { cleanup, findByRole, getByRole, screen } from '@testing-library/react';
+import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import App from '../components/App';
@@ -115,7 +115,7 @@ describe('Testing character creation flow', () => {
     expect(screen.getByRole('textbox').value).toEqual('');
 
     // Type a character name instead
-    userEvent.type(screen.getByRole('textbox'), mockCharacter2.name);
+    userEvent.type(screen.getByRole('textbox'), mockCharacter2.name as string);
     // @ts-ignore
     expect(screen.getByRole('textbox').value).toEqual(mockCharacter2.name);
 
@@ -124,7 +124,7 @@ describe('Testing character creation flow', () => {
 
     // --------------------------------------------- CharacterLooksForm --------------------------------------------- //
     // Check that CharacterLooksForm is open
-    await screen.findByRole('heading', { name: `WHAT DOES ${mockCharacter2.name.toUpperCase()} LOOK LIKE?` });
+    await screen.findByRole('heading', { name: `WHAT DOES ${mockCharacter2.name?.toUpperCase()} LOOK LIKE?` });
     expect(screen.getByTestId('name-box').textContent).toContain(mockCharacter2.name);
     // @ts-ignore
     expect(screen.getByRole('textbox').value).toEqual('');
@@ -194,7 +194,7 @@ describe('Testing character creation flow', () => {
 
     // --------------------------------------------- CharacterStatsForm --------------------------------------------- //
     // Check CharacterStatsForm is open
-    screen.getByRole('heading', { name: `WHAT ARE ${mockCharacter2.name.toUpperCase()}'S STRENGTHS AND WEAKNESSES?` });
+    screen.getByRole('heading', { name: `WHAT ARE ${mockCharacter2.name?.toUpperCase()}'S STRENGTHS AND WEAKNESSES?` });
 
     // Check correct number of stats options
     //(3 mock statsOptions sets, each with 5 stats.
@@ -218,7 +218,7 @@ describe('Testing character creation flow', () => {
 
     // --------------------------------------------- CharacterGearForm --------------------------------------------- //
     // Check CharacterGearForm is open
-    screen.getByRole('heading', { name: `WHAT IS ${mockCharacter2.name.toUpperCase()}'S GEAR?` });
+    screen.getByRole('heading', { name: `WHAT IS ${mockCharacter2.name?.toUpperCase()}'S GEAR?` });
   });
 
   test('should create an ANGEL character - part 2', async () => {
@@ -240,7 +240,7 @@ describe('Testing character creation flow', () => {
 
     // --------------------------------------------- CharacterGearForm --------------------------------------------- //
     // Check CharacterGearForm is open
-    await screen.findByRole('heading', { name: `WHAT IS ${mockCharacter2.name.toUpperCase()}'S GEAR?` });
+    await screen.findByRole('heading', { name: `WHAT IS ${mockCharacter2.name?.toUpperCase()}'S GEAR?` });
 
     // CLick on an item in the options list
     userEvent.click(screen.getByTestId(`${mockPlaybookCreatorAngel.gearInstructions.youGetItems[0]}-listitem`));
@@ -307,7 +307,7 @@ describe('Testing character creation flow', () => {
 
     // ----------------------------------------------- AngelKitForm ----------------------------------------------- //
     // Check AngelKitform is open and gear correctly rendered
-    await screen.findByRole('heading', { name: `${mockCharacter2.name.toUpperCase()}'S ANGEL KIT` });
+    await screen.findByRole('heading', { name: `${mockCharacter2.name?.toUpperCase()}'S ANGEL KIT` });
     const gearBox = await screen.findByTestId('gear-box');
     expect(gearBox.textContent).toContain(mockCharacter2.gear[0]);
     expect(gearBox.textContent).toContain(mockCharacter2.gear[1]);
@@ -321,7 +321,7 @@ describe('Testing character creation flow', () => {
 
     // -------------------------------------------- CharacterMovesForm -------------------------------------------- //
     // Check CharacterMovesForm is open
-    await screen.findByRole('heading', { name: `WHAT ARE ${mockCharacter2.name.toUpperCase()}'S MOVES?` });
+    await screen.findByRole('heading', { name: `WHAT ARE ${mockCharacter2.name?.toUpperCase()}'S MOVES?` });
     expect(screen.getByRole('button', { name: /SET/ }).getAttribute('disabled')).toBeDefined();
     // Check that ANGEL SPECIAL move is already checked
     expect(screen.getByRole('checkbox', { name: /ANGEL SPECIAL/ }).getAttribute('checked')).toBeDefined();
@@ -340,9 +340,7 @@ describe('Testing character creation flow', () => {
     // -------------------------------------------- CharacterHxForm -------------------------------------------- //
     await screen.findByRole('heading', { name: /HISTORY/ });
     const movesBox = await screen.findByTestId('moves-box');
-    expect(movesBox.textContent?.toUpperCase()).toContain(mockCharacter2.characterMoves[0].name);
-    expect(movesBox.textContent?.toUpperCase()).toContain(mockCharacter2.characterMoves[2].name);
-    expect(movesBox.textContent?.toUpperCase()).toContain(mockCharacter2.characterMoves[1].name);
+    mockCharacter2.characterMoves?.forEach((move) => expect(movesBox.textContent?.toUpperCase()).toContain(move.name));
 
     // Check character box is rendered properly
     screen.getByTestId(`${mockCharacter1.name}-hx-box`);

@@ -1,7 +1,8 @@
 import React from 'react';
-import { renderWithRouter } from '../../tests/test-utils';
 import { screen } from '@testing-library/react';
+
 import App from '../App';
+import { renderWithRouter } from '../../tests/test-utils';
 import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
 import { mockKeycloakUserInfo } from '../../tests/mocks';
 

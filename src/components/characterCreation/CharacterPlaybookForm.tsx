@@ -4,7 +4,7 @@ import { Box, Grid } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
-import { Playbook } from '../../@types';
+import { Playbook } from '../../@types/staticDataInterfaces';
 import { PlayBooks } from '../../@types/enums';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';

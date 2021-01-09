@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { GameRole } from '../@types';
+import { GameRole } from '../@types/dataInterfaces';
 
 export interface GameRolesByUserIdData {
   gameRolesByUserId: GameRole[]

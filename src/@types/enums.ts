@@ -34,17 +34,6 @@ export enum PlayBooks {
   skinner = 'SKINNER'
 }
 
-export enum WebsocketResponses {
-  default = 'DEFAULT_GAME_RESPONSE',
-  deleteChannels = 'DELETE_CHANNELS_RESPONSE',
-  addChannels = 'ADD_CHANNELS_RESPONSE'
-}
-
-export enum WebsocketRequests {
-  deleteChannels = 'DELETE_CHANNELS_REQUEST',
-  addChannels = 'ADD_CHANNELS_REQUEST'
-}
-
 export enum CharacterCreationSteps {
   intro = 0,
   selectPlaybook = 1,

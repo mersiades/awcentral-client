@@ -3,21 +3,15 @@ import { useMutation } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { FormField, TextInput, Box, Form } from 'grommet';
 
+import Spinner from './Spinner';
+import { ButtonWS, TextWS } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
-// import { useWebsocketContext } from '../contexts/websocketContext';
 import CREATE_GAME, { CreateGameData, CreateGameVars } from '../mutations/createGame';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
-import { ButtonWS, TextWS } from '../config/grommetConfig';
-import Spinner from './Spinner';
-// import { GameRequestBody } from '../@types';
-// import { WebsocketRequests } from '../@types/enums';
-// import { GameRequest, GameResponse } from '../@types';
-// import { WebsocketRequests } from '../@types/enums';
 
 const CreateGameForm: FC = () => {
   const [gameName, setGameName] = useState({ name: '' });
   const { id: userId, username: displayName, email } = useKeycloakUser();
-  // const { stompClient, handleGame } = useWebsocketContext();
   const [createGame, { loading: loadingCreateGame }] = useMutation<CreateGameData, CreateGameVars>(CREATE_GAME);
   const history = useHistory();
 

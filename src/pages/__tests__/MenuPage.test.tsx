@@ -1,12 +1,12 @@
 import React from 'react';
-import { customRenderForComponent, render, renderWithRouter } from '../../tests/test-utils';
-import { getAllByRole, getByTestId, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import MenuPage from '../MenuPage';
+import { customRenderForComponent } from '../../tests/test-utils';
 import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
 import { mockKeycloakUser1, mockKeycloakUserInfo, mockNewGameName } from '../../tests/mocks';
-import MenuPage from '../MenuPage';
 import { mockCreateGame, mockGameRolesByUserId } from '../../tests/mockQueries';
-import App from '../../components/App';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');

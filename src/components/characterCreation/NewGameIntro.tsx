@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import { Anchor, Box } from 'grommet';
 
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
-import { Game } from '../../@types';
+import { Game } from '../../@types/dataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 
 interface NewGameIntroProps {

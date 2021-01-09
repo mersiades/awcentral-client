@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Playbook } from '../@types';
+import { Playbook } from '../@types/staticDataInterfaces';
 
 export interface PlaybooksData {
   playbooks: Playbook[]

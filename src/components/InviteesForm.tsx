@@ -7,7 +7,7 @@ import Spinner from './Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../config/grommetConfig';
 import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 import GAME from '../queries/game';
-import { Game } from '../@types';
+import { Game } from '../@types/dataInterfaces';
 import { copyToClipboard } from '../helpers/copyToClipboard';
 import { validateEmail } from '../helpers/validateEmail';
 import { useFonts } from '../contexts/fontContext';

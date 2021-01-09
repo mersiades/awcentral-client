@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Character } from '../@types';
+import { Character } from '../@types/dataInterfaces';
 import { PlayBooks } from '../@types/enums';
 
 export interface SetCharacterPlaybookData {

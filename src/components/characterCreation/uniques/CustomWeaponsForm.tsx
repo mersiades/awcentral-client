@@ -5,7 +5,9 @@ import { Box, Text, TextArea, Tip } from 'grommet';
 
 import Spinner from '../../Spinner';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
-import { CustomWeapons, ItemCharacteristic, PlaybookUniqueCreator, TaggedItem } from '../../../@types';
+import { ItemCharacteristic, TaggedItem } from '../../../@types';
+import { CustomWeapons } from '../../../@types/dataInterfaces';
+import { PlaybookUniqueCreator } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 
 interface CustomWeaponsFormProps {
@@ -50,7 +52,7 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
     handBaseOptions,
     handOptionsInstructions,
     handOptionsOptions,
-  } = playbookUniqueCreator.customWeaponsCreator;
+  } = playbookUniqueCreator.customWeaponsCreator || {};
 
   const getParsedValue = useCallback(() => {
     if (!baseValue && characteristics.length === 0) {
@@ -305,13 +307,13 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
           </HeadingWS>
           <TextWS weight="bold">{firearmsBaseInstructions}</TextWS>
           <Box direction="row" wrap>
-            {firearmsBaseOptions.map((option) => renderBasePill(option))}
+            {firearmsBaseOptions?.map((option) => renderBasePill(option))}
           </Box>
           <TextWS weight="bold" margin={{ top: '6px' }}>
             {firearmsOptionsInstructions}
           </TextWS>
           <Box direction="row" wrap>
-            {firearmsOptionsOptions.map((option) => renderOptionPill(option))}
+            {firearmsOptionsOptions?.map((option) => renderOptionPill(option))}
           </Box>
         </Box>
         <Box height="300px" width="50%" pad="6px">
@@ -319,12 +321,12 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
             {handTitle}
           </HeadingWS>
           <TextWS weight="bold">{handBaseInstructions}</TextWS>
-          <Box direction="row">{handBaseOptions.map((option) => renderBasePill(option))}</Box>
+          <Box direction="row">{handBaseOptions?.map((option) => renderBasePill(option))}</Box>
           <TextWS weight="bold" margin={{ top: '6px' }}>
             {handOptionsInstructions}
           </TextWS>
           <Box direction="row" wrap>
-            {handOptionsOptions.map((option) => renderOptionPill(option))}
+            {handOptionsOptions?.map((option) => renderOptionPill(option))}
           </Box>
         </Box>
       </Box>

@@ -4,7 +4,7 @@ import { Box, FormField, TextInput } from 'grommet';
 
 import Spinner from '../../Spinner';
 import { ButtonWS, HeadingWS, RedBox } from '../../../config/grommetConfig';
-import { PlaybookUniqueCreator } from '../../../@types';
+import { PlaybookUniqueCreator } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 
 interface AngelKitFormProps {
@@ -20,7 +20,7 @@ const AngelKitForm: FC<AngelKitFormProps> = ({
   playbookUniqueCreator,
   handleSubmitAngelKit,
 }) => {
-  const { angelKitInstructions, startingStock } = playbookUniqueCreator.angelKitCreator;
+  const { angelKitInstructions, startingStock } = playbookUniqueCreator.angelKitCreator || {};
   const [stock, setStock] = useState(startingStock);
 
   const { crustReady } = useFonts();
@@ -33,9 +33,7 @@ const AngelKitForm: FC<AngelKitFormProps> = ({
         alignSelf="center"
       >{`${characterName.toUpperCase()}'S ANGEL KIT`}</HeadingWS>
       <Box flex="grow" direction="row" align="start">
-        <Box fill="horizontal">
-          <ReactMarkdown>{angelKitInstructions}</ReactMarkdown>
-        </Box>
+        <Box fill="horizontal">{!!angelKitInstructions && <ReactMarkdown>{angelKitInstructions}</ReactMarkdown>}</Box>
         <RedBox
           width="150px"
           align="center"
@@ -61,7 +59,7 @@ const AngelKitForm: FC<AngelKitFormProps> = ({
         <ButtonWS
           label={settingAngelKit ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
           primary
-          onClick={() => !settingAngelKit && handleSubmitAngelKit(startingStock, false)}
+          onClick={() => !settingAngelKit && !!startingStock && handleSubmitAngelKit(startingStock, false)}
           margin={{ right: '5px' }}
         />
       </Box>

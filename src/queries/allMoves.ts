@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Move } from '../@types';
+import { Move } from '../@types/staticDataInterfaces';
 
 export interface AllMovesData {
   allMoves: Move[]

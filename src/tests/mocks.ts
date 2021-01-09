@@ -1,5 +1,20 @@
-import { BrainerGear, Character, Game, GameRole, KeycloakUser, KeycloakUserInfo } from "../@types";
+import { HxInput, KeycloakUser, KeycloakUserInfo } from "../@types";
+import { AngelKit, BrainerGear, Character, CharacterStat, CustomWeapons, Game, GameRole, HxStat, PlaybookUnique } from "../@types/dataInterfaces";
 import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, UniqueTypes } from "../@types/enums";
+import { AngelKitCreator, CharacterMove, GearInstructions, Look, Move, Name, Playbook, PlaybookCreator, PlaybookUniqueCreator, RollModifier, StatModifier, StatsOption } from "../@types/staticDataInterfaces";
+
+// Same as Character, but with no nullable fields
+interface MockCharacter {
+  id: string
+  statsBlock: CharacterStat[]
+  hxBlock: HxStat[]
+  gear: string[]
+  looks: Look[] // Does graphql return an empty array or undefined? // May need an id-less version of Look "EmbeddedLook"
+  name: string
+  playbook: PlayBooks
+  playbookUnique: PlaybookUnique
+  characterMoves: CharacterMove[]
+}
 
 export const mockNewGameName = 'My new mock game'
 
@@ -31,7 +46,7 @@ export const mockKeycloakUser3: KeycloakUser = {
   email: 'mockUser3@email.com'
 }
 
-export const mockStatsBlock1 = [
+export const mockStatsBlock1: CharacterStat[] = [
   {
     id: 'mock-statsblock-stat-id-1',
     stat: Stats.cool,
@@ -64,7 +79,7 @@ export const mockStatsBlock1 = [
   },
 ]
 
-export const dummyRollModifier = {
+export const dummyRollModifier: RollModifier = {
   id: 'dummy',
   movesToModify: [
     {
@@ -78,13 +93,13 @@ export const dummyRollModifier = {
   statToRollWith: Stats.sharp,
 }
 
-export const dummyStatModifier = {
+export const dummyStatModifier: StatModifier = {
   id: "dummy",
   statToModify: Stats.sharp,
   modification: 0
 }
 
-export const mockCharacterMoveAngel1 = {
+export const mockCharacterMoveAngel1: CharacterMove = {
   id: 'angel-move-id-1',
   name: "ANGEL SPECIAL",
   description: "If you and another character have sex,",
@@ -96,7 +111,7 @@ export const mockCharacterMoveAngel1 = {
   isSelected: true
 }
 
-export const mockCharacterMoveAngel2 = {
+export const mockCharacterMoveAngel2: CharacterMove = {
   id: 'angel-move-id-2',
   name: "SIXTH SENSE",
   kind: MoveKinds.character,
@@ -108,7 +123,7 @@ export const mockCharacterMoveAngel2 = {
   isSelected: false
 }
 
-export const mockCharacterMoveAngel3 = {
+export const mockCharacterMoveAngel3: CharacterMove = {
   id: 'angel-move-id-3',
   name: "INFIRMARY",
   description: "you get an infirmary, a workspace with life support...",
@@ -120,7 +135,7 @@ export const mockCharacterMoveAngel3 = {
   isSelected: false
 }
 
-export const mockCharacterMoveAngel4 = {
+export const mockCharacterMoveAngel4: CharacterMove = {
   id: 'angel-move-id-4',
   name: "PROFESSIONAL COMPASSION",
   description: "you can roll+sharp instead of roll+Hx when you help someone who’s rolling.",
@@ -132,77 +147,89 @@ export const mockCharacterMoveAngel4 = {
   isSelected: false
 }
 
-export const mockNameAngel1 = {
+export const mockNameAngel1: Name = {
   id: 'mock-angel-name-id-1',
   name: "Jay"
 }
 
-export const mockNameAngel2 = {
+export const mockNameAngel2: Name = {
   id: 'mock-angel-name-id-2',
   name: "Boo"
 }
 
-export const mockLookAngel1 = {
+export const mockLookAngel1: Look = {
   id: 'mock-angel-look-id-1',
   look: 'man',
   category: LookCategories.gender
 }
 
-export const mockLookAngel2 = {
+export const mockLookAngel2: Look  = {
   id: 'mock-angel-look-id-2',
   look: 'woman',
   category: LookCategories.gender
 }
 
-export const mockLookAngel3 = {
+export const mockLookAngel3: Look  = {
   id: 'mock-angel-look-id-3',
   look: "utility wear",
   category: LookCategories.clothes
 }
 
-export const mockLookAngel4 = {
+export const mockLookAngel4: Look  = {
   id: 'mock-angel-look-id-4',
   look: "casual wear plus utility",
   category: LookCategories.clothes
 }
 
-export const mockLookAngel5 = {
+export const mockLookAngel5: Look  = {
   id: 'mock-angel-look-id-5',
   look: "kind face",
   category: LookCategories.face
 }
 
-export const mockLookAngel6 = {
+export const mockLookAngel6: Look  = {
   id: 'mock-angel-look-id-6',
   look: "strong face",
   category: LookCategories.face
 }
 
-export const mockLookAngel7 = {
+export const mockLookAngel7: Look  = {
   id: 'mock-angel-look-id-7',
   look: "hard eyes",
   category: LookCategories.eyes
 }
 
-export const mockLookAngel8 = {
+export const mockLookAngel8: Look  = {
   id: 'mock-angel-look-id-8',
   look: "quick eyes",
   category: LookCategories.eyes
 }
 
-export const mockLookAngel9 = {
+export const mockLookAngel9: Look  = {
   id: 'mock-angel-look-id-9',
   look: "compact body",
   category: LookCategories.body
 }
 
-export const mockLookAngel10 = {
+export const mockLookAngel10: Look  = {
   id: 'mock-angel-look-id-10',
   look: 'stout body',
   category: LookCategories.body
 }
 
-export const mockStatsOptionsAngel1 = {
+export const mockLookBettleBabe1: Look = {
+  id: 'mock-battlebabe-look-id-1',
+  look: 'woman',
+  category: LookCategories.gender
+}
+
+export const mockLookBattlebabe2: Look = {
+  id: 'mock-battlebabe-look-id-2',
+  look: 'formal wear',
+  category: LookCategories.clothes
+}
+
+export const mockStatsOptionsAngel1: StatsOption = {
   id: 'angel-stats-options-1',
   COOL: 1,
   HARD: 0,
@@ -211,7 +238,7 @@ export const mockStatsOptionsAngel1 = {
   WEIRD: -1,
 }
 
-export const mockStatsOptionsAngel2 = {
+export const mockStatsOptionsAngel2: StatsOption  = {
   id: 'angel-stats-options-2',
   COOL: 1,
   HARD: 1,
@@ -220,7 +247,7 @@ export const mockStatsOptionsAngel2 = {
   WEIRD: -1,
 }
 
-export const mockStatsOptionsAngel3 = {
+export const mockStatsOptionsAngel3: StatsOption  = {
   id: 'angel-stats-options-3',
   COOL: -1,
   HARD: 1,
@@ -229,12 +256,12 @@ export const mockStatsOptionsAngel3 = {
   WEIRD: 1,
 }
 
-export const mockCustomWeapons = {
+export const mockCustomWeapons: CustomWeapons = {
   id: 'mock-custom-weapons-id',
   weapons: ['custom weapon 1', 'custom weapons 2']
 }
 
-export const dummyCustomWeapons = {
+export const dummyCustomWeapons: CustomWeapons = {
   id: 'dummy',
   weapons: ["dummy"]
 }
@@ -244,7 +271,7 @@ export const dummyBrainerGear: BrainerGear = {
   brainerGear: ["dummy"]
 }
 
-export const dummyAngelKitMove = {
+export const dummyAngelKitMove: Move = {
   id: "dummy",
   name: "dummy",
   description: "dummy",
@@ -253,10 +280,9 @@ export const dummyAngelKitMove = {
   stat: Stats.cool,
   statModifier: dummyStatModifier,
   rollModifier: dummyRollModifier,
-  isSelected: false
 }
 
-export const dummyAngelKit =  {
+export const dummyAngelKit: AngelKit =  {
   id: "dummy",
   description: "dummy",
   stock: 0,
@@ -265,7 +291,7 @@ export const dummyAngelKit =  {
   angelKitMoves: [dummyAngelKitMove]
 }
 
-export const mockPlaybookUniqueBattlebabe = {
+export const mockPlaybookUniqueBattlebabe: PlaybookUnique = {
   id: 'mock-battlebabe-unique-id',
   type: UniqueTypes.customWeapons,
   customWeapons: mockCustomWeapons,
@@ -273,7 +299,7 @@ export const mockPlaybookUniqueBattlebabe = {
   angelKit: dummyAngelKit
 }
 
-export const mockAngelKit =  {
+export const mockAngelKit: AngelKit =  {
   id: "mock-angel-kit-id",
   description: "Your angel kit has all kinds of crap in it...",
   stock: 6,
@@ -282,7 +308,7 @@ export const mockAngelKit =  {
   angelKitMoves: [dummyAngelKitMove]
 }
 
-export const mockPlaybookUniqueAngel = {
+export const mockPlaybookUniqueAngel: PlaybookUnique = {
   id: 'mock-angle-unique-id',
   type: UniqueTypes.angelKit,
   customWeapons: dummyCustomWeapons,
@@ -290,28 +316,19 @@ export const mockPlaybookUniqueAngel = {
   angelKit: mockAngelKit
 }
 
-export const mockCharacter1 = {
+export const mockCharacter1: MockCharacter = {
   id: 'mock-character-id-1',
   name: "Mock Character 1",
   playbook: PlayBooks.battlebabe,
   gear: ['leather jacket', 'Timberland boots'],
   statsBlock: mockStatsBlock1,
   hxBlock: [],
-  looks: [
-    {
-      look: mockLookAngel1.look, // TODO: change to battlebabe looks
-      category: mockLookAngel1.category
-    },
-    {
-      look: mockLookAngel3.look,
-      category: mockLookAngel3.category
-    }
-  ],
+  looks: [ mockLookBettleBabe1, mockLookBattlebabe2 ],
   characterMoves: [ mockCharacterMoveAngel1, {...mockCharacterMoveAngel2, isSelected: true}, {...mockCharacterMoveAngel3, isSelected: true} ], // TODO: change to battlebabe moves
   playbookUnique: mockPlaybookUniqueBattlebabe
 }
 
-export const mockCharacter2 = {
+export const mockCharacter2: MockCharacter = {
   id: 'mock-character-id-2',
   name: "Mock Character 2",
   playbook: PlayBooks.angel,
@@ -319,31 +336,10 @@ export const mockCharacter2 = {
   statsBlock: mockStatsBlock1,
   hxBlock: [{
     characterId: mockCharacter1.id,
-    characterName: mockCharacter1.name,
+    characterName: mockCharacter1.name as string,
     hxValue: 1
   }],
-  looks: [
-    {
-      look: mockLookAngel1.look,
-      category: mockLookAngel1.category
-    },
-    {
-      look: mockLookAngel3.look,
-      category: mockLookAngel3.category
-    },
-    {
-      look: mockLookAngel5.look,
-      category: mockLookAngel5.category
-    },
-    {
-      look: mockLookAngel7.look,
-      category: mockLookAngel7.category
-    },
-    {
-      look: mockLookAngel9.look,
-      category: mockLookAngel9.category
-    }
-  ],
+  looks: [ mockLookAngel1, mockLookAngel3, mockLookAngel5, mockLookAngel7, mockLookAngel9],
   characterMoves: [ {...mockCharacterMoveAngel1, isSelected: true}, {...mockCharacterMoveAngel2, isSelected: true}, {...mockCharacterMoveAngel3, isSelected: true} ],
   playbookUnique: mockPlaybookUniqueAngel
 } 
@@ -359,10 +355,16 @@ export const mockGame1: Game = {
     id: "mock-gamerole-id-1",
     role: Roles.mc,
     userId: 'mock-keycloak-id-1',
+    characters: [],
+    npcs: [],
+    threats: []
   }, {
     id: "mock-gamerole-id-3",
     role: Roles.player,
     userId: 'mock-keycloak-id-2',
+    characters: [],
+    npcs: [],
+    threats: []
   }],
   invitees: []
 }
@@ -377,11 +379,17 @@ export const mockGame2: Game = {
   gameRoles: [{
     id: "mock-gamerole-id-2",
     role: Roles.player,
-    userId: 'mock-keycloak-id-1'
+    userId: 'mock-keycloak-id-1',
+    characters: [],
+    npcs: [],
+    threats: []
   }, {
     id: "mock-gamerole-id-4",
     role: Roles.mc,
-    userId: 'mock-keycloak-id-2'
+    userId: 'mock-keycloak-id-2',
+    characters: [],
+    npcs: [],
+    threats: []
   }],
   invitees: []
 }
@@ -396,7 +404,10 @@ export const mockGame3: Game = {
   gameRoles: [{
     id: "mock-gamerole-id-5",
     role: Roles.mc,
-    userId: 'mock-keycloak-id-1'
+    userId: 'mock-keycloak-id-1',
+    characters: [],
+    npcs: [],
+    threats: []
   }],
   invitees: []
 }
@@ -413,12 +424,18 @@ export const mockGame4: Game = {
     {
     id: "mock-gamerole-id-6",
     role: Roles.mc,
-    userId: 'mock-keycloak-id-2'
+    userId: 'mock-keycloak-id-2',
+    characters: [],
+    npcs: [],
+    threats: []
     },
     {
       id: "mock-gamerole-id-7",
       role: Roles.player,
-      userId: 'mock-keycloak-id-3'
+      userId: 'mock-keycloak-id-3',
+      characters: [],
+      npcs: [],
+      threats: []
     },
   ],
   invitees: ['mockUser1@email.com']
@@ -467,31 +484,43 @@ export const mockGameRole1: GameRole = {
   id: "mock-gamerole-id-1",
   role: Roles.mc,
   userId: 'mock-keycloak-id-1',
-  game: mockGame1
+  game: mockGame1,
+  characters: [],
+  npcs: [],
+  threats: []
 }
 
 export const mockGameRole2: GameRole = {
   id: "mock-gamerole-id-2",
   role: Roles.player,
   userId: 'mock-keycloak-id-1',
-  game: mockGame2
+  game: mockGame2,
+  characters: [],
+  npcs: [],
+  threats: []
 }
 
 export const mockGameRole3: GameRole = {
   id: "mock-gamerole-id-3",
   role: Roles.player,
   userId: 'mock-keycloak-id-2',
-  game: mockGame1
+  game: mockGame1,
+  characters: [],
+  npcs: [],
+  threats: []
 }
 
 export const mockGameRole4: GameRole = {
   id: "mock-gamerole-id-4",
   role: Roles.mc,
   userId: 'mock-keycloak-id-2',
-  game: mockGame2
+  game: mockGame2,
+  characters: [],
+  npcs: [],
+  threats: []
 }
 
-export const mockgearInstructionsAngel = {
+export const mockgearInstructionsAngel: GearInstructions = {
   id: "angel-gear-instructions-id",
   youGet: "You get:",
   youGetItems: ["fashion suitable to your look, including at your option a piece worth 1-armor (you detail)"],
@@ -507,21 +536,19 @@ export const mockgearInstructionsAngel = {
   startingBarter: 2
 }
 
-export const mockAngelKitCreator = {
+export const mockAngelKitCreator: AngelKitCreator = {
   id: 'angel-kit-creator-id',
   angelKitInstructions: 'Your angel kit has all kinds of crap in it...',
   startingStock: 6
 }
 
-export const mockUniqueCreatorAngel = {
+export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
   id: 'angel-playbook-unique-creator-id',
   type: UniqueTypes.angelKit,
   angelKitCreator: mockAngelKitCreator
 }
 
-
-
-export const mockPlaybookCreatorAngel = {
+export const mockPlaybookCreatorAngel: PlaybookCreator = {
   id: 'angel-playbook-creator-id',
   playbookType: PlayBooks.angel,
   gearInstructions: mockgearInstructionsAngel,
@@ -538,7 +565,7 @@ export const mockPlaybookCreatorAngel = {
   moveChoiceCount: 2
 }
 
-export const mockPlaybookAngel = {
+export const mockPlaybookAngel: Playbook = {
   id: 'mock-playbook-angel-id',
   playbookType: PlayBooks.angel,
   barterInstructions: 'At the beginning of the session, spend 1- or 2-barter for your lifestyle.',
@@ -547,10 +574,10 @@ export const mockPlaybookAngel = {
   playbookImageUrl: "https://awc-images.s3-ap-southeast-2.amazonaws.com/angel-white-transparent.png"
 }
 
-export const mockPlaybooks = [mockPlaybookAngel]
+export const mockPlaybooks: Playbook[] = [mockPlaybookAngel]
 
-export const mockHxInput = {
+export const mockHxInput: HxInput = {
   characterId: mockCharacter1.id,
-  characterName: mockCharacter1.name,
+  characterName: mockCharacter1.name as string,
   hxValue: 1
 }

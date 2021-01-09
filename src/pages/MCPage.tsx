@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { useKeycloak } from '@react-keycloak/web';
 import {
   Box,
   Header,
@@ -19,21 +20,20 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import GamePanel from '../components/GamePanel';
 import MovesPanel from '../components/MovesPanel';
+import CommsFormShort from '../components/CommsFormShort';
+import InvitationForm from '../components/InvitationForm';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
-import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
 import GAME, { GameData, GameVars } from '../queries/game';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
-import { Roles } from '../@types/enums';
-import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
-import '../assets/styles/transitions.css';
-// import { useWebsocketContext } from '../contexts/websocketContext';
-import { useKeycloak } from '@react-keycloak/web';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
-import InvitationForm from '../components/InvitationForm';
+import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
 import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
-import CommsFormShort from '../components/CommsFormShort';
+import { GameRole } from '../@types/dataInterfaces';
+import { Roles } from '../@types/enums';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import '../assets/styles/transitions.css';
 
 interface LeftMainProps {
   readonly rightPanel: number;
@@ -211,8 +211,8 @@ const MCPage = () => {
             ]}
           />
           {game.gameRoles
-            .filter((gameRole) => gameRole.role === Roles.player)
-            .map((gameRole) =>
+            .filter((gameRole: GameRole) => gameRole.role === Roles.player)
+            .map((gameRole: GameRole) =>
               gameRole.characters?.map((character) => <Button key={character.name} label={character.name} />)
             )}
           <Button label="Threat map" />
