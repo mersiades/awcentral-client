@@ -2,11 +2,11 @@ import { gql } from '@apollo/client';
 import { Game } from '../@types/dataInterfaces';
 
 export interface GameData {
-  game: Game
+  game: Game;
 }
 
 export interface GameVars {
-  gameId: string
+  gameId: string;
 }
 
 const GAME = gql`
@@ -40,6 +40,7 @@ const GAME = gql`
           id
           name
           playbook
+          hasCompletedCharacterCreation
           gear
           statsBlock {
             id
@@ -97,8 +98,8 @@ const GAME = gql`
           }
         }
       }
+    }
   }
-}
 `;
 
 export default GAME;

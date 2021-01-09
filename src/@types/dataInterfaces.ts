@@ -42,6 +42,7 @@ export interface GameRole {
 export interface Character {
   id: string;
   playbook: PlayBooks;
+  hasCompletedCharacterCreation: boolean;
   statsBlock: CharacterStat[];
   hxBlock: HxStat[];
   gear: string[];

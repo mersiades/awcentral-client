@@ -1,20 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { Box } from 'grommet';
+import { Box, Button } from 'grommet';
 import CloseButton from '../components/CloseButton';
 import { HeadingWS, RedBox, TextWS } from '../config/grommetConfig';
 import GAME, { GameData, GameVars } from '../queries/game';
 import { useGameRoles } from '../contexts/gameRoleContext';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { Character } from '../@types/dataInterfaces';
-import { Roles } from '../@types/enums';
+import { PlayBooks, Roles } from '../@types/enums';
 import { decapitalize } from '../helpers/decapitalize';
 import { Checkbox, Checkmark } from 'grommet-icons';
+import ScrollableIndicator from '../components/ScrollableIndicator';
 
 const PreGamePage = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
+  const [havePlayersFinished, setHavePlayersFinished] = useState(false);
+  const [showScrollable, setShowScrollable] = useState(false);
+
+  // ------------------------------------------------------- Refs -------------------------------------------------------- //
+  const containerRef = useRef<HTMLDivElement>(null);
+
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
@@ -27,6 +34,56 @@ const PreGamePage = () => {
   // ----------------------------------------- Component functions and variables ------------------------------------------- //
 
   const pathToGame = userGameRole?.role === Roles.mc ? `/mc-game/${game?.id}` : `/player-game/${game?.id}`;
+
+  // TODO: refactor out into HOC
+  const handleScroll = (e: any) => {
+    if (!e.currentTarget) {
+      return;
+    }
+    if (e.currentTarget.scrollHeight <= e.currentTarget.offsetHeight) {
+      setShowScrollable(false);
+      return;
+    }
+
+    if (e.currentTarget.scrollTop > 0) {
+      setShowScrollable(false);
+      return;
+    }
+
+    if (e.currentTarget.scrollTop === 0) {
+      setShowScrollable(true);
+      return;
+    }
+  };
+
+  const getUnique = (playbookType: PlayBooks) => {
+    switch (playbookType) {
+      case PlayBooks.angel:
+        return 'Angel kit';
+      case PlayBooks.battlebabe:
+        return 'Custom weapons';
+      case PlayBooks.brainer:
+        return 'Brainer gear';
+      case PlayBooks.chopper:
+        return 'Bike & gang';
+      case PlayBooks.driver:
+        return 'Cars';
+      case PlayBooks.gunlugger:
+        return 'Weapons';
+      case PlayBooks.hardholder:
+        return 'Holding';
+      case PlayBooks.hocus:
+        return 'Followers';
+      case PlayBooks.maestroD:
+        return 'Establishment';
+      case PlayBooks.savvyhead:
+        return 'Workspace';
+      case PlayBooks.skinner:
+        return 'Skinner gear';
+      default:
+        return 'Unique';
+    }
+  };
 
   // ------------------------------------------------------ Effects -------------------------------------------------------- //
 
@@ -54,10 +111,36 @@ const PreGamePage = () => {
     }
   }, [game, userId, setGameRoles]);
 
+  useEffect(() => {
+    const unfinishedPlayers = allPlayerGameRoles?.filter((gameRole) => {
+      console.log('gameRoles.characters', gameRole?.characters);
+      if (!gameRole.characters[0]) {
+        return true;
+      } else if (!gameRole.characters[0].hasCompletedCharacterCreation) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    console.log('unfinishedPlayers?.length', unfinishedPlayers?.length);
+    unfinishedPlayers?.length === 0 ? setHavePlayersFinished(true) : setHavePlayersFinished(false);
+  }, [allPlayerGameRoles]);
+
+  useEffect(() => {
+    if (!!containerRef.current) {
+      containerRef.current.addEventListener('scroll', (e) => handleScroll(e));
+      if (containerRef.current.scrollHeight >= containerRef.current.offsetHeight) {
+        setShowScrollable(true);
+      } else {
+        setShowScrollable(false);
+      }
+      containerRef.current.scrollTop = 0;
+    }
+  }, [containerRef]);
+
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   const renderPlayerBox = (character: Character, index: number) => {
-    console.log('character', character);
     return (
       <RedBox
         key={!!character?.id ? character.id : index}
@@ -71,8 +154,8 @@ const PreGamePage = () => {
           }`}
         </HeadingWS>
 
-        <Box direction="row" align="center" justify="around">
-          <Box align="center" margin={{ horizontal: '6px' }} gap="12px">
+        <Box direction="row" align="start" justify="around">
+          <Box align="center" pad="12px" gap="12px" width="80px">
             {!!character && character.looks.length === 5 ? (
               <Checkmark size="large" color="accent-1" />
             ) : (
@@ -80,7 +163,7 @@ const PreGamePage = () => {
             )}
             <TextWS size="large">Looks</TextWS>
           </Box>
-          <Box align="center" pad="12px" gap="12px">
+          <Box align="center" pad="12px" gap="12px" width="80px">
             {!!character && character.statsBlock.length === 5 ? (
               <Checkmark size="large" color="accent-1" />
             ) : (
@@ -88,7 +171,7 @@ const PreGamePage = () => {
             )}
             <TextWS size="large">Stats</TextWS>
           </Box>
-          <Box align="center" pad="12px" gap="12px">
+          <Box align="center" pad="12px" gap="12px" width="80px">
             {!!character && character.gear.length > 0 ? (
               <Checkmark size="large" color="accent-1" />
             ) : (
@@ -96,15 +179,17 @@ const PreGamePage = () => {
             )}
             <TextWS size="large">Gear</TextWS>
           </Box>
-          <Box align="center" pad="12px" gap="12px">
+          <Box align="center" pad="12px" gap="12px" width="80px">
             {!!character && !!character.playbookUnique ? (
               <Checkmark size="large" color="accent-1" />
             ) : (
               <Checkbox size="large" color="neutral-1" />
             )}
-            <TextWS size="large">Unique</TextWS>
+            <TextWS size="large" textAlign="center">
+              {!!character && !!character.playbook ? getUnique(character.playbook) : 'Unique'}
+            </TextWS>
           </Box>
-          <Box align="center" pad="12px" gap="12px">
+          <Box align="center" pad="12px" gap="12px" width="80px">
             {!!character && character.characterMoves.length > 2 ? (
               <Checkmark size="large" color="accent-1" />
             ) : (
@@ -112,7 +197,7 @@ const PreGamePage = () => {
             )}
             <TextWS size="large">Moves</TextWS>
           </Box>
-          <Box align="center" pad="12px" gap="12px">
+          <Box align="center" pad="12px" gap="12px" width="80px">
             {!!character && character.hxBlock.length > 0 ? (
               <Checkmark size="large" color="accent-1" />
             ) : (
@@ -126,11 +211,21 @@ const PreGamePage = () => {
   };
 
   return (
-    <Box background="black" fill align="center" justify="start" pad="24px" overflow="auto">
+    <Box ref={containerRef} background="black" fill align="center" justify="start" pad="24px" overflow="auto">
       <CloseButton handleClose={() => history.push(pathToGame)} />
-      <HeadingWS level="2">PRE-GAME PROGRESS</HeadingWS>
+      <ScrollableIndicator show={showScrollable} />
+      <HeadingWS level="2">PRE-GAME</HeadingWS>
       {userGameRole?.role === Roles.mc && (
         <Box flex="grow" style={{ maxWidth: '812px' }} gap="3px">
+          <Button
+            alignSelf="center"
+            label="START GAME"
+            primary
+            onClick={() => {}}
+            disabled={!havePlayersFinished}
+            size="large"
+            margin="12px"
+          />
           <TextWS>Use this time to build the world you will play in.</TextWS>
           <TextWS>Ask your players lots of questions about their characters and the world.</TextWS>
           <TextWS>While the players are making their characters, here are some things to get out up-front:</TextWS>
@@ -145,7 +240,7 @@ const PreGamePage = () => {
           </ul>
         </Box>
       )}
-      <Box direction="row" wrap justify="center">
+      <Box direction="row" wrap justify="center" flex="shrink" margin={{ bottom: '12px' }}>
         {allPlayerGameRoles?.map((gameRole, index) => {
           return renderPlayerBox(gameRole.characters[0], index);
         })}
