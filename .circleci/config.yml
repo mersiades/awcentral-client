@@ -18,6 +18,7 @@ jobs:
           username: qdfn3af9be
           password: $DOCKERHUB_PASSWORD
     steps:
+      - checkout
       - run: ls
       - run: yarn test
 
