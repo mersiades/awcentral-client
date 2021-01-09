@@ -35,6 +35,7 @@ const CreateGamePage = () => {
   );
 
   const game = gameData?.game;
+  // console.log('game', game);
 
   // ---------------------------------------------------- UseEffects  ------------------------------------------------------ //
   useEffect(() => {

@@ -9,6 +9,7 @@ import { theme } from './config/grommetConfig';
 import { apolloClient } from './config/apolloConfig';
 import keycloak from './config/keycloakConfig';
 import { KeycloakUserProvider } from './contexts/keycloakUserContext';
+import { GameRolesProvider } from './contexts/gameRoleContext';
 
 interface RootProps {
   children: JSX.Element;
@@ -33,7 +34,9 @@ const Root: FC<RootProps> = ({ children }) => {
                       onLoad: 'login-required',
                     }}
                   >
-                    <KeycloakUserProvider>{children}</KeycloakUserProvider>
+                    <GameRolesProvider>
+                      <KeycloakUserProvider>{children}</KeycloakUserProvider>
+                    </GameRolesProvider>
                   </ReactKeycloakProvider>
                 </Grommet>
               );
