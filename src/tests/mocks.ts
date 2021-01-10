@@ -539,6 +539,47 @@ export const mockGame5: Game = {
   invitees: [],
 };
 
+// Used for testing starting a game from the PreGamePage
+export const mockGame6: Game = {
+  id: 'mock-game-id-6',
+  name: 'Mock Game 6',
+  commsApp: 'Discord',
+  commsUrl: 'https://discord.com/urltodiscordchannel',
+  hasFinishedPreGame: false,
+  mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2' },
+  players: [
+    { id: 'mock-keycloak-id-3', displayName: 'mock-user-3' },
+    { id: 'mock-keycloak-id-1', displayName: 'mock-user-1' },
+  ],
+  gameRoles: [
+    {
+      id: 'mock-gamerole-id-6',
+      role: Roles.mc,
+      userId: 'mock-keycloak-id-2',
+      npcs: [],
+      threats: [],
+      characters: [],
+    },
+    {
+      id: 'mock-gamerole-id-7',
+      role: Roles.player,
+      userId: 'mock-keycloak-id-3',
+      npcs: [],
+      threats: [],
+      characters: [{ ...mockCharacter1, hasCompletedCharacterCreation: true }],
+    },
+    {
+      id: 'mock-gamerole-id-8',
+      role: Roles.player,
+      userId: 'mock-keycloak-id-1',
+      npcs: [],
+      threats: [],
+      characters: [{ ...mockCharacter2, hasCompletedCharacterCreation: true, hxBlock: [] }],
+    },
+  ],
+  invitees: [],
+};
+
 export const mockGameRole1: GameRole = {
   id: 'mock-gamerole-id-1',
   role: Roles.mc,

@@ -6,8 +6,15 @@ import userEvent from '@testing-library/user-event';
 import App from '../../components/App';
 import { renderWithRouter } from '../../tests/test-utils';
 import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
-import { mockCharacter1, mockCharacter2, mockGame5, mockKeycloakUser2, mockKeycloakUserInfo2 } from '../../tests/mocks';
-import { mockGameForPreGame1, mockGameForPreGame2 } from '../../tests/mockQueries';
+import {
+  mockCharacter1,
+  mockCharacter2,
+  mockGame5,
+  mockGame6,
+  mockKeycloakUser2,
+  mockKeycloakUserInfo2,
+} from '../../tests/mocks';
+import { mockFinishPreGame, mockGameForPreGame1, mockGameForPreGame2, mockGameForPreGame3 } from '../../tests/mockQueries';
 import { decapitalize } from '../../helpers/decapitalize';
 
 jest.mock('@react-keycloak/web', () => {
@@ -19,11 +26,11 @@ jest.mock('@react-keycloak/web', () => {
 });
 
 describe('Rendering PreGamePage', () => {
-  test('should render of MC with two Characters', async () => {
+  test('should render for MC with two incomplete Characters', async () => {
     renderWithRouter(<App />, `/pre-game/${mockGame5.id}`, {
       isAuthenticated: true,
       keycloakUser: mockKeycloakUser2,
-      apolloMocks: [mockGameForPreGame1, mockGameForPreGame2],
+      apolloMocks: [mockGameForPreGame1],
     });
     await screen.findByTestId('pre-game-page');
 
@@ -38,6 +45,30 @@ describe('Rendering PreGamePage', () => {
     expect(char2LooksBox.querySelector('svg')?.getAttribute('aria-label')).toEqual('Checkbox');
 
     // TODO: add tests for when new data comes in via polling
+  });
+
+  test('should render for MC with two complete Characters', async () => {
+    renderWithRouter(<App />, `/pre-game/${mockGame6.id}`, {
+      isAuthenticated: true,
+      keycloakUser: mockKeycloakUser2,
+      apolloMocks: [mockGameForPreGame3, mockFinishPreGame],
+    });
+    await screen.findByTestId('pre-game-page');
+
+    // Check everything has been rendered properly initially
+    screen.getByRole('heading', { name: /PRE-GAME/ });
+    screen.getByRole('heading', { name: `${mockCharacter1.name} -- ${decapitalize(mockCharacter1.playbook)}` });
+    screen.getByRole('heading', { name: `${mockCharacter2.name} -- ${decapitalize(mockCharacter2.playbook)}` });
+    const button = screen.getByRole('button', { name: /START GAME/ });
+    let char1LooksBox = screen.getByTestId(`${mockCharacter1.id}-looks-box`);
+    expect(char1LooksBox.querySelector('svg')?.getAttribute('aria-label')).toEqual('Checkbox');
+    let char2LooksBox = screen.getByTestId(`${mockCharacter2.id}-looks-box`);
+    expect(char2LooksBox.querySelector('svg')?.getAttribute('aria-label')).toEqual('Checkmark');
+
+    userEvent.click(button);
+
+    // Check that PlayerPage is open
+    await screen.findByTestId('mc-page');
   });
 });
 

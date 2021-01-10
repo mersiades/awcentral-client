@@ -7,6 +7,7 @@ import ADD_USER_TO_GAME from '../mutations/addUserToGame';
 import CREATE_CHARACTER from '../mutations/createCharacter';
 import CREATE_GAME from '../mutations/createGame';
 import FINISH_CHARACTER_CREATION from '../mutations/finishCharacterCreation';
+import FINISH_PRE_GAME from '../mutations/finishPreGame';
 import SET_ANGEL_KIT from '../mutations/setAngelKit';
 import SET_CHARACTER_GEAR from '../mutations/setCharacterGear';
 import SET_CHARACTER_HX from '../mutations/setCharacterHx';
@@ -29,6 +30,7 @@ import {
   mockGame3,
   mockGame4,
   mockGame5,
+  mockGame6,
   mockGameRole1,
   mockGameRole2,
   mockHxInput,
@@ -1773,6 +1775,40 @@ export const mockGameForPreGame2: MockedResponse = {
               ],
             },
           ],
+        },
+      },
+    };
+  },
+};
+
+export const mockGameForPreGame3: MockedResponse = {
+  request: {
+    query: GAME,
+    variables: { gameId: mockGame6.id },
+  },
+  result: () => {
+    // console.log('mockGameForPreGame3');
+    return {
+      data: {
+        game: mockGame6,
+      },
+    };
+  },
+};
+
+export const mockFinishPreGame: MockedResponse = {
+  request: {
+    query: FINISH_PRE_GAME,
+    variables: {
+      gameId: mockGame6.id,
+    },
+  },
+  result: () => {
+    // console.log('mockFinishPreGame');
+    return {
+      data: {
+        finishPreGame: {
+          id: mockGame6.id,
         },
       },
     };
