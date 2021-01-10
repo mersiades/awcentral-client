@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { Box, Button } from 'grommet';
 import CloseButton from '../components/CloseButton';
 import { HeadingWS, RedBox, TextWS } from '../config/grommetConfig';
 import GAME, { GameData, GameVars } from '../queries/game';
+import FINISH_PRE_GAME, { FinishPreGameData, FinishPreGameVars } from '../mutations/finishPreGame';
 import { useGameRoles } from '../contexts/gameRoleContext';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { Character } from '../@types/dataInterfaces';
@@ -13,6 +14,7 @@ import { PlayBooks, Roles } from '../@types/enums';
 import { decapitalize } from '../helpers/decapitalize';
 import { Checkbox, Checkmark } from 'grommet-icons';
 import ScrollableIndicator from '../components/ScrollableIndicator';
+import Spinner from '../components/Spinner';
 
 const PreGamePage = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -25,8 +27,10 @@ const PreGamePage = () => {
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
-  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } /*pollInterval: 2500*/ });
+  const [finishPreGame, { loading: finishingPreGame }] = useMutation<FinishPreGameData, FinishPreGameVars>(FINISH_PRE_GAME);
+  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId }, pollInterval: 2500 });
   const game = gameData?.game;
+  // console.log('game', game);
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
   const { userGameRole, allPlayerGameRoles, setGameRoles } = useGameRoles();
@@ -85,6 +89,17 @@ const PreGamePage = () => {
     }
   };
 
+  const handleStartGame = async () => {
+    if (!!game) {
+      try {
+        await finishPreGame({ variables: { gameId: game.id } });
+        history.push(pathToGame);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   // ------------------------------------------------------ Effects -------------------------------------------------------- //
 
   // Send User to MenuPage if not a member of this game
@@ -113,7 +128,6 @@ const PreGamePage = () => {
 
   useEffect(() => {
     const unfinishedPlayers = allPlayerGameRoles?.filter((gameRole) => {
-      console.log('gameRoles.characters', gameRole?.characters);
       if (!gameRole.characters[0]) {
         return true;
       } else if (!gameRole.characters[0].hasCompletedCharacterCreation) {
@@ -122,14 +136,13 @@ const PreGamePage = () => {
         return false;
       }
     });
-    console.log('unfinishedPlayers?.length', unfinishedPlayers?.length);
     unfinishedPlayers?.length === 0 ? setHavePlayersFinished(true) : setHavePlayersFinished(false);
   }, [allPlayerGameRoles]);
 
   useEffect(() => {
     if (!!containerRef.current) {
       containerRef.current.addEventListener('scroll', (e) => handleScroll(e));
-      if (containerRef.current.scrollHeight >= containerRef.current.offsetHeight) {
+      if (containerRef.current.scrollHeight > containerRef.current.offsetHeight) {
         setShowScrollable(true);
       } else {
         setShowScrollable(false);
@@ -219,9 +232,9 @@ const PreGamePage = () => {
         <Box flex="grow" style={{ maxWidth: '812px' }} gap="3px">
           <Button
             alignSelf="center"
-            label="START GAME"
+            label={finishingPreGame ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'START GAME'}
             primary
-            onClick={() => {}}
+            onClick={() => !finishingPreGame && handleStartGame()}
             disabled={!havePlayersFinished}
             size="large"
             margin="12px"
