@@ -14,6 +14,20 @@ import { decapitalize } from '../helpers/decapitalize';
 import { Checkbox, Checkmark } from 'grommet-icons';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
+import styled from 'styled-components';
+
+export const background = {
+  color: 'black',
+  dark: true,
+  size: 'contain',
+  image: 'url(/images/background-image-7.jpg)',
+  position: 'bottom left',
+};
+
+const StyledLi = styled.li`
+  text-shadow: 0 0 2px #000, 0 0 4px #000;
+  cursor: default;
+`;
 
 const PreGamePage = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -230,7 +244,7 @@ const PreGamePage = () => {
     <Box
       data-testid="pre-game-page"
       ref={containerRef}
-      background="black"
+      background={background}
       fill
       align="center"
       justify="start"
@@ -255,13 +269,13 @@ const PreGamePage = () => {
           <TextWS>Ask your players lots of questions about their characters and the world.</TextWS>
           <TextWS>While the players are making their characters, here are some things to get out up-front:</TextWS>
           <ul>
-            <li>Your characters don't have to be friends, but they should definitely be allies.</li>
-            <li>Your characters are unique in Apocalypse World.</li>
-            <li>1-armor can be armor or clothing. 2-armor is armor.</li>
-            <li>
+            <StyledLi>Your characters don't have to be friends, but they should definitely be allies.</StyledLi>
+            <StyledLi>Your characters are unique in Apocalypse World.</StyledLi>
+            <StyledLi>1-armor can be armor or clothing. 2-armor is armor.</StyledLi>
+            <StyledLi>
               Is <em>barter</em> a medium of exchange? What do you use?
-            </li>
-            <li>I'm not out to get you. I'm here to find out what's going to happen. Same as you!</li>
+            </StyledLi>
+            <StyledLi>I'm not out to get you. I'm here to find out what's going to happen. Same as you!</StyledLi>
           </ul>
         </Box>
       )}

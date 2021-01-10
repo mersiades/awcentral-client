@@ -17,7 +17,7 @@ import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
 import { ButtonWS, HeadingWS } from '../config/grommetConfig';
-import GAME, { GameData, GameVars } from '../queries/game';
+import GAME from '../queries/game';
 import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
 import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../mutations/createCharacter';
 import SET_CHARACTER_PLAYBOOK, {
@@ -35,7 +35,7 @@ import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
 import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
 import { HxInput } from '../@types';
-import { Character, GameRole } from '../@types/dataInterfaces';
+import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import FINISH_CHARACTER_CREATION, {
   FinishCharacterCreationData,
@@ -73,11 +73,10 @@ const CharacterCreationPage: FC = () => {
   const { id: userId } = useKeycloakUser();
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
-  const { game, userGameRole, allPlayerGameRoles, setGameContext } = useGame();
+  const { game, userGameRole, setGameContext } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
   const { data: playbooksData } = useQuery<PlaybooksData>(PLAYBOOKS);
-  // const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
   const [createCharacter, { loading: creatingCharacter }] = useMutation<CreateCharacterData, CreateCharacterVars>(
     CREATE_CHARACTER
   );
