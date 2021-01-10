@@ -115,6 +115,9 @@ const CharacterCreationPage: FC = () => {
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.game;
   const gameRoles = game?.gameRoles;
+  // useEffect(() => {
+  //   console.log('game', game);
+  // }, [game]);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
@@ -186,13 +189,13 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitLook = async (look: string, category: LookCategories) => {
+    // console.log('handleSubmitLook');
     if (!!gameRole && !!character) {
       try {
         const data = await setCharacterLook({
           variables: { gameRoleId: gameRole.id, characterId: character.id, look, category },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
-
         if (data.data?.setCharacterLook.looks?.length === 5) {
           setCreationStep((prevState) => prevState + 1);
         }

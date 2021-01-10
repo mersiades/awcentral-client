@@ -1,4 +1,5 @@
 import React from 'react';
+// import wait from 'waait';
 import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -8,11 +9,14 @@ import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
 import { mockCharacter1, mockCharacter2, mockGame5, mockKeycloakUserInfo, mockPlaybookCreatorAngel } from './mocks';
 import {
   mockCreateCharacter,
+  mockfinishCharacterCreation,
   mockGameForCharacterCreation1,
   mockGameForCharacterCreation10,
   mockGameForCharacterCreation11,
   mockGameForCharacterCreation12,
   mockGameForCharacterCreation13,
+  mockGameForCharacterCreation14,
+  mockGameForCharacterCreation15,
   mockGameForCharacterCreation2,
   mockGameForCharacterCreation3,
   mockGameForCharacterCreation4,
@@ -96,6 +100,7 @@ describe('Testing character creation flow', () => {
 
     // ---------------------------------------------- CharacterNameForm ---------------------------------------------- //
     const playbookBox = await screen.findByTestId('playbook-box');
+
     expect(playbookBox.textContent).toContain('Angel');
 
     // Check that CharacterNameForm is open
@@ -235,6 +240,9 @@ describe('Testing character creation flow', () => {
         mockGameForCharacterCreation12,
         mockSetCharacterHx,
         mockGameForCharacterCreation13,
+        mockGameForCharacterCreation14,
+        mockfinishCharacterCreation,
+        mockGameForCharacterCreation15,
       ],
     });
 
@@ -363,5 +371,6 @@ describe('Testing character creation flow', () => {
 
     // Check that PlayerPage is open
     screen.findByTestId('player-page');
+    // await screen.findByTestId('player-page');
   });
 });

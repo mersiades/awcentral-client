@@ -28,7 +28,7 @@ const PreGamePage = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
   const [finishPreGame, { loading: finishingPreGame }] = useMutation<FinishPreGameData, FinishPreGameVars>(FINISH_PRE_GAME);
-  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId }, pollInterval: 2500 });
+  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } /*pollInterval: 2500*/ });
   const game = gameData?.game;
   // console.log('game', game);
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
