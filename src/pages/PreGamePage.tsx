@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { Box, Button } from 'grommet';
 import CloseButton from '../components/CloseButton';
 import { HeadingWS, RedBox, TextWS } from '../config/grommetConfig';
-import GAME, { GameData, GameVars } from '../queries/game';
 import FINISH_PRE_GAME, { FinishPreGameData, FinishPreGameVars } from '../mutations/finishPreGame';
-import { useGameRoles } from '../contexts/gameRoleContext';
+import { useGame } from '../contexts/gameContext';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { Character } from '../@types/dataInterfaces';
 import { PlayBooks, Roles } from '../@types/enums';
@@ -28,12 +27,10 @@ const PreGamePage = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
   const [finishPreGame, { loading: finishingPreGame }] = useMutation<FinishPreGameData, FinishPreGameVars>(FINISH_PRE_GAME);
-  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId }, pollInterval: 2500 });
-  const game = gameData?.game;
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
-  const { userGameRole, allPlayerGameRoles, setGameRoles } = useGameRoles();
+  const { game, userGameRole, allPlayerGameRoles, setGameContext } = useGame();
 
   // ----------------------------------------- Component functions and variables ------------------------------------------- //
 
@@ -119,12 +116,12 @@ const PreGamePage = () => {
     }
   }, [game, userGameRole, pathToGame, history]);
 
-  // Set the Game's GameRoles
+  // Set the GameContext
   useEffect(() => {
-    if (!!game && game.gameRoles.length > 0 && !!userId && !!setGameRoles) {
-      setGameRoles(game.gameRoles, userId);
+    if (!!gameId && !!userId && !!setGameContext) {
+      setGameContext(gameId, userId);
     }
-  }, [game, userId, setGameRoles]);
+  }, [gameId, userId, setGameContext]);
 
   useEffect(() => {
     const unfinishedPlayers = allPlayerGameRoles?.filter((gameRole) => {
