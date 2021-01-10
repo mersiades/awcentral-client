@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import App from '../components/App';
 import { renderWithRouter } from './test-utils';
 import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
-import { mockCharacter1, mockCharacter2, mockGame5, mockKeycloakUserInfo, mockPlaybookCreatorAngel } from './mocks';
+import { mockCharacter1, mockCharacter2, mockGame5, mockKeycloakUserInfo1, mockPlaybookCreatorAngel } from './mocks';
 import {
   mockCreateCharacter,
   mockfinishCharacterCreation,
@@ -45,7 +45,7 @@ jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
   return {
     ...originalModule,
-    useKeycloak: () => ({ keycloak: mockKeycloakStub(true, mockKeycloakUserInfo), initialized: true }),
+    useKeycloak: () => ({ keycloak: mockKeycloakStub(true, mockKeycloakUserInfo1), initialized: true }),
   };
 });
 

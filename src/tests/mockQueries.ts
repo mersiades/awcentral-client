@@ -1692,3 +1692,89 @@ export const mockAllMoves: MockedResponse = {
     };
   },
 };
+
+export const mockGameForPreGame1: MockedResponse = {
+  request: {
+    query: GAME,
+    variables: { gameId: mockGame5.id },
+  },
+  result: () => {
+    // console.log('mockGameForPreGame1');
+    return {
+      data: {
+        game: {
+          id: mockGame5.id,
+          name: mockGame5.name,
+          invitees: [],
+          commsApp: mockGame5.commsApp,
+          commsUrl: mockGame5.commsUrl,
+          hasFinishedPreGame: mockGame5.hasFinishedPreGame,
+          mc: mockGame5.mc,
+          players: mockGame5.players,
+          gameRoles: mockGame5.gameRoles,
+        },
+      },
+    };
+  },
+};
+
+export const mockGameForPreGame2: MockedResponse = {
+  request: {
+    query: GAME,
+    variables: { gameId: mockGame5.id },
+  },
+  result: () => {
+    // console.log('mockGameForPreGame2');
+    return {
+      data: {
+        game: {
+          ...mockGame5,
+          gameRoles: [
+            mockGame5.gameRoles[0],
+            mockGame5.gameRoles[1],
+            {
+              id: mockGame5.gameRoles[2].id,
+              role: mockGame5.gameRoles[2].role,
+              userId: mockGame5.gameRoles[2].userId,
+              npcs: mockGame5.gameRoles[2].npcs,
+              threats: mockGame5.gameRoles[2].threats,
+              characters: [
+                {
+                  id: mockCharacter2.id,
+                  playbook: mockCharacter2.playbook,
+                  name: '',
+                  gear: [],
+                  statsBlock: [],
+                  hxBlock: [],
+                  looks: [],
+                  hasCompletedCharacterCreation: false,
+                  characterMoves: [],
+                  playbookUnique: {
+                    id: 'dummy',
+                    type: 'dummy',
+                    brainerGear: {
+                      id: 'dummy',
+                      brainerGear: [],
+                    },
+                    customWeapons: {
+                      id: 'dummy',
+                      weapons: [],
+                    },
+                    angelKit: {
+                      id: 'dummy',
+                      description: 'dummy',
+                      stock: 0,
+                      hasSupplier: false,
+                      supplierText: 'dummy',
+                      angelKitMoves: [dummyAngelKitMove],
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+  },
+};

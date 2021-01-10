@@ -2,7 +2,6 @@ import { HxInput, KeycloakUser, KeycloakUserInfo } from '../@types';
 import {
   AngelKit,
   BrainerGear,
-  Character,
   CharacterStat,
   CustomWeapons,
   Game,
@@ -42,7 +41,7 @@ interface MockCharacter {
 
 export const mockNewGameName = 'My new mock game';
 
-export const mockKeycloakUserInfo: KeycloakUserInfo = {
+export const mockKeycloakUserInfo1: KeycloakUserInfo = {
   email: 'mockUser1@email.com',
   email_verified: true,
   family_name: 'mock-family-name-1',
@@ -56,6 +55,16 @@ export const mockKeycloakUser1: KeycloakUser = {
   id: 'mock-keycloak-id-1',
   username: 'mock-user-1',
   email: 'mockUser1@email.com',
+};
+
+export const mockKeycloakUserInfo2: KeycloakUserInfo = {
+  email: 'mockUser2@email.com',
+  email_verified: true,
+  family_name: 'mock-family-name-2',
+  given_name: 'mock-given-name-2',
+  name: 'mock-name-2',
+  preferred_username: 'mock-user-2',
+  sub: 'mock-keycloak-id-2',
 };
 
 export const mockKeycloakUser2: KeycloakUser = {
@@ -459,7 +468,7 @@ export const mockGame3: Game = {
   invitees: [],
 };
 
-// mockgame4 is used to test joinging a game
+// mockgame4 is used to test joining a game
 export const mockGame4: Game = {
   id: 'mock-game-id-4',
   name: 'Mock Game 4 - Join Me',

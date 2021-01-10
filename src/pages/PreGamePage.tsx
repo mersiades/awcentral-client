@@ -28,9 +28,9 @@ const PreGamePage = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
   const [finishPreGame, { loading: finishingPreGame }] = useMutation<FinishPreGameData, FinishPreGameVars>(FINISH_PRE_GAME);
-  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } /*pollInterval: 2500*/ });
+  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId }, pollInterval: 2500 });
   const game = gameData?.game;
-  // console.log('game', game);
+
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
   const { userGameRole, allPlayerGameRoles, setGameRoles } = useGameRoles();
@@ -168,7 +168,13 @@ const PreGamePage = () => {
         </HeadingWS>
 
         <Box direction="row" align="start" justify="around">
-          <Box align="center" pad="12px" gap="12px" width="80px">
+          <Box
+            data-testid={`${character?.id ? character.id : index}-looks-box`}
+            align="center"
+            pad="12px"
+            gap="12px"
+            width="80px"
+          >
             {!!character && character.looks.length === 5 ? (
               <Checkmark size="large" color="accent-1" />
             ) : (
@@ -224,7 +230,16 @@ const PreGamePage = () => {
   };
 
   return (
-    <Box ref={containerRef} background="black" fill align="center" justify="start" pad="24px" overflow="auto">
+    <Box
+      data-testid="pre-game-page"
+      ref={containerRef}
+      background="black"
+      fill
+      align="center"
+      justify="start"
+      pad="24px"
+      overflow="auto"
+    >
       <CloseButton handleClose={() => history.push(pathToGame)} />
       <ScrollableIndicator show={showScrollable} />
       <HeadingWS level="2">PRE-GAME</HeadingWS>

@@ -41,9 +41,9 @@ const ComponentProviders = ({
                 onLoad: 'login-required',
               }}
             >
-              <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>
-                <GameRolesProvider>{children}</GameRolesProvider>
-              </KeycloakUserProvider>
+              <GameRolesProvider>
+                <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
+              </GameRolesProvider>
             </ReactKeycloakProvider>
           </Grommet>
         </FontsProvider>
@@ -72,7 +72,9 @@ const AppProviders = ({
                 onLoad: 'login-required',
               }}
             >
-              <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
+              <GameRolesProvider>
+                <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
+              </GameRolesProvider>
             </ReactKeycloakProvider>
           </Grommet>
         </FontsProvider>
