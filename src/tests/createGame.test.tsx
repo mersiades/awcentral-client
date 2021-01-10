@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import App from '../components/App';
 import { renderWithRouter } from './test-utils';
 import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
-import { mockKeycloakUser1, mockKeycloakUserInfo, mockNewGameName } from './mocks';
+import { mockKeycloakUser1, mockKeycloakUserInfo1, mockNewGameName } from './mocks';
 import {
   mockAddCommsApp,
   mockAddCommsUrl,
@@ -24,7 +24,7 @@ jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
   return {
     ...originalModule,
-    useKeycloak: () => ({ keycloak: mockKeycloakStub(true, mockKeycloakUserInfo), initialized: true }),
+    useKeycloak: () => ({ keycloak: mockKeycloakStub(true, mockKeycloakUserInfo1), initialized: true }),
   };
 });
 
@@ -75,7 +75,7 @@ describe('Testing flow for creating a game', () => {
     // Check the game's name is in the GameCreationStepper
     const nameBox = await screen.findByTestId('name-box');
     await screen.findByTestId('channel-box'); // For some reason I need to advance by two 'ticks' here
-    await screen.findByTestId('channel-box'); // It's related to adding createGenericContext
+    await screen.findByTestId('channel-box');
     expect(nameBox.textContent).toEqual('Name' + mockNewGameName);
 
     // Open the comms app drop list

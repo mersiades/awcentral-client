@@ -3,17 +3,17 @@ import { HxInput } from '../@types';
 import { Character } from '../@types/dataInterfaces';
 
 export interface SetCharacterHxData {
-  setCharacterHx: Character
+  setCharacterHx: Character;
 }
 
 export interface SetCharacterHxVars {
-  gameRoleId: string
-  characterId: string
-  hxStats: HxInput[]
+  gameRoleId: string;
+  characterId: string;
+  hxStats: HxInput[];
 }
 
 const SET_CHARACTER_HX = gql`
-  mutation SetCharacterHx($gameRoleId: String!,$characterId: String!, $hxStats: [HxInput]!) {
+  mutation SetCharacterHx($gameRoleId: String!, $characterId: String!, $hxStats: [HxInput]!) {
     setCharacterHx(gameRoleId: $gameRoleId, characterId: $characterId, hxStats: $hxStats) {
       id
       name
@@ -25,6 +25,6 @@ const SET_CHARACTER_HX = gql`
       }
     }
   }
-`
+`;
 
-export default SET_CHARACTER_HX
+export default SET_CHARACTER_HX;

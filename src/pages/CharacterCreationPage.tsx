@@ -37,6 +37,10 @@ import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enu
 import { HxInput } from '../@types';
 import { Character, GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import FINISH_CHARACTER_CREATION, {
+  FinishCharacterCreationData,
+  FinishCharacterCreationVars,
+} from '../mutations/finishCharacterCreation';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -103,10 +107,17 @@ const CharacterCreationPage: FC = () => {
     SET_CHARACTER_MOVES
   );
   const [setCharacterHx, { loading: settingHx }] = useMutation<SetCharacterHxData, SetCharacterHxVars>(SET_CHARACTER_HX);
+  const [finishCharacterCreation, { loading: finishingCreation }] = useMutation<
+    FinishCharacterCreationData,
+    FinishCharacterCreationVars
+  >(FINISH_CHARACTER_CREATION);
 
   const playbooks = playbooksData?.playbooks;
   const game = gameData?.game;
   const gameRoles = game?.gameRoles;
+  // useEffect(() => {
+  //   console.log('game', game);
+  // }, [game]);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
@@ -178,13 +189,13 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitLook = async (look: string, category: LookCategories) => {
+    // console.log('handleSubmitLook');
     if (!!gameRole && !!character) {
       try {
         const data = await setCharacterLook({
           variables: { gameRoleId: gameRole.id, characterId: character.id, look, category },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
-
         if (data.data?.setCharacterLook.looks?.length === 5) {
           setCreationStep((prevState) => prevState + 1);
         }
@@ -297,7 +308,19 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  const handleFinishCreation = () => history.push(`/player-game/${gameId}`);
+  const handleFinishCreation = async () => {
+    if (!!gameRole && !!character) {
+      try {
+        await finishCharacterCreation({
+          variables: { gameRoleId: gameRole.id, characterId: character.id },
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
+        });
+        history.push(`/pre-game/${gameId}`);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
 
@@ -512,6 +535,7 @@ const CharacterCreationPage: FC = () => {
             character={character}
             gameRoles={gameRoles}
             settingHx={settingHx}
+            finishingCreation={finishingCreation}
             handleSubmitCharacterHx={handleSubmitCharacterHx}
             handleFinishCreation={handleFinishCreation}
           />

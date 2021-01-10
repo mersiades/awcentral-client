@@ -213,9 +213,10 @@ const MCPage = () => {
           {game.gameRoles
             .filter((gameRole: GameRole) => gameRole.role === Roles.player)
             .map((gameRole: GameRole) =>
-              gameRole.characters?.map((character) => <Button key={character.name} label={character.name} />)
+              gameRole.characters?.map((character: any) => <Button key={character.name} label={character.name} />)
             )}
-          <Button label="Threat map" />
+          <Button label="THREAT MAP" />
+          {!game.hasFinishedPreGame && <Button label="PRE-GAME" onClick={() => history.push(`/pre-game/${game.id}`)} />}
         </ThemeContext.Extend>
       </Header>
       <div data-testid="mc-page">

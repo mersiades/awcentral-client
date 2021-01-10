@@ -5,14 +5,14 @@ import userEvent from '@testing-library/user-event';
 import MenuPage from '../MenuPage';
 import { customRenderForComponent } from '../../tests/test-utils';
 import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
-import { mockKeycloakUser1, mockKeycloakUserInfo, mockNewGameName } from '../../tests/mocks';
+import { mockKeycloakUser1, mockKeycloakUserInfo1, mockNewGameName } from '../../tests/mocks';
 import { mockCreateGame, mockGameRolesByUserId } from '../../tests/mockQueries';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
   return {
     ...originalModule,
-    useKeycloak: () => ({ keycloak: mockKeycloakStub(true, mockKeycloakUserInfo), initialized: true }),
+    useKeycloak: () => ({ keycloak: mockKeycloakStub(true, mockKeycloakUserInfo1), initialized: true }),
   };
 });
 
@@ -24,7 +24,7 @@ describe('Rendering MenuPage', () => {
     });
 
     const welcomeHeading = await screen.findByRole('heading');
-    expect(welcomeHeading.textContent).toEqual(`Welcome, ${mockKeycloakUserInfo.preferred_username}`);
+    expect(welcomeHeading.textContent).toEqual(`Welcome, ${mockKeycloakUserInfo1.preferred_username}`);
     const titleImage = screen.getByRole('img');
     expect(titleImage.getAttribute('alt')).toEqual('D. Vincent Baker & Meguey Baker Apocalypse World');
     const spinner = screen.getByTestId('spinner');

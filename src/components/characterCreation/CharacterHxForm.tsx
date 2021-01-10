@@ -24,6 +24,7 @@ interface CharacterHxFormProps {
   playbookType: PlayBooks;
   character: Character;
   settingHx: boolean;
+  finishingCreation: boolean;
   handleSubmitCharacterHx: (hxInputs: HxInput[]) => void;
   handleFinishCreation: () => void;
   gameRoles?: GameRole[];
@@ -33,6 +34,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
   playbookType,
   character,
   settingHx,
+  finishingCreation,
   handleSubmitCharacterHx,
   handleFinishCreation,
   gameRoles,
@@ -177,10 +179,10 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
           {hasSet && (
             <ButtonWS
               primary
-              label="GO TO GAME"
+              label={finishingCreation ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'GO TO GAME'}
               style={{ minHeight: '52px' }}
               disabled={value.length === 0}
-              onClick={() => handleFinishCreation()}
+              onClick={() => !finishingCreation && handleFinishCreation()}
             />
           )}
         </Box>
