@@ -6,11 +6,10 @@ import { Box, FormField, TextInput } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS, RedBox, TextWS } from '../../config/grommetConfig';
-import { PlayBooks, Roles } from '../../@types/enums';
+import { PlayBooks } from '../../@types/enums';
 import { HxInput } from '../../@types';
-import { Character, GameRole } from '../../@types/dataInterfaces';
+import { Character } from '../../@types/dataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
-import { useKeycloakUser } from '../../contexts/keycloakUserContext';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
 import { useGame } from '../../contexts/gameContext';
@@ -42,9 +41,8 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
   const [hasSet, setHasSet] = useState(false);
 
   // -------------------------------------------------- Context hooks ---------------------------------------------------- //
-  const { id: userId } = useKeycloakUser();
   const { crustReady } = useFonts();
-  const { game, userGameRole, allPlayerGameRoles, otherPlayerGameRoles, setGameContext } = useGame();
+  const { otherPlayerGameRoles } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
