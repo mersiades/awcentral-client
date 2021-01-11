@@ -239,7 +239,7 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
   }, [baseValue, characteristics, getParsedValue]);
 
   return (
-    <Box width="60vw" direction="column" align="start" justify="between" flex="grow">
+    <Box width="60vw" direction="column" align="start" justify="between" flex="grow" style={{ minHeight: '625px' }}>
       <HeadingWS
         crustReady={crustReady}
         level={2}
@@ -297,6 +297,8 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
             primary
             onClick={() => !settingCustomWeapons && handleSubmitCustomWeapons(weapons)}
             disabled={weapons.length === 0}
+            // Flex required for Safari
+            style={{ flex: '1 0 auto' }}
           />
         </Box>
       </Box>

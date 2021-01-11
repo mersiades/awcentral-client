@@ -11,7 +11,7 @@ import { FontsProvider } from '../contexts/fontContext';
 import { KeycloakUserProvider } from '../contexts/keycloakUserContext';
 import { theme } from '../config/grommetConfig';
 import { mockKeycloakUser1 } from './mocks';
-import { GameRolesProvider } from '../contexts/gameRoleContext';
+import { GameProvider } from '../contexts/gameContext';
 
 interface CustomRenderOptions {
   isAuthenticated?: boolean;
@@ -41,9 +41,9 @@ const ComponentProviders = ({
                 onLoad: 'login-required',
               }}
             >
-              <GameRolesProvider>
+              <GameProvider>
                 <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
-              </GameRolesProvider>
+              </GameProvider>
             </ReactKeycloakProvider>
           </Grommet>
         </FontsProvider>
@@ -72,9 +72,9 @@ const AppProviders = ({
                 onLoad: 'login-required',
               }}
             >
-              <GameRolesProvider>
+              <GameProvider>
                 <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
-              </GameRolesProvider>
+              </GameProvider>
             </ReactKeycloakProvider>
           </Grommet>
         </FontsProvider>

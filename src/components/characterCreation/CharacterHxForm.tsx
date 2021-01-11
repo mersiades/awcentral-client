@@ -6,13 +6,13 @@ import { Box, FormField, TextInput } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS, RedBox, TextWS } from '../../config/grommetConfig';
-import { PlayBooks, Roles } from '../../@types/enums';
+import { PlayBooks } from '../../@types/enums';
 import { HxInput } from '../../@types';
-import { Character, GameRole } from '../../@types/dataInterfaces';
+import { Character } from '../../@types/dataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
-import { useKeycloakUser } from '../../contexts/keycloakUserContext';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
+import { useGame } from '../../contexts/gameContext';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -27,7 +27,6 @@ interface CharacterHxFormProps {
   finishingCreation: boolean;
   handleSubmitCharacterHx: (hxInputs: HxInput[]) => void;
   handleFinishCreation: () => void;
-  gameRoles?: GameRole[];
 }
 
 const CharacterHxForm: FC<CharacterHxFormProps> = ({
@@ -37,14 +36,13 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
   finishingCreation,
   handleSubmitCharacterHx,
   handleFinishCreation,
-  gameRoles,
 }) => {
   const [value, setValue] = useState<HxInput[]>([]);
   const [hasSet, setHasSet] = useState(false);
 
   // -------------------------------------------------- Context hooks ---------------------------------------------------- //
-  const { id: userId } = useKeycloakUser();
   const { crustReady } = useFonts();
+  const { otherPlayerGameRoles } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
@@ -57,9 +55,9 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
   const hxInstructions = pbCreatorData?.playbookCreator.hxInstructions;
 
   let characters: Character[] = [];
-  gameRoles?.forEach((gameRole) => {
-    if (gameRole.role === Roles.player && gameRole.userId !== userId) {
-      if (!!gameRole.characters && gameRole.characters.length === 1) characters = [...characters, gameRole.characters[0]];
+  otherPlayerGameRoles?.forEach((gameRole) => {
+    if (!!gameRole.characters && gameRole.characters.length === 1) {
+      characters = [...characters, gameRole.characters[0]];
     }
   });
 

@@ -76,6 +76,7 @@ describe('Testing character creation flow', () => {
         mockGameForCharacterCreation8,
         mockSetCharacterStats,
         mockGameForCharacterCreation9,
+        mockGameForCharacterCreation9,
       ],
     });
 

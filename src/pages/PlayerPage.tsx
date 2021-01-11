@@ -1,55 +1,49 @@
 import { useQuery } from '@apollo/client';
 import { useKeycloak } from '@react-keycloak/web';
-import { Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
+import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { GameRole } from '../@types/dataInterfaces';
 import { Move } from '../@types/staticDataInterfaces';
 import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import ALL_MOVES from '../queries/allMoves';
-import GAME, { GameData, GameVars } from '../queries/game';
 import MovesPanel from '../components/MovesPanel';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
+import { useGame } from '../contexts/gameContext';
 
 interface AllMovesData {
   allMoves: Move[];
 }
 
 const PlayerPage: FC = () => {
-  const maxSidePanel = 2;
-  const sidePanelWidth = 34;
+  const MAX_SIDE_PANEL = 2;
+  const SIDE_PANEL_WIDTH = 34;
+
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   /**
    * Number that indicates what should be shown in the side panel
    * 0 - CharacterPanel
    * 1 - MovesPanel
    * 2 - None, side panel is closed
    */
-  const [sidePanel, setSidePanel] = useState<number>(maxSidePanel);
-  const [gameRole, setGameRole] = useState<GameRole | undefined>();
+  const [sidePanel, setSidePanel] = useState<number>(MAX_SIDE_PANEL);
 
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
   const { keycloak } = useKeycloak();
-  const { id: userId } = useKeycloakUser();
-
   const { gameId } = useParams<{ gameId: string }>();
 
-  const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { id: userId } = useKeycloakUser();
+  const { game, userGameRole, setGameContext } = useGame();
+
+  // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
-
-  // ------------------------------------------ Component functions ------------------------------------------- //
-
-  // ------------------------------------------------ Render -------------------------------------------------- //
-
-  const game = gameData?.game;
-  const gameRoles = game?.gameRoles;
   const allMoves = allMovesData?.allMoves;
 
-  useEffect(() => {
-    if (!!gameRoles && gameRoles.length > 0) {
-      setGameRole(gameRoles[0]);
-    }
-  }, [gameRoles]);
+  // ------------------------------------------------- Component functions -------------------------------------------------- //
+
+  // ------------------------------------------------------- Effects -------------------------------------------------------- //
 
   useEffect(() => {
     if (!!game && !!userId) {
@@ -60,14 +54,23 @@ const PlayerPage: FC = () => {
     }
   }, [game, userId, history]);
 
-  if (loadingGame || !game || !userId || !gameRole) {
+  // Set the GameContext
+  useEffect(() => {
+    if (!!gameId && !!userId && !!setGameContext) {
+      setGameContext(gameId, userId);
+    }
+  }, [gameId, userId, setGameContext]);
+
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
+
+  if (!game || !userId || !userGameRole) {
     return <div> Loading </div>;
   }
 
   // Redirect if new game/ no character
   // Also, may need to create gameRole
   return (
-    <>
+    <Box fill background="black">
       <Header background="neutral-1">
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
@@ -88,8 +91,8 @@ const PlayerPage: FC = () => {
       </Header>
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
-          <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
-            {sidePanel === 0 && gameRole && gameRole.characters?.length === 1 && <p>Character Panel</p>}
+          <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>
+            {sidePanel === 0 && userGameRole && userGameRole.characters?.length === 1 && <p>Character Panel</p>}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           </SidePanel>
         </Collapsible>
@@ -98,8 +101,8 @@ const PlayerPage: FC = () => {
           justify="center"
           align="center"
           sidePanel={sidePanel}
-          maxPanels={maxSidePanel}
-          shinkWidth={sidePanelWidth}
+          maxPanels={MAX_SIDE_PANEL}
+          shinkWidth={SIDE_PANEL_WIDTH}
         ></MainContainer>
       </div>
       <Footer direction="row" justify="between" align="center">
@@ -111,7 +114,7 @@ const PlayerPage: FC = () => {
               tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
             }}
           >
-            {gameRole && gameRole.characters && gameRole.characters.length >= 1 && <Tab title="Character" />}
+            {userGameRole && userGameRole.characters && userGameRole.characters.length >= 1 && <Tab title="Character" />}
             {allMoves && <Tab title="Moves" />}
           </Tabs>
         </ThemeContext.Extend>
@@ -125,7 +128,7 @@ const PlayerPage: FC = () => {
           />
         ) */}
       </Footer>
-    </>
+    </Box>
   );
 };
 

@@ -17,7 +17,7 @@ import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
 import { ButtonWS, HeadingWS } from '../config/grommetConfig';
-import GAME, { GameData, GameVars } from '../queries/game';
+import GAME from '../queries/game';
 import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
 import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../mutations/createCharacter';
 import SET_CHARACTER_PLAYBOOK, {
@@ -35,12 +35,13 @@ import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
 import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
 import { HxInput } from '../@types';
-import { Character, GameRole } from '../@types/dataInterfaces';
+import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import FINISH_CHARACTER_CREATION, {
   FinishCharacterCreationData,
   FinishCharacterCreationVars,
 } from '../mutations/finishCharacterCreation';
+import { useGame } from '../contexts/gameContext';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -62,7 +63,6 @@ const CharacterCreationPage: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [creationStep, setCreationStep] = useState<number>(0);
   const [character, setCharacter] = useState<Character | undefined>();
-  const [gameRole, setGameRole] = useState<GameRole | undefined>();
   const [showResetWarning, setShowResetWarning] = useState<PlayBooks | undefined>();
   const [showScrollable, setShowScrollable] = useState(false);
 
@@ -73,10 +73,10 @@ const CharacterCreationPage: FC = () => {
   const { id: userId } = useKeycloakUser();
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
+  const { game, userGameRole, setGameContext } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
   const { data: playbooksData } = useQuery<PlaybooksData>(PLAYBOOKS);
-  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
   const [createCharacter, { loading: creatingCharacter }] = useMutation<CreateCharacterData, CreateCharacterVars>(
     CREATE_CHARACTER
   );
@@ -113,8 +113,8 @@ const CharacterCreationPage: FC = () => {
   >(FINISH_CHARACTER_CREATION);
 
   const playbooks = playbooksData?.playbooks;
-  const game = gameData?.game;
-  const gameRoles = game?.gameRoles;
+  // const game = gameData?.game;
+  // const gameRoles = game?.gameRoles;
   // useEffect(() => {
   //   console.log('game', game);
   // }, [game]);
@@ -123,11 +123,11 @@ const CharacterCreationPage: FC = () => {
 
   const checkPlaybookReset = (playbookType: PlayBooks) => {
     if (
-      !!gameRole &&
-      !!gameRole.characters &&
-      gameRole.characters.length > 0 &&
-      !!gameRole.characters[0].playbook &&
-      gameRole.characters[0].playbook !== playbookType
+      !!userGameRole &&
+      !!userGameRole.characters &&
+      userGameRole.characters.length > 0 &&
+      !!userGameRole.characters[0].playbook &&
+      userGameRole.characters[0].playbook !== playbookType
     ) {
       setShowResetWarning(playbookType);
     } else {
@@ -136,11 +136,11 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handlePlaybookSelect = async (playbookType: PlayBooks) => {
-    if (!!gameRole) {
-      if (gameRole.characters?.length === 0) {
+    if (!!userGameRole) {
+      if (userGameRole.characters?.length === 0) {
         let characterId;
         try {
-          const { data: characterData } = await createCharacter({ variables: { gameRoleId: gameRole?.id } });
+          const { data: characterData } = await createCharacter({ variables: { gameRoleId: userGameRole?.id } });
           characterId = characterData?.createCharacter.id;
         } catch (error) {
           console.error(error);
@@ -151,16 +151,16 @@ const CharacterCreationPage: FC = () => {
         }
         try {
           await setCharacterPlaybook({
-            variables: { gameRoleId: gameRole.id, characterId, playbookType },
+            variables: { gameRoleId: userGameRole.id, characterId, playbookType },
             refetchQueries: [{ query: GAME, variables: { gameId } }],
           });
         } catch (error) {
           console.error(error);
         }
-      } else if (gameRole.characters?.length === 1) {
+      } else if (userGameRole.characters?.length === 1) {
         try {
           await setCharacterPlaybook({
-            variables: { gameRoleId: gameRole.id, characterId: gameRole.characters[0].id, playbookType },
+            variables: { gameRoleId: userGameRole.id, characterId: userGameRole.characters[0].id, playbookType },
             refetchQueries: [{ query: GAME, variables: { gameId } }],
           });
         } catch (error) {
@@ -174,10 +174,10 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitName = async (name: string) => {
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         await setCharacterName({
-          variables: { gameRoleId: gameRole.id, characterId: character.id, name },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, name },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevStep) => prevStep + 1);
@@ -190,10 +190,10 @@ const CharacterCreationPage: FC = () => {
 
   const handleSubmitLook = async (look: string, category: LookCategories) => {
     // console.log('handleSubmitLook');
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         const data = await setCharacterLook({
-          variables: { gameRoleId: gameRole.id, characterId: character.id, look, category },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, look, category },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         if (data.data?.setCharacterLook.looks?.length === 5) {
@@ -206,10 +206,10 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitStats = async (statsOptionId: string) => {
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         await setCharacterStats({
-          variables: { gameRoleId: gameRole.id, characterId: character.id, statsOptionId },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, statsOptionId },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -221,10 +221,10 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitGear = async (gear: string[]) => {
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         await setCharacterGear({
-          variables: { gameRoleId: gameRole.id, characterId: character.id, gear },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, gear },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -236,10 +236,10 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitBrainerGear = async (brainerGear: string[]) => {
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         await setBrainerGear({
-          variables: { gameRoleId: gameRole.id, characterId: character.id, brainerGear },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, brainerGear },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -251,10 +251,10 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitAngelKit = async (stock: number, hasSupplier: boolean) => {
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         await setAngelKit({
-          variables: { gameRoleId: gameRole.id, characterId: character.id, stock, hasSupplier },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, stock, hasSupplier },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -266,10 +266,10 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitCustomWeapons = async (weapons: string[]) => {
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         await setCustomWeapons({
-          variables: { gameRoleId: gameRole.id, characterId: character.id, weapons },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, weapons },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -281,10 +281,10 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitCharacterMoves = async (moveIds: string[]) => {
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         await setCharacterMoves({
-          variables: { gameRoleId: gameRole.id, characterId: character.id, moveIds },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, moveIds },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -296,10 +296,10 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitCharacterHx = async (hxInputs: HxInput[]) => {
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         await setCharacterHx({
-          variables: { gameRoleId: gameRole.id, characterId: character.id, hxStats: hxInputs },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, hxStats: hxInputs },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
       } catch (error) {
@@ -309,10 +309,10 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleFinishCreation = async () => {
-    if (!!gameRole && !!character) {
+    if (!!userGameRole && !!character) {
       try {
         await finishCharacterCreation({
-          variables: { gameRoleId: gameRole.id, characterId: character.id },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         history.push(`/pre-game/${gameId}`);
@@ -345,15 +345,12 @@ const CharacterCreationPage: FC = () => {
   };
 
   // -------------------------------------------------- UseEffects ---------------------------------------------------- //
+  // Put the User's Character into component state
   useEffect(() => {
-    if (!!gameRoles && gameRoles.length > 0) {
-      const gameRole = gameRoles.find((gameRole) => gameRole.userId === userId);
-      setGameRole(gameRole);
-      if (!!gameRole?.characters && gameRole.characters.length === 1) {
-        setCharacter(gameRole.characters[0]);
-      }
+    if (!!userGameRole?.characters && userGameRole.characters.length === 1) {
+      setCharacter(userGameRole.characters[0]);
     }
-  }, [gameRoles, userId]);
+  }, [userGameRole, userId]);
 
   // If page is loading but character is already partially created,
   // set creationStep to appropriate step
@@ -397,6 +394,13 @@ const CharacterCreationPage: FC = () => {
       containerRef.current.scrollTop = 0;
     }
   }, [containerRef, creationStep]);
+
+  // Set the GameContext
+  useEffect(() => {
+    if (!!gameId && !!userId && !!setGameContext) {
+      setGameContext(gameId, userId);
+    }
+  }, [gameId, userId, setGameContext]);
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
@@ -529,11 +533,10 @@ const CharacterCreationPage: FC = () => {
             handleSubmitCharacterMoves={handleSubmitCharacterMoves}
           />
         )}
-        {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && !!gameRoles && (
+        {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && (
           <CharacterHxForm
             playbookType={character.playbook}
             character={character}
-            gameRoles={gameRoles}
             settingHx={settingHx}
             finishingCreation={finishingCreation}
             handleSubmitCharacterHx={handleSubmitCharacterHx}

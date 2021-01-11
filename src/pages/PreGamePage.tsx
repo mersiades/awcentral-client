@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { Box, Button } from 'grommet';
 import CloseButton from '../components/CloseButton';
 import { HeadingWS, RedBox, TextWS } from '../config/grommetConfig';
-import GAME, { GameData, GameVars } from '../queries/game';
 import FINISH_PRE_GAME, { FinishPreGameData, FinishPreGameVars } from '../mutations/finishPreGame';
-import { useGameRoles } from '../contexts/gameRoleContext';
+import { useGame } from '../contexts/gameContext';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { Character } from '../@types/dataInterfaces';
 import { PlayBooks, Roles } from '../@types/enums';
@@ -15,6 +14,20 @@ import { decapitalize } from '../helpers/decapitalize';
 import { Checkbox, Checkmark } from 'grommet-icons';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
+import styled from 'styled-components';
+
+export const background = {
+  color: 'black',
+  dark: true,
+  size: 'contain',
+  image: 'url(/images/background-image-7.jpg)',
+  position: 'bottom left',
+};
+
+const StyledLi = styled.li`
+  text-shadow: 0 0 2px #000, 0 0 4px #000;
+  cursor: default;
+`;
 
 const PreGamePage = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -28,12 +41,10 @@ const PreGamePage = () => {
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
   const [finishPreGame, { loading: finishingPreGame }] = useMutation<FinishPreGameData, FinishPreGameVars>(FINISH_PRE_GAME);
-  const { data: gameData } = useQuery<GameData, GameVars>(GAME, { variables: { gameId }, pollInterval: 2500 });
-  const game = gameData?.game;
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
-  const { userGameRole, allPlayerGameRoles, setGameRoles } = useGameRoles();
+  const { game, userGameRole, allPlayerGameRoles, setGameContext } = useGame();
 
   // ----------------------------------------- Component functions and variables ------------------------------------------- //
 
@@ -119,12 +130,12 @@ const PreGamePage = () => {
     }
   }, [game, userGameRole, pathToGame, history]);
 
-  // Set the Game's GameRoles
+  // Set the GameContext
   useEffect(() => {
-    if (!!game && game.gameRoles.length > 0 && !!userId && !!setGameRoles) {
-      setGameRoles(game.gameRoles, userId);
+    if (!!gameId && !!userId && !!setGameContext) {
+      setGameContext(gameId, userId);
     }
-  }, [game, userId, setGameRoles]);
+  }, [gameId, userId, setGameContext]);
 
   useEffect(() => {
     const unfinishedPlayers = allPlayerGameRoles?.filter((gameRole) => {
@@ -233,7 +244,7 @@ const PreGamePage = () => {
     <Box
       data-testid="pre-game-page"
       ref={containerRef}
-      background="black"
+      background={background}
       fill
       align="center"
       justify="start"
@@ -258,13 +269,13 @@ const PreGamePage = () => {
           <TextWS>Ask your players lots of questions about their characters and the world.</TextWS>
           <TextWS>While the players are making their characters, here are some things to get out up-front:</TextWS>
           <ul>
-            <li>Your characters don't have to be friends, but they should definitely be allies.</li>
-            <li>Your characters are unique in Apocalypse World.</li>
-            <li>1-armor can be armor or clothing. 2-armor is armor.</li>
-            <li>
+            <StyledLi>Your characters don't have to be friends, but they should definitely be allies.</StyledLi>
+            <StyledLi>Your characters are unique in Apocalypse World.</StyledLi>
+            <StyledLi>1-armor can be armor or clothing. 2-armor is armor.</StyledLi>
+            <StyledLi>
               Is <em>barter</em> a medium of exchange? What do you use?
-            </li>
-            <li>I'm not out to get you. I'm here to find out what's going to happen. Same as you!</li>
+            </StyledLi>
+            <StyledLi>I'm not out to get you. I'm here to find out what's going to happen. Same as you!</StyledLi>
           </ul>
         </Box>
       )}
