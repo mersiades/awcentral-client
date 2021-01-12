@@ -71,16 +71,7 @@ const MenuPage: FC = () => {
               fill
               onClick={() => setButtonsContainer(2)}
             />
-            <ButtonWS
-              label="LOG OUT"
-              size="large"
-              alignSelf="center"
-              fill
-              onClick={() => {
-                history.push('/');
-                keycloak.logout();
-              }}
-            />
+            <ButtonWS label="LOG OUT" size="large" alignSelf="center" fill onClick={() => keycloak.logout()} />
           </Box>
         </Box>
       );
