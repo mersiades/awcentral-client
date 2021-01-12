@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useKeycloak } from '@react-keycloak/web';
 import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
 import React, { FC, useEffect, useState } from 'react';
@@ -12,6 +12,7 @@ import { Footer, MainContainer, SidePanel } from '../components/styledComponents
 import { useGame } from '../contexts/gameContext';
 import { Character } from '../@types/dataInterfaces';
 import CharacterSheet from '../components/CharacterSheet';
+import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -52,7 +53,21 @@ const PlayerPage: FC = () => {
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
   const allMoves = allMovesData?.allMoves;
 
+  const [setCharacterBarter, { loading: settingBarter }] = useMutation<SetCharacterBarterData, SetCharacterBarterVars>(
+    SET_CHARACTER_BARTER
+  );
+
   // ------------------------------------------------- Component functions -------------------------------------------------- //
+
+  const handleSetBarter = async (amount: number) => {
+    if (!!userGameRole && !!character) {
+      try {
+        await setCharacterBarter({ variables: { gameRoleId: userGameRole.id, characterId: character.id, amount } });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   // ------------------------------------------------------- Effects -------------------------------------------------------- //
 
@@ -114,7 +129,9 @@ const PlayerPage: FC = () => {
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>
-            {sidePanel === 0 && !!character && <CharacterSheet character={character} />}
+            {sidePanel === 0 && !!character && (
+              <CharacterSheet character={character} handleSetBarter={handleSetBarter} settingBarter={settingBarter} />
+            )}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           </SidePanel>
         </Collapsible>

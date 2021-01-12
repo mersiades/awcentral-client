@@ -36,7 +36,7 @@ export const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.
   ({ sidePanel, growWidth }) => {
     return css`
       border-right: 1px solid ${accentColors[0]};
-      background-color: rgba(76, 104, 76, 0.3);
+      background: transparent;
       position: absolute;
       height: calc(100vh - 95px);
       width: ${growWidth}vw;

@@ -42,6 +42,7 @@ const GAME = gql`
           playbook
           hasCompletedCharacterCreation
           gear
+          barter
           statsBlock {
             id
             stat

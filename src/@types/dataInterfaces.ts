@@ -49,6 +49,7 @@ export interface Character {
   looks: Look[];
   characterMoves: CharacterMove[];
   name?: string;
+  barter?: number;
   playbookUnique?: PlaybookUnique;
 }
 

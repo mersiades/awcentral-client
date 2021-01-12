@@ -33,6 +33,7 @@ interface MockCharacter {
   gear: string[];
   looks: Look[]; // Does graphql return an empty array or undefined? // May need an id-less version of Look "EmbeddedLook"
   name: string;
+  barter: number;
   playbook: PlayBooks;
   hasCompletedCharacterCreation: boolean;
   playbookUnique: PlaybookUnique;
@@ -356,6 +357,7 @@ export const mockCharacter1: MockCharacter = {
   hasCompletedCharacterCreation: false,
   gear: ['leather jacket', 'Timberland boots'],
   statsBlock: mockStatsBlock1,
+  barter: 2,
   hxBlock: [],
   looks: [mockLookBettleBabe1, mockLookBattlebabe2],
   characterMoves: [
@@ -373,6 +375,7 @@ export const mockCharacter2: MockCharacter = {
   hasCompletedCharacterCreation: false,
   gear: ['Grimey green raincoat', '9mm (2-harm close loud)'],
   statsBlock: mockStatsBlock1,
+  barter: 2,
   hxBlock: [
     {
       characterId: mockCharacter1.id,

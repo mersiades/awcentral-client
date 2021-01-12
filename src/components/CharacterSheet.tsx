@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Box, Heading } from 'grommet';
-import { FormDown, FormUp } from 'grommet-icons';
+import { CaretDownFill, CaretUpFill, FormDown, FormUp } from 'grommet-icons';
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Character, CharacterStat } from '../@types/dataInterfaces';
@@ -19,7 +19,7 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({ name, playb
   const [showDescription, setShowDescription] = useState(false);
 
   return (
-    <Box fill="horizontal" border={{ color: accentColors[0] }} align="center" justify="start" background="black">
+    <Box fill="horizontal" align="center" justify="start">
       <Box fill="horizontal" direction="row" justify="between" align="center" pad="12px">
         <Heading level="2">{`${name + ' '}the ${playbook}`}</Heading>
         {showDescription ? (
@@ -48,16 +48,7 @@ const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats }) => {
   });
 
   return (
-    <Box
-      fill="horizontal"
-      direction="row"
-      border={{ color: accentColors[0] }}
-      align="center"
-      justify="around"
-      background="black"
-      pad="12px"
-      gap="12px"
-    >
+    <Box fill="horizontal" direction="row" align="center" justify="around" pad="12px" gap="12px" wrap>
       {stats.map((stat) => {
         return (
           <RedBox key={stat.id} align="center" width="76px" style={statBoxStyle(stat.isHighlighted)}>
@@ -81,37 +72,99 @@ interface CharacterSheetMovesBoxProps {
 const CharacterSheetMovesBox: FC<CharacterSheetMovesBoxProps> = ({ moves }) => {
   const [showMove, setShowMove] = useState<string>('');
   return (
-    <Box fill="horizontal" border={{ color: accentColors[0] }} align="center" justify="start" background="black">
+    <Box fill="horizontal" align="center" justify="start">
       {moves.map((move) => {
         return (
-          <>
+          <Box key={move.id} fill="horizontal">
             <Box key={move.id} fill="horizontal" direction="row" justify="between" align="center" pad="12px">
               <Heading level="3" margin={{ top: '3px', bottom: '3px' }}>
                 {move.name}
               </Heading>
+
               {showMove === move.id ? (
                 <FormUp onClick={() => setShowMove('')} />
               ) : (
                 <FormDown onClick={() => setShowMove(move.id)} />
               )}
             </Box>
+
             {showMove === move.id && (
               <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
                 <ReactMarkdown>{move.description}</ReactMarkdown>
               </Box>
             )}
-          </>
+          </Box>
         );
       })}
     </Box>
   );
 };
 
-interface CharacterSheetProps {
-  character: Character;
+interface CharacterSheetBarterBoxProps {
+  barter: number;
+  instructions: string;
+  settingBarter: boolean;
+  handleSetBarter: (amount: number) => void;
 }
 
-const CharacterSheet: FC<CharacterSheetProps> = ({ character }) => {
+const CharacterSheetBarterBox: FC<CharacterSheetBarterBoxProps> = ({
+  barter,
+  instructions,
+  handleSetBarter,
+  settingBarter,
+}) => {
+  const [showInstructions, setShowInstructions] = useState(false);
+  const increaseBarter = () => {
+    handleSetBarter(barter + 1);
+  };
+
+  const decreaseBarter = () => {
+    handleSetBarter(barter - 1);
+  };
+
+  return (
+    <Box fill="horizontal" align="center" justify="start">
+      <Box fill="horizontal" direction="row" justify="between" align="center" pad="12px">
+        <Heading level="3">Barter</Heading>
+        <Box direction="row" align="center" gap="12px">
+          {showInstructions ? (
+            <FormUp onClick={() => setShowInstructions(false)} />
+          ) : (
+            <FormDown onClick={() => setShowInstructions(true)} />
+          )}
+          <RedBox width="50px" align="center" margin={{ left: '12px' }}>
+            <Heading level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
+              {barter}
+            </Heading>
+          </RedBox>
+          <Box align="center" justify="around">
+            {settingBarter ? (
+              <Box width="48px" height="80px" />
+            ) : (
+              <Box align="center" justify="around" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
+                <CaretUpFill size="large" color="brand" onClick={increaseBarter} style={{ height: '40px' }} />
+                <CaretDownFill size="large" color="brand" onClick={decreaseBarter} style={{ height: '40px' }} />
+              </Box>
+            )}
+          </Box>
+        </Box>
+      </Box>
+      {showInstructions && (
+        <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
+          <ReactMarkdown>{instructions}</ReactMarkdown>
+        </Box>
+      )}
+    </Box>
+  );
+};
+
+interface CharacterSheetProps {
+  character: Character;
+  settingBarter: boolean;
+  handleSetBarter: (amount: number) => void;
+}
+
+const CharacterSheet: FC<CharacterSheetProps> = ({ character, handleSetBarter, settingBarter }) => {
   const { data } = useQuery<PlaybookData, PlaybookVars>(PLAYBOOK, { variables: { playbookType: character.playbook } });
   return (
     <Box direction="row" wrap gap="12px" pad="12px" overflow="auto">
@@ -122,6 +175,14 @@ const CharacterSheet: FC<CharacterSheetProps> = ({ character }) => {
       />
       {character.statsBlock.length > 0 && <CharacterSheetStatsBox stats={character.statsBlock} />}
       {character.characterMoves.length > 0 && <CharacterSheetMovesBox moves={character.characterMoves} />}
+      {!!character.barter && data?.playbook.barterInstructions && (
+        <CharacterSheetBarterBox
+          barter={character.barter}
+          instructions={data?.playbook.barterInstructions}
+          settingBarter={settingBarter}
+          handleSetBarter={handleSetBarter}
+        />
+      )}
     </Box>
   );
 };

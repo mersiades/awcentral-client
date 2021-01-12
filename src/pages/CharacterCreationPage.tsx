@@ -28,6 +28,7 @@ import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
+import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mutations/setBrainerGear';
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/setAngelKit';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
@@ -96,6 +97,10 @@ const CharacterCreationPage: FC = () => {
   const [setCharacterGear, { loading: settingGear }] = useMutation<SetCharacterGearData, SetCharacterGearVars>(
     SET_CHARACTER_GEAR
   );
+
+  const [setCharacterBarter, { loading: settingBarter }] = useMutation<SetCharacterBarterData, SetCharacterBarterVars>(
+    SET_CHARACTER_BARTER
+  );
   const [setBrainerGear, { loading: settingBrainerGear }] = useMutation<SetBrainerGearData, SetBrainerGearVars>(
     SET_BRAINER_GEAR
   );
@@ -113,11 +118,6 @@ const CharacterCreationPage: FC = () => {
   >(FINISH_CHARACTER_CREATION);
 
   const playbooks = playbooksData?.playbooks;
-  // const game = gameData?.game;
-  // const gameRoles = game?.gameRoles;
-  // useEffect(() => {
-  //   console.log('game', game);
-  // }, [game]);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
@@ -220,11 +220,15 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  const handleSubmitGear = async (gear: string[]) => {
+  const handleSubmitGear = async (gear: string[], amount: number) => {
     if (!!userGameRole && !!character) {
       try {
         await setCharacterGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, gear },
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
+        });
+        await setCharacterBarter({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -508,6 +512,7 @@ const CharacterCreationPage: FC = () => {
             existingGear={character.gear}
             characterName={character.name}
             settingGear={settingGear}
+            settingBarter={settingBarter}
             playbookType={character?.playbook}
             handleSubmitGear={handleSubmitGear}
           />
