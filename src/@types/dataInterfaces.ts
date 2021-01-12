@@ -56,7 +56,7 @@ export interface CharacterStat {
   id: string;
   stat: Stats;
   value: number;
-  isHighlighted: Boolean;
+  isHighlighted: boolean;
 }
 
 export interface HxStat {

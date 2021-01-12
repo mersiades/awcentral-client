@@ -1,6 +1,6 @@
 import { Box, BoxProps } from 'grommet';
 import styled, { css } from 'styled-components';
-import { accentColors, neutralColors } from '../config/grommetConfig';
+import { accentColors } from '../config/grommetConfig';
 
 export const Footer = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
   border-top: 1px solid ${accentColors[0]};
