@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client';
-import { Box, Heading } from 'grommet';
+import { Box, Heading, Text } from 'grommet';
 import { CaretDownFill, CaretUpFill, FormDown, FormUp } from 'grommet-icons';
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Character, CharacterStat } from '../@types/dataInterfaces';
-import { CharacterMove } from '../@types/staticDataInterfaces';
+import { CharacterMove, Look } from '../@types/staticDataInterfaces';
 import { accentColors, RedBox } from '../config/grommetConfig';
 import { decapitalize } from '../helpers/decapitalize';
 import PLAYBOOK, { PlaybookData, PlaybookVars } from '../queries/playbook';
@@ -13,15 +13,23 @@ interface CharacterSheetHeaderBoxProps {
   playbook: string;
   name: string;
   description?: string;
+  looks: Look[];
 }
 
-const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({ name, playbook, description }) => {
+const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({ name, playbook, description, looks }) => {
   const [showDescription, setShowDescription] = useState(false);
+
+  const looksLooks = looks.map((look) => look.look);
+
+  let looksString = looksLooks.join(', ');
 
   return (
     <Box fill="horizontal" align="center" justify="start">
       <Box fill="horizontal" direction="row" justify="between" align="center" pad="12px">
-        <Heading level="2">{`${name + ' '}the ${playbook}`}</Heading>
+        <Box>
+          <Heading level="2" margin={{ bottom: '3px' }}>{`${name + ' '}the ${playbook}`}</Heading>
+          <Text>{looksString}</Text>
+        </Box>
         {showDescription ? (
           <FormUp onClick={() => setShowDescription(false)} />
         ) : (
@@ -172,6 +180,7 @@ const CharacterSheet: FC<CharacterSheetProps> = ({ character, handleSetBarter, s
         name={character.name ? character.name : ''}
         playbook={decapitalize(character.playbook)}
         description={data?.playbook.intro}
+        looks={character.looks}
       />
       {character.statsBlock.length > 0 && <CharacterSheetStatsBox stats={character.statsBlock} />}
       {character.characterMoves.length > 0 && <CharacterSheetMovesBox moves={character.characterMoves} />}
