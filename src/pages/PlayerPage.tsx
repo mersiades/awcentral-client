@@ -4,20 +4,30 @@ import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Move } from '../@types/staticDataInterfaces';
-import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import ALL_MOVES from '../queries/allMoves';
 import MovesPanel from '../components/MovesPanel';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import { useGame } from '../contexts/gameContext';
+import { Character } from '../@types/dataInterfaces';
+import CharacterSheet from '../components/CharacterSheet';
 
 interface AllMovesData {
   allMoves: Move[];
 }
 
+export const background = {
+  color: 'black',
+  dark: true,
+  size: 'contain',
+  image: 'url(/images/background-image-8.jpg)',
+  position: 'bottom center',
+};
+
 const PlayerPage: FC = () => {
   const MAX_SIDE_PANEL = 2;
-  const SIDE_PANEL_WIDTH = 34;
+  const SIDE_PANEL_WIDTH = 50;
 
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   /**
@@ -26,7 +36,8 @@ const PlayerPage: FC = () => {
    * 1 - MovesPanel
    * 2 - None, side panel is closed
    */
-  const [sidePanel, setSidePanel] = useState<number>(MAX_SIDE_PANEL);
+  const [sidePanel, setSidePanel] = useState<number>(0);
+  const [character, setCharacter] = useState<Character | undefined>();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
@@ -41,6 +52,8 @@ const PlayerPage: FC = () => {
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
   const allMoves = allMovesData?.allMoves;
 
+  console.log('allMoves', allMoves);
+
   // ------------------------------------------------- Component functions -------------------------------------------------- //
 
   // ------------------------------------------------------- Effects -------------------------------------------------------- //
@@ -54,12 +67,25 @@ const PlayerPage: FC = () => {
     }
   }, [game, userId, history]);
 
-  // Set the GameContext
+  // Sets the GameContext
   useEffect(() => {
     if (!!gameId && !!userId && !!setGameContext) {
       setGameContext(gameId, userId);
     }
   }, [gameId, userId, setGameContext]);
+
+  // Handles different degrees of character creation completion
+  useEffect(() => {
+    if (!!userGameRole && userGameRole.characters.length === 1) {
+      if (!userGameRole.characters[0].hasCompletedCharacterCreation) {
+        history.push(`/character-creation/${gameId}`);
+      } else {
+        setCharacter(userGameRole.characters[0]);
+      }
+    } else if (!!userGameRole && userGameRole.characters.length > 1) {
+      // TODO: handle case when Player has more than one Character
+    }
+  }, [userGameRole, gameId, history]);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
@@ -70,11 +96,12 @@ const PlayerPage: FC = () => {
   // Redirect if new game/ no character
   // Also, may need to create gameRole
   return (
-    <Box fill background="black">
-      <Header background="neutral-1">
+    <Box fill background={background}>
+      <Header background={{ color: 'rgba(76, 104, 76, 0.5)' }} style={{ borderBottom: `1px solid ${accentColors[0]}` }}>
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
-            dropBackground="neutral-1"
+            style={{ backgroundColor: 'transparent' }}
+            dropBackground={{ color: 'rgba(76, 104, 76, 0.5)' }}
             label="AW Central"
             items={[
               { label: 'Main menu', onClick: () => history.push('/menu') },
@@ -89,7 +116,7 @@ const PlayerPage: FC = () => {
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>
-            {sidePanel === 0 && userGameRole && userGameRole.characters?.length === 1 && <p>Character Panel</p>}
+            {sidePanel === 0 && userGameRole && userGameRole.characters?.length === 1 && <CharacterSheet />}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           </SidePanel>
         </Collapsible>
@@ -115,15 +142,6 @@ const PlayerPage: FC = () => {
             {allMoves && <Tab title="Moves" />}
           </Tabs>
         </ThemeContext.Extend>
-        {/*gameRole && gameRole.characters?.length === 0 && !showCharacterCreator && (
-          <Button
-            label="CREATE CHARACTER"
-            primary
-            size="medium"
-            onClick={() => setshowCharacterCreator(true)}
-            style={{ marginRight: '10px' }}
-          />
-        ) */}
       </Footer>
     </Box>
   );

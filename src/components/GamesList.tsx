@@ -41,8 +41,8 @@ const GamesList: FC<GamesListProps> = ({ gameRoles }) => {
       secondaryKey="role"
       data={transformGames()}
       onClickItem={(e: any) => {
+        console.log('e.item', e.item);
         if (e.item.role === Roles.player && e.item.numberOfCharacters === 0) {
-          history.push(`/character-creation/${e.item.gameId}`, { role: e.item.role });
         } else if (e.item.role === Roles.player) {
           history.push(`/player-game/${e.item.gameId}`);
         } else {

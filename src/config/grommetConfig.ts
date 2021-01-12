@@ -3,9 +3,23 @@ import { deepMerge } from 'grommet/utils';
 import { grommet } from 'grommet/themes/grommet';
 import styled, { css } from 'styled-components';
 
-
-import '../assets/styles/main.css'
-import { Box, BoxProps, Button, ButtonProps, Heading, HeadingProps, Paragraph, ParagraphProps, Text, TextProps} from 'grommet';
+import '../assets/styles/main.css';
+import {
+  Box,
+  BoxProps,
+  Button,
+  ButtonProps,
+  Heading,
+  HeadingProps,
+  Paragraph,
+  ParagraphProps,
+  Tab,
+  TabProps,
+  Tabs,
+  TabsProps,
+  Text,
+  TextProps,
+} from 'grommet';
 import { Close, IconProps } from 'grommet-icons';
 import { FC } from 'react';
 
@@ -115,246 +129,245 @@ const fontSizing = (factor: number) => {
   };
 };
 
-
-
 export const theme = (vtksReady: boolean, crustReady: boolean) => {
   return deepMerge(grommet, {
-  global: {
-    font: {
-      family: "'chaparral pro', sans-serif",
-      size: '18px',
-      height: '20px',
-    },
-    colors,
-  },
-  button: {
-    text: {
-      large: {
-        size: 36,
+    global: {
+      font: {
+        family: "'chaparral pro', sans-serif",
+        size: '18px',
+        height: '20px',
       },
+      colors,
     },
-    size: {
-      small: {
-        border: {
-          radius: '0px',
+    button: {
+      text: {
+        large: {
+          size: 36,
         },
       },
-      medium: {
-        border: {
-          radius: '0px',
+      size: {
+        small: {
+          border: {
+            radius: '0px',
+          },
         },
-      },
-      large: {
-        border: {
-          radius: '0px',
+        medium: {
+          border: {
+            radius: '0px',
+          },
         },
-      },
-    },
-    border: {
-      width: '0px',
-      radius: 0,
-    },
-    color: {
-      dark: 'black',
-      light: 'white',
-    },
-    default: {
-      color: {
-        dark: 'accent-1',
-        light: 'neutral-1',
-      },
-      background: {
-        color: {
-          dark: 'black',
-          light: 'white',
+        large: {
+          border: {
+            radius: '0px',
+          },
         },
-        opacity: 100,
       },
       border: {
-        color: 'accent-1',
-        width: '2px',
+        width: '0px',
+        radius: 0,
       },
-    },
-    primary: {
       color: {
-        dark: 'white',
+        dark: 'black',
         light: 'white',
       },
-      background: {
+      default: {
         color: {
-          dark: brandColor,
-          light: brandColor,
+          dark: 'accent-1',
+          light: 'neutral-1',
         },
-        opacity: 100,
-      },
-      border: {
-        color: 'brand',
-        width: '2px',
-      },
-    },
-    secondary: {
-      color: {
-        dark: 'brand',
-        light: 'brand',
-      },
-      border: {
-        color: 'brand',
-        width: '2px',
-      },
-    },
-    hover: {
-      primary: {
-        border: {
+        background: {
           color: {
-            dark: 'white',
-            light: 'brand',
+            dark: 'black',
+            light: 'white',
           },
+          opacity: 100,
+        },
+        border: {
+          color: 'accent-1',
           width: '2px',
         },
+      },
+      primary: {
         color: {
           dark: 'white',
           light: 'white',
         },
         background: {
-          dark: 'brand',
-          light: 'accent-3',
+          color: {
+            dark: brandColor,
+            light: brandColor,
+          },
+          opacity: 100,
         },
-        extend: 'font-weight: 500;'
+        border: {
+          color: 'brand',
+          width: '2px',
+        },
       },
       secondary: {
+        color: {
+          dark: 'brand',
+          light: 'brand',
+        },
+        border: {
+          color: 'brand',
+          width: '2px',
+        },
+      },
+      hover: {
+        primary: {
+          border: {
+            color: {
+              dark: 'white',
+              light: 'brand',
+            },
+            width: '2px',
+          },
+          color: {
+            dark: 'white',
+            light: 'white',
+          },
+          background: {
+            dark: 'brand',
+            light: 'accent-3',
+          },
+          extend: 'font-weight: 500;',
+        },
+        secondary: {
+          border: {
+            color: {
+              dark: 'white',
+              light: 'brand',
+            },
+            width: '2px',
+          },
+          color: {
+            dark: 'white',
+            light: 'white',
+          },
+          background: {
+            light: 'accent-3',
+          },
+          extend: 'font-weight: 500;',
+        },
         border: {
           color: {
             dark: 'white',
-            light: 'brand',
+            light: 'neutral-1',
           },
           width: '2px',
         },
         color: {
           dark: 'white',
-          light: 'white',
-        },
-        background: {         
-          light: 'accent-3',
+          light: 'neutral-1',
         },
         extend: 'font-weight: 500;',
       },
+
+      extend: vtksReady
+        ? "font-family: 'Vtks good luck for you', sans-serif; font-size: 36px; line-height: 36px;"
+        : 'font-family: sans-serif; font-size: 28px; line-height: 36px; font-weight: 600; letter-spacing: -3px;',
+    },
+    heading: {
+      font: {
+        family: 'crust_clean',
+      },
+      level: {
+        1: {
+          font: {
+            family: 'Vtks good luck for you',
+            weight: 500,
+          },
+          small: { ...fontSizing(4) },
+          medium: { ...fontSizing(8) },
+          large: { ...fontSizing(16) },
+          xlarge: { ...fontSizing(24) },
+        },
+        2: {
+          font: {
+            family: 'crust_clean',
+            weight: 500,
+          },
+          small: { ...fontSizing(2) },
+          medium: { ...fontSizing(4) },
+          large: { ...fontSizing(8) },
+          xlarge: { ...fontSizing(12) },
+        },
+        3: {
+          font: {
+            family: 'crust_clean',
+            weight: 500,
+          },
+          small: { ...fontSizing(1) },
+          medium: { ...fontSizing(2) },
+          large: { ...fontSizing(4) },
+          xlarge: { ...fontSizing(6) },
+        },
+        4: {
+          font: {
+            family: 'chaparral pro',
+            weight: 700,
+          },
+          small: { ...fontSizing(0) },
+          medium: { ...fontSizing(0) },
+          large: { ...fontSizing(0) },
+          xlarge: { ...fontSizing(0) },
+        },
+      },
+    },
+    layer: {
       border: {
-        color: {
-          dark: 'white',
-          light: 'neutral-1',
-        },
-        width: '2px',
-      },
-      color: {
-        dark: 'white',
-        light: 'neutral-1',
-      },
-      extend: 'font-weight: 500;'
-    },
-
-    extend: vtksReady 
-      ? "font-family: 'Vtks good luck for you', sans-serif; font-size: 36px; line-height: 36px;" 
-      : "font-family: sans-serif; font-size: 28px; line-height: 36px; font-weight: 600; letter-spacing: -3px;"
-  },
-  heading: {
-    font: {
-      family: 'crust_clean',
-    },
-    level: {
-      1: {
-        font: {
-          family: 'Vtks good luck for you',
-          weight: 500,
-        },
-        small: { ...fontSizing(4) },
-        medium: { ...fontSizing(8) },
-        large: { ...fontSizing(16) },
-        xlarge: { ...fontSizing(24) },
-      },
-      2: {
-        font: {
-          family: 'crust_clean',
-          weight: 500,
-        },
-        small: { ...fontSizing(2) },
-        medium: { ...fontSizing(4) },
-        large: { ...fontSizing(8) },
-        xlarge: { ...fontSizing(12) },
-      },
-      3: {
-        font: {
-          family: 'crust_clean',
-          weight: 500,
-        },
-        small: { ...fontSizing(1) },
-        medium: { ...fontSizing(2) },
-        large: { ...fontSizing(4) },
-        xlarge: { ...fontSizing(6) },
-      },
-      4: {
-        font: {
-          family: 'chaparral pro',
-          weight: 700,
-        },
-        small: { ...fontSizing(0) },
-        medium: { ...fontSizing(0) },
-        large: { ...fontSizing(0) },
-        xlarge: { ...fontSizing(0) },
+        radius: 'unset',
       },
     },
-  },
-  layer: {
-    border: {
-      radius: 'unset'
-    }
-  },
-  tab: {
-    active: {
-      color: 'neutral-1',
-      // background: undefined,
-    },
-    border: {
-      side: 'bottom',
-      size: 'medium',
-      color: {
-        dark: 'accent-1',
-        light: 'black',
-      },
+    tab: {
       active: {
+        color: 'neutral-1',
+        // background: undefined,
+      },
+      border: {
+        side: 'bottom',
+        size: 'medium',
         color: {
-          dark: 'white',
-          light: 'neutral-1',
+          dark: 'accent-1',
+          light: 'black',
+        },
+        active: {
+          color: {
+            dark: 'white',
+            light: 'neutral-1',
+          },
         },
       },
-    },
 
-    margin: {
-      vertical: 'small',
-      horizontal: 'medium',
-    },
-    pad: {
-      bottom: 'xsmall',
-    },
-  },
-  tip: {
-    content: {
-      // any Box props
-      background: {
-        color: neutralColors[1],
-        dark: false
+      margin: {
+        vertical: 'small',
+        horizontal: 'medium',
       },
-      elevation: 'small',
-      margin: 'xsmall',
-      pad: { vertical: 'xsmall', horizontal: 'small' },
-      round: 'small',
-      style: { boxShadow: '0 0 1px 1px #000, 0 0 5px 3px #000'}
+      pad: {
+        bottom: 'xsmall',
+      },
     },
-    drop: {
-      // any props for the drop
-      align: { top: 'bottom' }, // most common use case is Header with Buttons
+    tip: {
+      content: {
+        // any Box props
+        background: {
+          color: neutralColors[1],
+          dark: false,
+        },
+        elevation: 'small',
+        margin: 'xsmall',
+        pad: { vertical: 'xsmall', horizontal: 'small' },
+        round: 'small',
+        style: { boxShadow: '0 0 1px 1px #000, 0 0 5px 3px #000' },
+      },
+      drop: {
+        // any props for the drop
+        align: { top: 'bottom' }, // most common use case is Header with Buttons
+      },
     },
-  },
-})};
+  });
+};
 
 export const customDefaultButtonStyles = deepMerge(grommet, {
   button: {
@@ -395,15 +408,44 @@ export const customDefaultButtonStyles = deepMerge(grommet, {
   },
 });
 
-
 export const customTabStyles = deepMerge(grommet, {
   text: {
     medium: '36px',
   },
   tab: {
+    color: '#FFF',
+    hover: {
+      color: accentColors[0],
+    },
+    active: {
+      color: accentColors[0],
+    },
+    border: {
+      side: 'bottom',
+      size: 'small',
+      color: {
+        dark: '#FFF',
+        // "light": "brand"
+      },
+      active: {
+        color: {
+          dark: accentColors[0],
+          // light: 'black',
+        },
+      },
+      disabled: {},
+      hover: {
+        color: {
+          dark: accentColors[0],
+          // light: 'black',
+        },
+      },
+    },
     extend: `
-    font-size: 36px;
-    font-family: 'Vtks good luck for you', sans-serif;
+      font-size: 36px;
+      font-family: 'crust_clean', sans-serif;
+      line-height: normal;
+      text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000;
     `,
   },
   button: {
@@ -433,108 +475,116 @@ export const CustomUL = styled.ul`
   &::-webkit-scrollbar {
     display: none;
   }
-  
 `;
 
+// export const FooterTabs = styled(Tabs as FC<TabsProps & JSX.IntrinsicElements['div']>)(() => {
+//   return css``;
+// });
+
+// export const FooterTab = styled(Tab as React.ComponentClass<TabProps & Omit<JSX.IntrinsicElements['button'], 'title'>>)(
+//   () => {
+//     return css`
+//       font-size: 36px;
+//       font-family: 'crust_clean', sans-serif;
+//       line-height: normal;
+//     `;
+//   }
+// );
+
 // Renders Grommet Heading with black text shadow
-export const HeadingWS = styled(Heading as React.FC<HeadingProps &
-  JSX.IntrinsicElements['h1'] & 
-  JSX.IntrinsicElements['h2'] &
-  JSX.IntrinsicElements['h3'] &
-  JSX.IntrinsicElements['h4'] &
-  JSX.IntrinsicElements['h5'] &
-  JSX.IntrinsicElements['h6'] & 
-  {vtksReady?: boolean, crustReady?: boolean}>)(
-    ({level, vtksReady, crustReady}) => {
-      const setFontFamily = () => {
-        switch (level) {
-          case 1:
-            return vtksReady ? null : "sans serif"
-          case 2:
-            return crustReady ? null : "sans serif"
-          case 3:
-            return crustReady ? null : "sans serif"
-        }
-      }
-
-      const setFontWeight = () => {
-        switch (level) {
-          case 1:
-            return vtksReady ? null : 600
-          case 2:
-            // Deliberately falls through
-          case 3:
-            return crustReady ? null : 600
-        }
-      }
-
-      const setFontSize = () => {
-        switch (level) {
-          case 1:
-            return vtksReady ? null : "28px"
-          case 2:
-            return crustReady ? null : "30px"
-          case 3:
-            return crustReady ? null : "24px"
-        }
-      }
-
-      const setLetterSpacing = () => {
-        switch (level) {
-          case 1:
-            return vtksReady ? null : "-3px"
-          case 2:
-            return crustReady ? null : "-3px"
-          case 3:
-            return crustReady ? null : "-1.5px"
-        }
-      }
-
-      return css`
-        text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000;
-        cursor: default;
-        font-family: ${setFontFamily()};
-        font-weight: ${setFontWeight()};
-        font-size: ${setFontSize()};
-        letter-spacing: ${setLetterSpacing()};
-      `
+export const HeadingWS = styled(
+  Heading as React.FC<
+    HeadingProps &
+      JSX.IntrinsicElements['h1'] &
+      JSX.IntrinsicElements['h2'] &
+      JSX.IntrinsicElements['h3'] &
+      JSX.IntrinsicElements['h4'] &
+      JSX.IntrinsicElements['h5'] &
+      JSX.IntrinsicElements['h6'] & { vtksReady?: boolean; crustReady?: boolean }
+  >
+)(({ level, vtksReady, crustReady }) => {
+  const setFontFamily = () => {
+    switch (level) {
+      case 1:
+        return vtksReady ? null : 'sans serif';
+      case 2:
+        return crustReady ? null : 'sans serif';
+      case 3:
+        return crustReady ? null : 'sans serif';
     }
-  )
+  };
+
+  const setFontWeight = () => {
+    switch (level) {
+      case 1:
+        return vtksReady ? null : 600;
+      case 2:
+      // Deliberately falls through
+      case 3:
+        return crustReady ? null : 600;
+    }
+  };
+
+  const setFontSize = () => {
+    switch (level) {
+      case 1:
+        return vtksReady ? null : '28px';
+      case 2:
+        return crustReady ? null : '30px';
+      case 3:
+        return crustReady ? null : '24px';
+    }
+  };
+
+  const setLetterSpacing = () => {
+    switch (level) {
+      case 1:
+        return vtksReady ? null : '-3px';
+      case 2:
+        return crustReady ? null : '-3px';
+      case 3:
+        return crustReady ? null : '-1.5px';
+    }
+  };
+
+  return css`
+    text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000;
+    cursor: default;
+    font-family: ${setFontFamily()};
+    font-weight: ${setFontWeight()};
+    font-size: ${setFontSize()};
+    letter-spacing: ${setLetterSpacing()};
+  `;
+});
 
 // Renders Grommet Paragraph with black text shadow
-export const ParagraphWS = styled(Paragraph as FC<ParagraphProps & JSX.IntrinsicElements['p']>)(
-  () => {
-    return css`
-      text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000;
-    `
-  }
-)
+export const ParagraphWS = styled(Paragraph as FC<ParagraphProps & JSX.IntrinsicElements['p']>)(() => {
+  return css`
+    text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000;
+  `;
+});
 
 // Renders Grommet Button with black box shadow
-export const ButtonWS = styled(Button as FC<ButtonProps & JSX.IntrinsicElements['button']>)(
-  ({primary, secondary}) => {
-    return css`
-      box-shadow: 0 0 5px 1px #000${ !primary ? ", 0 0 5px 1px #000 inset" : ""};
-      text-shadow: ${!primary ? "0 0 2px #000, 0 0 4px #000" : ""};
-      &:focus {
-        outline: 0;
-        box-shadow: none;
-        border-color: #FFF;
-        color: #FFF;   
-      }
-    `
-  }
-)
+export const ButtonWS = styled(Button as FC<ButtonProps & JSX.IntrinsicElements['button']>)(({ primary, secondary }) => {
+  return css`
+    box-shadow: 0 0 5px 1px #000 ${!primary ? ', 0 0 5px 1px #000 inset' : ''};
+    text-shadow: ${!primary ? '0 0 2px #000, 0 0 4px #000' : ''};
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+      border-color: #fff;
+      color: #fff;
+    }
+  `;
+});
 
 // Renders Grommet Text with black text shadow
-export const TextWS = styled(Text as FC<TextProps & Omit<JSX.IntrinsicElements['span'], 'color'>>)(
-  () => {
-    return css`
-      text-shadow: 0 0 1px #000, 0 0 3px #000;
-      cursor: default;
-    `
-  }
-)
+export const TextWS = styled(Text as FC<TextProps & Omit<JSX.IntrinsicElements['span'], 'color'>>)(() => {
+  return css`
+    text-shadow: 0 0 1px #000, 0 0 3px #000;
+    cursor: default;
+  `;
+});
 
 export const StyledClose = styled(Close as FC<IconProps & JSX.IntrinsicElements['svg']>)(() => {
   return css`
@@ -545,16 +595,12 @@ export const StyledClose = styled(Close as FC<IconProps & JSX.IntrinsicElements[
   `;
 });
 
-export const RedBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>)(
-  () => {
-    return css`
-      border-color: ${brandColor};
-      border-width: 3px;
-      border-style: solid;
-      box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3),
-                  0 0 10px 1px rgba(0, 0, 0, 0.2),
-                  0 0 5px 1px rgba(0, 0, 0, 0.3) inset,
-                  0 0 10px 1px rgba(0, 0, 0, 0.2) inset
-    `
-  }
-)
+export const RedBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>)(() => {
+  return css`
+    border-color: ${brandColor};
+    border-width: 3px;
+    border-style: solid;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.3), 0 0 10px 1px rgba(0, 0, 0, 0.2), 0 0 5px 1px rgba(0, 0, 0, 0.3) inset,
+      0 0 10px 1px rgba(0, 0, 0, 0.2) inset;
+  `;
+});
