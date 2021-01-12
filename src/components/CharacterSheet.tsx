@@ -166,6 +166,25 @@ const CharacterSheetBarterBox: FC<CharacterSheetBarterBoxProps> = ({
   );
 };
 
+interface CharacterSheetGearProps {
+  gear: string[];
+}
+
+const CharacterSheetGear: FC<CharacterSheetGearProps> = ({ gear }) => {
+  return (
+    <Box width="20vw" align="start" justify="start">
+      <Heading level="3" margin={{ bottom: '3px' }}>
+        Gear
+      </Heading>
+      <ul style={{ margin: 0, paddingInlineStart: '20px' }}>
+        {gear.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </Box>
+  );
+};
+
 interface CharacterSheetProps {
   character: Character;
   settingBarter: boolean;
@@ -192,6 +211,7 @@ const CharacterSheet: FC<CharacterSheetProps> = ({ character, handleSetBarter, s
           handleSetBarter={handleSetBarter}
         />
       )}
+      <CharacterSheetGear gear={character.gear} />
     </Box>
   );
 };
