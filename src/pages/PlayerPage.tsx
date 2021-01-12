@@ -52,8 +52,6 @@ const PlayerPage: FC = () => {
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
   const allMoves = allMovesData?.allMoves;
 
-  console.log('allMoves', allMoves);
-
   // ------------------------------------------------- Component functions -------------------------------------------------- //
 
   // ------------------------------------------------------- Effects -------------------------------------------------------- //
@@ -116,7 +114,7 @@ const PlayerPage: FC = () => {
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>
-            {sidePanel === 0 && userGameRole && userGameRole.characters?.length === 1 && <CharacterSheet />}
+            {sidePanel === 0 && !!character && <CharacterSheet character={character} />}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           </SidePanel>
         </Collapsible>
@@ -138,7 +136,7 @@ const PlayerPage: FC = () => {
               tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
             }}
           >
-            {userGameRole && userGameRole.characters && userGameRole.characters.length >= 1 && <Tab title="Character" />}
+            {userGameRole && userGameRole.characters && userGameRole.characters.length >= 1 && <Tab title="Playbook" />}
             {allMoves && <Tab title="Moves" />}
           </Tabs>
         </ThemeContext.Extend>

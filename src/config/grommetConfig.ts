@@ -13,10 +13,6 @@ import {
   HeadingProps,
   Paragraph,
   ParagraphProps,
-  Tab,
-  TabProps,
-  Tabs,
-  TabsProps,
   Text,
   TextProps,
 } from 'grommet';
@@ -415,10 +411,10 @@ export const customTabStyles = deepMerge(grommet, {
   tab: {
     color: '#FFF',
     hover: {
-      color: accentColors[0],
+      color: '#FFF',
     },
     active: {
-      color: accentColors[0],
+      color: '#FFF',
     },
     border: {
       side: 'bottom',
