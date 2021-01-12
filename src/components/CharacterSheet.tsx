@@ -4,6 +4,7 @@ import { FormDown, FormUp } from 'grommet-icons';
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Character, CharacterStat } from '../@types/dataInterfaces';
+import { CharacterMove } from '../@types/staticDataInterfaces';
 import { accentColors, RedBox } from '../config/grommetConfig';
 import { decapitalize } from '../helpers/decapitalize';
 import PLAYBOOK, { PlaybookData, PlaybookVars } from '../queries/playbook';
@@ -45,6 +46,7 @@ const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats }) => {
     backgroundColor: isHighlighted ? accentColors[2] : '#000',
     cursor: 'pointer',
   });
+
   return (
     <Box
       fill="horizontal"
@@ -59,13 +61,46 @@ const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats }) => {
       {stats.map((stat) => {
         return (
           <RedBox key={stat.id} align="center" width="76px" style={statBoxStyle(stat.isHighlighted)}>
-            <Heading level="2" margin={{ left: '6px', right: '6px', bottom: '3px', top: '6px' }}>
+            <Heading level="2" margin={{ left: '6px', right: '6px', bottom: '3px', top: '9px' }}>
               {stat.value}
             </Heading>
-            <Heading level="3" margin={{ left: '6px', right: '6px', bottom: '6px', top: '3px' }}>
+            <Heading level="3" margin={{ left: '6px', right: '6px', bottom: '3px', top: '3px' }}>
               {stat.stat}
             </Heading>
           </RedBox>
+        );
+      })}
+    </Box>
+  );
+};
+
+interface CharacterSheetMovesBoxProps {
+  moves: CharacterMove[];
+}
+
+const CharacterSheetMovesBox: FC<CharacterSheetMovesBoxProps> = ({ moves }) => {
+  const [showMove, setShowMove] = useState<string>('');
+  return (
+    <Box fill="horizontal" border={{ color: accentColors[0] }} align="center" justify="start" background="black">
+      {moves.map((move) => {
+        return (
+          <>
+            <Box key={move.id} fill="horizontal" direction="row" justify="between" align="center" pad="12px">
+              <Heading level="3" margin={{ top: '3px', bottom: '3px' }}>
+                {move.name}
+              </Heading>
+              {showMove === move.id ? (
+                <FormUp onClick={() => setShowMove('')} />
+              ) : (
+                <FormDown onClick={() => setShowMove(move.id)} />
+              )}
+            </Box>
+            {showMove === move.id && (
+              <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
+                <ReactMarkdown>{move.description}</ReactMarkdown>
+              </Box>
+            )}
+          </>
         );
       })}
     </Box>
@@ -86,6 +121,7 @@ const CharacterSheet: FC<CharacterSheetProps> = ({ character }) => {
         description={data?.playbook.intro}
       />
       {character.statsBlock.length > 0 && <CharacterSheetStatsBox stats={character.statsBlock} />}
+      {character.characterMoves.length > 0 && <CharacterSheetMovesBox moves={character.characterMoves} />}
     </Box>
   );
 };
