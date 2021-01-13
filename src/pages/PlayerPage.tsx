@@ -13,6 +13,7 @@ import { useGame } from '../contexts/gameContext';
 import { Character } from '../@types/dataInterfaces';
 import CharacterSheet from '../components/CharacterSheet';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
+import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -52,9 +53,11 @@ const PlayerPage: FC = () => {
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
   const allMoves = allMovesData?.allMoves;
-
   const [setCharacterBarter, { loading: settingBarter }] = useMutation<SetCharacterBarterData, SetCharacterBarterVars>(
     SET_CHARACTER_BARTER
+  );
+  const [adjustCharacterHx, { loading: adjustingHx }] = useMutation<AdjustCharacterHxData, AdjustCharacterHxVars>(
+    ADJUST_CHARACTER_HX
   );
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
@@ -63,6 +66,16 @@ const PlayerPage: FC = () => {
     if (!!userGameRole && !!character) {
       try {
         await setCharacterBarter({ variables: { gameRoleId: userGameRole.id, characterId: character.id, amount } });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleAdjustHx = async (hxId: string, value: number) => {
+    if (!!userGameRole && !!character) {
+      try {
+        await adjustCharacterHx({ variables: { gameRoleId: userGameRole.id, characterId: character.id, hxId, value } });
       } catch (error) {
         console.error(error);
       }
@@ -110,7 +123,11 @@ const PlayerPage: FC = () => {
   // Also, may need to create gameRole
   return (
     <Box fill background={background}>
-      <Header background={{ color: 'rgba(76, 104, 76, 0.5)' }} style={{ borderBottom: `1px solid ${accentColors[0]}` }}>
+      <Header
+        background={{ color: 'rgba(76, 104, 76, 0.5)' }}
+        style={{ borderBottom: `1px solid ${accentColors[0]}` }}
+        height="4vh"
+      >
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
             style={{ backgroundColor: 'transparent' }}
@@ -130,7 +147,13 @@ const PlayerPage: FC = () => {
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>
             {sidePanel === 0 && !!character && (
-              <CharacterSheet character={character} handleSetBarter={handleSetBarter} settingBarter={settingBarter} />
+              <CharacterSheet
+                character={character}
+                settingBarter={settingBarter}
+                adjustingHx={adjustingHx}
+                handleSetBarter={handleSetBarter}
+                handleAdjustHx={handleAdjustHx}
+              />
             )}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
           </SidePanel>
@@ -144,7 +167,7 @@ const PlayerPage: FC = () => {
           shinkWidth={SIDE_PANEL_WIDTH}
         ></MainContainer>
       </div>
-      <Footer direction="row" justify="between" align="center">
+      <Footer direction="row" justify="between" align="center" height="10vh">
         <ThemeContext.Extend value={customTabStyles}>
           <Tabs
             activeIndex={sidePanel}

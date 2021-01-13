@@ -12,10 +12,11 @@ interface MainContainerProps {
   readonly shinkWidth: number; // 0-100, for vw
 }
 
+//height: calc(100vh - 102px);
 export const MainContainer = styled(Box as React.FC<MainContainerProps & BoxProps & JSX.IntrinsicElements['div']>)(
   ({ sidePanel, maxPanels, shinkWidth }) => {
     return css`
-      height: calc(100vh - 95px);
+      height: 86vh;
       width: 100vw;
       transition: width 200ms ease-in-out, transform 200ms ease-in-out;
       ${sidePanel < maxPanels &&
@@ -38,7 +39,7 @@ export const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.
       border-right: 1px solid ${accentColors[0]};
       background: transparent;
       position: absolute;
-      height: calc(100vh - 95px);
+      height: 86vh;
       width: ${growWidth}vw;
     `;
   }

@@ -3,7 +3,7 @@ import { Box, Heading, Text } from 'grommet';
 import { CaretDownFill, CaretUpFill, FormDown, FormUp } from 'grommet-icons';
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Character, CharacterStat } from '../@types/dataInterfaces';
+import { Character, CharacterStat, HxStat } from '../@types/dataInterfaces';
 import { CharacterMove, Look } from '../@types/staticDataInterfaces';
 import { accentColors, RedBox } from '../config/grommetConfig';
 import { decapitalize } from '../helpers/decapitalize';
@@ -56,19 +56,24 @@ const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats }) => {
   });
 
   return (
-    <Box fill="horizontal" direction="row" align="center" justify="around" pad="12px" gap="12px" wrap>
-      {stats.map((stat) => {
-        return (
-          <RedBox key={stat.id} align="center" width="76px" style={statBoxStyle(stat.isHighlighted)}>
-            <Heading level="2" margin={{ left: '6px', right: '6px', bottom: '3px', top: '9px' }}>
-              {stat.value}
-            </Heading>
-            <Heading level="3" margin={{ left: '6px', right: '6px', bottom: '3px', top: '3px' }}>
-              {stat.stat}
-            </Heading>
-          </RedBox>
-        );
-      })}
+    <Box fill="horizontal" pad="12px">
+      <Heading level="3" margin={{ bottom: '3px' }}>
+        Stats
+      </Heading>
+      <Box fill="horizontal" direction="row" align="center" justify="around" pad="12px" gap="12px" wrap>
+        {stats.map((stat) => {
+          return (
+            <RedBox key={stat.id} align="center" width="76px" style={statBoxStyle(stat.isHighlighted)}>
+              <Heading level="2" margin={{ left: '6px', right: '6px', bottom: '3px', top: '9px' }}>
+                {stat.value}
+              </Heading>
+              <Heading level="3" margin={{ left: '6px', right: '6px', bottom: '3px', top: '3px' }}>
+                {stat.stat}
+              </Heading>
+            </RedBox>
+          );
+        })}
+      </Box>
     </Box>
   );
 };
@@ -80,7 +85,10 @@ interface CharacterSheetMovesBoxProps {
 const CharacterSheetMovesBox: FC<CharacterSheetMovesBoxProps> = ({ moves }) => {
   const [showMove, setShowMove] = useState<string>('');
   return (
-    <Box fill="horizontal" align="center" justify="start">
+    <Box fill="horizontal" align="center" justify="start" pad="12px">
+      <Heading level="3" margin={{ bottom: '3px' }} alignSelf="start">
+        Moves
+      </Heading>
       {moves.map((move) => {
         return (
           <Box key={move.id} fill="horizontal">
@@ -172,7 +180,7 @@ interface CharacterSheetGearProps {
 
 const CharacterSheetGear: FC<CharacterSheetGearProps> = ({ gear }) => {
   return (
-    <Box width="20vw" align="start" justify="start">
+    <Box width="23vw" align="start" justify="start">
       <Heading level="3" margin={{ bottom: '3px' }}>
         Gear
       </Heading>
@@ -185,13 +193,86 @@ const CharacterSheetGear: FC<CharacterSheetGearProps> = ({ gear }) => {
   );
 };
 
+interface CharacterSheetHxProps {
+  hxStats: HxStat[];
+  adjustingHx: boolean;
+  handleAdjustHx: (hxId: string, value: number) => void;
+}
+
+const CharacterSheetHx: FC<CharacterSheetHxProps> = ({ hxStats, adjustingHx, handleAdjustHx }) => {
+  const increaseHx = (hxId: string, hxValue: number) => {
+    handleAdjustHx(hxId, hxValue + 1);
+  };
+
+  const decreaseHx = (hxId: string, hxValue: number) => {
+    handleAdjustHx(hxId, hxValue - 1);
+  };
+
+  return (
+    <Box width="23vw" align="start" justify="start">
+      <Heading level="3" margin={{ bottom: '3px' }}>
+        Hx
+      </Heading>
+
+      {hxStats.map((stat) => (
+        <Box fill="horizontal" key={stat.characterId}>
+          <Box fill="horizontal" direction="row" justify="between" align="center">
+            <Heading level="4" margin={{ vertical: '6px', left: '12px' }}>
+              {stat.characterName}
+            </Heading>
+            <Box direction="row" align="center" gap="12px">
+              <RedBox width="50px" align="center" margin={{ left: '12px' }}>
+                <Heading level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
+                  {stat.hxValue}
+                </Heading>
+              </RedBox>
+              <Box align="center" justify="around">
+                {adjustingHx ? (
+                  <Box width="48px" height="80px" />
+                ) : (
+                  <Box
+                    align="center"
+                    justify="around"
+                    animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+                  >
+                    <CaretUpFill
+                      size="large"
+                      color="brand"
+                      onClick={() => increaseHx(stat.characterId, stat.hxValue)}
+                      style={{ height: '40px' }}
+                    />
+                    <CaretDownFill
+                      size="large"
+                      color="brand"
+                      onClick={() => decreaseHx(stat.characterId, stat.hxValue)}
+                      style={{ height: '40px' }}
+                    />
+                  </Box>
+                )}
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
 interface CharacterSheetProps {
   character: Character;
   settingBarter: boolean;
+  adjustingHx: boolean;
   handleSetBarter: (amount: number) => void;
+  handleAdjustHx: (hxId: string, value: number) => void;
 }
 
-const CharacterSheet: FC<CharacterSheetProps> = ({ character, handleSetBarter, settingBarter }) => {
+const CharacterSheet: FC<CharacterSheetProps> = ({
+  character,
+  adjustingHx,
+  settingBarter,
+  handleSetBarter,
+  handleAdjustHx,
+}) => {
   const { data } = useQuery<PlaybookData, PlaybookVars>(PLAYBOOK, { variables: { playbookType: character.playbook } });
   return (
     <Box direction="row" wrap gap="12px" pad="12px" overflow="auto">
@@ -212,6 +293,9 @@ const CharacterSheet: FC<CharacterSheetProps> = ({ character, handleSetBarter, s
         />
       )}
       <CharacterSheetGear gear={character.gear} />
+      {character.hxBlock.length > 0 && (
+        <CharacterSheetHx hxStats={character.hxBlock} adjustingHx={adjustingHx} handleAdjustHx={handleAdjustHx} />
+      )}
     </Box>
   );
 };
