@@ -538,6 +538,7 @@ export const mockGameForCharacterCreation2: MockedResponse = {
                   hasCompletedCharacterCreation: false,
                   characterMoves: [],
                   barter: 0,
+                  harm: mockCharacter2.harm,
                   playbookUnique: {
                     id: 'dummy',
                     type: 'dummy',
@@ -686,6 +687,7 @@ export const mockGameForCharacterCreation3: MockedResponse = {
                   hxBlock: [],
                   looks: [],
                   barter: 0,
+                  harm: mockCharacter2.harm,
                   characterMoves: [],
                   playbookUnique: {
                     id: 'dummy',
@@ -774,6 +776,7 @@ export const mockGameForCharacterCreation4: MockedResponse = {
                   looks: [mockCharacter2.looks[0]],
                   characterMoves: [],
                   barter: 0,
+                  harm: mockCharacter2.harm,
                   playbookUnique: {
                     id: 'dummy',
                     type: 'dummy',
@@ -861,6 +864,7 @@ export const mockGameForCharacterCreation5: MockedResponse = {
                   looks: [mockCharacter2.looks[0], mockCharacter2.looks[1]],
                   characterMoves: [],
                   barter: 0,
+                  harm: mockCharacter2.harm,
                   playbookUnique: {
                     id: 'dummy',
                     type: 'dummy',
@@ -948,6 +952,7 @@ export const mockGameForCharacterCreation6: MockedResponse = {
                   looks: [mockCharacter2.looks[0], mockCharacter2.looks[1], mockCharacter2.looks[2]],
                   characterMoves: [],
                   barter: 0,
+                  harm: mockCharacter2.harm,
                   playbookUnique: {
                     id: 'dummy',
                     type: 'dummy',
@@ -1033,6 +1038,7 @@ export const mockGameForCharacterCreation7: MockedResponse = {
                   statsBlock: [],
                   hxBlock: [],
                   barter: 0,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1131,6 +1137,7 @@ export const mockGameForCharacterCreation8: MockedResponse = {
                   statsBlock: [],
                   hxBlock: [],
                   barter: 0,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1223,6 +1230,7 @@ export const mockGameForCharacterCreation9: MockedResponse = {
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: [],
                   barter: 0,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1314,6 +1322,7 @@ export const mockGameForCharacterCreation10: MockedResponse = {
                   gear: mockCharacter2.gear,
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: [],
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1406,6 +1415,7 @@ export const mockGameForCharacterCreation11: MockedResponse = {
                   barter: mockCharacter2.barter,
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: [],
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1499,6 +1509,7 @@ export const mockGameForCharacterCreation12: MockedResponse = {
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: [],
                   barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1576,6 +1587,7 @@ export const mockGameForCharacterCreation13: MockedResponse = {
                   hasCompletedCharacterCreation: false,
                   hxBlock: [],
                   barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1649,6 +1661,7 @@ export const mockGameForCharacterCreation14: MockedResponse = {
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: mockCharacter2.hxBlock,
                   barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1721,6 +1734,7 @@ export const mockGameForCharacterCreation15: MockedResponse = {
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: mockCharacter2.hxBlock,
                   barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1770,6 +1784,7 @@ export const mockGameForCharacterCreation16: MockedResponse = {
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: mockCharacter2.hxBlock,
                   barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],

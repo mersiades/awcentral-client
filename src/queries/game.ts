@@ -43,6 +43,15 @@ const GAME = gql`
           hasCompletedCharacterCreation
           gear
           barter
+          harm {
+            id
+            value
+            isStabilized
+            hasComeBackHard
+            hasComeBackWeird
+            hasChangedPlaybook
+            hasDied
+          }
           statsBlock {
             id
             stat

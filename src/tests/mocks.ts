@@ -2,6 +2,7 @@ import { HxInput, KeycloakUser, KeycloakUserInfo } from '../@types';
 import {
   AngelKit,
   BrainerGear,
+  CharacterHarm,
   CharacterStat,
   CustomWeapons,
   Game,
@@ -35,6 +36,7 @@ interface MockCharacter {
   name: string;
   barter: number;
   playbook: PlayBooks;
+  harm: CharacterHarm;
   hasCompletedCharacterCreation: boolean;
   playbookUnique: PlaybookUnique;
   characterMoves: CharacterMove[];
@@ -350,6 +352,16 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   angelKit: mockAngelKit,
 };
 
+export const mockCharacterHarm: CharacterHarm = {
+  id: 'mock-character-harm-id-1',
+  value: 0,
+  isStabilized: false,
+  hasComeBackHard: false,
+  hasComeBackWeird: false,
+  hasChangedPlaybook: false,
+  hasDied: false,
+};
+
 export const mockCharacter1: MockCharacter = {
   id: 'mock-character-id-1',
   name: 'Mock Character 1',
@@ -359,6 +371,7 @@ export const mockCharacter1: MockCharacter = {
   statsBlock: mockStatsBlock1,
   barter: 2,
   hxBlock: [],
+  harm: mockCharacterHarm,
   looks: [mockLookBettleBabe1, mockLookBattlebabe2],
   characterMoves: [
     mockCharacterMoveAngel1,
@@ -383,6 +396,7 @@ export const mockCharacter2: MockCharacter = {
       hxValue: 1,
     },
   ],
+  harm: { ...mockCharacterHarm, id: 'mock-character-harm-id-2' },
   looks: [mockLookAngel1, mockLookAngel3, mockLookAngel5, mockLookAngel7, mockLookAngel9],
   characterMoves: [
     { ...mockCharacterMoveAngel1, isSelected: true },

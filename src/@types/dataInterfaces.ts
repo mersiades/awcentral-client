@@ -48,9 +48,20 @@ export interface Character {
   gear: string[];
   looks: Look[];
   characterMoves: CharacterMove[];
+  harm: CharacterHarm;
   name?: string;
   barter?: number;
   playbookUnique?: PlaybookUnique;
+}
+
+export interface CharacterHarm {
+  id: string;
+  value: number;
+  isStabilized: boolean;
+  hasComeBackHard: boolean;
+  hasComeBackWeird: boolean;
+  hasChangedPlaybook: boolean;
+  hasDied: boolean;
 }
 
 export interface CharacterStat {

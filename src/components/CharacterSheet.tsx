@@ -1,11 +1,12 @@
 import { useQuery } from '@apollo/client';
-import { Box, Heading, Text } from 'grommet';
+import { Box, Button, CheckBox, Heading, Text } from 'grommet';
 import { CaretDownFill, CaretUpFill, FormDown, FormUp } from 'grommet-icons';
 import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Character, CharacterStat, HxStat } from '../@types/dataInterfaces';
+import { HarmInput } from '../@types';
+import { Character, CharacterHarm, CharacterStat, HxStat } from '../@types/dataInterfaces';
 import { CharacterMove, Look } from '../@types/staticDataInterfaces';
-import { accentColors, RedBox } from '../config/grommetConfig';
+import { accentColors, brandColor, RedBox, TextWS } from '../config/grommetConfig';
 import { decapitalize } from '../helpers/decapitalize';
 import PLAYBOOK, { PlaybookData, PlaybookVars } from '../queries/playbook';
 
@@ -25,16 +26,16 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({ name, playb
 
   return (
     <Box fill="horizontal" align="center" justify="start">
-      <Box fill="horizontal" direction="row" justify="between" align="center" pad="12px">
-        <Box>
-          <Heading level="2" margin={{ bottom: '3px' }}>{`${name + ' '}the ${playbook}`}</Heading>
-          <Text>{looksString}</Text>
-        </Box>
+      <Box fill="horizontal" direction="row" justify="start" align="center" pad="12px" gap="12px">
         {showDescription ? (
           <FormUp onClick={() => setShowDescription(false)} />
         ) : (
           <FormDown onClick={() => setShowDescription(true)} />
         )}
+        <Box>
+          <Heading level="2" margin={{ bottom: '3px' }}>{`${name + ' '}the ${playbook}`}</Heading>
+          <Text>{looksString}</Text>
+        </Box>
       </Box>
       {showDescription && !!description && (
         <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
@@ -92,16 +93,18 @@ const CharacterSheetMovesBox: FC<CharacterSheetMovesBoxProps> = ({ moves }) => {
       {moves.map((move) => {
         return (
           <Box key={move.id} fill="horizontal">
-            <Box key={move.id} fill="horizontal" direction="row" justify="between" align="center" pad="12px">
-              <Heading level="3" margin={{ top: '3px', bottom: '3px' }}>
-                {move.name}
-              </Heading>
-
-              {showMove === move.id ? (
-                <FormUp onClick={() => setShowMove('')} />
-              ) : (
-                <FormDown onClick={() => setShowMove(move.id)} />
-              )}
+            <Box fill="horizontal" direction="row" justify="between" align="center">
+              <Box direction="row" justify="start" align="center" pad="12px" gap="12px">
+                {showMove === move.id ? (
+                  <FormUp onClick={() => setShowMove('')} />
+                ) : (
+                  <FormDown onClick={() => setShowMove(move.id)} />
+                )}
+                <Heading level="3" margin={{ top: '3px', bottom: '3px' }}>
+                  {move.name}
+                </Heading>
+              </Box>
+              {!!move.stat && <Button secondary label="ROLL" />}
             </Box>
 
             {showMove === move.id && (
@@ -141,13 +144,15 @@ const CharacterSheetBarterBox: FC<CharacterSheetBarterBoxProps> = ({
   return (
     <Box fill="horizontal" align="center" justify="start">
       <Box fill="horizontal" direction="row" justify="between" align="center" pad="12px">
-        <Heading level="3">Barter</Heading>
         <Box direction="row" align="center" gap="12px">
           {showInstructions ? (
             <FormUp onClick={() => setShowInstructions(false)} />
           ) : (
             <FormDown onClick={() => setShowInstructions(true)} />
           )}
+          <Heading level="3">Barter</Heading>
+        </Box>
+        <Box direction="row" align="center" gap="12px">
           <RedBox width="50px" align="center" margin={{ left: '12px' }}>
             <Heading level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
               {barter}
@@ -258,20 +263,219 @@ const CharacterSheetHx: FC<CharacterSheetHxProps> = ({ hxStats, adjustingHx, han
   );
 };
 
+interface CharacterSheetHarmProps {
+  harm: CharacterHarm;
+  settingHarm: boolean;
+  handleSetHarm: (harm: HarmInput) => void;
+}
+
+const CharacterSheetHarm: FC<CharacterSheetHarmProps> = ({ harm, settingHarm, handleSetHarm }) => {
+  const highlightColor = harm.isStabilized ? accentColors[0] : brandColor;
+  const circle = {
+    position: 'relative' as 'relative',
+    height: '200px',
+    width: '200px',
+    overflow: 'hidden',
+    borderRadius: '50%',
+  };
+
+  const sectorBase = {
+    position: 'absolute' as 'absolute',
+    left: '50%',
+    bottom: '50%',
+    height: '100%',
+    width: '100%',
+    transformOrigin: 'bottom left',
+    borderColor: '#000',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    cursor: 'pointer',
+  };
+
+  const sector0 = (value: number) => {
+    return {
+      ...sectorBase,
+      backgroundColor: value > 0 ? highlightColor : '#FFF',
+      transform: 'rotate(0deg) skewY(0deg)',
+    };
+  };
+
+  const sector1 = (value: number) => {
+    return {
+      ...sectorBase,
+      backgroundColor: value > 1 ? highlightColor : '#FFF',
+      transform: 'rotate(90deg) skewY(0deg)',
+    };
+  };
+
+  const sector2 = (value: number) => {
+    return {
+      ...sectorBase,
+      backgroundColor: value > 2 ? highlightColor : '#FFF',
+      transform: 'rotate(180deg) skewY(0deg)',
+    };
+  };
+
+  const sector3 = (value: number) => {
+    return {
+      ...sectorBase,
+      backgroundColor: value > 3 ? highlightColor : '#FFF',
+      transform: 'rotate(270deg) skewY(-60deg)',
+    };
+  };
+
+  const sector4 = (value: number) => {
+    return {
+      ...sectorBase,
+      backgroundColor: value > 4 ? highlightColor : '#FFF',
+      transform: 'rotate(300deg) skewY(-60deg)',
+    };
+  };
+
+  const sector5 = (value: number) => {
+    return {
+      ...sectorBase,
+      backgroundColor: value > 5 ? highlightColor : '#FFF',
+      transform: 'rotate(330deg) skewY(-60deg)',
+    };
+  };
+
+  const oclockBase = {
+    position: 'absolute' as 'absolute',
+    padding: '3px',
+    width: '30px',
+    height: '30px',
+  };
+
+  const oclock12 = {
+    ...oclockBase,
+    top: 0,
+    left: 'calc(50% - 15px)',
+  };
+
+  const oclock3 = {
+    ...oclockBase,
+    top: 'calc(50% - 15px)',
+    right: 0,
+  };
+
+  const oclock6 = {
+    ...oclockBase,
+    bottom: -3,
+    left: 'calc(50% - 15px)',
+  };
+
+  const oclock9 = {
+    ...oclockBase,
+    top: 'calc(50% -15px)',
+    left: 0,
+  };
+
+  const setHarmValue = (sector: number) => {
+    let newValue = harm.value;
+    if (harm.value > sector) {
+      newValue = sector;
+    } else {
+      newValue = sector + 1;
+    }
+
+    handleSetHarm({ ...harm, value: newValue });
+  };
+
+  return (
+    <Box fill="horizontal" align="start" justify="start" pad="12px">
+      <Heading level="3" margin={{ bottom: '3px' }}>
+        Harm
+      </Heading>
+      <Box fill="horizontal" direction="row" justify="around">
+        <Box align="center" justify="center" style={{ position: 'relative', width: '250px', height: '250px' }}>
+          <Box style={oclock12} align="center" justify="center">
+            <TextWS style={{ textAlign: 'center' }}>12</TextWS>
+          </Box>
+          <Box style={oclock3} align="center" justify="center">
+            <TextWS>3</TextWS>
+          </Box>
+          <Box style={oclock6} align="center" justify="center">
+            <TextWS>6</TextWS>
+          </Box>
+          <Box style={oclock9} align="center" justify="center">
+            <TextWS>9</TextWS>
+          </Box>
+
+          <div style={circle}>
+            <div style={sector0(harm.value)} onClick={() => !settingHarm && setHarmValue(0)} />
+            <div style={sector1(harm.value)} onClick={() => !settingHarm && setHarmValue(1)} />
+            <div style={sector2(harm.value)} onClick={() => !settingHarm && setHarmValue(2)} />
+            <div style={sector3(harm.value)} onClick={() => !settingHarm && setHarmValue(3)} />
+            <div style={sector4(harm.value)} onClick={() => !settingHarm && setHarmValue(4)} />
+            <div style={sector5(harm.value)} onClick={() => !settingHarm && setHarmValue(5)} />
+          </div>
+        </Box>
+        <Box flex="grow" pad="12px" gap="12px" justify="center">
+          {(harm.isStabilized || harm.value > 1) && (
+            <Box animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
+              <CheckBox
+                label="Stabilized"
+                checked={harm.isStabilized}
+                onClick={() => handleSetHarm({ ...harm, isStabilized: !harm.isStabilized })}
+                disabled={settingHarm}
+              />
+            </Box>
+          )}
+
+          {(harm.hasComeBackHard || harm.hasComeBackWeird || harm.hasChangedPlaybook || harm.hasDied || harm.value > 5) && (
+            <Box animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }} gap="12px">
+              <TextWS>When life becomes untenable:</TextWS>
+              <CheckBox
+                label="Come back with -1hard"
+                checked={harm.hasComeBackHard}
+                onClick={() => handleSetHarm({ ...harm, hasComeBackHard: !harm.hasComeBackHard })}
+                disabled={settingHarm}
+              />
+              <CheckBox
+                label="Come back with +1weird (max+3)"
+                checked={harm.hasComeBackWeird}
+                onClick={() => handleSetHarm({ ...harm, hasComeBackWeird: !harm.hasComeBackWeird })}
+                disabled={settingHarm}
+              />
+              <CheckBox
+                label="Change to a new playbook"
+                checked={harm.hasChangedPlaybook}
+                onClick={() => handleSetHarm({ ...harm, hasChangedPlaybook: !harm.hasChangedPlaybook })}
+                disabled={settingHarm}
+              />
+              <CheckBox
+                label="die"
+                checked={harm.hasDied}
+                onClick={() => handleSetHarm({ ...harm, hasDied: !harm.hasDied })}
+                disabled={settingHarm}
+              />
+            </Box>
+          )}
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
 interface CharacterSheetProps {
   character: Character;
   settingBarter: boolean;
   adjustingHx: boolean;
+  settingHarm: boolean;
   handleSetBarter: (amount: number) => void;
   handleAdjustHx: (hxId: string, value: number) => void;
+  handleSetHarm: (harm: HarmInput) => void;
 }
 
 const CharacterSheet: FC<CharacterSheetProps> = ({
   character,
   adjustingHx,
   settingBarter,
+  settingHarm,
   handleSetBarter,
   handleAdjustHx,
+  handleSetHarm,
 }) => {
   const { data } = useQuery<PlaybookData, PlaybookVars>(PLAYBOOK, { variables: { playbookType: character.playbook } });
   return (
@@ -282,8 +486,19 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
         description={data?.playbook.intro}
         looks={character.looks}
       />
+
       {character.statsBlock.length > 0 && <CharacterSheetStatsBox stats={character.statsBlock} />}
+
       {character.characterMoves.length > 0 && <CharacterSheetMovesBox moves={character.characterMoves} />}
+
+      <CharacterSheetHarm harm={character.harm} settingHarm={settingHarm} handleSetHarm={handleSetHarm} />
+
+      <CharacterSheetGear gear={character.gear} />
+
+      {character.hxBlock.length > 0 && (
+        <CharacterSheetHx hxStats={character.hxBlock} adjustingHx={adjustingHx} handleAdjustHx={handleAdjustHx} />
+      )}
+
       {!!character.barter && data?.playbook.barterInstructions && (
         <CharacterSheetBarterBox
           barter={character.barter}
@@ -291,10 +506,6 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
           settingBarter={settingBarter}
           handleSetBarter={handleSetBarter}
         />
-      )}
-      <CharacterSheetGear gear={character.gear} />
-      {character.hxBlock.length > 0 && (
-        <CharacterSheetHx hxStats={character.hxBlock} adjustingHx={adjustingHx} handleAdjustHx={handleAdjustHx} />
       )}
     </Box>
   );

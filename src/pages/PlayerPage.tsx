@@ -14,6 +14,8 @@ import { Character } from '../@types/dataInterfaces';
 import CharacterSheet from '../components/CharacterSheet';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
+import { HarmInput } from '../@types';
+import SET_CHARACTER_HARM, { SetCharacterHarmData, SetCharacterHarmVars } from '../mutations/setCharacterHarm';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -59,6 +61,9 @@ const PlayerPage: FC = () => {
   const [adjustCharacterHx, { loading: adjustingHx }] = useMutation<AdjustCharacterHxData, AdjustCharacterHxVars>(
     ADJUST_CHARACTER_HX
   );
+  const [setCharacterHarm, { loading: settingHarm }] = useMutation<SetCharacterHarmData, SetCharacterHarmVars>(
+    SET_CHARACTER_HARM
+  );
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
 
@@ -76,6 +81,18 @@ const PlayerPage: FC = () => {
     if (!!userGameRole && !!character) {
       try {
         await adjustCharacterHx({ variables: { gameRoleId: userGameRole.id, characterId: character.id, hxId, value } });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleSetHarm = async (harm: HarmInput) => {
+    if (!!userGameRole && !!character) {
+      try {
+        // @ts-ignore
+        delete harm.__typename;
+        await setCharacterHarm({ variables: { gameRoleId: userGameRole.id, characterId: character.id, harm } });
       } catch (error) {
         console.error(error);
       }
@@ -151,8 +168,10 @@ const PlayerPage: FC = () => {
                 character={character}
                 settingBarter={settingBarter}
                 adjustingHx={adjustingHx}
+                settingHarm={settingHarm}
                 handleSetBarter={handleSetBarter}
                 handleAdjustHx={handleAdjustHx}
+                handleSetHarm={handleSetHarm}
               />
             )}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
@@ -172,7 +191,6 @@ const PlayerPage: FC = () => {
           <Tabs
             activeIndex={sidePanel}
             onActive={(tab) => {
-              console.log('clicked', tab);
               tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
             }}
           >
