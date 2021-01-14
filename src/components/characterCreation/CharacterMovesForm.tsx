@@ -2,7 +2,7 @@ import React, { FC, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
-import { Box, CheckBox, CheckBoxGroup, CheckBoxProps, Text } from 'grommet';
+import { Box, CheckBox, Text } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
@@ -23,6 +23,7 @@ interface CharacterMovesFormProps {
   characterName: string;
   settingMoves: boolean;
   handleSubmitCharacterMoves: (moveIds: string[]) => void;
+  existingMoves?: CharacterMove[];
 }
 
 const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
@@ -49,21 +50,14 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
   const defaultMoveIds = defaultMoves?.map((move) => move.id);
   const moveOptions = playbookMoves?.filter((move) => !move.isSelected);
 
-  const renderOptions = (options: CharacterMove[]) => {
-    let optionsArray: CheckBoxProps[] = [];
-    options.forEach((item) => {
-      const option: CheckBoxProps = {
-        id: item.id,
-        label: (
-          <div key={item.id}>
-            <Text weight="bold">{item.name}</Text>
-            <StyledMarkdown>{item.description}</StyledMarkdown>
-          </div>
-        ),
-      };
-      optionsArray = [...optionsArray, option];
-    });
-    return optionsArray;
+  const handleSelectMove = (moveId: string) => {
+    if (selectedMoveIds.includes(moveId)) {
+      setSelectedMoveIds(selectedMoveIds.filter((id) => id !== moveId));
+    } else {
+      if (!!moveChoiceCount) {
+        selectedMoveIds.length < moveChoiceCount && setSelectedMoveIds([...selectedMoveIds, moveId]);
+      }
+    }
   };
 
   if (
@@ -116,13 +110,23 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
         <Text size="large" weight="bold" margin={{ vertical: '12px' }}>
           Select {moveChoiceCount}
         </Text>
-        <CheckBoxGroup
-          overflow="auto"
-          options={renderOptions(moveOptions)}
-          labelKey="label"
-          valueKey="id"
-          onChange={({ value, option }: any) => setSelectedMoveIds(value)}
-        />
+        <Box align="start" gap="12px">
+          {moveOptions.map((move) => {
+            return (
+              <CheckBox
+                key={move.id}
+                label={
+                  <div>
+                    <Text weight="bold">{move.name}</Text>
+                    <StyledMarkdown>{move.description}</StyledMarkdown>
+                  </div>
+                }
+                checked={selectedMoveIds.includes(move.id)}
+                onChange={() => handleSelectMove(move.id)}
+              />
+            );
+          })}
+        </Box>
         <Box direction="row" justify="end" gap="24px" margin={{ vertical: '12px' }}>
           <ButtonWS
             primary

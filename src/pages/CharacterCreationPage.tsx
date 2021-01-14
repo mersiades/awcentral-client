@@ -539,6 +539,7 @@ const CharacterCreationPage: FC = () => {
             characterName={character.name}
             settingMoves={settingMoves}
             handleSubmitCharacterMoves={handleSubmitCharacterMoves}
+            existingMoves={character.characterMoves}
           />
         )}
         {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && (
