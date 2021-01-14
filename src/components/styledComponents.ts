@@ -1,4 +1,5 @@
 import { Box, BoxProps } from 'grommet';
+import ReactMarkdown from 'react-markdown';
 import styled, { css } from 'styled-components';
 import { accentColors } from '../config/grommetConfig';
 
@@ -44,3 +45,10 @@ export const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.
     `;
   }
 );
+
+export const StyledMarkdown = styled(ReactMarkdown)`
+  & p {
+    margin: unset;
+    text-shadow: 0 0 1px #000, 0 0 3px #000;
+  }
+`;

@@ -6,7 +6,7 @@ import Spinner from '../Spinner';
 import AngelKitForm from './uniques/AngelKitForm';
 import CustomWeaponsForm from './uniques/CustomWeaponsForm';
 import BrainerGearForm from './uniques/BrainerGearForm';
-import { CustomWeapons } from '../../@types/dataInterfaces';
+import { AngelKit, BrainerGear, CustomWeapons } from '../../@types/dataInterfaces';
 import { PlayBooks } from '../../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 
@@ -19,7 +19,9 @@ interface PlaybookUniqueRouterProps {
   handleSubmitBrainerGear: (brainerGear: string[]) => void;
   handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
   handleSubmitCustomWeapons: (weapons: string[]) => void;
-  customWeapons?: CustomWeapons;
+  existingCustomWeapons?: CustomWeapons;
+  existingAngelKit?: AngelKit;
+  existingBrainerGear?: BrainerGear;
 }
 
 /**
@@ -41,7 +43,9 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
   handleSubmitAngelKit,
   handleSubmitBrainerGear,
   handleSubmitCustomWeapons,
-  customWeapons,
+  existingCustomWeapons,
+  existingAngelKit,
+  existingBrainerGear,
 }) => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType },
@@ -66,6 +70,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
             settingAngelKit={settingAngelKit}
             playbookUniqueCreator={playbookUniqueCreator}
             handleSubmitAngelKit={handleSubmitAngelKit}
+            existingAngelKit={existingAngelKit}
           />
         );
       case PlayBooks.battlebabe:
@@ -75,7 +80,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
             settingCustomWeapons={settingCustomWeapons}
             playbookUniqueCreator={playbookUniqueCreator}
             handleSubmitCustomWeapons={handleSubmitCustomWeapons}
-            customWeapons={customWeapons}
+            existingCustomWeapons={existingCustomWeapons}
           />
         );
       case PlayBooks.brainer:
@@ -85,6 +90,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
             settingBrainerGear={settingBrainerGear}
             playbookUniqueCreator={playbookUniqueCreator}
             handleSubmitBrainerGear={handleSubmitBrainerGear}
+            existingBrainerGear={existingBrainerGear}
           />
         );
       default:

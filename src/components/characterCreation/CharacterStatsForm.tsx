@@ -75,6 +75,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({
               justify="around"
               align="center"
               border={opt.id === existingStatOption}
+              background={{ color: 'neutral-1', opacity: opt.id === existingStatOption ? 0.5 : 0 }}
               hoverIndicator={{ color: 'neutral-1', opacity: 0.4 }}
               onClick={() => setSelectedStatsOption(opt)}
               gap="6px"

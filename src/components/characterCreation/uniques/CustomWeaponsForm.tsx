@@ -15,7 +15,7 @@ interface CustomWeaponsFormProps {
   settingCustomWeapons: boolean;
   playbookUniqueCreator: PlaybookUniqueCreator;
   handleSubmitCustomWeapons: (weapons: string[]) => void;
-  customWeapons?: CustomWeapons;
+  existingCustomWeapons?: CustomWeapons;
 }
 
 const WeaponsUL = styled.ul`
@@ -32,12 +32,12 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
   settingCustomWeapons,
   playbookUniqueCreator,
   handleSubmitCustomWeapons,
-  customWeapons,
+  existingCustomWeapons,
 }) => {
   const [baseValue, setBaseValue] = useState<TaggedItem | undefined>();
   const [characteristics, setCharacteristics] = useState<ItemCharacteristic[]>([]);
   const [value, setValue] = useState('');
-  const [weapons, setWeapons] = useState<string[]>(!!customWeapons ? [...customWeapons.weapons] : []);
+  const [weapons, setWeapons] = useState<string[]>(!!existingCustomWeapons ? [...existingCustomWeapons.weapons] : []);
 
   const { crustReady } = useFonts();
 

@@ -2,13 +2,13 @@ import { useQuery } from '@apollo/client';
 import { Box, Button, CheckBox, Heading, Text } from 'grommet';
 import { CaretDownFill, CaretUpFill, FormDown, FormUp } from 'grommet-icons';
 import React, { FC, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { HarmInput } from '../@types';
 import { Character, CharacterHarm, CharacterStat, HxStat } from '../@types/dataInterfaces';
 import { CharacterMove, Look } from '../@types/staticDataInterfaces';
 import { accentColors, brandColor, RedBox, TextWS } from '../config/grommetConfig';
 import { decapitalize } from '../helpers/decapitalize';
 import PLAYBOOK, { PlaybookData, PlaybookVars } from '../queries/playbook';
+import { StyledMarkdown } from './styledComponents';
 
 interface CharacterSheetHeaderBoxProps {
   playbook: string;
@@ -39,7 +39,7 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({ name, playb
       </Box>
       {showDescription && !!description && (
         <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
-          <ReactMarkdown>{description}</ReactMarkdown>
+          <StyledMarkdown>{description}</StyledMarkdown>
         </Box>
       )}
     </Box>
@@ -109,7 +109,7 @@ const CharacterSheetMovesBox: FC<CharacterSheetMovesBoxProps> = ({ moves }) => {
 
             {showMove === move.id && (
               <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
-                <ReactMarkdown>{move.description}</ReactMarkdown>
+                <StyledMarkdown>{move.description}</StyledMarkdown>
               </Box>
             )}
           </Box>
@@ -172,7 +172,7 @@ const CharacterSheetBarterBox: FC<CharacterSheetBarterBoxProps> = ({
       </Box>
       {showInstructions && (
         <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
-          <ReactMarkdown>{instructions}</ReactMarkdown>
+          <StyledMarkdown>{instructions}</StyledMarkdown>
         </Box>
       )}
     </Box>
