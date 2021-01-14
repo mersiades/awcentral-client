@@ -35,7 +35,7 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({
   return (
     <Box fill="horizontal" align="center" justify="start">
       <Box fill="horizontal" direction="row" justify="between" align="center" pad="12px">
-        <Box direction="row" align="center" gap="12px">
+        <Box direction="row" align="center" gap="24px">
           {showDescription ? (
             <FormUp onClick={() => setShowDescription(false)} />
           ) : (
@@ -46,7 +46,7 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({
             <Text>{looksString}</Text>
           </Box>
         </Box>
-        <Edit color="accent-1" onClick={() => navigateToCharacterCreation(1)} />
+        <Edit color="accent-1" onClick={() => navigateToCharacterCreation(1)} style={{ cursor: 'pointer' }} />
       </Box>
       {showDescription && !!description && (
         <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
@@ -59,9 +59,10 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({
 
 interface CharacterSheetStatsBoxProps {
   stats: CharacterStat[];
+  navigateToCharacterCreation: (step: number) => void;
 }
 
-const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats }) => {
+const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats, navigateToCharacterCreation }) => {
   const statBoxStyle = (isHighlighted: boolean) => ({
     backgroundColor: isHighlighted ? accentColors[2] : '#000',
     cursor: 'pointer',
@@ -69,9 +70,12 @@ const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats }) => {
 
   return (
     <Box fill="horizontal" pad="12px">
-      <Heading level="3" margin={{ bottom: '3px' }}>
-        Stats
-      </Heading>
+      <Box fill="horizontal" direction="row" align="center" justify="between">
+        <Heading level="3" margin={{ bottom: '3px' }}>
+          Stats
+        </Heading>
+        <Edit color="accent-1" onClick={() => navigateToCharacterCreation(4)} style={{ cursor: 'pointer' }} />
+      </Box>
       <Box fill="horizontal" direction="row" align="center" justify="around" pad="12px" gap="12px" wrap>
         {stats.map((stat) => {
           return (
@@ -92,15 +96,19 @@ const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats }) => {
 
 interface CharacterSheetMovesBoxProps {
   moves: CharacterMove[];
+  navigateToCharacterCreation: (step: number) => void;
 }
 
-const CharacterSheetMovesBox: FC<CharacterSheetMovesBoxProps> = ({ moves }) => {
+const CharacterSheetMovesBox: FC<CharacterSheetMovesBoxProps> = ({ moves, navigateToCharacterCreation }) => {
   const [showMove, setShowMove] = useState<string>('');
   return (
     <Box fill="horizontal" align="center" justify="start" pad="12px">
-      <Heading level="3" margin={{ bottom: '3px' }} alignSelf="start">
-        Moves
-      </Heading>
+      <Box fill="horizontal" direction="row" align="center" justify="between">
+        <Heading level="3" margin={{ bottom: '3px' }} alignSelf="start">
+          Moves
+        </Heading>
+        <Edit color="accent-1" onClick={() => navigateToCharacterCreation(7)} style={{ cursor: 'pointer' }} />
+      </Box>
       {moves.map((move) => {
         return (
           <Box key={move.id} fill="horizontal">
@@ -192,14 +200,18 @@ const CharacterSheetBarterBox: FC<CharacterSheetBarterBoxProps> = ({
 
 interface CharacterSheetGearProps {
   gear: string[];
+  navigateToCharacterCreation: (step: number) => void;
 }
 
-const CharacterSheetGear: FC<CharacterSheetGearProps> = ({ gear }) => {
+const CharacterSheetGear: FC<CharacterSheetGearProps> = ({ gear, navigateToCharacterCreation }) => {
   return (
     <Box width="23vw" align="start" justify="start">
-      <Heading level="3" margin={{ bottom: '3px' }}>
-        Gear
-      </Heading>
+      <Box fill="horizontal" direction="row" align="center" justify="between" pad="12px">
+        <Heading level="3" margin="0px">
+          Gear
+        </Heading>
+        <Edit color="accent-1" onClick={() => navigateToCharacterCreation(5)} style={{ cursor: 'pointer' }} />
+      </Box>
       <ul style={{ margin: 0, paddingInlineStart: '20px' }}>
         {gear.map((item) => (
           <li key={item}>{item}</li>
@@ -501,13 +513,20 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
         navigateToCharacterCreation={navigateToCharacterCreation}
       />
 
-      {character.statsBlock.stats.length > 0 && <CharacterSheetStatsBox stats={character.statsBlock.stats} />}
+      {character.statsBlock.stats.length > 0 && (
+        <CharacterSheetStatsBox
+          stats={character.statsBlock.stats}
+          navigateToCharacterCreation={navigateToCharacterCreation}
+        />
+      )}
 
-      {character.characterMoves.length > 0 && <CharacterSheetMovesBox moves={character.characterMoves} />}
+      {character.characterMoves.length > 0 && (
+        <CharacterSheetMovesBox moves={character.characterMoves} navigateToCharacterCreation={navigateToCharacterCreation} />
+      )}
 
       <CharacterSheetHarm harm={character.harm} settingHarm={settingHarm} handleSetHarm={handleSetHarm} />
 
-      <CharacterSheetGear gear={character.gear} />
+      <CharacterSheetGear gear={character.gear} navigateToCharacterCreation={navigateToCharacterCreation} />
 
       {character.hxBlock.length > 0 && (
         <CharacterSheetHx hxStats={character.hxBlock} adjustingHx={adjustingHx} handleAdjustHx={handleAdjustHx} />
