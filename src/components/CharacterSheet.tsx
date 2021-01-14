@@ -10,6 +10,7 @@ import { Character, CharacterHarm, CharacterStat, HxStat } from '../@types/dataI
 import { CharacterMove, Look } from '../@types/staticDataInterfaces';
 import { accentColors, brandColor, RedBox, TextWS } from '../config/grommetConfig';
 import { decapitalize } from '../helpers/decapitalize';
+import { Stats } from '../@types/enums';
 
 interface CharacterSheetHeaderBoxProps {
   playbook: string;
@@ -34,15 +35,15 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({
 
   return (
     <Box fill="horizontal" align="center" justify="start">
-      <Box fill="horizontal" direction="row" justify="between" align="center" pad="12px">
-        <Box direction="row" align="center" gap="24px">
+      <Box fill="horizontal" direction="row" justify="between" align="center" pad={{ vertical: '12px' }}>
+        <Box direction="row" align="center" gap="12px" pad={{ vertical: '12px' }}>
           {showDescription ? (
             <FormUp onClick={() => setShowDescription(false)} />
           ) : (
             <FormDown onClick={() => setShowDescription(true)} />
           )}
           <Box>
-            <Heading level="2" margin={{ bottom: '3px' }}>{`${name + ' '}the ${playbook}`}</Heading>
+            <Heading level="2" margin="0px">{`${name + ' '}the ${playbook}`}</Heading>
             <Text>{looksString}</Text>
           </Box>
         </Box>
@@ -59,19 +60,26 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({
 
 interface CharacterSheetStatsBoxProps {
   stats: CharacterStat[];
+  togglingHighlight: boolean;
+  handleToggleHighlight: (stat: Stats) => void;
   navigateToCharacterCreation: (step: number) => void;
 }
 
-const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats, navigateToCharacterCreation }) => {
+const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({
+  stats,
+  togglingHighlight,
+  handleToggleHighlight,
+  navigateToCharacterCreation,
+}) => {
   const statBoxStyle = (isHighlighted: boolean) => ({
     backgroundColor: isHighlighted ? accentColors[2] : '#000',
     cursor: 'pointer',
   });
 
   return (
-    <Box fill="horizontal" pad="12px">
-      <Box fill="horizontal" direction="row" align="center" justify="between">
-        <Heading level="3" margin={{ bottom: '3px' }}>
+    <Box fill="horizontal" pad={{ vertical: '12px' }}>
+      <Box fill="horizontal" direction="row" align="center" justify="between" pad={{ vertical: '12px' }}>
+        <Heading level="3" margin="0px">
           Stats
         </Heading>
         <Edit color="accent-1" onClick={() => navigateToCharacterCreation(4)} style={{ cursor: 'pointer' }} />
@@ -79,7 +87,13 @@ const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({ stats, naviga
       <Box fill="horizontal" direction="row" align="center" justify="around" pad="12px" gap="12px" wrap>
         {stats.map((stat) => {
           return (
-            <RedBox key={stat.id} align="center" width="76px" style={statBoxStyle(stat.isHighlighted)}>
+            <RedBox
+              key={stat.id}
+              align="center"
+              width="76px"
+              style={statBoxStyle(stat.isHighlighted)}
+              onClick={() => !togglingHighlight && handleToggleHighlight(stat.stat)}
+            >
               <Heading level="2" margin={{ left: '6px', right: '6px', bottom: '3px', top: '9px' }}>
                 {stat.value}
               </Heading>
@@ -102,9 +116,9 @@ interface CharacterSheetMovesBoxProps {
 const CharacterSheetMovesBox: FC<CharacterSheetMovesBoxProps> = ({ moves, navigateToCharacterCreation }) => {
   const [showMove, setShowMove] = useState<string>('');
   return (
-    <Box fill="horizontal" align="center" justify="start" pad="12px">
-      <Box fill="horizontal" direction="row" align="center" justify="between">
-        <Heading level="3" margin={{ bottom: '3px' }} alignSelf="start">
+    <Box fill="horizontal" align="center" justify="start" pad={{ vertical: '12px' }}>
+      <Box fill="horizontal" direction="row" align="center" justify="between" pad={{ vertical: '12px' }}>
+        <Heading level="3" margin="0px" alignSelf="start">
           Moves
         </Heading>
         <Edit color="accent-1" onClick={() => navigateToCharacterCreation(7)} style={{ cursor: 'pointer' }} />
@@ -162,14 +176,16 @@ const CharacterSheetBarterBox: FC<CharacterSheetBarterBoxProps> = ({
 
   return (
     <Box fill="horizontal" align="center" justify="start">
-      <Box fill="horizontal" direction="row" justify="between" align="center" pad="12px">
-        <Box direction="row" align="center" gap="12px">
+      <Box fill="horizontal" direction="row" justify="between" align="center" pad={{ vertical: '12px' }}>
+        <Box direction="row" align="center" gap="12px" pad={{ vertical: '12px' }}>
           {showInstructions ? (
             <FormUp onClick={() => setShowInstructions(false)} />
           ) : (
             <FormDown onClick={() => setShowInstructions(true)} />
           )}
-          <Heading level="3">Barter</Heading>
+          <Heading level="3" margin="0px">
+            Barter
+          </Heading>
         </Box>
         <Box direction="row" align="center" gap="12px">
           <RedBox width="50px" align="center" margin={{ left: '12px' }}>
@@ -206,13 +222,13 @@ interface CharacterSheetGearProps {
 const CharacterSheetGear: FC<CharacterSheetGearProps> = ({ gear, navigateToCharacterCreation }) => {
   return (
     <Box width="23vw" align="start" justify="start">
-      <Box fill="horizontal" direction="row" align="center" justify="between" pad="12px">
+      <Box fill="horizontal" direction="row" align="center" justify="between" pad={{ vertical: '12px', left: '12px' }}>
         <Heading level="3" margin="0px">
           Gear
         </Heading>
         <Edit color="accent-1" onClick={() => navigateToCharacterCreation(5)} style={{ cursor: 'pointer' }} />
       </Box>
-      <ul style={{ margin: 0, paddingInlineStart: '20px' }}>
+      <ul style={{ margin: 0, paddingInlineStart: '28px' }}>
         {gear.map((item) => (
           <li key={item}>{item}</li>
         ))}
@@ -237,8 +253,8 @@ const CharacterSheetHx: FC<CharacterSheetHxProps> = ({ hxStats, adjustingHx, han
   };
 
   return (
-    <Box width="23vw" align="start" justify="start">
-      <Heading level="3" margin={{ bottom: '3px' }}>
+    <Box width="23vw" align="start" justify="start" pad={{ vertical: '12px', right: '12px' }}>
+      <Heading level="3" margin="0px">
         Hx
       </Heading>
 
@@ -406,8 +422,8 @@ const CharacterSheetHarm: FC<CharacterSheetHarmProps> = ({ harm, settingHarm, ha
   };
 
   return (
-    <Box fill="horizontal" align="start" justify="start" pad="12px">
-      <Heading level="3" margin={{ bottom: '3px' }}>
+    <Box fill="horizontal" align="start" justify="start" pad={{ vertical: '12px', top: '12px' }}>
+      <Heading level="3" margin="0px">
         Harm
       </Heading>
       <Box fill="horizontal" direction="row" justify="around">
@@ -486,9 +502,11 @@ interface CharacterSheetProps {
   settingBarter: boolean;
   adjustingHx: boolean;
   settingHarm: boolean;
+  togglingHighlight: boolean;
   handleSetBarter: (amount: number) => void;
   handleAdjustHx: (hxId: string, value: number) => void;
   handleSetHarm: (harm: HarmInput) => void;
+  handleToggleHighlight: (stat: Stats) => void;
   navigateToCharacterCreation: (step: number) => void;
 }
 
@@ -497,14 +515,16 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
   adjustingHx,
   settingBarter,
   settingHarm,
+  togglingHighlight,
   handleSetBarter,
   handleAdjustHx,
   handleSetHarm,
+  handleToggleHighlight,
   navigateToCharacterCreation,
 }) => {
   const { data } = useQuery<PlaybookData, PlaybookVars>(PLAYBOOK, { variables: { playbookType: character.playbook } });
   return (
-    <Box direction="row" wrap gap="12px" pad="12px" overflow="auto">
+    <Box direction="row" wrap pad="12px" overflow="auto">
       <CharacterSheetHeaderBox
         name={character.name ? character.name : ''}
         playbook={decapitalize(character.playbook)}
@@ -516,7 +536,9 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
       {character.statsBlock.stats.length > 0 && (
         <CharacterSheetStatsBox
           stats={character.statsBlock.stats}
+          togglingHighlight={togglingHighlight}
           navigateToCharacterCreation={navigateToCharacterCreation}
+          handleToggleHighlight={handleToggleHighlight}
         />
       )}
 
@@ -526,11 +548,11 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
 
       <CharacterSheetHarm harm={character.harm} settingHarm={settingHarm} handleSetHarm={handleSetHarm} />
 
-      <CharacterSheetGear gear={character.gear} navigateToCharacterCreation={navigateToCharacterCreation} />
-
       {character.hxBlock.length > 0 && (
         <CharacterSheetHx hxStats={character.hxBlock} adjustingHx={adjustingHx} handleAdjustHx={handleAdjustHx} />
       )}
+
+      <CharacterSheetGear gear={character.gear} navigateToCharacterCreation={navigateToCharacterCreation} />
 
       {!!character.barter && data?.playbook.barterInstructions && (
         <CharacterSheetBarterBox

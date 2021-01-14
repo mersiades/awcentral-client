@@ -16,6 +16,8 @@ import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } 
 import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
 import { HarmInput } from '../@types';
 import SET_CHARACTER_HARM, { SetCharacterHarmData, SetCharacterHarmVars } from '../mutations/setCharacterHarm';
+import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
+import { Stats } from '../@types/enums';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -40,7 +42,7 @@ const PlayerPage: FC = () => {
    * 1 - MovesPanel
    * 2 - None, side panel is closed
    */
-  const [sidePanel, setSidePanel] = useState<number>(2);
+  const [sidePanel, setSidePanel] = useState<number>(0);
   const [character, setCharacter] = useState<Character | undefined>();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
@@ -64,6 +66,10 @@ const PlayerPage: FC = () => {
   const [setCharacterHarm, { loading: settingHarm }] = useMutation<SetCharacterHarmData, SetCharacterHarmVars>(
     SET_CHARACTER_HARM
   );
+  const [toggleStatHighlight, { loading: togglingHighlight }] = useMutation<
+    ToggleStatHighlightData,
+    ToggleStatHighlightVars
+  >(TOGGLE_STAT_HIGHLIGHT);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
 
@@ -93,6 +99,16 @@ const PlayerPage: FC = () => {
         // @ts-ignore
         delete harm.__typename;
         await setCharacterHarm({ variables: { gameRoleId: userGameRole.id, characterId: character.id, harm } });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleToggleHighlight = async (stat: Stats) => {
+    if (!!userGameRole && !!character) {
+      try {
+        await toggleStatHighlight({ variables: { gameRoleId: userGameRole.id, characterId: character.id, stat } });
       } catch (error) {
         console.error(error);
       }
@@ -135,13 +151,6 @@ const PlayerPage: FC = () => {
     }
   }, [userGameRole]);
 
-  // Send User to character creation if they tyr to open the playbook panel with no character
-  useEffect(() => {
-    if (sidePanel === 0 && !character) {
-      navigateToCharacterCreation(0);
-    }
-  }, [sidePanel, character, navigateToCharacterCreation]);
-
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   if (!game || !userId || !userGameRole) {
@@ -179,9 +188,11 @@ const PlayerPage: FC = () => {
                 settingBarter={settingBarter}
                 adjustingHx={adjustingHx}
                 settingHarm={settingHarm}
+                togglingHighlight={togglingHighlight}
                 handleSetBarter={handleSetBarter}
                 handleAdjustHx={handleAdjustHx}
                 handleSetHarm={handleSetHarm}
+                handleToggleHighlight={handleToggleHighlight}
                 navigateToCharacterCreation={navigateToCharacterCreation}
               />
             )}
@@ -202,6 +213,9 @@ const PlayerPage: FC = () => {
           <Tabs
             activeIndex={sidePanel}
             onActive={(tab) => {
+              // If user tries to open CharacterSheet without a minimal character
+              tab === 0 && !character && navigateToCharacterCreation(0);
+              // Toggle open panel
               tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
             }}
           >

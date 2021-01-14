@@ -411,6 +411,7 @@ const CharacterCreationPage: FC = () => {
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
+  console.log('character', character);
   return (
     <Box
       data-testid="character-creation-page"
