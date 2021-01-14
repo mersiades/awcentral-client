@@ -12,15 +12,17 @@ import { useFonts } from '../../contexts/fontContext';
 interface CharacterStatsFormProps {
   playbookType: PlayBooks;
   settingStats: boolean;
-  handleSubmitStats: (statsOptionId: string) => void;
   characterName: string;
+  handleSubmitStats: (statsOptionId: string) => void;
+  existingStatOption?: string;
 }
 
 const CharacterStatsForm: FC<CharacterStatsFormProps> = ({
   playbookType,
   settingStats,
-  handleSubmitStats,
   characterName,
+  handleSubmitStats,
+  existingStatOption,
 }) => {
   const [selectedStatsOption, setSelectedStatsOption] = useState<StatsOption | undefined>();
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
@@ -72,6 +74,7 @@ const CharacterStatsForm: FC<CharacterStatsFormProps> = ({
               direction="row"
               justify="around"
               align="center"
+              border={opt.id === existingStatOption}
               hoverIndicator={{ color: 'neutral-1', opacity: 0.4 }}
               onClick={() => setSelectedStatsOption(opt)}
               gap="6px"

@@ -43,7 +43,7 @@ export interface Character {
   id: string;
   playbook: PlayBooks;
   hasCompletedCharacterCreation: boolean;
-  statsBlock: CharacterStat[];
+  statsBlock: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
   looks: Look[];
@@ -62,6 +62,12 @@ export interface CharacterHarm {
   hasComeBackWeird: boolean;
   hasChangedPlaybook: boolean;
   hasDied: boolean;
+}
+
+export interface StatsBlock {
+  id: string;
+  statsOptionId: string;
+  stats: CharacterStat[];
 }
 
 export interface CharacterStat {

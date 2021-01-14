@@ -147,9 +147,9 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
       <Text color="white" weight="bold">
         Stats
       </Text>
-      {!!character && character.statsBlock?.length > 0 ? (
+      {!!character && character.statsBlock?.stats.length > 0 ? (
         <CustomUL>
-          {character.statsBlock.map((stat) => (
+          {character.statsBlock.stats.map((stat) => (
             <li key={stat.id}>{`${stat.stat} ${'--'.repeat(8 - stat.stat.length)} ${stat.value}`}</li>
           ))}
         </CustomUL>

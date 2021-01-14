@@ -9,6 +9,7 @@ import {
   GameRole,
   HxStat,
   PlaybookUnique,
+  StatsBlock,
 } from '../@types/dataInterfaces';
 import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, UniqueTypes } from '../@types/enums';
 import {
@@ -29,7 +30,7 @@ import {
 // Same as Character, but with no nullable fields
 interface MockCharacter {
   id: string;
-  statsBlock: CharacterStat[];
+  statsBlock: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
   looks: Look[]; // Does graphql return an empty array or undefined? // May need an id-less version of Look "EmbeddedLook"
@@ -82,38 +83,42 @@ export const mockKeycloakUser3: KeycloakUser = {
   email: 'mockUser3@email.com',
 };
 
-export const mockStatsBlock1: CharacterStat[] = [
-  {
-    id: 'mock-statsblock-stat-id-1',
-    stat: Stats.cool,
-    value: 1,
-    isHighlighted: false,
-  },
-  {
-    id: 'mock-statsblock-stat-id-2',
-    stat: Stats.hard,
-    value: 1,
-    isHighlighted: false,
-  },
-  {
-    id: 'mock-statsblock-stat-id-3',
-    stat: Stats.hot,
-    value: 1,
-    isHighlighted: false,
-  },
-  {
-    id: 'mock-statsblock-stat-id-4',
-    stat: Stats.sharp,
-    value: 1,
-    isHighlighted: false,
-  },
-  {
-    id: 'mock-statsblock-stat-id-5',
-    stat: Stats.weird,
-    value: 1,
-    isHighlighted: false,
-  },
-];
+export const mockStatsBlock1: StatsBlock = {
+  id: 'mock-stats-block-id-1',
+  statsOptionId: 'mock-stats-option-id-1',
+  stats: [
+    {
+      id: 'mock-statsblock-stat-id-1',
+      stat: Stats.cool,
+      value: 1,
+      isHighlighted: false,
+    },
+    {
+      id: 'mock-statsblock-stat-id-2',
+      stat: Stats.hard,
+      value: 1,
+      isHighlighted: false,
+    },
+    {
+      id: 'mock-statsblock-stat-id-3',
+      stat: Stats.hot,
+      value: 1,
+      isHighlighted: false,
+    },
+    {
+      id: 'mock-statsblock-stat-id-4',
+      stat: Stats.sharp,
+      value: 1,
+      isHighlighted: false,
+    },
+    {
+      id: 'mock-statsblock-stat-id-5',
+      stat: Stats.weird,
+      value: 1,
+      isHighlighted: false,
+    },
+  ],
+};
 
 export const dummyRollModifier: RollModifier = {
   id: 'dummy',

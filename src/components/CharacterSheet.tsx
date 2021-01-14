@@ -487,7 +487,7 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
         looks={character.looks}
       />
 
-      {character.statsBlock.length > 0 && <CharacterSheetStatsBox stats={character.statsBlock} />}
+      {character.statsBlock.stats.length > 0 && <CharacterSheetStatsBox stats={character.statsBlock.stats} />}
 
       {character.characterMoves.length > 0 && <CharacterSheetMovesBox moves={character.characterMoves} />}
 

@@ -2,21 +2,30 @@ import { gql } from '@apollo/client';
 import { Character } from '../@types/dataInterfaces';
 
 export interface SetCharacterMovesData {
-  setCharacterMoves: Character
+  setCharacterMoves: Character;
 }
 
 export interface SetCharacterMovesVars {
-  gameRoleId: string
-  characterId: string
-  moveIds: string[]
+  gameRoleId: string;
+  characterId: string;
+  moveIds: string[];
 }
 
 const SET_CHARACTER_MOVES = gql`
-  mutation SetCharacterMoves($gameRoleId: String!,$characterId: String!, $moveIds: [String]!) {
+  mutation SetCharacterMoves($gameRoleId: String!, $characterId: String!, $moveIds: [String]!) {
     setCharacterMoves(gameRoleId: $gameRoleId, characterId: $characterId, moveIds: $moveIds) {
       id
       name
       playbook
+      statsBlock {
+        id
+        stats {
+          id
+          stat
+          value
+          isHighlighted
+        }
+      }
       characterMoves {
         id
         isSelected
@@ -35,6 +44,6 @@ const SET_CHARACTER_MOVES = gql`
       }
     }
   }
-`
+`;
 
-export default SET_CHARACTER_MOVES
+export default SET_CHARACTER_MOVES;

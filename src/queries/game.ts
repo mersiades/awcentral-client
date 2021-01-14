@@ -54,9 +54,13 @@ const GAME = gql`
           }
           statsBlock {
             id
-            stat
-            value
-            isHighlighted
+            statsOptionId
+            stats {
+              id
+              stat
+              value
+              isHighlighted
+            }
           }
           hxBlock {
             id
