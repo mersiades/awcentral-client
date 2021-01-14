@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { useKeycloak } from '@react-keycloak/web';
 import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { Move } from '../@types/staticDataInterfaces';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
@@ -40,7 +40,7 @@ const PlayerPage: FC = () => {
    * 1 - MovesPanel
    * 2 - None, side panel is closed
    */
-  const [sidePanel, setSidePanel] = useState<number>(0);
+  const [sidePanel, setSidePanel] = useState<number>(2);
   const [character, setCharacter] = useState<Character | undefined>();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
@@ -99,8 +99,16 @@ const PlayerPage: FC = () => {
     }
   };
 
+  const navigateToCharacterCreation = useCallback(
+    (step: number) => {
+      history.push(`/character-creation/${gameId}?step=${step}`);
+    },
+    [history, gameId]
+  );
+
   // ------------------------------------------------------- Effects -------------------------------------------------------- //
 
+  // Kick the User off the page if they are not a member of the game
   useEffect(() => {
     if (!!game && !!userId) {
       const memberIds = game?.players.map((player) => player.id);
@@ -117,18 +125,22 @@ const PlayerPage: FC = () => {
     }
   }, [gameId, userId, setGameContext]);
 
-  // Handles different degrees of character creation completion
+  // Set character in state if character meets minimum requirements
   useEffect(() => {
-    if (!!userGameRole && userGameRole.characters.length === 1) {
-      if (!userGameRole.characters[0].hasCompletedCharacterCreation) {
-        history.push(`/character-creation/${gameId}`);
-      } else {
-        setCharacter(userGameRole.characters[0]);
+    if (userGameRole?.characters.length === 1) {
+      const character = userGameRole?.characters[0];
+      if (!!character.playbook) {
+        setCharacter(character);
       }
-    } else if (!!userGameRole && userGameRole.characters.length > 1) {
-      // TODO: handle case when Player has more than one Character
     }
-  }, [userGameRole, gameId, history]);
+  }, [userGameRole]);
+
+  // Send User to character creation if they tyr to open the playbook panel with no character
+  useEffect(() => {
+    if (sidePanel === 0 && !character) {
+      navigateToCharacterCreation(0);
+    }
+  }, [sidePanel, character, navigateToCharacterCreation]);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
@@ -136,8 +148,6 @@ const PlayerPage: FC = () => {
     return <div> Loading </div>;
   }
 
-  // Redirect if new game/ no character
-  // Also, may need to create gameRole
   return (
     <Box fill background={background}>
       <Header
@@ -172,6 +182,7 @@ const PlayerPage: FC = () => {
                 handleSetBarter={handleSetBarter}
                 handleAdjustHx={handleAdjustHx}
                 handleSetHarm={handleSetHarm}
+                navigateToCharacterCreation={navigateToCharacterCreation}
               />
             )}
             {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}

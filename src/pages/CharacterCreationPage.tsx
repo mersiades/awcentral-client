@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, Layer, Paragraph } from 'grommet';
 
@@ -61,8 +61,11 @@ export const background = {
 };
 
 const CharacterCreationPage: FC = () => {
+  const query = new URLSearchParams(useLocation().search);
+  const step = query.get('step');
+  console.log('step', step);
   // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [creationStep, setCreationStep] = useState<number>(0);
+  const [creationStep, setCreationStep] = useState<number>(step ? parseInt(step) : 0);
   const [character, setCharacter] = useState<Character | undefined>();
   const [showResetWarning, setShowResetWarning] = useState<PlayBooks | undefined>();
   const [showScrollable, setShowScrollable] = useState(false);
@@ -423,7 +426,7 @@ const CharacterCreationPage: FC = () => {
           </div>
         ))}
       <ScrollableIndicator show={showScrollable} />
-      <CloseButton handleClose={() => history.push('/menu')} />
+      <CloseButton handleClose={() => history.goBack()} />
       {!!showResetWarning && (
         <Layer onEsc={() => setShowResetWarning(undefined)} onClickOutside={() => setShowResetWarning(undefined)}>
           <Box

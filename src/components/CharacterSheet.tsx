@@ -1,23 +1,31 @@
+import React, { FC, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box, Button, CheckBox, Heading, Text } from 'grommet';
-import { CaretDownFill, CaretUpFill, FormDown, FormUp } from 'grommet-icons';
-import React, { FC, useState } from 'react';
+import { CaretDownFill, CaretUpFill, Edit, FormDown, FormUp } from 'grommet-icons';
+
+import { StyledMarkdown } from './styledComponents';
+import PLAYBOOK, { PlaybookData, PlaybookVars } from '../queries/playbook';
 import { HarmInput } from '../@types';
 import { Character, CharacterHarm, CharacterStat, HxStat } from '../@types/dataInterfaces';
 import { CharacterMove, Look } from '../@types/staticDataInterfaces';
 import { accentColors, brandColor, RedBox, TextWS } from '../config/grommetConfig';
 import { decapitalize } from '../helpers/decapitalize';
-import PLAYBOOK, { PlaybookData, PlaybookVars } from '../queries/playbook';
-import { StyledMarkdown } from './styledComponents';
 
 interface CharacterSheetHeaderBoxProps {
   playbook: string;
   name: string;
   description?: string;
   looks: Look[];
+  navigateToCharacterCreation: (step: number) => void;
 }
 
-const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({ name, playbook, description, looks }) => {
+const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({
+  name,
+  playbook,
+  description,
+  looks,
+  navigateToCharacterCreation,
+}) => {
   const [showDescription, setShowDescription] = useState(false);
 
   const looksLooks = looks.map((look) => look.look);
@@ -26,16 +34,19 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({ name, playb
 
   return (
     <Box fill="horizontal" align="center" justify="start">
-      <Box fill="horizontal" direction="row" justify="start" align="center" pad="12px" gap="12px">
-        {showDescription ? (
-          <FormUp onClick={() => setShowDescription(false)} />
-        ) : (
-          <FormDown onClick={() => setShowDescription(true)} />
-        )}
-        <Box>
-          <Heading level="2" margin={{ bottom: '3px' }}>{`${name + ' '}the ${playbook}`}</Heading>
-          <Text>{looksString}</Text>
+      <Box fill="horizontal" direction="row" justify="between" align="center" pad="12px">
+        <Box direction="row" align="center" gap="12px">
+          {showDescription ? (
+            <FormUp onClick={() => setShowDescription(false)} />
+          ) : (
+            <FormDown onClick={() => setShowDescription(true)} />
+          )}
+          <Box>
+            <Heading level="2" margin={{ bottom: '3px' }}>{`${name + ' '}the ${playbook}`}</Heading>
+            <Text>{looksString}</Text>
+          </Box>
         </Box>
+        <Edit color="accent-1" onClick={() => navigateToCharacterCreation(1)} />
       </Box>
       {showDescription && !!description && (
         <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
@@ -466,6 +477,7 @@ interface CharacterSheetProps {
   handleSetBarter: (amount: number) => void;
   handleAdjustHx: (hxId: string, value: number) => void;
   handleSetHarm: (harm: HarmInput) => void;
+  navigateToCharacterCreation: (step: number) => void;
 }
 
 const CharacterSheet: FC<CharacterSheetProps> = ({
@@ -476,6 +488,7 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
   handleSetBarter,
   handleAdjustHx,
   handleSetHarm,
+  navigateToCharacterCreation,
 }) => {
   const { data } = useQuery<PlaybookData, PlaybookVars>(PLAYBOOK, { variables: { playbookType: character.playbook } });
   return (
@@ -485,6 +498,7 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
         playbook={decapitalize(character.playbook)}
         description={data?.playbook.intro}
         looks={character.looks}
+        navigateToCharacterCreation={navigateToCharacterCreation}
       />
 
       {character.statsBlock.stats.length > 0 && <CharacterSheetStatsBox stats={character.statsBlock.stats} />}
