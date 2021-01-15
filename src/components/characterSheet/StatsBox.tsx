@@ -1,16 +1,16 @@
 import React, { FC } from 'react';
 import { Box, Heading } from 'grommet';
-import { Edit } from 'grommet-icons';
 
 import { Stats } from '../../@types/enums';
 import { CharacterStat } from '../../@types/dataInterfaces';
 import { accentColors, RedBox } from '../../config/grommetConfig';
+import CharacterSheetBox from './CharacterSheetBox';
 
 interface StatsBoxProps {
   stats: CharacterStat[];
   togglingHighlight: boolean;
   handleToggleHighlight: (stat: Stats) => void;
-  navigateToCharacterCreation?: (step: number) => void;
+  navigateToCharacterCreation?: (step: string) => void;
 }
 
 const StatsBox: FC<StatsBoxProps> = ({ stats, togglingHighlight, handleToggleHighlight, navigateToCharacterCreation }) => {
@@ -20,26 +20,21 @@ const StatsBox: FC<StatsBoxProps> = ({ stats, togglingHighlight, handleToggleHig
   });
 
   return (
-    <Box fill="horizontal" pad={{ vertical: '12px' }}>
+    <CharacterSheetBox open title="Stats" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="4">
       <Box
         fill="horizontal"
         direction="row"
         align="center"
-        justify={!!navigateToCharacterCreation ? 'between' : 'start'}
-        pad={{ vertical: '12px' }}
+        justify="around"
+        pad="12px"
+        gap="12px"
+        wrap
+        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       >
-        <Heading level="3" margin="0px">
-          Stats
-        </Heading>
-        {!!navigateToCharacterCreation && (
-          <Edit color="accent-1" onClick={() => navigateToCharacterCreation(4)} style={{ cursor: 'pointer' }} />
-        )}
-      </Box>
-      <Box fill="horizontal" direction="row" align="center" justify="around" pad="12px" gap="12px" wrap>
         {stats.map((stat) => {
           return (
             <RedBox
-              data-testid={`${stat.stat}-box`}
+              data-testid={`${stat.stat}`}
               key={stat.id}
               align="center"
               width="76px"
@@ -56,7 +51,7 @@ const StatsBox: FC<StatsBoxProps> = ({ stats, togglingHighlight, handleToggleHig
           );
         })}
       </Box>
-    </Box>
+    </CharacterSheetBox>
   );
 };
 

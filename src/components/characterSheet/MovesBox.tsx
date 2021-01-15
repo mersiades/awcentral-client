@@ -14,7 +14,7 @@ interface MovesBoxProps {
   moves: Array<CharacterMove | Move>;
   moveCategory: string;
   open?: boolean;
-  navigateToCharacterCreation?: (step: number) => void;
+  navigateToCharacterCreation?: (step: string) => void;
 }
 
 const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToCharacterCreation }) => {
@@ -35,7 +35,13 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
   };
 
   return (
-    <Box fill="horizontal" align="center" justify="start" pad={{ vertical: '12px' }}>
+    <Box
+      fill="horizontal"
+      align="center"
+      justify="start"
+      pad={{ vertical: '12px' }}
+      style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.25)' }}
+    >
       <Box fill="horizontal" direction="row" align="center" justify="between" pad={{ vertical: '12px' }}>
         <HeadingWS
           crustReady={crustReady}
@@ -54,7 +60,7 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
             <FormDown onClick={toggleShowMoves} style={{ cursor: 'pointer' }} />
           )}
           {!!navigateToCharacterCreation && (
-            <Edit color="accent-1" onClick={() => navigateToCharacterCreation(7)} style={{ cursor: 'pointer' }} />
+            <Edit color="accent-1" onClick={() => navigateToCharacterCreation('7')} style={{ cursor: 'pointer' }} />
           )}
         </Box>
       </Box>

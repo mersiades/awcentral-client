@@ -1,23 +1,24 @@
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useKeycloak } from '@react-keycloak/web';
-import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
-import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { Move } from '../@types/staticDataInterfaces';
-import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
-import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import ALL_MOVES from '../queries/allMoves';
+import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
+
 import MovesPanel from '../components/MovesPanel';
-import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
-import { useGame } from '../contexts/gameContext';
-import { Character } from '../@types/dataInterfaces';
 import CharacterSheet from '../components/characterSheet/CharacterSheet';
+import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
+import ALL_MOVES from '../queries/allMoves';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
-import { HarmInput } from '../@types';
 import SET_CHARACTER_HARM, { SetCharacterHarmData, SetCharacterHarmVars } from '../mutations/setCharacterHarm';
 import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
 import { Stats } from '../@types/enums';
+import { HarmInput } from '../@types';
+import { Move } from '../@types/staticDataInterfaces';
+import { Character } from '../@types/dataInterfaces';
+import { useKeycloakUser } from '../contexts/keycloakUserContext';
+import { useGame } from '../contexts/gameContext';
+import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -42,7 +43,7 @@ const PlayerPage: FC = () => {
    * 1 - MovesPanel
    * 2 - None, side panel is closed
    */
-  const [sidePanel, setSidePanel] = useState<number>(1);
+  const [sidePanel, setSidePanel] = useState<number>(0);
   const [character, setCharacter] = useState<Character | undefined>();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
@@ -116,7 +117,7 @@ const PlayerPage: FC = () => {
   };
 
   const navigateToCharacterCreation = useCallback(
-    (step: number) => {
+    (step: string) => {
       history.push(`/character-creation/${gameId}?step=${step}`);
     },
     [history, gameId]
@@ -152,11 +153,6 @@ const PlayerPage: FC = () => {
   }, [userGameRole]);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
-
-  if (!game || !userId || !userGameRole) {
-    return <div> Loading </div>;
-  }
-
   return (
     <Box fill background={background}>
       <Header
@@ -214,7 +210,7 @@ const PlayerPage: FC = () => {
             activeIndex={sidePanel}
             onActive={(tab) => {
               // If user tries to open CharacterSheet without a minimal character
-              tab === 0 && !character && navigateToCharacterCreation(0);
+              tab === 0 && !character && navigateToCharacterCreation('0');
               // Toggle open panel
               tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
             }}
