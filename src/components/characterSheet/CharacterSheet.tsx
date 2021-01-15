@@ -1,13 +1,13 @@
 import React, { FC, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { Box, Button, CheckBox, Heading, Text } from 'grommet';
+import { Box, CheckBox, Heading, Text } from 'grommet';
 import { CaretDownFill, CaretUpFill, Edit, FormDown, FormUp } from 'grommet-icons';
 
 import { StyledMarkdown } from '../styledComponents';
 import PLAYBOOK, { PlaybookData, PlaybookVars } from '../../queries/playbook';
 import { HarmInput } from '../../@types';
 import { Character, CharacterHarm, HxStat } from '../../@types/dataInterfaces';
-import { CharacterMove, Look } from '../../@types/staticDataInterfaces';
+import { Look } from '../../@types/staticDataInterfaces';
 import { accentColors, brandColor, RedBox, TextWS } from '../../config/grommetConfig';
 import { decapitalize } from '../../helpers/decapitalize';
 import { MoveKinds, Stats } from '../../@types/enums';

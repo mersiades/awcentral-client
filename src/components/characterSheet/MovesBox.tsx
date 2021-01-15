@@ -1,11 +1,14 @@
-import { Box, Heading, Button } from 'grommet';
-import { FormUp, FormDown, Edit } from 'grommet-icons';
 import React, { FC, useState } from 'react';
+import { Box, Button } from 'grommet';
+import { FormUp, FormDown, Edit } from 'grommet-icons';
+
+import { StyledMarkdown } from '../styledComponents';
+import { useGame } from '../../contexts/gameContext';
 import { Roles } from '../../@types/enums';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
-import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
-import { StyledMarkdown } from '../styledComponents';
+import { HeadingWS } from '../../config/grommetConfig';
+import { useFonts } from '../../contexts/fontContext';
 
 interface MovesBoxProps {
   moves: Array<CharacterMove | Move>;
@@ -19,15 +22,37 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
   const [showMoveDetails, setShowMoveDetails] = useState<string[]>([]);
 
   const { userGameRole } = useGame();
+  const { crustReady } = useFonts();
+
+  const toggleShowMoves = () => setShowMoves(!showMoves);
+
+  const toggleShowMoveDetails = (moveId: string) => {
+    if (showMoveDetails.includes(moveId)) {
+      setShowMoveDetails(showMoveDetails.filter((m) => m !== moveId));
+    } else {
+      setShowMoveDetails([...showMoveDetails, moveId]);
+    }
+  };
 
   return (
     <Box fill="horizontal" align="center" justify="start" pad={{ vertical: '12px' }}>
       <Box fill="horizontal" direction="row" align="center" justify="between" pad={{ vertical: '12px' }}>
-        <Heading level="3" margin="0px" alignSelf="start">
+        <HeadingWS
+          crustReady={crustReady}
+          level="3"
+          margin="0px"
+          alignSelf="start"
+          onClick={toggleShowMoves}
+          style={{ cursor: 'pointer' }}
+        >
           {`${decapitalize(moveCategory)} moves`}
-        </Heading>
+        </HeadingWS>
         <Box direction="row" align="center" gap="12px">
-          {showMoves ? <FormUp onClick={() => setShowMoves(false)} /> : <FormDown onClick={() => setShowMoves(true)} />}
+          {showMoves ? (
+            <FormUp onClick={toggleShowMoves} style={{ cursor: 'pointer' }} />
+          ) : (
+            <FormDown onClick={toggleShowMoves} style={{ cursor: 'pointer' }} />
+          )}
           {!!navigateToCharacterCreation && (
             <Edit color="accent-1" onClick={() => navigateToCharacterCreation(7)} style={{ cursor: 'pointer' }} />
           )}
@@ -40,19 +65,25 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
               <Box fill="horizontal" direction="row" justify="between" align="center">
                 <Box direction="row" justify="start" align="center" pad="12px" gap="12px">
                   {showMoveDetails.includes(move.id) ? (
-                    <FormUp onClick={() => setShowMoveDetails(showMoveDetails.filter((m) => m !== move.id))} />
+                    <FormUp onClick={() => toggleShowMoveDetails(move.id)} style={{ cursor: 'pointer' }} />
                   ) : (
-                    <FormDown onClick={() => setShowMoveDetails([...showMoveDetails, move.id])} />
+                    <FormDown onClick={() => toggleShowMoveDetails(move.id)} style={{ cursor: 'pointer' }} />
                   )}
-                  <Heading level="3" margin={{ top: '3px', bottom: '3px' }}>
+                  <HeadingWS
+                    crustReady={crustReady}
+                    level="3"
+                    margin={{ top: '3px', bottom: '3px' }}
+                    onClick={() => toggleShowMoveDetails(move.id)}
+                    style={{ cursor: 'pointer' }}
+                  >
                     {decapitalize(move.name)}
-                  </Heading>
+                  </HeadingWS>
                 </Box>
                 {!!move.stat && userGameRole?.role !== Roles.mc && <Button secondary label="ROLL" />}
               </Box>
 
               {showMoveDetails.includes(move.id) && (
-                <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
+                <Box pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
                   <StyledMarkdown>{move.description}</StyledMarkdown>
                 </Box>
               )}

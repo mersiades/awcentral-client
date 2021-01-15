@@ -47,8 +47,10 @@ export const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.
 );
 
 export const StyledMarkdown = styled(ReactMarkdown)`
+  cursor: default;
   & p {
     margin: unset;
+    margin-bottom: 6px;
     text-shadow: 0 0 1px #000, 0 0 3px #000;
   }
 `;
