@@ -1,5 +1,5 @@
 import { MockedResponse } from '@apollo/client/testing';
-import { PlayBooks, Roles } from '../@types/enums';
+import { PlayBooks, Roles, Stats } from '../@types/enums';
 import ADD_COMMS_APP from '../mutations/addCommsApp';
 import ADD_COMMS_URL from '../mutations/addCommsUrl';
 import ADD_INVITEE from '../mutations/addInvitee';
@@ -17,6 +17,7 @@ import SET_CHARACTER_MOVES from '../mutations/setCharacterMoves';
 import SET_CHARACTER_NAME from '../mutations/setCharacterName';
 import SET_CHARACTER_PLAYBOOK from '../mutations/setCharacterPlaybook';
 import SET_CHARACTER_STATS from '../mutations/setCharacterStats';
+import TOGGLE_STAT_HIGHLIGHT from '../mutations/toggleStatHighlight';
 import ALL_MOVES from '../queries/allMoves';
 import GAME from '../queries/game';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
@@ -39,6 +40,7 @@ import {
   mockNewGameName,
   mockPlaybookCreatorAngel,
   mockPlaybooks,
+  mockStatsBlockWithHighlight,
 } from './mocks';
 
 export const mockGameRolesByUserId: MockedResponse = {
@@ -1513,7 +1515,7 @@ export const mockGameForCharacterCreation12: MockedResponse = {
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    // console.log('mockGameForCharacterCreation12');
+    console.log('mockGameForCharacterCreation12');
     return {
       data: {
         game: {
@@ -1591,7 +1593,7 @@ export const mockGameForCharacterCreation13: MockedResponse = {
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    // console.log('mockGameForCharacterCreation13');
+    console.log('mockGameForCharacterCreation13');
     return {
       data: {
         game: {
@@ -1635,6 +1637,80 @@ export const mockGameForCharacterCreation13: MockedResponse = {
   },
 };
 
+export const mockToggleStatHighlight: MockedResponse = {
+  request: {
+    query: TOGGLE_STAT_HIGHLIGHT,
+    variables: {
+      gameRoleId: mockGame5.gameRoles[2].id,
+      characterId: mockCharacter2.id,
+      stat: Stats.cool,
+    },
+  },
+  result: () => {
+    console.log('mockToggleStatHighlight');
+    return {
+      data: {
+        setCharacterHx: {
+          id: mockCharacter2.id,
+          name: mockCharacter2.name,
+          playbook: mockCharacter2.playbook,
+          statsBlock: mockStatsBlockWithHighlight,
+        },
+      },
+    };
+  },
+};
+
+export const mockGameForCharacterCreation14: MockedResponse = {
+  request: {
+    query: GAME,
+    variables: { gameId: mockGame5.id },
+  },
+  result: () => {
+    console.log('mockGameForCharacterCreation14');
+    return {
+      data: {
+        game: {
+          ...mockGame5,
+          gameRoles: [
+            mockGame5.gameRoles[0],
+            mockGame5.gameRoles[1],
+            {
+              id: mockGame5.gameRoles[2].id,
+              role: mockGame5.gameRoles[2].role,
+              userId: mockGame5.gameRoles[2].userId,
+              npcs: mockGame5.gameRoles[2].npcs,
+              threats: mockGame5.gameRoles[2].threats,
+              characters: [
+                {
+                  id: mockCharacter2.id,
+                  playbook: mockCharacter2.playbook,
+                  name: mockCharacter2.name,
+                  hasCompletedCharacterCreation: false,
+                  gear: mockCharacter2.gear,
+                  statsBlock: mockStatsBlockWithHighlight,
+                  hxBlock: mockCharacter2.hxBlock,
+                  barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
+                  looks: [
+                    mockCharacter2.looks[0],
+                    mockCharacter2.looks[1],
+                    mockCharacter2.looks[2],
+                    mockCharacter2.looks[3],
+                    mockCharacter2.looks[4],
+                  ],
+                  characterMoves: mockCharacter2.characterMoves,
+                  playbookUnique: mockCharacter2.playbookUnique,
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+  },
+};
+
 export const mockSetCharacterHx: MockedResponse = {
   request: {
     query: SET_CHARACTER_HX,
@@ -1645,7 +1721,7 @@ export const mockSetCharacterHx: MockedResponse = {
     },
   },
   result: () => {
-    // console.log('mockSetCharacterHx');
+    console.log('mockSetCharacterHx');
     return {
       data: {
         setCharacterHx: {
@@ -1659,13 +1735,13 @@ export const mockSetCharacterHx: MockedResponse = {
   },
 };
 
-export const mockGameForCharacterCreation14: MockedResponse = {
+export const mockGameForCharacterCreation15: MockedResponse = {
   request: {
     query: GAME,
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    // console.log('mockGameForCharacterCreation14');
+    console.log('mockGameForCharacterCreation15');
     return {
       data: {
         game: {
@@ -1732,13 +1808,13 @@ export const mockfinishCharacterCreation: MockedResponse = {
   },
 };
 
-export const mockGameForCharacterCreation15: MockedResponse = {
+export const mockGameForCharacterCreation16: MockedResponse = {
   request: {
     query: GAME,
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    // console.log('mockGameForCharacterCreation15');
+    console.log('mockGameForCharacterCreation16');
     return {
       data: {
         game: {
@@ -1782,13 +1858,13 @@ export const mockGameForCharacterCreation15: MockedResponse = {
   },
 };
 
-export const mockGameForCharacterCreation16: MockedResponse = {
+export const mockGameForCharacterCreation17: MockedResponse = {
   request: {
     query: GAME,
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    // console.log('mockGameForCharacterCreation16');
+    // console.log('mockGameForCharacterCreation17');
     return {
       data: {
         game: {

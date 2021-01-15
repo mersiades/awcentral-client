@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
 import { Box, Grid } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
-import { Playbook } from '../../@types/staticDataInterfaces';
+import { StyledMarkdown } from '../styledComponents';
 import { PlayBooks } from '../../@types/enums';
+import { Playbook } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
 import '../../assets/styles/transitions.css';
@@ -106,17 +106,17 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
                 <img
                   src={selectedPlaybook.playbookImageUrl}
                   alt={decapitalize(selectedPlaybook.playbookType)}
-                  style={{ objectFit: 'contain', maxHeight: '60vh' }}
+                  style={{ objectFit: 'contain', maxHeight: '50vh' }}
                 />
               </Box>
-              <Box gridArea="text" pad="24px" animation="fadeIn" justify="around" align="center">
-                <HeadingWS crustReady={crustReady} level={2} alignSelf="center">
+              <Box gridArea="text" pad="12px" animation="fadeIn" justify="around" align="center">
+                <HeadingWS crustReady={crustReady} level={2} alignSelf="center" margin="0px">
                   {decapitalize(selectedPlaybook.playbookType)}
                 </HeadingWS>
                 <Box overflow="auto" style={{ maxWidth: '600px' }}>
-                  <ReactMarkdown>{selectedPlaybook.intro}</ReactMarkdown>
+                  <StyledMarkdown>{selectedPlaybook.intro}</StyledMarkdown>
                   <em>
-                    <ReactMarkdown>{selectedPlaybook.introComment}</ReactMarkdown>
+                    <StyledMarkdown>{selectedPlaybook.introComment}</StyledMarkdown>
                   </em>
                 </Box>
 

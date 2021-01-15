@@ -3,14 +3,15 @@ import { useQuery } from '@apollo/client';
 import { Box, Button, CheckBox, Heading, Text } from 'grommet';
 import { CaretDownFill, CaretUpFill, Edit, FormDown, FormUp } from 'grommet-icons';
 
-import { StyledMarkdown } from './styledComponents';
-import PLAYBOOK, { PlaybookData, PlaybookVars } from '../queries/playbook';
-import { HarmInput } from '../@types';
-import { Character, CharacterHarm, CharacterStat, HxStat } from '../@types/dataInterfaces';
-import { CharacterMove, Look } from '../@types/staticDataInterfaces';
-import { accentColors, brandColor, RedBox, TextWS } from '../config/grommetConfig';
-import { decapitalize } from '../helpers/decapitalize';
-import { Stats } from '../@types/enums';
+import { StyledMarkdown } from '../styledComponents';
+import PLAYBOOK, { PlaybookData, PlaybookVars } from '../../queries/playbook';
+import { HarmInput } from '../../@types';
+import { Character, CharacterHarm, HxStat } from '../../@types/dataInterfaces';
+import { CharacterMove, Look } from '../../@types/staticDataInterfaces';
+import { accentColors, brandColor, RedBox, TextWS } from '../../config/grommetConfig';
+import { decapitalize } from '../../helpers/decapitalize';
+import { Stats } from '../../@types/enums';
+import StatsBox from './StatsBox';
 
 interface CharacterSheetHeaderBoxProps {
   playbook: string;
@@ -54,56 +55,6 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({
           <StyledMarkdown>{description}</StyledMarkdown>
         </Box>
       )}
-    </Box>
-  );
-};
-
-interface CharacterSheetStatsBoxProps {
-  stats: CharacterStat[];
-  togglingHighlight: boolean;
-  handleToggleHighlight: (stat: Stats) => void;
-  navigateToCharacterCreation: (step: number) => void;
-}
-
-const CharacterSheetStatsBox: FC<CharacterSheetStatsBoxProps> = ({
-  stats,
-  togglingHighlight,
-  handleToggleHighlight,
-  navigateToCharacterCreation,
-}) => {
-  const statBoxStyle = (isHighlighted: boolean) => ({
-    backgroundColor: isHighlighted ? accentColors[2] : '#000',
-    cursor: 'pointer',
-  });
-
-  return (
-    <Box fill="horizontal" pad={{ vertical: '12px' }}>
-      <Box fill="horizontal" direction="row" align="center" justify="between" pad={{ vertical: '12px' }}>
-        <Heading level="3" margin="0px">
-          Stats
-        </Heading>
-        <Edit color="accent-1" onClick={() => navigateToCharacterCreation(4)} style={{ cursor: 'pointer' }} />
-      </Box>
-      <Box fill="horizontal" direction="row" align="center" justify="around" pad="12px" gap="12px" wrap>
-        {stats.map((stat) => {
-          return (
-            <RedBox
-              key={stat.id}
-              align="center"
-              width="76px"
-              style={statBoxStyle(stat.isHighlighted)}
-              onClick={() => !togglingHighlight && handleToggleHighlight(stat.stat)}
-            >
-              <Heading level="2" margin={{ left: '6px', right: '6px', bottom: '3px', top: '9px' }}>
-                {stat.value}
-              </Heading>
-              <Heading level="3" margin={{ left: '6px', right: '6px', bottom: '3px', top: '3px' }}>
-                {stat.stat}
-              </Heading>
-            </RedBox>
-          );
-        })}
-      </Box>
     </Box>
   );
 };
@@ -534,7 +485,7 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
       />
 
       {character.statsBlock.stats.length > 0 && (
-        <CharacterSheetStatsBox
+        <StatsBox
           stats={character.statsBlock.stats}
           togglingHighlight={togglingHighlight}
           navigateToCharacterCreation={navigateToCharacterCreation}

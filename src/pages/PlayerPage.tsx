@@ -11,7 +11,7 @@ import MovesPanel from '../components/MovesPanel';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import { useGame } from '../contexts/gameContext';
 import { Character } from '../@types/dataInterfaces';
-import CharacterSheet from '../components/CharacterSheet';
+import CharacterSheet from '../components/characterSheet/CharacterSheet';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
 import { HarmInput } from '../@types';

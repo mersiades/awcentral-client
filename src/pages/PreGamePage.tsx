@@ -194,7 +194,7 @@ const PreGamePage = () => {
             <TextWS size="large">Looks</TextWS>
           </Box>
           <Box align="center" pad="12px" gap="12px" width="80px">
-            {!!character && character.statsBlock.stats.length === 5 ? (
+            {!!character && character.statsBlock?.stats.length === 5 ? (
               <Checkmark size="large" color="accent-1" />
             ) : (
               <Checkbox size="large" color="neutral-1" />
