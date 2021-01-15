@@ -10,8 +10,9 @@ import { Character, CharacterHarm, HxStat } from '../../@types/dataInterfaces';
 import { CharacterMove, Look } from '../../@types/staticDataInterfaces';
 import { accentColors, brandColor, RedBox, TextWS } from '../../config/grommetConfig';
 import { decapitalize } from '../../helpers/decapitalize';
-import { Stats } from '../../@types/enums';
+import { MoveKinds, Stats } from '../../@types/enums';
 import StatsBox from './StatsBox';
+import MovesBox from './MovesBox';
 
 interface CharacterSheetHeaderBoxProps {
   playbook: string;
@@ -55,50 +56,6 @@ const CharacterSheetHeaderBox: FC<CharacterSheetHeaderBoxProps> = ({
           <StyledMarkdown>{description}</StyledMarkdown>
         </Box>
       )}
-    </Box>
-  );
-};
-
-interface CharacterSheetMovesBoxProps {
-  moves: CharacterMove[];
-  navigateToCharacterCreation: (step: number) => void;
-}
-
-const CharacterSheetMovesBox: FC<CharacterSheetMovesBoxProps> = ({ moves, navigateToCharacterCreation }) => {
-  const [showMove, setShowMove] = useState<string>('');
-  return (
-    <Box fill="horizontal" align="center" justify="start" pad={{ vertical: '12px' }}>
-      <Box fill="horizontal" direction="row" align="center" justify="between" pad={{ vertical: '12px' }}>
-        <Heading level="3" margin="0px" alignSelf="start">
-          Moves
-        </Heading>
-        <Edit color="accent-1" onClick={() => navigateToCharacterCreation(7)} style={{ cursor: 'pointer' }} />
-      </Box>
-      {moves.map((move) => {
-        return (
-          <Box key={move.id} fill="horizontal">
-            <Box fill="horizontal" direction="row" justify="between" align="center">
-              <Box direction="row" justify="start" align="center" pad="12px" gap="12px">
-                {showMove === move.id ? (
-                  <FormUp onClick={() => setShowMove('')} />
-                ) : (
-                  <FormDown onClick={() => setShowMove(move.id)} />
-                )}
-                <Heading level="3" margin={{ top: '3px', bottom: '3px' }}>
-                  {move.name}
-                </Heading>
-              </Box>
-              {!!move.stat && <Button secondary label="ROLL" />}
-            </Box>
-
-            {showMove === move.id && (
-              <Box fill="horizontal" pad="12px" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
-                <StyledMarkdown>{move.description}</StyledMarkdown>
-              </Box>
-            )}
-          </Box>
-        );
-      })}
     </Box>
   );
 };
@@ -494,7 +451,12 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
       )}
 
       {character.characterMoves.length > 0 && (
-        <CharacterSheetMovesBox moves={character.characterMoves} navigateToCharacterCreation={navigateToCharacterCreation} />
+        <MovesBox
+          moves={character.characterMoves}
+          open
+          moveCategory={MoveKinds.character}
+          navigateToCharacterCreation={navigateToCharacterCreation}
+        />
       )}
 
       <CharacterSheetHarm harm={character.harm} settingHarm={settingHarm} handleSetHarm={handleSetHarm} />

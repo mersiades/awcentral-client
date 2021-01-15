@@ -15,9 +15,13 @@ import { decapitalize } from '../../helpers/decapitalize';
 import { useGame } from '../../contexts/gameContext';
 import StatsBox from '../characterSheet/StatsBox';
 
+//     margin: unset;
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
-    margin: unset;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-left: 0px;
+    margin-right: 0px;
   }
 `;
 
