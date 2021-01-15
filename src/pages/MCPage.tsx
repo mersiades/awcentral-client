@@ -203,10 +203,7 @@ const MCPage = () => {
               { label: 'Main menu', onClick: () => history.push('/menu') },
               {
                 label: 'Log out',
-                onClick: () => {
-                  history.push('/');
-                  keycloak.logout();
-                },
+                onClick: () => keycloak.logout(),
               },
             ]}
           />

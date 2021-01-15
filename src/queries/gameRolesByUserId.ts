@@ -2,11 +2,11 @@ import { gql } from '@apollo/client';
 import { GameRole } from '../@types/dataInterfaces';
 
 export interface GameRolesByUserIdData {
-  gameRolesByUserId: GameRole[]
+  gameRolesByUserId: GameRole[];
 }
 
 export interface GameRolesByUserIdVars {
-  id: string
+  id: string;
 }
 
 const GAMEROLES_BY_USER_ID = gql`
@@ -18,8 +18,11 @@ const GAMEROLES_BY_USER_ID = gql`
         id
         name
       }
+      characters {
+        id
+      }
     }
   }
-`
+`;
 
-export default GAMEROLES_BY_USER_ID
+export default GAMEROLES_BY_USER_ID;

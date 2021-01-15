@@ -5,29 +5,39 @@ export interface KeycloakUser {
 }
 
 export interface KeycloakUserInfo {
-  email: string
-  email_verified: boolean
-  family_name: string
-  given_name: string
-  name: string
-  preferred_username: string
-  sub: string
+  email: string;
+  email_verified: boolean;
+  family_name: string;
+  given_name: string;
+  name: string;
+  preferred_username: string;
+  sub: string;
 }
 
 export interface TaggedItem {
-  id: string
-  description: string
-  tags: string[]
+  id: string;
+  description: string;
+  tags: string[];
 }
 
 export interface ItemCharacteristic {
-  id: string
-  description: string
-  tag: string
+  id: string;
+  description: string;
+  tag: string;
 }
 
 export interface HxInput {
-  characterId: string
-  characterName: string
-  hxValue: number
+  characterId: string;
+  characterName: string;
+  hxValue: number;
+}
+
+export interface HarmInput {
+  id: string;
+  value: number;
+  isStabilized: boolean;
+  hasComeBackHard: boolean;
+  hasComeBackWeird: boolean;
+  hasChangedPlaybook: boolean;
+  hasDied: boolean;
 }

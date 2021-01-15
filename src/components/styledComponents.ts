@@ -1,11 +1,10 @@
-import { Box, BoxProps } from "grommet";
-import styled, { css } from "styled-components";
+import { Box, BoxProps } from 'grommet';
+import ReactMarkdown from 'react-markdown';
+import styled, { css } from 'styled-components';
+import { accentColors } from '../config/grommetConfig';
 
 export const Footer = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
-  border-top: 6px solid transparent;
-  border-image-source: url(/images/black-line-short.png);
-  border-image-slice: 17 0;
-  border-image-repeat: round;
+  border-top: 1px solid ${accentColors[0]};
 `;
 
 interface MainContainerProps {
@@ -14,17 +13,18 @@ interface MainContainerProps {
   readonly shinkWidth: number; // 0-100, for vw
 }
 
+//height: calc(100vh - 102px);
 export const MainContainer = styled(Box as React.FC<MainContainerProps & BoxProps & JSX.IntrinsicElements['div']>)(
   ({ sidePanel, maxPanels, shinkWidth }) => {
     return css`
-      height: calc(100vh - 95px);
+      height: 86vh;
       width: 100vw;
       transition: width 200ms ease-in-out, transform 200ms ease-in-out;
       ${sidePanel < maxPanels &&
-        css`
-          transform: translateX(${shinkWidth}vw);
-          width: ${100 - shinkWidth}vw;
-        `};
+      css`
+        transform: translateX(${shinkWidth}vw);
+        width: ${100 - shinkWidth}vw;
+      `};
     `;
   }
 );
@@ -34,12 +34,21 @@ interface SidePanelProps {
   readonly growWidth: number; // 0-100, for vw
 }
 
-export const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.IntrinsicElements['div']>)(({ sidePanel, growWidth }) => {
-  return css`
-    border-right: 1px solid transparent;
-    border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), black, rgba(0, 0, 0, 0)) 1 100%;
-    position: absolute;
-    height: calc(100vh - 95px);
-    width: ${growWidth}vw;
-  `;
-});
+export const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.IntrinsicElements['div']>)(
+  ({ sidePanel, growWidth }) => {
+    return css`
+      border-right: 1px solid ${accentColors[0]};
+      background: transparent;
+      position: absolute;
+      height: 86vh;
+      width: ${growWidth}vw;
+    `;
+  }
+);
+
+export const StyledMarkdown = styled(ReactMarkdown)`
+  & p {
+    margin: unset;
+    text-shadow: 0 0 1px #000, 0 0 3px #000;
+  }
+`;

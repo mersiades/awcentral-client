@@ -17,6 +17,7 @@ import {
   mockGameForCharacterCreation13,
   mockGameForCharacterCreation14,
   mockGameForCharacterCreation15,
+  mockGameForCharacterCreation16,
   mockGameForCharacterCreation2,
   mockGameForCharacterCreation3,
   mockGameForCharacterCreation4,
@@ -28,6 +29,7 @@ import {
   mockPlaybookCreator,
   mockPlaybooksQuery,
   mockSetAngelKit,
+  mockSetCharacterBarter,
   mockSetCharacterGear,
   mockSetCharacterHx,
   mockSetCharacterLook1,
@@ -218,7 +220,7 @@ describe('Testing character creation flow', () => {
     // Check correct stats added to CharacterCreationStepper
     await screen.findByTestId('stats-box'); // I have to do this twice because the statsBox shifts to the left
     const statsBox = await screen.findByTestId('stats-box');
-    mockCharacter2.statsBlock.forEach((stat) =>
+    mockCharacter2.statsBlock.stats.forEach((stat) =>
       expect(statsBox.textContent).toContain(`${stat.stat} ${'--'.repeat(8 - stat.stat.length)} ${stat.value}`)
     );
 
@@ -235,15 +237,17 @@ describe('Testing character creation flow', () => {
         mockGameForCharacterCreation9,
         mockSetCharacterGear,
         mockGameForCharacterCreation10,
-        mockSetAngelKit,
+        mockSetCharacterBarter,
         mockGameForCharacterCreation11,
-        mockSetCharacterMoves,
+        mockSetAngelKit,
         mockGameForCharacterCreation12,
-        mockSetCharacterHx,
+        mockSetCharacterMoves,
         mockGameForCharacterCreation13,
         mockGameForCharacterCreation14,
-        mockfinishCharacterCreation,
+        mockSetCharacterHx,
         mockGameForCharacterCreation15,
+        mockfinishCharacterCreation,
+        // mockGameForCharacterCreation16,
       ],
     });
 

@@ -2,12 +2,14 @@ import { HxInput, KeycloakUser, KeycloakUserInfo } from '../@types';
 import {
   AngelKit,
   BrainerGear,
+  CharacterHarm,
   CharacterStat,
   CustomWeapons,
   Game,
   GameRole,
   HxStat,
   PlaybookUnique,
+  StatsBlock,
 } from '../@types/dataInterfaces';
 import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, UniqueTypes } from '../@types/enums';
 import {
@@ -28,12 +30,14 @@ import {
 // Same as Character, but with no nullable fields
 interface MockCharacter {
   id: string;
-  statsBlock: CharacterStat[];
+  statsBlock: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
   looks: Look[]; // Does graphql return an empty array or undefined? // May need an id-less version of Look "EmbeddedLook"
   name: string;
+  barter: number;
   playbook: PlayBooks;
+  harm: CharacterHarm;
   hasCompletedCharacterCreation: boolean;
   playbookUnique: PlaybookUnique;
   characterMoves: CharacterMove[];
@@ -79,38 +83,42 @@ export const mockKeycloakUser3: KeycloakUser = {
   email: 'mockUser3@email.com',
 };
 
-export const mockStatsBlock1: CharacterStat[] = [
-  {
-    id: 'mock-statsblock-stat-id-1',
-    stat: Stats.cool,
-    value: 1,
-    isHighlighted: false,
-  },
-  {
-    id: 'mock-statsblock-stat-id-2',
-    stat: Stats.hard,
-    value: 1,
-    isHighlighted: false,
-  },
-  {
-    id: 'mock-statsblock-stat-id-3',
-    stat: Stats.hot,
-    value: 1,
-    isHighlighted: false,
-  },
-  {
-    id: 'mock-statsblock-stat-id-4',
-    stat: Stats.sharp,
-    value: 1,
-    isHighlighted: false,
-  },
-  {
-    id: 'mock-statsblock-stat-id-5',
-    stat: Stats.weird,
-    value: 1,
-    isHighlighted: false,
-  },
-];
+export const mockStatsBlock1: StatsBlock = {
+  id: 'mock-stats-block-id-1',
+  statsOptionId: 'mock-stats-option-id-1',
+  stats: [
+    {
+      id: 'mock-statsblock-stat-id-1',
+      stat: Stats.cool,
+      value: 1,
+      isHighlighted: false,
+    },
+    {
+      id: 'mock-statsblock-stat-id-2',
+      stat: Stats.hard,
+      value: 1,
+      isHighlighted: false,
+    },
+    {
+      id: 'mock-statsblock-stat-id-3',
+      stat: Stats.hot,
+      value: 1,
+      isHighlighted: false,
+    },
+    {
+      id: 'mock-statsblock-stat-id-4',
+      stat: Stats.sharp,
+      value: 1,
+      isHighlighted: false,
+    },
+    {
+      id: 'mock-statsblock-stat-id-5',
+      stat: Stats.weird,
+      value: 1,
+      isHighlighted: false,
+    },
+  ],
+};
 
 export const dummyRollModifier: RollModifier = {
   id: 'dummy',
@@ -349,6 +357,16 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   angelKit: mockAngelKit,
 };
 
+export const mockCharacterHarm: CharacterHarm = {
+  id: 'mock-character-harm-id-1',
+  value: 0,
+  isStabilized: false,
+  hasComeBackHard: false,
+  hasComeBackWeird: false,
+  hasChangedPlaybook: false,
+  hasDied: false,
+};
+
 export const mockCharacter1: MockCharacter = {
   id: 'mock-character-id-1',
   name: 'Mock Character 1',
@@ -356,7 +374,9 @@ export const mockCharacter1: MockCharacter = {
   hasCompletedCharacterCreation: false,
   gear: ['leather jacket', 'Timberland boots'],
   statsBlock: mockStatsBlock1,
+  barter: 2,
   hxBlock: [],
+  harm: mockCharacterHarm,
   looks: [mockLookBettleBabe1, mockLookBattlebabe2],
   characterMoves: [
     mockCharacterMoveAngel1,
@@ -373,6 +393,7 @@ export const mockCharacter2: MockCharacter = {
   hasCompletedCharacterCreation: false,
   gear: ['Grimey green raincoat', '9mm (2-harm close loud)'],
   statsBlock: mockStatsBlock1,
+  barter: 2,
   hxBlock: [
     {
       characterId: mockCharacter1.id,
@@ -380,6 +401,7 @@ export const mockCharacter2: MockCharacter = {
       hxValue: 1,
     },
   ],
+  harm: { ...mockCharacterHarm, id: 'mock-character-harm-id-2' },
   looks: [mockLookAngel1, mockLookAngel3, mockLookAngel5, mockLookAngel7, mockLookAngel9],
   characterMoves: [
     { ...mockCharacterMoveAngel1, isSelected: true },

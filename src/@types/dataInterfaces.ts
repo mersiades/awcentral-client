@@ -43,20 +43,38 @@ export interface Character {
   id: string;
   playbook: PlayBooks;
   hasCompletedCharacterCreation: boolean;
-  statsBlock: CharacterStat[];
+  statsBlock: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
   looks: Look[];
   characterMoves: CharacterMove[];
+  harm: CharacterHarm;
   name?: string;
+  barter?: number;
   playbookUnique?: PlaybookUnique;
+}
+
+export interface CharacterHarm {
+  id: string;
+  value: number;
+  isStabilized: boolean;
+  hasComeBackHard: boolean;
+  hasComeBackWeird: boolean;
+  hasChangedPlaybook: boolean;
+  hasDied: boolean;
+}
+
+export interface StatsBlock {
+  id: string;
+  statsOptionId: string;
+  stats: CharacterStat[];
 }
 
 export interface CharacterStat {
   id: string;
   stat: Stats;
   value: number;
-  isHighlighted: Boolean;
+  isHighlighted: boolean;
 }
 
 export interface HxStat {

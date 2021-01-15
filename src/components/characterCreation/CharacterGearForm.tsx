@@ -13,9 +13,10 @@ import { useFonts } from '../../contexts/fontContext';
 interface CharacterGearFormProps {
   existingGear: string[];
   settingGear: boolean;
+  settingBarter: boolean;
   playbookType: PlayBooks;
   characterName: string;
-  handleSubmitGear: (gear: string[]) => void;
+  handleSubmitGear: (gear: string[], amount: number) => void;
 }
 
 const GearUL = styled.ul`
@@ -28,6 +29,7 @@ const GearUL = styled.ul`
 const CharacterGearForm: FC<CharacterGearFormProps> = ({
   existingGear = [],
   settingGear,
+  settingBarter,
   playbookType,
   characterName,
   handleSubmitGear,
@@ -266,8 +268,10 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
         <Box direction="row" pad="6px" justify="end" align="center" style={{ minHeight: 52 }}>
           <ButtonWS
             primary
-            label={settingGear ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-            onClick={() => handleSubmitGear(gear)}
+            label={settingGear || settingBarter ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+            onClick={() =>
+              !settingBarter && !settingGear && handleSubmitGear(gear, pbCreator.gearInstructions.startingBarter)
+            }
             disabled={gear.length < 1 || JSON.stringify(gear) === JSON.stringify(existingGear)}
           />
         </Box>

@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { Move } from '../@types/staticDataInterfaces';
 
 export interface AllMovesData {
-  allMoves: Move[]
+  allMoves: Move[];
 }
 
 const ALL_MOVES = gql`
@@ -11,11 +11,11 @@ const ALL_MOVES = gql`
       id
       name
       description
-      stat
       kind
       playbook
+      stat
     }
   }
-`
+`;
 
-export default ALL_MOVES
+export default ALL_MOVES;

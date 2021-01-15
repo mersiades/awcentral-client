@@ -6,12 +6,14 @@ import Spinner from '../../Spinner';
 import { ButtonWS, HeadingWS, RedBox } from '../../../config/grommetConfig';
 import { PlaybookUniqueCreator } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
+import { AngelKit } from '../../../@types/dataInterfaces';
 
 interface AngelKitFormProps {
   characterName: string;
   settingAngelKit: boolean;
   playbookUniqueCreator: PlaybookUniqueCreator;
   handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
+  existingAngelKit?: AngelKit;
 }
 
 const AngelKitForm: FC<AngelKitFormProps> = ({
@@ -19,9 +21,10 @@ const AngelKitForm: FC<AngelKitFormProps> = ({
   settingAngelKit,
   playbookUniqueCreator,
   handleSubmitAngelKit,
+  existingAngelKit,
 }) => {
   const { angelKitInstructions, startingStock } = playbookUniqueCreator.angelKitCreator || {};
-  const [stock, setStock] = useState(startingStock);
+  const [stock, setStock] = useState(!!existingAngelKit ? existingAngelKit.stock : startingStock);
 
   const { crustReady } = useFonts();
 
@@ -50,7 +53,7 @@ const AngelKitForm: FC<AngelKitFormProps> = ({
               value={stock}
               size="xlarge"
               textAlign="center"
-              onChange={(e) => setStock(parseInt(e.target.value))}
+              onChange={(e) => !!existingAngelKit && setStock(parseInt(e.target.value))}
             />
           </FormField>
         </RedBox>

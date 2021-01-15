@@ -9,6 +9,7 @@ import CREATE_GAME from '../mutations/createGame';
 import FINISH_CHARACTER_CREATION from '../mutations/finishCharacterCreation';
 import FINISH_PRE_GAME from '../mutations/finishPreGame';
 import SET_ANGEL_KIT from '../mutations/setAngelKit';
+import SET_CHARACTER_BARTER from '../mutations/setCharacterBarter';
 import SET_CHARACTER_GEAR from '../mutations/setCharacterGear';
 import SET_CHARACTER_HX from '../mutations/setCharacterHx';
 import SET_CHARACTER_LOOK from '../mutations/setCharacterLook';
@@ -55,6 +56,7 @@ export const mockGameRolesByUserId: MockedResponse = {
             id: mockGame1.id,
             name: mockGame1.name,
           },
+          characters: [],
         },
         {
           id: mockGameRole2.id,
@@ -63,6 +65,7 @@ export const mockGameRolesByUserId: MockedResponse = {
             id: mockGame2.id,
             name: mockGame2.name,
           },
+          characters: [],
         },
       ],
     },
@@ -529,11 +532,17 @@ export const mockGameForCharacterCreation2: MockedResponse = {
                   playbook: mockCharacter2.playbook,
                   name: '',
                   gear: [],
-                  statsBlock: [],
+                  statsBlock: {
+                    id: '',
+                    statsOptionId: '',
+                    stats: [],
+                  },
                   hxBlock: [],
                   looks: [],
                   hasCompletedCharacterCreation: false,
                   characterMoves: [],
+                  barter: 0,
+                  harm: mockCharacter2.harm,
                   playbookUnique: {
                     id: 'dummy',
                     type: 'dummy',
@@ -678,9 +687,15 @@ export const mockGameForCharacterCreation3: MockedResponse = {
                   name: mockCharacter2.name,
                   hasCompletedCharacterCreation: false,
                   gear: [],
-                  statsBlock: [],
+                  statsBlock: {
+                    id: '',
+                    statsOptionId: '',
+                    stats: [],
+                  },
                   hxBlock: [],
                   looks: [],
+                  barter: 0,
+                  harm: mockCharacter2.harm,
                   characterMoves: [],
                   playbookUnique: {
                     id: 'dummy',
@@ -764,10 +779,16 @@ export const mockGameForCharacterCreation4: MockedResponse = {
                   name: mockCharacter2.name,
                   hasCompletedCharacterCreation: false,
                   gear: [],
-                  statsBlock: [],
+                  statsBlock: {
+                    id: '',
+                    statsOptionId: '',
+                    stats: [],
+                  },
                   hxBlock: [],
                   looks: [mockCharacter2.looks[0]],
                   characterMoves: [],
+                  barter: 0,
+                  harm: mockCharacter2.harm,
                   playbookUnique: {
                     id: 'dummy',
                     type: 'dummy',
@@ -850,10 +871,16 @@ export const mockGameForCharacterCreation5: MockedResponse = {
                   name: mockCharacter2.name,
                   hasCompletedCharacterCreation: false,
                   gear: [],
-                  statsBlock: [],
+                  statsBlock: {
+                    id: '',
+                    statsOptionId: '',
+                    stats: [],
+                  },
                   hxBlock: [],
                   looks: [mockCharacter2.looks[0], mockCharacter2.looks[1]],
                   characterMoves: [],
+                  barter: 0,
+                  harm: mockCharacter2.harm,
                   playbookUnique: {
                     id: 'dummy',
                     type: 'dummy',
@@ -936,10 +963,16 @@ export const mockGameForCharacterCreation6: MockedResponse = {
                   name: mockCharacter2.name,
                   hasCompletedCharacterCreation: false,
                   gear: [],
-                  statsBlock: [],
+                  statsBlock: {
+                    id: '',
+                    statsOptionId: '',
+                    stats: [],
+                  },
                   hxBlock: [],
                   looks: [mockCharacter2.looks[0], mockCharacter2.looks[1], mockCharacter2.looks[2]],
                   characterMoves: [],
+                  barter: 0,
+                  harm: mockCharacter2.harm,
                   playbookUnique: {
                     id: 'dummy',
                     type: 'dummy',
@@ -1022,8 +1055,14 @@ export const mockGameForCharacterCreation7: MockedResponse = {
                   name: mockCharacter2.name,
                   hasCompletedCharacterCreation: false,
                   gear: [],
-                  statsBlock: [],
+                  statsBlock: {
+                    id: '',
+                    statsOptionId: '',
+                    stats: [],
+                  },
                   hxBlock: [],
+                  barter: 0,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1119,8 +1158,14 @@ export const mockGameForCharacterCreation8: MockedResponse = {
                   name: mockCharacter2.name,
                   hasCompletedCharacterCreation: false,
                   gear: [],
-                  statsBlock: [],
+                  statsBlock: {
+                    id: '',
+                    statsOptionId: '',
+                    stats: [],
+                  },
                   hxBlock: [],
+                  barter: 0,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1212,6 +1257,8 @@ export const mockGameForCharacterCreation9: MockedResponse = {
                   gear: [],
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: [],
+                  barter: 0,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1303,6 +1350,100 @@ export const mockGameForCharacterCreation10: MockedResponse = {
                   gear: mockCharacter2.gear,
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: [],
+                  harm: mockCharacter2.harm,
+                  looks: [
+                    mockCharacter2.looks[0],
+                    mockCharacter2.looks[1],
+                    mockCharacter2.looks[2],
+                    mockCharacter2.looks[3],
+                    mockCharacter2.looks[4],
+                  ],
+                  characterMoves: [],
+                  playbookUnique: {
+                    id: 'dummy',
+                    type: 'dummy',
+                    brainerGear: {
+                      id: 'dummy',
+                      brainerGear: [],
+                    },
+                    customWeapons: {
+                      id: 'dummy',
+                      weapons: [],
+                    },
+                    angelKit: {
+                      id: 'dummy',
+                      description: 'dummy',
+                      stock: 0,
+                      hasSupplier: false,
+                      supplierText: 'dummy',
+                      angelKitMoves: [dummyAngelKitMove],
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+  },
+};
+
+export const mockSetCharacterBarter: MockedResponse = {
+  request: {
+    query: SET_CHARACTER_BARTER,
+    variables: {
+      gameRoleId: mockGame5.gameRoles[2].id,
+      characterId: mockCharacter2.id,
+      amount: mockCharacter2.barter,
+    },
+  },
+  result: () => {
+    // console.log('mockSetCharacterBarter');
+    return {
+      data: {
+        setCharacterGear: {
+          id: mockCharacter2.id,
+          playbook: mockCharacter2.playbook,
+          name: mockCharacter2.name,
+          barter: mockCharacter2.barter,
+        },
+      },
+    };
+  },
+};
+
+export const mockGameForCharacterCreation11: MockedResponse = {
+  request: {
+    query: GAME,
+    variables: { gameId: mockGame5.id },
+  },
+  result: () => {
+    // console.log('mockGameForCharacterCreation11');
+    return {
+      data: {
+        game: {
+          ...mockGame5,
+          gameRoles: [
+            mockGame5.gameRoles[0],
+            mockGame5.gameRoles[1],
+            {
+              id: mockGame5.gameRoles[2].id,
+              role: mockGame5.gameRoles[2].role,
+              userId: mockGame5.gameRoles[2].userId,
+              npcs: mockGame5.gameRoles[2].npcs,
+              threats: mockGame5.gameRoles[2].threats,
+              characters: [
+                {
+                  id: mockCharacter2.id,
+                  playbook: mockCharacter2.playbook,
+                  name: mockCharacter2.name,
+                  hasCompletedCharacterCreation: false,
+                  gear: mockCharacter2.gear,
+                  barter: mockCharacter2.barter,
+                  statsBlock: mockCharacter2.statsBlock,
+                  hxBlock: [],
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1366,13 +1507,13 @@ export const mockSetAngelKit: MockedResponse = {
   },
 };
 
-export const mockGameForCharacterCreation11: MockedResponse = {
+export const mockGameForCharacterCreation12: MockedResponse = {
   request: {
     query: GAME,
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    // console.log('mockGameForCharacterCreation11');
+    // console.log('mockGameForCharacterCreation12');
     return {
       data: {
         game: {
@@ -1395,6 +1536,8 @@ export const mockGameForCharacterCreation11: MockedResponse = {
                   gear: mockCharacter2.gear,
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: [],
+                  barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1442,13 +1585,13 @@ export const mockSetCharacterMoves: MockedResponse = {
   },
 };
 
-export const mockGameForCharacterCreation12: MockedResponse = {
+export const mockGameForCharacterCreation13: MockedResponse = {
   request: {
     query: GAME,
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    // console.log('mockGameForCharacterCreation12');
+    // console.log('mockGameForCharacterCreation13');
     return {
       data: {
         game: {
@@ -1471,6 +1614,8 @@ export const mockGameForCharacterCreation12: MockedResponse = {
                   statsBlock: mockCharacter2.statsBlock,
                   hasCompletedCharacterCreation: false,
                   hxBlock: [],
+                  barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1514,13 +1659,13 @@ export const mockSetCharacterHx: MockedResponse = {
   },
 };
 
-export const mockGameForCharacterCreation13: MockedResponse = {
+export const mockGameForCharacterCreation14: MockedResponse = {
   request: {
     query: GAME,
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    // console.log('mockGameForCharacterCreation13');
+    // console.log('mockGameForCharacterCreation14');
     return {
       data: {
         game: {
@@ -1543,6 +1688,8 @@ export const mockGameForCharacterCreation13: MockedResponse = {
                   gear: mockCharacter2.gear,
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: mockCharacter2.hxBlock,
+                  barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],
@@ -1585,54 +1732,6 @@ export const mockfinishCharacterCreation: MockedResponse = {
   },
 };
 
-export const mockGameForCharacterCreation14: MockedResponse = {
-  request: {
-    query: GAME,
-    variables: { gameId: mockGame5.id },
-  },
-  result: () => {
-    // console.log('mockGameForCharacterCreation14');
-    return {
-      data: {
-        game: {
-          ...mockGame5,
-          gameRoles: [
-            mockGame5.gameRoles[0],
-            mockGame5.gameRoles[1],
-            {
-              id: mockGame5.gameRoles[2].id,
-              role: mockGame5.gameRoles[2].role,
-              userId: mockGame5.gameRoles[2].userId,
-              npcs: mockGame5.gameRoles[2].npcs,
-              threats: mockGame5.gameRoles[2].threats,
-              characters: [
-                {
-                  id: mockCharacter2.id,
-                  playbook: mockCharacter2.playbook,
-                  name: mockCharacter2.name,
-                  hasCompletedCharacterCreation: true,
-                  gear: mockCharacter2.gear,
-                  statsBlock: mockCharacter2.statsBlock,
-                  hxBlock: mockCharacter2.hxBlock,
-                  looks: [
-                    mockCharacter2.looks[0],
-                    mockCharacter2.looks[1],
-                    mockCharacter2.looks[2],
-                    mockCharacter2.looks[3],
-                    mockCharacter2.looks[4],
-                  ],
-                  characterMoves: mockCharacter2.characterMoves,
-                  playbookUnique: mockCharacter2.playbookUnique,
-                },
-              ],
-            },
-          ],
-        },
-      },
-    };
-  },
-};
-
 export const mockGameForCharacterCreation15: MockedResponse = {
   request: {
     query: GAME,
@@ -1662,6 +1761,58 @@ export const mockGameForCharacterCreation15: MockedResponse = {
                   gear: mockCharacter2.gear,
                   statsBlock: mockCharacter2.statsBlock,
                   hxBlock: mockCharacter2.hxBlock,
+                  barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
+                  looks: [
+                    mockCharacter2.looks[0],
+                    mockCharacter2.looks[1],
+                    mockCharacter2.looks[2],
+                    mockCharacter2.looks[3],
+                    mockCharacter2.looks[4],
+                  ],
+                  characterMoves: mockCharacter2.characterMoves,
+                  playbookUnique: mockCharacter2.playbookUnique,
+                },
+              ],
+            },
+          ],
+        },
+      },
+    };
+  },
+};
+
+export const mockGameForCharacterCreation16: MockedResponse = {
+  request: {
+    query: GAME,
+    variables: { gameId: mockGame5.id },
+  },
+  result: () => {
+    // console.log('mockGameForCharacterCreation16');
+    return {
+      data: {
+        game: {
+          ...mockGame5,
+          gameRoles: [
+            mockGame5.gameRoles[0],
+            mockGame5.gameRoles[1],
+            {
+              id: mockGame5.gameRoles[2].id,
+              role: mockGame5.gameRoles[2].role,
+              userId: mockGame5.gameRoles[2].userId,
+              npcs: mockGame5.gameRoles[2].npcs,
+              threats: mockGame5.gameRoles[2].threats,
+              characters: [
+                {
+                  id: mockCharacter2.id,
+                  playbook: mockCharacter2.playbook,
+                  name: mockCharacter2.name,
+                  hasCompletedCharacterCreation: true,
+                  gear: mockCharacter2.gear,
+                  statsBlock: mockCharacter2.statsBlock,
+                  hxBlock: mockCharacter2.hxBlock,
+                  barter: mockCharacter2.barter,
+                  harm: mockCharacter2.harm,
                   looks: [
                     mockCharacter2.looks[0],
                     mockCharacter2.looks[1],

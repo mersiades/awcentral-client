@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, Layer, Paragraph } from 'grommet';
 
@@ -28,6 +28,7 @@ import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
+import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mutations/setBrainerGear';
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/setAngelKit';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
@@ -60,8 +61,11 @@ export const background = {
 };
 
 const CharacterCreationPage: FC = () => {
+  const query = new URLSearchParams(useLocation().search);
+  const step = query.get('step');
+  console.log('step', step);
   // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [creationStep, setCreationStep] = useState<number>(0);
+  const [creationStep, setCreationStep] = useState<number>(step ? parseInt(step) : 0);
   const [character, setCharacter] = useState<Character | undefined>();
   const [showResetWarning, setShowResetWarning] = useState<PlayBooks | undefined>();
   const [showScrollable, setShowScrollable] = useState(false);
@@ -96,6 +100,10 @@ const CharacterCreationPage: FC = () => {
   const [setCharacterGear, { loading: settingGear }] = useMutation<SetCharacterGearData, SetCharacterGearVars>(
     SET_CHARACTER_GEAR
   );
+
+  const [setCharacterBarter, { loading: settingBarter }] = useMutation<SetCharacterBarterData, SetCharacterBarterVars>(
+    SET_CHARACTER_BARTER
+  );
   const [setBrainerGear, { loading: settingBrainerGear }] = useMutation<SetBrainerGearData, SetBrainerGearVars>(
     SET_BRAINER_GEAR
   );
@@ -113,11 +121,6 @@ const CharacterCreationPage: FC = () => {
   >(FINISH_CHARACTER_CREATION);
 
   const playbooks = playbooksData?.playbooks;
-  // const game = gameData?.game;
-  // const gameRoles = game?.gameRoles;
-  // useEffect(() => {
-  //   console.log('game', game);
-  // }, [game]);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
@@ -220,11 +223,15 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  const handleSubmitGear = async (gear: string[]) => {
+  const handleSubmitGear = async (gear: string[], amount: number) => {
     if (!!userGameRole && !!character) {
       try {
         await setCharacterGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, gear },
+          refetchQueries: [{ query: GAME, variables: { gameId } }],
+        });
+        await setCharacterBarter({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
           refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -360,9 +367,9 @@ const CharacterCreationPage: FC = () => {
         setCreationStep(2);
       } else if (!!character.name && (!character.looks || character.looks.length < 5)) {
         setCreationStep(3);
-      } else if (!!character.looks && character.looks.length >= 5 && character.statsBlock.length < 5) {
+      } else if (!!character.looks && character.looks.length >= 5 && character.statsBlock?.stats.length < 5) {
         setCreationStep(4);
-      } else if (!!character.statsBlock && character.statsBlock.length === 5 && character.gear.length === 0) {
+      } else if (!!character.statsBlock && character.statsBlock?.stats.length === 5 && character.gear.length === 0) {
         setCreationStep(5);
       } else if (!!character.gear && character.gear.length > 0 && !character.playbookUnique) {
         setCreationStep(6);
@@ -404,6 +411,7 @@ const CharacterCreationPage: FC = () => {
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
+  console.log('character', character);
   return (
     <Box
       data-testid="character-creation-page"
@@ -419,7 +427,7 @@ const CharacterCreationPage: FC = () => {
           </div>
         ))}
       <ScrollableIndicator show={showScrollable} />
-      <CloseButton handleClose={() => history.push('/menu')} />
+      <CloseButton handleClose={() => history.goBack()} />
       {!!showResetWarning && (
         <Layer onEsc={() => setShowResetWarning(undefined)} onClickOutside={() => setShowResetWarning(undefined)}>
           <Box
@@ -499,6 +507,7 @@ const CharacterCreationPage: FC = () => {
           <CharacterStatsForm
             characterName={character.name}
             settingStats={settingStats}
+            existingStatOption={character.statsBlock?.statsOptionId}
             playbookType={character?.playbook}
             handleSubmitStats={handleSubmitStats}
           />
@@ -508,6 +517,7 @@ const CharacterCreationPage: FC = () => {
             existingGear={character.gear}
             characterName={character.name}
             settingGear={settingGear}
+            settingBarter={settingBarter}
             playbookType={character?.playbook}
             handleSubmitGear={handleSubmitGear}
           />
@@ -519,10 +529,12 @@ const CharacterCreationPage: FC = () => {
             settingAngelKit={settingAngelKit}
             settingBrainerGear={settingBrainerGear}
             settingCustomWeapons={settingCustomWeapons}
+            existingAngelKit={character.playbookUnique?.angelKit}
+            existingCustomWeapons={character.playbookUnique?.customWeapons}
+            existingBrainerGear={character.playbookUnique?.brainerGear}
             handleSubmitBrainerGear={handleSubmitBrainerGear}
             handleSubmitAngelKit={handleSubmitAngelKit}
             handleSubmitCustomWeapons={handleSubmitCustomWeapons}
-            customWeapons={character.playbookUnique?.customWeapons}
           />
         )}
         {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (
@@ -531,6 +543,7 @@ const CharacterCreationPage: FC = () => {
             characterName={character.name}
             settingMoves={settingMoves}
             handleSubmitCharacterMoves={handleSubmitCharacterMoves}
+            existingMoves={character.characterMoves}
           />
         )}
         {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && (

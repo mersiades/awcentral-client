@@ -42,11 +42,25 @@ const GAME = gql`
           playbook
           hasCompletedCharacterCreation
           gear
+          barter
+          harm {
+            id
+            value
+            isStabilized
+            hasComeBackHard
+            hasComeBackWeird
+            hasChangedPlaybook
+            hasDied
+          }
           statsBlock {
             id
-            stat
-            value
-            isHighlighted
+            statsOptionId
+            stats {
+              id
+              stat
+              value
+              isHighlighted
+            }
           }
           hxBlock {
             id
