@@ -43,7 +43,7 @@ const PlayerPage: FC = () => {
    * 1 - MovesPanel
    * 2 - None, side panel is closed
    */
-  const [sidePanel, setSidePanel] = useState<number>(0);
+  const [sidePanel, setSidePanel] = useState<number>(2);
   const [character, setCharacter] = useState<Character | undefined>();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
@@ -153,6 +153,13 @@ const PlayerPage: FC = () => {
   }, [userGameRole]);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
+
+  useEffect(() => {
+    // console.log('allMoves', allMoves);
+    // console.log('game', game);
+    // console.log('userGameRole', userGameRole);
+  }, [allMoves, game, userGameRole]);
+
   return (
     <Box fill background={background}>
       <Header

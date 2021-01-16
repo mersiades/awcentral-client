@@ -639,6 +639,47 @@ export const mockGame6: Game = {
   invitees: [],
 };
 
+// Used for testing PlayerPage
+export const mockGame7: Game = {
+  id: 'mock-game-id-6',
+  name: 'Mock Game 6',
+  commsApp: 'Discord',
+  commsUrl: 'https://discord.com/urltodiscordchannel',
+  hasFinishedPreGame: false,
+  mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2' },
+  players: [
+    { id: 'mock-keycloak-id-3', displayName: 'mock-user-3' },
+    { id: 'mock-keycloak-id-1', displayName: 'mock-user-1' },
+  ],
+  gameRoles: [
+    {
+      id: 'mock-gamerole-id-6',
+      role: Roles.mc,
+      userId: 'mock-keycloak-id-2',
+      npcs: [],
+      threats: [],
+      characters: [],
+    },
+    {
+      id: 'mock-gamerole-id-7',
+      role: Roles.player,
+      userId: 'mock-keycloak-id-3',
+      npcs: [],
+      threats: [],
+      characters: [{ ...mockCharacter1, hasCompletedCharacterCreation: true }],
+    },
+    {
+      id: 'mock-gamerole-id-8',
+      role: Roles.player,
+      userId: 'mock-keycloak-id-1',
+      npcs: [],
+      threats: [],
+      characters: [{ ...mockCharacter2, hasCompletedCharacterCreation: true }],
+    },
+  ],
+  invitees: [],
+};
+
 export const mockGameRole1: GameRole = {
   id: 'mock-gamerole-id-1',
   role: Roles.mc,
@@ -752,3 +793,154 @@ export const mockHxInput: HxInput = {
   characterName: mockCharacter1.name as string,
   hxValue: 1,
 };
+
+// -------------------------------------- Static move mocks ------------------------------------- //
+
+export const doSomethingUnderFire: Move = {
+  id: 'mock-move-id-1',
+  name: 'DO SOMETHING UNDER FIRE',
+  description: 'When you _**do something under fire**_, or dig in to endure fire, roll+cool.',
+  kind: MoveKinds.basic,
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  stat: Stats.cool,
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const goAggro: Move = {
+  id: 'mock-move-id-2',
+  name: 'GO AGGRO ON SOMEONE',
+  description:
+    'When you _**go aggro on someone**_, make it clear what you want them to do and what you’ll do to them. Roll+hard.',
+  kind: MoveKinds.basic,
+  stat: Stats.hard,
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const sucker: Move = {
+  id: 'mock-move-id-3',
+  name: 'SUCKER SOMEONE',
+  description: 'When you _**attack someone unsuspecting or helpless**_, ask the MC if you could miss.',
+  kind: MoveKinds.basic,
+  stat: Stats.cool, // Apollo MockProvider won't allow undefined here
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const sufferHarm: Move = {
+  id: 'mock-move-id-4',
+  name: 'SUFFER HARM',
+  description: 'When you _**suffer harm**_, roll+harm suffered (after armor, if you’re wearing any).',
+  kind: MoveKinds.peripheral,
+  stat: Stats.cool, // Apollo MockProvider won't allow undefined here
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const goToMarket: Move = {
+  id: 'mock-move-id-5',
+  name: 'GO TO THE MARKET',
+  description:
+    'When you _**go into a holding’s bustling market**_, looking for some particular thing to buy, and it’s not obvious whether you should be able to just go buy one like that, roll+sharp.',
+  kind: MoveKinds.peripheral,
+  stat: Stats.sharp,
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const augury: Move = {
+  id: 'mock-move-id-6',
+  name: 'AUGURY',
+  description: 'When you are able to use something for _**augury**_, roll+weird.',
+  kind: MoveKinds.peripheral,
+  stat: Stats.weird,
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const exchangeHarm: Move = {
+  id: 'mock-move-id-7',
+  name: 'EXCHANGE HARM',
+  description: 'When you _**exchange harm**_, both sides simultaneously inflict and suffer harm as established:',
+  kind: MoveKinds.battle,
+  stat: Stats.cool, // Apollo MockProvider won't allow undefined here
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const seizeByForce: Move = {
+  id: 'mock-move-id-8',
+  name: 'SEIZE BY FORCE',
+  description: 'To _**seize something by force**_, exchange harm, but first roll+hard.',
+  kind: MoveKinds.battle,
+  stat: Stats.hard,
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+export const standOverwatch: Move = {
+  id: 'mock-move-id-9',
+  name: 'STAND OVERWATCH',
+  description: 'When you _**stand overwatch**_ for an ally, roll+cool. ',
+  kind: MoveKinds.battle,
+  stat: Stats.cool,
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const boardAMovingVehicle: Move = {
+  id: 'mock-move-id-10',
+  name: 'BOARD A MOVING VEHICLE',
+  description:
+    'To _**board a moving vehicle**_, roll+cool, minus its speed. To board one moving vehicle from another, roll+cool, minus the difference between their speeds.',
+  kind: MoveKinds.roadWar,
+  stat: Stats.cool,
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const dealWithBadTerrain: Move = {
+  id: 'mock-move-id-11',
+  name: 'DEAL WITH BAD TERRAIN',
+  description: 'When you have to _**deal with bad terrain**_, roll+cool, plus your vehicle’s handling.',
+  kind: MoveKinds.roadWar,
+  stat: Stats.cool,
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+export const shoulderAnotherVehicle: Move = {
+  id: 'mock-move-id-12',
+  name: 'SHOULDER ANOTHER VEHICLE',
+  description:
+    'To _**shoulder another vehicle**_, roll+cool. On a hit, you shoulder it aside, inflicting v-harm as established.',
+  kind: MoveKinds.roadWar,
+  stat: Stats.cool,
+  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  statModifier: undefined,
+  rollModifier: undefined,
+};
+
+export const mockAllMovesArray = [
+  doSomethingUnderFire,
+  goAggro,
+  sucker,
+  sufferHarm,
+  goToMarket,
+  augury,
+  exchangeHarm,
+  seizeByForce,
+  standOverwatch,
+  boardAMovingVehicle,
+  dealWithBadTerrain,
+  shoulderAnotherVehicle,
+];

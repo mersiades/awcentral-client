@@ -36,6 +36,7 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
 
   return (
     <Box
+      data-testid="moves-box"
       fill="horizontal"
       align="center"
       justify="start"
@@ -55,9 +56,9 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
         </HeadingWS>
         <Box direction="row" align="center" gap="12px">
           {showMoves ? (
-            <FormUp onClick={toggleShowMoves} style={{ cursor: 'pointer' }} />
+            <FormUp data-testid="hide-moves-icon" onClick={toggleShowMoves} style={{ cursor: 'pointer' }} />
           ) : (
-            <FormDown onClick={toggleShowMoves} style={{ cursor: 'pointer' }} />
+            <FormDown data-testid="show-moves-icon" onClick={toggleShowMoves} style={{ cursor: 'pointer' }} />
           )}
           {!!navigateToCharacterCreation && (
             <Edit color="accent-1" onClick={() => navigateToCharacterCreation('7')} style={{ cursor: 'pointer' }} />
@@ -71,9 +72,17 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
               <Box fill="horizontal" direction="row" justify="between" align="center">
                 <Box direction="row" justify="start" align="center" pad="12px" gap="12px">
                   {showMoveDetails.includes(move.id) ? (
-                    <FormUp onClick={() => toggleShowMoveDetails(move.id)} style={{ cursor: 'pointer' }} />
+                    <FormUp
+                      data-testid="hide-move-details-icon"
+                      onClick={() => toggleShowMoveDetails(move.id)}
+                      style={{ cursor: 'pointer' }}
+                    />
                   ) : (
-                    <FormDown onClick={() => toggleShowMoveDetails(move.id)} style={{ cursor: 'pointer' }} />
+                    <FormDown
+                      data-testid="show-move-details-icon"
+                      onClick={() => toggleShowMoveDetails(move.id)}
+                      style={{ cursor: 'pointer' }}
+                    />
                   )}
                   <HeadingWS
                     crustReady={crustReady}

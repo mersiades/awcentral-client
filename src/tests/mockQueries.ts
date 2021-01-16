@@ -22,10 +22,12 @@ import ALL_MOVES from '../queries/allMoves';
 import GAME from '../queries/game';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import GAMES_FOR_INVITEE from '../queries/gamesForInvitee';
+import PLAYBOOK from '../queries/playbook';
 import PLAYBOOK_CREATOR from '../queries/playbookCreator';
 import PLAYBOOKS from '../queries/playbooks';
 import {
   dummyAngelKitMove,
+  mockAllMovesArray,
   mockCharacter2,
   mockGame1,
   mockGame2,
@@ -38,6 +40,7 @@ import {
   mockHxInput,
   mockKeycloakUser1,
   mockNewGameName,
+  mockPlaybookAngel,
   mockPlaybookCreatorAngel,
   mockPlaybooks,
   mockStatsBlockWithHighlight,
@@ -1404,7 +1407,7 @@ export const mockSetCharacterBarter: MockedResponse = {
     // console.log('mockSetCharacterBarter');
     return {
       data: {
-        setCharacterGear: {
+        setCharacterBarter: {
           id: mockCharacter2.id,
           playbook: mockCharacter2.playbook,
           name: mockCharacter2.name,
@@ -1515,7 +1518,7 @@ export const mockGameForCharacterCreation12: MockedResponse = {
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    console.log('mockGameForCharacterCreation12');
+    // console.log('mockGameForCharacterCreation12');
     return {
       data: {
         game: {
@@ -1647,7 +1650,7 @@ export const mockToggleStatHighlight: MockedResponse = {
     },
   },
   result: () => {
-    console.log('mockToggleStatHighlight');
+    // console.log('mockToggleStatHighlight');
     return {
       data: {
         setCharacterHx: {
@@ -1667,7 +1670,7 @@ export const mockGameForCharacterCreation14: MockedResponse = {
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    console.log('mockGameForCharacterCreation14');
+    // console.log('mockGameForCharacterCreation14');
     return {
       data: {
         game: {
@@ -1721,7 +1724,7 @@ export const mockSetCharacterHx: MockedResponse = {
     },
   },
   result: () => {
-    console.log('mockSetCharacterHx');
+    // console.log('mockSetCharacterHx');
     return {
       data: {
         setCharacterHx: {
@@ -1741,7 +1744,7 @@ export const mockGameForCharacterCreation15: MockedResponse = {
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    console.log('mockGameForCharacterCreation15');
+    // console.log('mockGameForCharacterCreation15');
     return {
       data: {
         game: {
@@ -1814,7 +1817,7 @@ export const mockGameForCharacterCreation16: MockedResponse = {
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    console.log('mockGameForCharacterCreation16');
+    // console.log('mockGameForCharacterCreation16');
     return {
       data: {
         game: {
@@ -1858,13 +1861,13 @@ export const mockGameForCharacterCreation16: MockedResponse = {
   },
 };
 
-export const mockGameForCharacterCreation17: MockedResponse = {
+export const mockGameForPlayerPage: MockedResponse = {
   request: {
     query: GAME,
     variables: { gameId: mockGame5.id },
   },
   result: () => {
-    // console.log('mockGameForCharacterCreation17');
+    console.log('mockGameForPlayerPage');
     return {
       data: {
         game: {
@@ -1916,7 +1919,7 @@ export const mockAllMoves: MockedResponse = {
     // console.log('mockAllMoves');
     return {
       data: {
-        allMoves: [{ id: 'dummy', name: 'dummy', stat: 'dummy', kind: 'dummy', playbook: 'dummy' }],
+        allMoves: mockAllMovesArray,
       },
     };
   },
@@ -2037,6 +2040,21 @@ export const mockFinishPreGame: MockedResponse = {
         finishPreGame: {
           id: mockGame6.id,
         },
+      },
+    };
+  },
+};
+
+export const mockPlaybook: MockedResponse = {
+  request: {
+    query: PLAYBOOK,
+    variables: { playbookType: mockCharacter2.playbook },
+  },
+  result: () => {
+    // console.log('mockPlaybook');
+    return {
+      data: {
+        playbook: mockPlaybookAngel,
       },
     };
   },

@@ -16,7 +16,7 @@ const MovesPanel: FC<MovesPanelProps> = ({ allMoves, closePanel }) => {
   const roadWarMoves = allMoves.filter((move) => move.kind === MoveKinds.roadWar);
 
   return (
-    <Box direction="row" wrap pad="12px" overflow="auto">
+    <Box data-testid="moves-panel" direction="row" wrap pad="12px" overflow="auto">
       <MovesBox moves={basicMoves} moveCategory={MoveKinds.basic} />
       <MovesBox moves={peripheralMoves} moveCategory={MoveKinds.peripheral} />
       <MovesBox moves={battleMoves} moveCategory={MoveKinds.battle} />

@@ -12,6 +12,7 @@ import { KeycloakUserProvider } from '../contexts/keycloakUserContext';
 import { theme } from '../config/grommetConfig';
 import { mockKeycloakUser1 } from './mocks';
 import { GameProvider } from '../contexts/gameContext';
+import { Game } from '../@types/dataInterfaces';
 
 interface CustomRenderOptions {
   isAuthenticated?: boolean;
@@ -19,6 +20,8 @@ interface CustomRenderOptions {
   crustReady?: boolean;
   apolloMocks?: MockedResponse[];
   keycloakUser?: KeycloakUser;
+  injectedGame?: Game;
+  injectedUserId?: string;
 }
 
 // All the providers for unit tests
@@ -29,6 +32,8 @@ const ComponentProviders = ({
   crustReady = true,
   apolloMocks = [],
   keycloakUser = mockKeycloakUser1,
+  injectedGame,
+  injectedUserId,
 }: any) => {
   return (
     <BrowserRouter>
@@ -41,7 +46,7 @@ const ComponentProviders = ({
                 onLoad: 'login-required',
               }}
             >
-              <GameProvider>
+              <GameProvider injectedGame={injectedGame} injectedUserId={injectedUserId}>
                 <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
               </GameProvider>
             </ReactKeycloakProvider>

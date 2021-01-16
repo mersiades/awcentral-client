@@ -28,6 +28,7 @@ const HxBox: FC<HxBoxProps> = ({ hxStats, adjustingHx, handleAdjustHx, navigateT
   return (
     <CharacterSheetBox open title="Hx" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="8">
       <Box
+        data-testid="hx-box"
         fill="horizontal"
         direction="row"
         justify="around"
@@ -55,12 +56,14 @@ const HxBox: FC<HxBoxProps> = ({ hxStats, adjustingHx, handleAdjustHx, navigateT
                     animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
                   >
                     <CaretUpFill
+                      data-testid="increase-hx-caret"
                       size="large"
                       color="brand"
                       onClick={() => increaseHx(stat.characterId, stat.hxValue)}
                       style={{ height: '40px' }}
                     />
                     <CaretDownFill
+                      data-testid="decrease-hx-caret"
                       size="large"
                       color="brand"
                       onClick={() => decreaseHx(stat.characterId, stat.hxValue)}

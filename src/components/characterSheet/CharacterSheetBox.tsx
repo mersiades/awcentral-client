@@ -45,12 +45,17 @@ const CharacterSheetBox: FC<CharacterSheetBoxProps> = ({
         </HeadingWS>
         <Box direction="row" align="center" gap="12px">
           {show ? (
-            <FormUp onClick={toggleShow} style={{ cursor: 'pointer' }} />
+            <FormUp data-testid={`${title.toLowerCase()}-up-chevron`} onClick={toggleShow} style={{ cursor: 'pointer' }} />
           ) : (
-            <FormDown onClick={toggleShow} style={{ cursor: 'pointer' }} />
+            <FormDown
+              data-testid={`${title.toLowerCase()}-down-chevron`}
+              onClick={toggleShow}
+              style={{ cursor: 'pointer' }}
+            />
           )}
           {!!navigateToCharacterCreation && targetCreationStep && (
             <Edit
+              data-testid={`${title}-edit-link`}
               color="accent-1"
               onClick={() => navigateToCharacterCreation(targetCreationStep)}
               style={{ cursor: 'pointer' }}

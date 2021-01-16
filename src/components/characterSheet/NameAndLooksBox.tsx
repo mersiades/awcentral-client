@@ -24,7 +24,13 @@ const NameAndLooksBox: FC<NameAndLooksBoxProps> = ({ name, playbook, description
   let looksString = looksLooks.join(', ');
 
   return (
-    <Box fill="horizontal" align="center" justify="start" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.25)' }}>
+    <Box
+      data-testid="name-looks-box"
+      fill="horizontal"
+      align="center"
+      justify="start"
+      style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.25)' }}
+    >
       <Box fill="horizontal" direction="row" justify="between" align="center" pad={{ vertical: '12px' }}>
         <Box justify="center" pad={{ vertical: '12px' }}>
           <HeadingWS crustReady={crustReady} level="2" margin="0px">{`${name + ' '}the ${playbook}`}</HeadingWS>
@@ -32,9 +38,9 @@ const NameAndLooksBox: FC<NameAndLooksBoxProps> = ({ name, playbook, description
         </Box>
         <Box direction="row" align="center" gap="12px">
           {showDescription ? (
-            <FormUp onClick={() => setShowDescription(false)} />
+            <FormUp data-testid="name-up-chevron" onClick={() => setShowDescription(false)} />
           ) : (
-            <FormDown onClick={() => setShowDescription(true)} />
+            <FormDown data-testid="name-down-chevron" onClick={() => setShowDescription(true)} />
           )}
           <Edit color="accent-1" onClick={() => navigateToCharacterCreation('1')} style={{ cursor: 'pointer' }} />
         </Box>

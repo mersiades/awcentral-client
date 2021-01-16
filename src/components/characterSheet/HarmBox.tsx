@@ -134,7 +134,12 @@ const HarmBox: FC<HarmBoxProps> = ({ harm, settingHarm, handleSetHarm }) => {
         justify="around"
         animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       >
-        <Box align="center" justify="center" style={{ position: 'relative', width: '250px', height: '250px' }}>
+        <Box
+          data-testid="harm-clock"
+          align="center"
+          justify="center"
+          style={{ position: 'relative', width: '250px', height: '250px' }}
+        >
           <Box style={oclock12} align="center" justify="center">
             <TextWS style={{ textAlign: 'center' }}>12</TextWS>
           </Box>
@@ -149,12 +154,12 @@ const HarmBox: FC<HarmBoxProps> = ({ harm, settingHarm, handleSetHarm }) => {
           </Box>
 
           <div style={circle}>
-            <div style={sector0(harm.value)} onClick={() => !settingHarm && setHarmValue(0)} />
-            <div style={sector1(harm.value)} onClick={() => !settingHarm && setHarmValue(1)} />
-            <div style={sector2(harm.value)} onClick={() => !settingHarm && setHarmValue(2)} />
-            <div style={sector3(harm.value)} onClick={() => !settingHarm && setHarmValue(3)} />
-            <div style={sector4(harm.value)} onClick={() => !settingHarm && setHarmValue(4)} />
-            <div style={sector5(harm.value)} onClick={() => !settingHarm && setHarmValue(5)} />
+            <div data-testid="harm-sector-0" style={sector0(harm.value)} onClick={() => !settingHarm && setHarmValue(0)} />
+            <div data-testid="harm-sector-1" style={sector1(harm.value)} onClick={() => !settingHarm && setHarmValue(1)} />
+            <div data-testid="harm-sector-2" style={sector2(harm.value)} onClick={() => !settingHarm && setHarmValue(2)} />
+            <div data-testid="harm-sector-3" style={sector3(harm.value)} onClick={() => !settingHarm && setHarmValue(3)} />
+            <div data-testid="harm-sector-4" style={sector4(harm.value)} onClick={() => !settingHarm && setHarmValue(4)} />
+            <div data-testid="harm-sector-5" style={sector5(harm.value)} onClick={() => !settingHarm && setHarmValue(5)} />
           </div>
         </Box>
         <Box flex="grow" pad="12px" gap="12px" justify="center">
@@ -180,7 +185,7 @@ const HarmBox: FC<HarmBoxProps> = ({ harm, settingHarm, handleSetHarm }) => {
             onClick={() => !settingHarm && handleSetHarm({ ...harm, hasChangedPlaybook: !harm.hasChangedPlaybook })}
           />
           <CheckBox
-            label="die"
+            label="Die"
             checked={harm.hasDied}
             onClick={() => !settingHarm && handleSetHarm({ ...harm, hasDied: !harm.hasDied })}
           />

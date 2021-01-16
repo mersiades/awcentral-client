@@ -13,6 +13,6 @@ To run this app locally, for development purposes, you'll need to take the follo
 
 ### Running tests
 
-`yarn test -- --coverage --watchAll=false`
+`yarn test --coverage --watchAll=false`
 
 ### Production deployment

@@ -41,8 +41,9 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
   navigateToCharacterCreation,
 }) => {
   const { data } = useQuery<PlaybookData, PlaybookVars>(PLAYBOOK, { variables: { playbookType: character.playbook } });
+
   return (
-    <Box direction="row" wrap pad="12px" overflow="auto">
+    <Box data-testid="character-sheet" direction="row" wrap pad="12px" overflow="auto">
       <NameAndLooksBox
         name={character.name ? character.name : ''}
         playbook={decapitalize(character.playbook)}

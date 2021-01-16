@@ -40,7 +40,7 @@ const BarterBox: FC<BarterBoxProps> = ({ barter, instructions, handleSetBarter, 
           ) : (
             <FormDown onClick={() => setShowInstructions(true)} />
           )}
-          <RedBox width="50px" align="center" margin={{ left: '12px' }}>
+          <RedBox data-testid="barter-value-box" width="50px" align="center" margin={{ left: '12px' }}>
             <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
               {barter}
             </HeadingWS>
@@ -50,8 +50,20 @@ const BarterBox: FC<BarterBoxProps> = ({ barter, instructions, handleSetBarter, 
               <Box width="48px" height="80px" />
             ) : (
               <Box align="center" justify="around" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
-                <CaretUpFill size="large" color="brand" onClick={increaseBarter} style={{ height: '40px' }} />
-                <CaretDownFill size="large" color="brand" onClick={decreaseBarter} style={{ height: '40px' }} />
+                <CaretUpFill
+                  data-testid="increase-barter-caret"
+                  size="large"
+                  color="brand"
+                  onClick={increaseBarter}
+                  style={{ height: '40px' }}
+                />
+                <CaretDownFill
+                  data-testid="decrease-barter-caret"
+                  size="large"
+                  color="brand"
+                  onClick={decreaseBarter}
+                  style={{ height: '40px' }}
+                />
               </Box>
             )}
           </Box>
