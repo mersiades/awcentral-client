@@ -420,7 +420,7 @@ export const customTabStyles = deepMerge(grommet, {
       side: 'bottom',
       size: 'small',
       color: {
-        dark: '#FFF',
+        dark: 'rgba(255, 255, 255, 0.25)',
         // "light": "brand"
       },
       active: {

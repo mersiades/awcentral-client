@@ -6,17 +6,22 @@ import { Box, FormField, TextInput } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS, RedBox, TextWS } from '../../config/grommetConfig';
-import { PlayBooks } from '../../@types/enums';
+import { PlayBooks, Stats } from '../../@types/enums';
 import { HxInput } from '../../@types';
 import { Character } from '../../@types/dataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
 import { useGame } from '../../contexts/gameContext';
+import StatsBox from '../characterSheet/StatsBox';
 
+//     margin: unset;
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
-    margin: unset;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-left: 0px;
+    margin-right: 0px;
   }
 `;
 
@@ -24,7 +29,9 @@ interface CharacterHxFormProps {
   playbookType: PlayBooks;
   character: Character;
   settingHx: boolean;
+  togglingHighlight: boolean;
   finishingCreation: boolean;
+  handleToggleHighlight: (stat: Stats) => void;
   handleSubmitCharacterHx: (hxInputs: HxInput[]) => void;
   handleFinishCreation: () => void;
 }
@@ -33,7 +40,9 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
   playbookType,
   character,
   settingHx,
+  togglingHighlight,
   finishingCreation,
+  handleToggleHighlight,
   handleSubmitCharacterHx,
   handleFinishCreation,
 }) => {
@@ -98,7 +107,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
       align="center"
       justify="start"
     >
-      <Box width="60vw" flex="grow">
+      <Box width="60vw" flex="grow" align="center">
         <HeadingWS
           level={2}
           crustReady={crustReady}
@@ -161,11 +170,18 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
             );
           })}
         </Box>
-        <Box pad="6px" overflow={{ vertical: 'auto' }}>
+        <Box pad="6px" style={{ maxWidth: '812px' }}>
           <StyledMarkdown>{hxInstructions}</StyledMarkdown>
         </Box>
+        {!!character.statsBlock && (
+          <StatsBox
+            stats={character.statsBlock.stats}
+            togglingHighlight={togglingHighlight}
+            handleToggleHighlight={handleToggleHighlight}
+          />
+        )}
 
-        <Box direction="row" justify="end" gap="12px" margin={{ vertical: '12px' }}>
+        <Box fill="horizontal" direction="row" justify="end" gap="12px" margin={{ vertical: '12px' }}>
           <ButtonWS
             primary={!hasSet}
             secondary={hasSet}

@@ -17,7 +17,7 @@ import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
 import { ButtonWS, HeadingWS } from '../config/grommetConfig';
-import GAME from '../queries/game';
+// import GAME from '../queries/game';
 import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
 import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../mutations/createCharacter';
 import SET_CHARACTER_PLAYBOOK, {
@@ -34,7 +34,7 @@ import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/se
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
-import { PlayBooks, CharacterCreationSteps, LookCategories } from '../@types/enums';
+import { PlayBooks, CharacterCreationSteps, LookCategories, Stats } from '../@types/enums';
 import { HxInput } from '../@types';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
@@ -43,6 +43,7 @@ import FINISH_CHARACTER_CREATION, {
   FinishCharacterCreationVars,
 } from '../mutations/finishCharacterCreation';
 import { useGame } from '../contexts/gameContext';
+import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
 
 export const resetWarningBackground = {
   color: 'black',
@@ -63,7 +64,6 @@ export const background = {
 const CharacterCreationPage: FC = () => {
   const query = new URLSearchParams(useLocation().search);
   const step = query.get('step');
-  console.log('step', step);
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [creationStep, setCreationStep] = useState<number>(step ? parseInt(step) : 0);
   const [character, setCharacter] = useState<Character | undefined>();
@@ -114,6 +114,10 @@ const CharacterCreationPage: FC = () => {
   const [setCharacterMoves, { loading: settingMoves }] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(
     SET_CHARACTER_MOVES
   );
+  const [toggleStatHighlight, { loading: togglingHighlight }] = useMutation<
+    ToggleStatHighlightData,
+    ToggleStatHighlightVars
+  >(TOGGLE_STAT_HIGHLIGHT);
   const [setCharacterHx, { loading: settingHx }] = useMutation<SetCharacterHxData, SetCharacterHxVars>(SET_CHARACTER_HX);
   const [finishCharacterCreation, { loading: finishingCreation }] = useMutation<
     FinishCharacterCreationData,
@@ -155,7 +159,7 @@ const CharacterCreationPage: FC = () => {
         try {
           await setCharacterPlaybook({
             variables: { gameRoleId: userGameRole.id, characterId, playbookType },
-            refetchQueries: [{ query: GAME, variables: { gameId } }],
+            // refetchQueries: [{ query: GAME, variables: { gameId } }],
           });
         } catch (error) {
           console.error(error);
@@ -164,7 +168,7 @@ const CharacterCreationPage: FC = () => {
         try {
           await setCharacterPlaybook({
             variables: { gameRoleId: userGameRole.id, characterId: userGameRole.characters[0].id, playbookType },
-            refetchQueries: [{ query: GAME, variables: { gameId } }],
+            // refetchQueries: [{ query: GAME, variables: { gameId } }],
           });
         } catch (error) {
           console.error(error);
@@ -181,7 +185,7 @@ const CharacterCreationPage: FC = () => {
       try {
         await setCharacterName({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, name },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevStep) => prevStep + 1);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -197,7 +201,7 @@ const CharacterCreationPage: FC = () => {
       try {
         const data = await setCharacterLook({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, look, category },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         if (data.data?.setCharacterLook.looks?.length === 5) {
           setCreationStep((prevState) => prevState + 1);
@@ -213,7 +217,7 @@ const CharacterCreationPage: FC = () => {
       try {
         await setCharacterStats({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, statsOptionId },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -228,11 +232,11 @@ const CharacterCreationPage: FC = () => {
       try {
         await setCharacterGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, gear },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         await setCharacterBarter({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -247,7 +251,7 @@ const CharacterCreationPage: FC = () => {
       try {
         await setBrainerGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, brainerGear },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -262,7 +266,7 @@ const CharacterCreationPage: FC = () => {
       try {
         await setAngelKit({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, stock, hasSupplier },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -277,7 +281,7 @@ const CharacterCreationPage: FC = () => {
       try {
         await setCustomWeapons({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, weapons },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -292,10 +296,23 @@ const CharacterCreationPage: FC = () => {
       try {
         await setCharacterMoves({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, moveIds },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleToggleHighlight = async (stat: Stats) => {
+    if (!!userGameRole && !!character) {
+      try {
+        await toggleStatHighlight({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, stat },
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
+        });
       } catch (error) {
         console.error(error);
       }
@@ -307,7 +324,7 @@ const CharacterCreationPage: FC = () => {
       try {
         await setCharacterHx({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, hxStats: hxInputs },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
       } catch (error) {
         console.error(error);
@@ -320,7 +337,7 @@ const CharacterCreationPage: FC = () => {
       try {
         await finishCharacterCreation({
           variables: { gameRoleId: userGameRole.id, characterId: character.id },
-          refetchQueries: [{ query: GAME, variables: { gameId } }],
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         history.push(`/pre-game/${gameId}`);
       } catch (error) {
@@ -411,7 +428,6 @@ const CharacterCreationPage: FC = () => {
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
-  console.log('character', character);
   return (
     <Box
       data-testid="character-creation-page"
@@ -551,6 +567,8 @@ const CharacterCreationPage: FC = () => {
             playbookType={character.playbook}
             character={character}
             settingHx={settingHx}
+            togglingHighlight={togglingHighlight}
+            handleToggleHighlight={handleToggleHighlight}
             finishingCreation={finishingCreation}
             handleSubmitCharacterHx={handleSubmitCharacterHx}
             handleFinishCreation={handleFinishCreation}
