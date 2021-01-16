@@ -1,13 +1,11 @@
 import React from 'react';
-import wait from 'waait';
-import { findByTestId, screen } from '@testing-library/react';
+// import wait from 'waait';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { customRenderForComponent } from '../../../tests/test-utils';
-// import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
-import { mockCharacter2, mockGame7, mockKeycloakUserInfo1, mockPlaybookAngel } from '../../../tests/mocks';
-import { mockAllMoves, mockPlaybook } from '../../../tests/mockQueries';
-
+import { mockCharacter2, mockPlaybookAngel } from '../../../tests/mocks';
+import { mockPlaybook } from '../../../tests/mockQueries';
 import { decapitalize } from '../../../helpers/decapitalize';
 import CharacterSheet from '../CharacterSheet';
 import { MoveKinds } from '../../../@types/enums';

@@ -229,7 +229,7 @@ const MCPage = () => {
                 game={game}
               />
             )}
-            {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
+            {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} />}
             {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
           </SidePanel>
         </Collapsible>

@@ -199,7 +199,7 @@ const PlayerPage: FC = () => {
                 navigateToCharacterCreation={navigateToCharacterCreation}
               />
             )}
-            {sidePanel === 1 && !!allMoves && <MovesPanel closePanel={setSidePanel} allMoves={allMoves} />}
+            {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} />}
           </SidePanel>
         </Collapsible>
         <MainContainer

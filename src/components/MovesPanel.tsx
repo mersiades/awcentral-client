@@ -6,10 +6,9 @@ import MovesBox from './characterSheet/MovesBox';
 
 interface MovesPanelProps {
   allMoves: Move[];
-  closePanel: (tab: number) => void;
 }
 
-const MovesPanel: FC<MovesPanelProps> = ({ allMoves, closePanel }) => {
+const MovesPanel: FC<MovesPanelProps> = ({ allMoves }) => {
   const basicMoves = allMoves.filter((move) => move.kind === MoveKinds.basic);
   const peripheralMoves = allMoves.filter((move) => move.kind === MoveKinds.peripheral);
   const battleMoves = allMoves.filter((move) => move.kind === MoveKinds.battle);
