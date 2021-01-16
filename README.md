@@ -1,3 +1,5 @@
+[![<mersiades>](https://circleci.com/gh/mersiades/awcentral-client.svg?style=svg&circle-token=61d94b4d3bb809cac96f5d3ef1e49ec758d40e2a)](https://app.circleci.com/pipelines/github/mersiades/awcentral-client)
+
 ### About
 
 ### Running locally
