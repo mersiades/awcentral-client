@@ -2,22 +2,24 @@ import React, { FC, useState } from 'react';
 import { Box } from 'grommet';
 import { FormUp, FormDown, Edit } from 'grommet-icons';
 
-import { HeadingWS } from '../../config/grommetConfig';
-import { useFonts } from '../../contexts/fontContext';
+import { HeadingWS } from '../config/grommetConfig';
+import { useFonts } from '../contexts/fontContext';
 
-interface CharacterSheetBoxProps {
+interface CollapsiblePanelBoxProps {
   title: string;
   children: JSX.Element;
   open?: boolean;
   navigateToCharacterCreation?: (step: string) => void;
+  onEdit?: () => void;
   targetCreationStep?: string;
 }
 
-const CharacterSheetBox: FC<CharacterSheetBoxProps> = ({
+const CollapsiblePanelBox: FC<CollapsiblePanelBoxProps> = ({
   title,
   children,
   open,
   navigateToCharacterCreation,
+  onEdit,
   targetCreationStep,
 }) => {
   const [show, setShow] = useState(open);
@@ -61,6 +63,9 @@ const CharacterSheetBox: FC<CharacterSheetBoxProps> = ({
               style={{ cursor: 'pointer' }}
             />
           )}
+          {!!onEdit && (
+            <Edit data-testid={`${title}-edit-link`} color="accent-1" onClick={onEdit} style={{ cursor: 'pointer' }} />
+          )}
         </Box>
       </Box>
       {show && children}
@@ -68,4 +73,4 @@ const CharacterSheetBox: FC<CharacterSheetBoxProps> = ({
   );
 };
 
-export default CharacterSheetBox;
+export default CollapsiblePanelBox;

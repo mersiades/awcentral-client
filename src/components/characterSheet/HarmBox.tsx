@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, CheckBox } from 'grommet';
 
-import CharacterSheetBox from './CharacterSheetBox';
+import CollapsiblePanelBox from '../CollapsiblePanelBox';
 import { accentColors, brandColor, TextWS } from '../../config/grommetConfig';
 import { HarmInput } from '../../@types';
 import { CharacterHarm } from '../../@types/dataInterfaces';
@@ -127,7 +127,7 @@ const HarmBox: FC<HarmBoxProps> = ({ harm, settingHarm, handleSetHarm }) => {
   };
 
   return (
-    <CharacterSheetBox open title="Harm">
+    <CollapsiblePanelBox open title="Harm">
       <Box
         fill="horizontal"
         direction="row"
@@ -191,7 +191,7 @@ const HarmBox: FC<HarmBoxProps> = ({ harm, settingHarm, handleSetHarm }) => {
           />
         </Box>
       </Box>
-    </CharacterSheetBox>
+    </CollapsiblePanelBox>
   );
 };
 

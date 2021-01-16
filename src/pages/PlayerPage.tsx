@@ -154,12 +154,6 @@ const PlayerPage: FC = () => {
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
-  useEffect(() => {
-    // console.log('allMoves', allMoves);
-    // console.log('game', game);
-    // console.log('userGameRole', userGameRole);
-  }, [allMoves, game, userGameRole]);
-
   return (
     <Box fill background={background}>
       <Header
@@ -209,7 +203,9 @@ const PlayerPage: FC = () => {
           sidePanel={sidePanel}
           maxPanels={MAX_SIDE_PANEL}
           shinkWidth={SIDE_PANEL_WIDTH}
-        ></MainContainer>
+        >
+          Main container
+        </MainContainer>
       </div>
       <Footer direction="row" justify="between" align="center" height="10vh">
         <ThemeContext.Extend value={customTabStyles}>

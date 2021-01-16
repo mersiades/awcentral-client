@@ -5,7 +5,7 @@ import { CaretUpFill, CaretDownFill } from 'grommet-icons';
 import { HeadingWS, RedBox } from '../../config/grommetConfig';
 import { HxStat } from '../../@types/dataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
-import CharacterSheetBox from './CharacterSheetBox';
+import CollapsiblePanelBox from '../CollapsiblePanelBox';
 
 interface HxBoxProps {
   hxStats: HxStat[];
@@ -26,7 +26,7 @@ const HxBox: FC<HxBoxProps> = ({ hxStats, adjustingHx, handleAdjustHx, navigateT
   };
 
   return (
-    <CharacterSheetBox open title="Hx" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="8">
+    <CollapsiblePanelBox open title="Hx" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="8">
       <Box
         data-testid="hx-box"
         fill="horizontal"
@@ -79,7 +79,7 @@ const HxBox: FC<HxBoxProps> = ({ hxStats, adjustingHx, handleAdjustHx, navigateT
           </Box>
         ))}
       </Box>
-    </CharacterSheetBox>
+    </CollapsiblePanelBox>
   );
 
   // return (
