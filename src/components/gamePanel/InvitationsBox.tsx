@@ -1,17 +1,28 @@
 import React, { FC } from 'react';
-import { Box } from 'grommet';
+import { Box, BoxProps } from 'grommet';
 import { Trash } from 'grommet-icons';
 
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
 import { ButtonWS, TextWS } from '../../config/grommetConfig';
 import { useGame } from '../../contexts/gameContext';
+import { LeftPanelState } from '../../pages/MCPage';
+import styled, { css } from 'styled-components';
+
+const StyledBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>)(() => {
+  return css`
+    &:focus {
+      outline: 0;
+      box-shadow: none;
+    }
+  `;
+});
 
 interface InvitationsBoxProps {
-  setShowInvitationForm: (arg: { show: boolean; showMessageOnly: boolean; existingEmail: string }) => void;
+  handleShowInvitationForm: (value: LeftPanelState) => void;
   handleRemoveInvitee: (invitee: string) => void;
 }
 
-const InvitationsBox: FC<InvitationsBoxProps> = ({ setShowInvitationForm, handleRemoveInvitee }) => {
+const InvitationsBox: FC<InvitationsBoxProps> = ({ handleShowInvitationForm, handleRemoveInvitee }) => {
   const { game } = useGame();
 
   const renderInvitations = () => {
@@ -28,14 +39,16 @@ const InvitationsBox: FC<InvitationsBoxProps> = ({ setShowInvitationForm, handle
         return game.invitees.map((invitee) => {
           return (
             <Box key={invitee} direction="row" align="center" alignContent="end" fill margin={{ vertical: 'small' }}>
-              <Box
+              <StyledBox
                 data-testid={`${invitee}-list-item`}
                 align="start"
                 fill
-                onClick={() => setShowInvitationForm({ show: true, showMessageOnly: true, existingEmail: invitee })}
+                onClick={() =>
+                  handleShowInvitationForm({ type: 'INVITATION_FORM', showMessageOnly: true, existingEmail: invitee })
+                }
               >
-                <TextWS>{invitee}</TextWS>
-              </Box>
+                <TextWS style={{ cursor: 'pointer' }}>{invitee}</TextWS>
+              </StyledBox>
               <Box align="end" fill>
                 <Trash
                   data-testid={`${invitee}-trash-icon`}
@@ -69,7 +82,7 @@ const InvitationsBox: FC<InvitationsBoxProps> = ({ setShowInvitationForm, handle
           size="large"
           alignSelf="center"
           fill="horizontal"
-          onClick={() => setShowInvitationForm({ show: true, showMessageOnly: false, existingEmail: '' })}
+          onClick={() => handleShowInvitationForm({ type: 'INVITATION_FORM', showMessageOnly: false, existingEmail: '' })}
         />
       </Box>
     </CollapsiblePanelBox>

@@ -1,25 +1,26 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
-import { Box, Header, Menu, Button, Tabs, Tab, ThemeContext, Layer, Heading, Paragraph, Collapsible } from 'grommet';
+import { Box, Header, Menu, Button, Tabs, Tab, ThemeContext, Collapsible } from 'grommet';
 import { useMutation, useQuery } from '@apollo/client';
 
 import GamePanel from '../components/gamePanel/GamePanel';
 import MovesPanel from '../components/MovesPanel';
-import CommsFormShort from '../components/CommsFormShort';
 import InvitationForm from '../components/InvitationForm';
 import { Footer, LeftMainContainer, MainContainer, RightMainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
-import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
 import { Roles } from '../@types/enums';
 import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
-import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import { accentColors, customDefaultButtonStyles, customTabStyles, HeadingWS } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
+import { useFonts } from '../contexts/fontContext';
+import GameForm from '../components/GameForm';
+import WarningDialog from '../components/WarningDialog';
 
 export const background = {
   color: 'black',
@@ -35,14 +36,14 @@ export interface ShowInvitation {
   existingEmail: string;
 }
 
+export interface LeftPanelState {
+  type: 'MESSAGES' | 'GAME_FORM' | 'INVITATION_FORM';
+  [key: string]: any;
+}
+
 const MCPage: FC = () => {
   const maxSidePanel = 3;
   const sidePanelWidth = 25;
-  const resetInvitationForm: ShowInvitation = {
-    show: false,
-    showMessageOnly: false,
-    existingEmail: '',
-  };
 
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   /**
@@ -61,9 +62,8 @@ const MCPage: FC = () => {
    * 3 - None, side panel is closed
    */
   const [sidePanel, setSidePanel] = useState<number>(0);
+  const [leftPanel, setLeftPanel] = useState<LeftPanelState>({ type: 'MESSAGES' });
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
-  const [showInvitationForm, setShowInvitationForm] = useState<ShowInvitation>(resetInvitationForm);
-  const [showCommsForm, setShowCommsForm] = useState(false);
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
 
@@ -74,12 +74,13 @@ const MCPage: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, setGameContext } = useGame();
   const { id: userId } = useKeycloakUser();
+  const { vtksReady } = useFonts();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
   const allMoves = allMovesData?.allMoves;
   const [deleteGame] = useMutation<DeleteGameData, DeleteGameVars>(DELETE_GAME);
-  const [addInvitee] = useMutation<AddInviteeData, AddInviteeVars>(ADD_INVITEE);
+
   const [removeInvitee] = useMutation<RemoveInviteeData, RemoveInviteeVars>(REMOVE_INVITEE);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
@@ -88,12 +89,6 @@ const MCPage: FC = () => {
     console.log('handleDeleteGame', handleDeleteGame);
     deleteGame({ variables: { gameId }, refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { id: userId } }] });
     history.push('/menu');
-  };
-
-  const handleAddInvitee = (email: string) => {
-    if (!game?.invitees.includes(email)) {
-      addInvitee({ variables: { gameId, email } });
-    }
   };
 
   const handleRemoveInvitee = (email: string) => {
@@ -120,43 +115,41 @@ const MCPage: FC = () => {
     }
   }, [gameId, userId, setGameContext]);
 
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
+
+  const renderLeftPanel = () => {
+    switch (leftPanel.type) {
+      case 'GAME_FORM':
+        return <GameForm handleClose={() => setLeftPanel({ type: 'MESSAGES' })} />;
+      case 'INVITATION_FORM':
+        return (
+          <InvitationForm
+            handleClose={() => setLeftPanel({ type: 'MESSAGES', existingEmail: '', showMessageOnly: false })}
+            existingEmail={leftPanel.existingEmail}
+            showMessageOnly={leftPanel.showMessageOnly}
+          />
+        );
+      case 'MESSAGES':
+      //deliberately falls through
+      default:
+        return (
+          <HeadingWS vtksReady={vtksReady} level={1}>
+            Messages
+          </HeadingWS>
+        );
+    }
+  };
+
   return (
     <>
-      {showCommsForm && (
-        <Layer onEsc={() => setShowCommsForm(false)} onClickOutside={() => setShowCommsForm(false)}>
-          <Box gap="24px" pad="24px">
-            {!!game && <CommsFormShort game={game} setShowCommsForm={setShowCommsForm} />}
-          </Box>
-        </Layer>
-      )}
       {!!game && showDeleteGameDialog && (
-        <Layer onEsc={() => setShowDeleteGameDialog(false)} onClickOutside={() => setShowDeleteGameDialog(false)}>
-          <Box gap="24px" pad="24px">
-            <Heading level={3}>Delete game?</Heading>
-            <Paragraph>{`Are you sure you want to delete ${game.name}? This can't be undone.`}</Paragraph>
-            <Box direction="row" align="end" justify="end" gap="6px">
-              <Button label="CANCEL" secondary size="large" onClick={() => setShowDeleteGameDialog(false)} />
-              <Button label="DELETE" primary size="large" onClick={() => handleDeleteGame()} />
-            </Box>
-          </Box>
-        </Layer>
-      )}
-      {!!game && showInvitationForm.show && (
-        <Layer
-          onEsc={() => setShowInvitationForm(resetInvitationForm)}
-          onClickOutside={() => setShowInvitationForm(resetInvitationForm)}
-        >
-          <Box gap="24px" pad="24px">
-            <InvitationForm
-              gameName={game.name}
-              gameId={game.id}
-              setShowInvitationForm={setShowInvitationForm}
-              handleAddInvitee={handleAddInvitee}
-              existingEmail={showInvitationForm.existingEmail}
-              showMessageOnly={showInvitationForm.showMessageOnly}
-            />
-          </Box>
-        </Layer>
+        <WarningDialog
+          title="Delete game?"
+          buttonTitle="DELETE"
+          text={`Are you sure you want to delete ${game.name}? This can't be undone.`}
+          handleClose={() => setShowDeleteGameDialog(false)}
+          handleConfirm={handleDeleteGame}
+        />
       )}
       <Box fill background={background}>
         <Header
@@ -204,8 +197,8 @@ const MCPage: FC = () => {
               {!!game && sidePanel === 0 && (
                 <GamePanel
                   setShowDeleteGameDialog={setShowDeleteGameDialog}
-                  setShowInvitationForm={setShowInvitationForm}
-                  setShowCommsForm={setShowCommsForm}
+                  handleShowInvitationForm={setLeftPanel}
+                  handleShowGameForm={setLeftPanel}
                   handleRemoveInvitee={handleRemoveInvitee}
                 />
               )}
@@ -215,11 +208,23 @@ const MCPage: FC = () => {
           </Collapsible>
           <MainContainer sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
             <LeftMainContainer rightPanel={rightPanel}>
-              <p>Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre</p>
+              <Box fill align="center" justify="center" pad="12px">
+                {renderLeftPanel()}
+              </Box>
             </LeftMainContainer>
             <RightMainContainer rightPanel={rightPanel}>
-              {rightPanel === 0 && <p>Threats</p>}
-              {rightPanel === 1 && <p>NPCs</p>}
+              <Box fill align="center" justify="center" wrap pad="12px" overflow="auto">
+                {rightPanel === 0 && (
+                  <HeadingWS vtksReady={vtksReady} level={1}>
+                    Threats
+                  </HeadingWS>
+                )}
+                {rightPanel === 1 && (
+                  <HeadingWS vtksReady={vtksReady} level={1}>
+                    Npcs
+                  </HeadingWS>
+                )}
+              </Box>
             </RightMainContainer>
           </MainContainer>
         </div>
@@ -236,13 +241,7 @@ const MCPage: FC = () => {
               {allMoves && <Tab title="Moves" />}
               <Tab title="MC Moves" />
             </Tabs>
-            <Tabs
-              activeIndex={rightPanel}
-              onActive={(tab) => {
-                console.log('clicked', tab);
-                tab === rightPanel ? setRightPanel(2) : setRightPanel(tab);
-              }}
-            >
+            <Tabs activeIndex={rightPanel} onActive={(tab) => (tab === rightPanel ? setRightPanel(2) : setRightPanel(tab))}>
               <Tab title="Threats" />
               <Tab title="NPCs" />
             </Tabs>

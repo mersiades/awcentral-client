@@ -8,11 +8,11 @@ import { useGame } from '../../contexts/gameContext';
 import { copyToClipboard } from '../../helpers/copyToClipboard';
 
 interface GameBoxProps {
-  setShowCommsForm: (show: boolean) => void;
+  handleShowGameForm: () => void;
   setShowDeleteGameDialog: (show: boolean) => void;
 }
 
-const GameBox: FC<GameBoxProps> = ({ setShowCommsForm, setShowDeleteGameDialog }) => {
+const GameBox: FC<GameBoxProps> = ({ handleShowGameForm: showGameForm, setShowDeleteGameDialog }) => {
   const { game } = useGame();
 
   const renderComms = () => {
@@ -41,7 +41,7 @@ const GameBox: FC<GameBoxProps> = ({ setShowCommsForm, setShowDeleteGameDialog }
     }
   };
   return (
-    <CollapsiblePanelBox title={!!game ? game.name : 'Game'} onEdit={() => setShowCommsForm(true)}>
+    <CollapsiblePanelBox title={!!game ? game.name : 'Game'} onEdit={showGameForm}>
       <Box
         data-testid="game-box"
         fill="horizontal"

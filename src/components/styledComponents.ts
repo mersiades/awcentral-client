@@ -70,8 +70,7 @@ interface RightMainProps {
 export const RightMainContainer = styled(Box as React.FC<RightMainProps & BoxProps & JSX.IntrinsicElements['div']>)(
   ({ rightPanel }) => {
     return css`
-      border-left: 1px solid transparent;
-      border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), black, rgba(0, 0, 0, 0)) 1 100%;
+      border-left: 1px solid ${accentColors[0]};
       position: absolute;
       height: 86vh;
       opacity: 0;

@@ -1,9 +1,8 @@
+import { FC } from 'react';
 import { rgba } from 'polished';
 import { deepMerge } from 'grommet/utils';
 import { grommet } from 'grommet/themes/grommet';
 import styled, { css } from 'styled-components';
-
-import '../assets/styles/main.css';
 import {
   Box,
   BoxProps,
@@ -17,7 +16,8 @@ import {
   TextProps,
 } from 'grommet';
 import { Close, IconProps } from 'grommet-icons';
-import { FC } from 'react';
+
+import '../assets/styles/main.css';
 
 export const brandColor = '#CD3F3E';
 
@@ -134,6 +134,12 @@ export const theme = (vtksReady: boolean, crustReady: boolean) => {
         height: '20px',
       },
       colors,
+      hover: {
+        background: {
+          color: 'accent-1',
+          opacity: '100%',
+        },
+      },
     },
     button: {
       text: {
@@ -360,6 +366,40 @@ export const theme = (vtksReady: boolean, crustReady: boolean) => {
       drop: {
         // any props for the drop
         align: { top: 'bottom' }, // most common use case is Header with Buttons
+      },
+    },
+    select: {
+      background: 'transparent',
+      container: {
+        extend: `
+        & button {
+          font-family: 'chaparral pro', sans-serif;
+          text-shadow: 0 0 1px #000, 0 0 3px #000;
+          font-weight: 600;
+        }
+        `,
+      },
+      control: {
+        extend: `
+        font-family: 'chaparral pro', sans-serif;
+        background: transparent;
+        width: 100%;
+        & input {
+          text-shadow: 0 0 1px #000, 0 0 3px #000;
+          font-size: 26px;
+        }
+        
+        `,
+        // open: undefined,
+      },
+      options: {
+        container: {
+          align: 'start',
+          pad: '12px',
+        },
+        text: {
+          margin: 'none',
+        },
       },
     },
   });
@@ -600,3 +640,11 @@ export const RedBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>)
       0 0 10px 1px rgba(0, 0, 0, 0.2) inset;
   `;
 });
+
+export const WarningDialogBackground = {
+  color: 'black',
+  dark: true,
+  position: 'center bottom',
+  size: 'cover',
+  image: 'url(/images/background-image-6.jpg)',
+};

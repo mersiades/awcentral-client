@@ -15,11 +15,13 @@ import GAME, { GameData, GameVars } from '../queries/game';
 
 interface IGameContext {
   game?: Game;
+  fetchingGame?: boolean;
   userGameRole?: GameRole;
   mcGameRole?: GameRole;
   allPlayerGameRoles?: GameRole[];
   otherPlayerGameRoles?: GameRole[];
   setGameContext?: (gameId: string, userId: string) => void;
+  clearGameContext?: () => void;
 }
 
 interface GameProviderProps {
@@ -43,12 +45,26 @@ export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, in
   const [allPlayerGameRoles, setAllPlayerGameRoles] = useState<GameRole[] | undefined>(undefined);
   const [otherPlayerGameRoles, setOtherPlayerGameRoles] = useState<GameRole[] | undefined>(undefined);
 
-  // @ts-ignore
-  const { data } = useQuery<GameData, GameVars>(GAME, { variables: { gameId }, pollInterval: 2500, skip: !gameId });
+  const {
+    data,
+    loading: fetchingGame,
+    stopPolling,
+    // @ts-ignore
+  } = useQuery<GameData, GameVars>(GAME, { variables: { gameId }, pollInterval: 2500, skip: !gameId });
 
   const setGameContext = (gameId: string, userId: string) => {
     setUserId(userId);
     setGameId(gameId);
+  };
+
+  const clearGameContext = () => {
+    stopPolling();
+    setGameId(undefined);
+    setGame(undefined);
+    setUserGameRole(undefined);
+    setMcGameRole(undefined);
+    setAllPlayerGameRoles(undefined);
+    setOtherPlayerGameRoles(undefined);
   };
 
   useEffect(() => {
@@ -69,10 +85,18 @@ export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, in
   useEffect(() => {
     !!data && setGame(data.game);
   }, [data]);
-
   return (
     <GameContext.Provider
-      value={{ game, userGameRole, mcGameRole, allPlayerGameRoles, otherPlayerGameRoles, setGameContext }}
+      value={{
+        game,
+        fetchingGame,
+        userGameRole,
+        mcGameRole,
+        allPlayerGameRoles,
+        otherPlayerGameRoles,
+        setGameContext,
+        clearGameContext,
+      }}
     >
       {children}
     </GameContext.Provider>
