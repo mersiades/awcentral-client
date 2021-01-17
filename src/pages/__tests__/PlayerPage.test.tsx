@@ -18,7 +18,7 @@ jest.mock('@react-keycloak/web', () => {
 });
 
 describe('Rendering PlayerPage', () => {
-  test('should render PlayerPage with CharacterSheet and MovesPanel', async () => {
+  test('should render PlayerPage with PlaybookPanel and MovesPanel', async () => {
     customRenderForComponent(<PlayerPage />, {
       isAuthenticated: true,
       apolloMocks: [mockAllMoves, mockPlaybook],
@@ -35,7 +35,7 @@ describe('Rendering PlayerPage', () => {
     const playbookTab = screen.getByRole('tab', { name: 'Playbook' });
     const movesTab = screen.getByRole('tab', { name: 'Moves' });
 
-    // Check that CharacterSheet opens
+    // Check that PlaybookPanel opens
     userEvent.click(playbookTab);
     await screen.findByTestId('character-sheet');
     screen.getByRole('tabpanel', { name: 'Playbook Tab Contents' });

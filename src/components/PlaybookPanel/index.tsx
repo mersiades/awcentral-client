@@ -15,7 +15,7 @@ import GearBox from './GearBox';
 import HxBox from './HxBox';
 import HarmBox from './HarmBox';
 
-interface CharacterSheetProps {
+interface PlaybookPanelProps {
   character: Character;
   settingBarter: boolean;
   adjustingHx: boolean;
@@ -28,7 +28,7 @@ interface CharacterSheetProps {
   navigateToCharacterCreation: (step: string) => void;
 }
 
-const CharacterSheet: FC<CharacterSheetProps> = ({
+const PlaybookPanel: FC<PlaybookPanelProps> = ({
   character,
   adjustingHx,
   settingBarter,
@@ -95,4 +95,4 @@ const CharacterSheet: FC<CharacterSheetProps> = ({
   );
 };
 
-export default CharacterSheet;
+export default PlaybookPanel;
