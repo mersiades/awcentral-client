@@ -18,8 +18,10 @@ import { Roles } from '../@types/enums';
 import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
-import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import { accentColors, customDefaultButtonStyles, customTabStyles, HeadingWS } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
+import { useFonts } from '../contexts/fontContext';
+import GameForm from '../components/GameForm';
 
 export const background = {
   color: 'black',
@@ -61,6 +63,7 @@ const MCPage: FC = () => {
    * 3 - None, side panel is closed
    */
   const [sidePanel, setSidePanel] = useState<number>(0);
+  const [leftPanel, setLeftPanel] = useState<'MESSAGES' | 'GAME_FORM'>('GAME_FORM');
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
   const [showInvitationForm, setShowInvitationForm] = useState<ShowInvitation>(resetInvitationForm);
   const [showCommsForm, setShowCommsForm] = useState(false);
@@ -74,6 +77,7 @@ const MCPage: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, setGameContext } = useGame();
   const { id: userId } = useKeycloakUser();
+  const { vtksReady } = useFonts();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
@@ -119,6 +123,23 @@ const MCPage: FC = () => {
       setGameContext(gameId, userId);
     }
   }, [gameId, userId, setGameContext]);
+
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
+
+  const renderLeftPanel = () => {
+    switch (leftPanel) {
+      case 'GAME_FORM':
+        return <GameForm handleClose={() => setLeftPanel('MESSAGES')} />;
+      case 'MESSAGES':
+      //deliberately falls through
+      default:
+        return (
+          <HeadingWS vtksReady={vtksReady} level={1}>
+            Messages
+          </HeadingWS>
+        );
+    }
+  };
 
   return (
     <>
@@ -205,7 +226,7 @@ const MCPage: FC = () => {
                 <GamePanel
                   setShowDeleteGameDialog={setShowDeleteGameDialog}
                   setShowInvitationForm={setShowInvitationForm}
-                  setShowCommsForm={setShowCommsForm}
+                  showGameForm={setLeftPanel}
                   handleRemoveInvitee={handleRemoveInvitee}
                 />
               )}
@@ -215,7 +236,9 @@ const MCPage: FC = () => {
           </Collapsible>
           <MainContainer sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
             <LeftMainContainer rightPanel={rightPanel}>
-              <p>Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre</p>
+              <Box fill align="center" justify="center" pad="12px">
+                {renderLeftPanel()}
+              </Box>
             </LeftMainContainer>
             <RightMainContainer rightPanel={rightPanel}>
               {rightPanel === 0 && <p>Threats</p>}
