@@ -641,9 +641,10 @@ export const RedBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>)
   `;
 });
 
-// export const SelectWS = styled(Select as ComponentClass<SelectProps, any>)(() => {
-//   return css`
-//     text-shadow: 0 0 1px #000, 0 0 3px #000;
-//     color: pink;
-//   `;
-// });
+export const WarningDialogBackground = {
+  color: 'black',
+  dark: true,
+  position: 'center bottom',
+  size: 'cover',
+  image: 'url(/images/background-image-6.jpg)',
+};

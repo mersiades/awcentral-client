@@ -1,14 +1,15 @@
-import { useMutation } from '@apollo/client';
-import { Box, Select, TextArea, TextInput } from 'grommet';
 import React, { FC, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { useParams } from 'react-router-dom';
+import { Box, Select, TextArea, TextInput } from 'grommet';
+
+import CloseButton from './CloseButton';
+import Spinner from './Spinner';
 import { ButtonWS } from '../config/grommetConfig';
-import { useGame } from '../contexts/gameContext';
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
 import SET_GAME_NAME, { SetGameNameData, SetGameNameVars } from '../mutations/setGameName';
-import CloseButton from './CloseButton';
-import Spinner from './Spinner';
+import { useGame } from '../contexts/gameContext';
 
 interface GameFormProps {
   handleClose: () => void;

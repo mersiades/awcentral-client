@@ -6,7 +6,6 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import GamePanel from '../components/gamePanel/GamePanel';
 import MovesPanel from '../components/MovesPanel';
-import CommsFormShort from '../components/CommsFormShort';
 import InvitationForm from '../components/InvitationForm';
 import { Footer, LeftMainContainer, MainContainer, RightMainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
@@ -18,10 +17,17 @@ import { Roles } from '../@types/enums';
 import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
-import { accentColors, customDefaultButtonStyles, customTabStyles, HeadingWS } from '../config/grommetConfig';
+import {
+  accentColors,
+  customDefaultButtonStyles,
+  customTabStyles,
+  HeadingWS,
+  WarningDialogBackground,
+} from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
 import { useFonts } from '../contexts/fontContext';
 import GameForm from '../components/GameForm';
+import WarningDialog from '../components/WarningDialog';
 
 export const background = {
   color: 'black',
@@ -66,7 +72,6 @@ const MCPage: FC = () => {
   const [leftPanel, setLeftPanel] = useState<'MESSAGES' | 'GAME_FORM'>('GAME_FORM');
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
   const [showInvitationForm, setShowInvitationForm] = useState<ShowInvitation>(resetInvitationForm);
-  const [showCommsForm, setShowCommsForm] = useState(false);
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
 
@@ -143,24 +148,24 @@ const MCPage: FC = () => {
 
   return (
     <>
-      {showCommsForm && (
-        <Layer onEsc={() => setShowCommsForm(false)} onClickOutside={() => setShowCommsForm(false)}>
-          <Box gap="24px" pad="24px">
-            {!!game && <CommsFormShort game={game} setShowCommsForm={setShowCommsForm} />}
-          </Box>
-        </Layer>
-      )}
       {!!game && showDeleteGameDialog && (
-        <Layer onEsc={() => setShowDeleteGameDialog(false)} onClickOutside={() => setShowDeleteGameDialog(false)}>
-          <Box gap="24px" pad="24px">
-            <Heading level={3}>Delete game?</Heading>
-            <Paragraph>{`Are you sure you want to delete ${game.name}? This can't be undone.`}</Paragraph>
-            <Box direction="row" align="end" justify="end" gap="6px">
-              <Button label="CANCEL" secondary size="large" onClick={() => setShowDeleteGameDialog(false)} />
-              <Button label="DELETE" primary size="large" onClick={() => handleDeleteGame()} />
-            </Box>
-          </Box>
-        </Layer>
+        <WarningDialog
+          title="Delete game?"
+          buttonTitle="DELETE"
+          text={`Are you sure you want to delete ${game.name}? This can't be undone.`}
+          handleClose={() => setShowDeleteGameDialog(false)}
+          handleConfirm={handleDeleteGame}
+        />
+        // <Layer onEsc={() => setShowDeleteGameDialog(false)} onClickOutside={() => setShowDeleteGameDialog(false)}>
+        //   <Box gap="24px" pad="24px" background={WarningDialogBackground} border={{ color: 'brand' }}>
+        //     <Heading level={3}>Delete game?</Heading>
+        //     <Paragraph></Paragraph>
+        //     <Box direction="row" align="end" justify="end" gap="6px">
+        //       <Button label="CANCEL" size="large" onClick={() => setShowDeleteGameDialog(false)} />
+        //       <Button label="DELETE" primary size="large" onClick={() => handleDeleteGame()} />
+        //     </Box>
+        //   </Box>
+        // </Layer>
       )}
       {!!game && showInvitationForm.show && (
         <Layer
@@ -241,8 +246,18 @@ const MCPage: FC = () => {
               </Box>
             </LeftMainContainer>
             <RightMainContainer rightPanel={rightPanel}>
-              {rightPanel === 0 && <p>Threats</p>}
-              {rightPanel === 1 && <p>NPCs</p>}
+              <Box fill align="center" justify="center" wrap pad="12px" overflow="auto">
+                {rightPanel === 0 && (
+                  <HeadingWS vtksReady={vtksReady} level={1}>
+                    Threats
+                  </HeadingWS>
+                )}
+                {rightPanel === 1 && (
+                  <HeadingWS vtksReady={vtksReady} level={1}>
+                    Npcs
+                  </HeadingWS>
+                )}
+              </Box>
             </RightMainContainer>
           </MainContainer>
         </div>

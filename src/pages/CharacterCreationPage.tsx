@@ -16,7 +16,7 @@ import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
-import { ButtonWS, HeadingWS } from '../config/grommetConfig';
+import { ButtonWS, HeadingWS, WarningDialogBackground } from '../config/grommetConfig';
 // import GAME from '../queries/game';
 import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
 import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../mutations/createCharacter';
@@ -44,14 +44,7 @@ import FINISH_CHARACTER_CREATION, {
 } from '../mutations/finishCharacterCreation';
 import { useGame } from '../contexts/gameContext';
 import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
-
-export const resetWarningBackground = {
-  color: 'black',
-  dark: true,
-  position: 'center bottom',
-  size: 'cover',
-  image: 'url(/images/background-image-6.jpg)',
-};
+import WarningDialog from '../components/WarningDialog';
 
 export const background = {
   color: 'black',
@@ -445,38 +438,13 @@ const CharacterCreationPage: FC = () => {
       <ScrollableIndicator show={showScrollable} />
       <CloseButton handleClose={() => history.goBack()} />
       {!!showResetWarning && (
-        <Layer onEsc={() => setShowResetWarning(undefined)} onClickOutside={() => setShowResetWarning(undefined)}>
-          <Box
-            direction="column"
-            fill
-            align="center"
-            justify="center"
-            pad="24px"
-            gap="24px"
-            border={{ color: 'neutral-1' }}
-            background={resetWarningBackground}
-            animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
-            style={{ boxShadow: '0 0 15px 1px #000, 0 0 20px 3px #000' }}
-          >
-            <HeadingWS level={4} alignSelf="start">
-              Switch playbook?
-            </HeadingWS>
-            <Paragraph style={{ textShadow: '0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000' }}>
-              Changing the playbook will reset the character.
-            </Paragraph>
-            <Box fill="horizontal" direction="row" justify="end" gap="small">
-              <ButtonWS
-                label="CANCEL"
-                style={{
-                  background: 'transparent',
-                  textShadow: '0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000',
-                }}
-                onClick={() => setShowResetWarning(undefined)}
-              />
-              <ButtonWS label="SWITCH" primary onClick={() => handlePlaybookSelect(showResetWarning)} />
-            </Box>
-          </Box>
-        </Layer>
+        <WarningDialog
+          title="Switch playbook?"
+          buttonTitle="SWITCH"
+          text="Changing the playbook will reset the character."
+          handleClose={() => setShowResetWarning(undefined)}
+          handleConfirm={() => handlePlaybookSelect(showResetWarning)}
+        />
       )}
 
       <CharacterCreationStepper
