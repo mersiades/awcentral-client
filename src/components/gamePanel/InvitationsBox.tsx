@@ -29,6 +29,7 @@ const InvitationsBox: FC<InvitationsBoxProps> = ({ setShowInvitationForm, handle
           return (
             <Box key={invitee} direction="row" align="center" alignContent="end" fill margin={{ vertical: 'small' }}>
               <Box
+                data-testid={`${invitee}-list-item`}
                 align="start"
                 fill
                 onClick={() => setShowInvitationForm({ show: true, showMessageOnly: true, existingEmail: invitee })}
@@ -36,7 +37,12 @@ const InvitationsBox: FC<InvitationsBoxProps> = ({ setShowInvitationForm, handle
                 <TextWS>{invitee}</TextWS>
               </Box>
               <Box align="end" fill>
-                <Trash color="accent-1" onClick={() => handleRemoveInvitee(invitee)} cursor="grab" />
+                <Trash
+                  data-testid={`${invitee}-trash-icon`}
+                  color="accent-1"
+                  onClick={() => handleRemoveInvitee(invitee)}
+                  cursor="grab"
+                />
               </Box>
             </Box>
           );
@@ -48,6 +54,7 @@ const InvitationsBox: FC<InvitationsBoxProps> = ({ setShowInvitationForm, handle
   return (
     <CollapsiblePanelBox open title="Invitations">
       <Box
+        data-testid="invitations-box"
         fill="horizontal"
         justify="start"
         align="center"

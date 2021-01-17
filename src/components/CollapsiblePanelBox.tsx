@@ -57,14 +57,19 @@ const CollapsiblePanelBox: FC<CollapsiblePanelBoxProps> = ({
           )}
           {!!navigateToCharacterCreation && targetCreationStep && (
             <Edit
-              data-testid={`${title}-edit-link`}
+              data-testid={`${title.toLowerCase()}-edit-link`}
               color="accent-1"
               onClick={() => navigateToCharacterCreation(targetCreationStep)}
               style={{ cursor: 'pointer' }}
             />
           )}
           {!!onEdit && (
-            <Edit data-testid={`${title}-edit-link`} color="accent-1" onClick={onEdit} style={{ cursor: 'pointer' }} />
+            <Edit
+              data-testid={`${title.toLowerCase()}-edit-link`}
+              color="accent-1"
+              onClick={onEdit}
+              style={{ cursor: 'pointer' }}
+            />
           )}
         </Box>
       </Box>

@@ -639,10 +639,10 @@ export const mockGame6: Game = {
   invitees: [],
 };
 
-// Used for testing PlayerPage
+// Used for testing PlayerPage, GamePanel
 export const mockGame7: Game = {
-  id: 'mock-game-id-6',
-  name: 'Mock Game 6',
+  id: 'mock-game-id-7',
+  name: 'Mock Game 7',
   commsApp: 'Discord',
   commsUrl: 'https://discord.com/urltodiscordchannel',
   hasFinishedPreGame: false,

@@ -43,6 +43,7 @@ const GameBox: FC<GameBoxProps> = ({ setShowCommsForm, setShowDeleteGameDialog }
   return (
     <CollapsiblePanelBox title={!!game ? game.name : 'Game'} onEdit={() => setShowCommsForm(true)}>
       <Box
+        data-testid="game-box"
         fill="horizontal"
         justify="start"
         align="start"
