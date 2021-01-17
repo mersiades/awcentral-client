@@ -7,7 +7,7 @@ import { customRenderForComponent } from '../../../tests/test-utils';
 import { mockCharacter2, mockPlaybookAngel } from '../../../tests/mocks';
 import { mockPlaybook } from '../../../tests/mockQueries';
 import { decapitalize } from '../../../helpers/decapitalize';
-import PlaybookPanel from '../PlaybookPanel';
+import PlaybookPanel from '..';
 import { MoveKinds } from '../../../@types/enums';
 
 describe('Rendering PlaybookPanel', () => {
