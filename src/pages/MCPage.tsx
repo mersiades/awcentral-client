@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
-import { Box, Header, Menu, Button, Tabs, Tab, ThemeContext, Layer, Heading, Paragraph, Collapsible } from 'grommet';
+import { Box, Header, Menu, Button, Tabs, Tab, ThemeContext, Collapsible } from 'grommet';
 import { useMutation, useQuery } from '@apollo/client';
 
 import GamePanel from '../components/gamePanel/GamePanel';
@@ -11,19 +11,12 @@ import { Footer, LeftMainContainer, MainContainer, RightMainContainer, SidePanel
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
-import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
 import { Roles } from '../@types/enums';
 import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
-import {
-  accentColors,
-  customDefaultButtonStyles,
-  customTabStyles,
-  HeadingWS,
-  WarningDialogBackground,
-} from '../config/grommetConfig';
+import { accentColors, customDefaultButtonStyles, customTabStyles, HeadingWS } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
 import { useFonts } from '../contexts/fontContext';
 import GameForm from '../components/GameForm';
@@ -43,14 +36,14 @@ export interface ShowInvitation {
   existingEmail: string;
 }
 
+export interface LeftPanelState {
+  type: 'MESSAGES' | 'GAME_FORM' | 'INVITATION_FORM';
+  [key: string]: any;
+}
+
 const MCPage: FC = () => {
   const maxSidePanel = 3;
   const sidePanelWidth = 25;
-  const resetInvitationForm: ShowInvitation = {
-    show: false,
-    showMessageOnly: false,
-    existingEmail: '',
-  };
 
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   /**
@@ -69,9 +62,8 @@ const MCPage: FC = () => {
    * 3 - None, side panel is closed
    */
   const [sidePanel, setSidePanel] = useState<number>(0);
-  const [leftPanel, setLeftPanel] = useState<'MESSAGES' | 'GAME_FORM'>('GAME_FORM');
+  const [leftPanel, setLeftPanel] = useState<LeftPanelState>({ type: 'MESSAGES' });
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
-  const [showInvitationForm, setShowInvitationForm] = useState<ShowInvitation>(resetInvitationForm);
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
 
@@ -88,7 +80,7 @@ const MCPage: FC = () => {
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
   const allMoves = allMovesData?.allMoves;
   const [deleteGame] = useMutation<DeleteGameData, DeleteGameVars>(DELETE_GAME);
-  const [addInvitee] = useMutation<AddInviteeData, AddInviteeVars>(ADD_INVITEE);
+
   const [removeInvitee] = useMutation<RemoveInviteeData, RemoveInviteeVars>(REMOVE_INVITEE);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
@@ -97,12 +89,6 @@ const MCPage: FC = () => {
     console.log('handleDeleteGame', handleDeleteGame);
     deleteGame({ variables: { gameId }, refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { id: userId } }] });
     history.push('/menu');
-  };
-
-  const handleAddInvitee = (email: string) => {
-    if (!game?.invitees.includes(email)) {
-      addInvitee({ variables: { gameId, email } });
-    }
   };
 
   const handleRemoveInvitee = (email: string) => {
@@ -132,9 +118,17 @@ const MCPage: FC = () => {
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   const renderLeftPanel = () => {
-    switch (leftPanel) {
+    switch (leftPanel.type) {
       case 'GAME_FORM':
-        return <GameForm handleClose={() => setLeftPanel('MESSAGES')} />;
+        return <GameForm handleClose={() => setLeftPanel({ type: 'MESSAGES' })} />;
+      case 'INVITATION_FORM':
+        return (
+          <InvitationForm
+            handleClose={() => setLeftPanel({ type: 'MESSAGES', existingEmail: '', showMessageOnly: false })}
+            existingEmail={leftPanel.existingEmail}
+            showMessageOnly={leftPanel.showMessageOnly}
+          />
+        );
       case 'MESSAGES':
       //deliberately falls through
       default:
@@ -156,33 +150,6 @@ const MCPage: FC = () => {
           handleClose={() => setShowDeleteGameDialog(false)}
           handleConfirm={handleDeleteGame}
         />
-        // <Layer onEsc={() => setShowDeleteGameDialog(false)} onClickOutside={() => setShowDeleteGameDialog(false)}>
-        //   <Box gap="24px" pad="24px" background={WarningDialogBackground} border={{ color: 'brand' }}>
-        //     <Heading level={3}>Delete game?</Heading>
-        //     <Paragraph></Paragraph>
-        //     <Box direction="row" align="end" justify="end" gap="6px">
-        //       <Button label="CANCEL" size="large" onClick={() => setShowDeleteGameDialog(false)} />
-        //       <Button label="DELETE" primary size="large" onClick={() => handleDeleteGame()} />
-        //     </Box>
-        //   </Box>
-        // </Layer>
-      )}
-      {!!game && showInvitationForm.show && (
-        <Layer
-          onEsc={() => setShowInvitationForm(resetInvitationForm)}
-          onClickOutside={() => setShowInvitationForm(resetInvitationForm)}
-        >
-          <Box gap="24px" pad="24px">
-            <InvitationForm
-              gameName={game.name}
-              gameId={game.id}
-              setShowInvitationForm={setShowInvitationForm}
-              handleAddInvitee={handleAddInvitee}
-              existingEmail={showInvitationForm.existingEmail}
-              showMessageOnly={showInvitationForm.showMessageOnly}
-            />
-          </Box>
-        </Layer>
       )}
       <Box fill background={background}>
         <Header
@@ -230,8 +197,8 @@ const MCPage: FC = () => {
               {!!game && sidePanel === 0 && (
                 <GamePanel
                   setShowDeleteGameDialog={setShowDeleteGameDialog}
-                  setShowInvitationForm={setShowInvitationForm}
-                  showGameForm={setLeftPanel}
+                  handleShowInvitationForm={setLeftPanel}
+                  handleShowGameForm={setLeftPanel}
                   handleRemoveInvitee={handleRemoveInvitee}
                 />
               )}
@@ -274,13 +241,7 @@ const MCPage: FC = () => {
               {allMoves && <Tab title="Moves" />}
               <Tab title="MC Moves" />
             </Tabs>
-            <Tabs
-              activeIndex={rightPanel}
-              onActive={(tab) => {
-                console.log('clicked', tab);
-                tab === rightPanel ? setRightPanel(2) : setRightPanel(tab);
-              }}
-            >
+            <Tabs activeIndex={rightPanel} onActive={(tab) => (tab === rightPanel ? setRightPanel(2) : setRightPanel(tab))}>
               <Tab title="Threats" />
               <Tab title="NPCs" />
             </Tabs>

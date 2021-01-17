@@ -1,4 +1,4 @@
-import { Layer, Box, Paragraph } from 'grommet';
+import { Layer, Box } from 'grommet';
 import React, { FC } from 'react';
 import { WarningDialogBackground, HeadingWS, ButtonWS, ParagraphWS } from '../config/grommetConfig';
 import { useFonts } from '../contexts/fontContext';

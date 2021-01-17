@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, Layer, Paragraph } from 'grommet';
+import { Box } from 'grommet';
 
 import PlaybooksSelector from '../components/characterCreation/CharacterPlaybookForm';
 import CharacterNameForm from '../components/characterCreation/CharacterNameForm';
@@ -16,8 +16,6 @@ import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
-import { ButtonWS, HeadingWS, WarningDialogBackground } from '../config/grommetConfig';
-// import GAME from '../queries/game';
 import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
 import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../mutations/createCharacter';
 import SET_CHARACTER_PLAYBOOK, {

@@ -8,11 +8,11 @@ import { useGame } from '../../contexts/gameContext';
 import { copyToClipboard } from '../../helpers/copyToClipboard';
 
 interface GameBoxProps {
-  showGameForm: () => void;
+  handleShowGameForm: () => void;
   setShowDeleteGameDialog: (show: boolean) => void;
 }
 
-const GameBox: FC<GameBoxProps> = ({ showGameForm, setShowDeleteGameDialog }) => {
+const GameBox: FC<GameBoxProps> = ({ handleShowGameForm: showGameForm, setShowDeleteGameDialog }) => {
   const { game } = useGame();
 
   const renderComms = () => {

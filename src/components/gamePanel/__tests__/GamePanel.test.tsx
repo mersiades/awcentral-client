@@ -12,13 +12,13 @@ import { MoveKinds } from '../../../@types/enums';
 
 describe('Rendering GamePanel', () => {
   test('should render GameBox with complete comms info', () => {
-    const mockSetShowCommsForm = jest.fn();
+    const mockHandleShowGameForm = jest.fn();
     const mockSetShowDeleteGameDialog = jest.fn();
     customRenderForComponent(
       <GamePanel
         setShowDeleteGameDialog={mockSetShowDeleteGameDialog}
-        setShowCommsForm={mockSetShowCommsForm}
-        setShowInvitationForm={jest.fn()}
+        handleShowGameForm={mockHandleShowGameForm}
+        handleShowInvitationForm={jest.fn()}
         handleRemoveInvitee={jest.fn()}
       />,
       {
@@ -34,8 +34,8 @@ describe('Rendering GamePanel', () => {
 
     // Check edit link
     userEvent.click(editIcon);
-    expect(mockSetShowCommsForm).toHaveBeenCalledWith(true);
-    mockSetShowCommsForm.mockClear();
+    expect(mockHandleShowGameForm).toHaveBeenCalledWith({ type: 'GAME_FORM' });
+    mockHandleShowGameForm.mockClear();
 
     // Check can open GameBox
     userEvent.click(downChevron);
@@ -54,8 +54,8 @@ describe('Rendering GamePanel', () => {
     customRenderForComponent(
       <GamePanel
         setShowDeleteGameDialog={jest.fn()}
-        setShowCommsForm={jest.fn()}
-        setShowInvitationForm={jest.fn()}
+        handleShowGameForm={jest.fn()}
+        handleShowInvitationForm={jest.fn()}
         handleRemoveInvitee={jest.fn()}
       />,
       {
@@ -75,8 +75,8 @@ describe('Rendering GamePanel', () => {
     customRenderForComponent(
       <GamePanel
         setShowDeleteGameDialog={jest.fn()}
-        setShowCommsForm={jest.fn()}
-        setShowInvitationForm={jest.fn()}
+        handleShowGameForm={jest.fn()}
+        handleShowInvitationForm={jest.fn()}
         handleRemoveInvitee={jest.fn()}
       />,
       {
@@ -92,12 +92,12 @@ describe('Rendering GamePanel', () => {
   });
 
   test('should render InvitationsBox with no invitations', () => {
-    const mockSetShowInvitationForm = jest.fn();
+    const mockhandleShowInvitationForm = jest.fn();
     customRenderForComponent(
       <GamePanel
         setShowDeleteGameDialog={jest.fn()}
-        setShowCommsForm={jest.fn()}
-        setShowInvitationForm={mockSetShowInvitationForm}
+        handleShowGameForm={jest.fn()}
+        handleShowInvitationForm={mockhandleShowInvitationForm}
         handleRemoveInvitee={jest.fn()}
       />,
       {
@@ -113,18 +113,22 @@ describe('Rendering GamePanel', () => {
 
     // Check INVITE PLAYER button
     userEvent.click(screen.getByRole('button', { name: /INVITE PLAYER/ }));
-    expect(mockSetShowInvitationForm).toHaveBeenCalledWith({ existingEmail: '', show: true, showMessageOnly: false });
-    mockSetShowInvitationForm.mockClear();
+    expect(mockhandleShowInvitationForm).toHaveBeenCalledWith({
+      type: 'INVITATION_FORM',
+      existingEmail: '',
+      showMessageOnly: false,
+    });
+    mockhandleShowInvitationForm.mockClear();
   });
 
   test('should render InvitationsBox with 2 invitations', () => {
-    const mockSetShowInvitationForm = jest.fn();
+    const mockhandleShowInvitationForm = jest.fn();
     const mockHandleRemoveInvitee = jest.fn();
     customRenderForComponent(
       <GamePanel
         setShowDeleteGameDialog={jest.fn()}
-        setShowCommsForm={jest.fn()}
-        setShowInvitationForm={mockSetShowInvitationForm}
+        handleShowGameForm={jest.fn()}
+        handleShowInvitationForm={mockhandleShowInvitationForm}
         handleRemoveInvitee={mockHandleRemoveInvitee}
       />,
       {
@@ -141,9 +145,9 @@ describe('Rendering GamePanel', () => {
 
     // Check show invitation when click on invitee
     userEvent.click(screen.getByTestId('john@email.com-list-item'));
-    expect(mockSetShowInvitationForm).toHaveBeenCalledWith({
+    expect(mockhandleShowInvitationForm).toHaveBeenCalledWith({
+      type: 'INVITATION_FORM',
       existingEmail: 'john@email.com',
-      show: true,
       showMessageOnly: true,
     });
 
