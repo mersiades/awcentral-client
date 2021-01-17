@@ -4,7 +4,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import { Box, Header, Menu, Button, Tabs, Tab, ThemeContext, Layer, Heading, Paragraph, Collapsible } from 'grommet';
 import { useMutation, useQuery } from '@apollo/client';
 
-import GamePanel from '../components/GamePanel';
+import GamePanel from '../components/GamePanel/GamePanel';
 import MovesPanel from '../components/MovesPanel';
 import CommsFormShort from '../components/CommsFormShort';
 import InvitationForm from '../components/InvitationForm';
