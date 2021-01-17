@@ -16,7 +16,10 @@ interface GameInList {
 }
 
 const GamesList: FC<GamesListProps> = ({ gameRoles }) => {
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
+
+  // ------------------------------------------------- Component functions -------------------------------------------------- //
   // Transforms gameRoles to fit nicely with Grommet's List requirements
   const transformGames = () => {
     const games: GameInList[] = [];
@@ -35,17 +38,21 @@ const GamesList: FC<GamesListProps> = ({ gameRoles }) => {
     return games;
   };
 
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
   return (
     <List
       primaryKey="name"
       secondaryKey="role"
       data={transformGames()}
-      onClickItem={(e: any) => {
+      onClickItem={async (e: any) => {
         if (e.item.role === Roles.player && e.item.numberOfCharacters === 0) {
+          console.log(`/character-creation/${e.item.gameId}?step=0`);
           history.push(`/character-creation/${e.item.gameId}?step=0`);
         } else if (e.item.role === Roles.player) {
+          console.log(`/player-game/${e.item.gameId}`);
           history.push(`/player-game/${e.item.gameId}`);
         } else {
+          console.log(`/mc-game/${e.item.gameId}`);
           history.push(`/mc-game/${e.item.gameId}`);
         }
       }}

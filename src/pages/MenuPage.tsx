@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useKeycloak } from '@react-keycloak/web';
 import { useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
@@ -12,31 +12,36 @@ import GAMEROLES_BY_USER_ID, { GameRolesByUserIdData, GameRolesByUserIdVars } fr
 import { background, ButtonWS, HeadingWS, StyledClose } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
 import { useFonts } from '../contexts/fontContext';
+import { useGame } from '../contexts/gameContext';
 
 const MenuPage: FC = () => {
-  // ---------------------------------- Accessing React context -------------------------------------------- //
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [buttonsContainer, setButtonsContainer] = useState(0);
 
-  // ---------------------------------- Accessing React context -------------------------------------------- //
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const { keycloak } = useKeycloak();
+  const history = useHistory();
+
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { username, id: keycloakId } = useKeycloakUser();
+  const { clearGameContext } = useGame();
   const { vtksReady } = useFonts();
 
-  // ---------------------------------- Hooking in to Keycloak  -------------------------------------------- //
-  const { keycloak } = useKeycloak();
-
-  // -------------------------------- Hooking in to Apollo graphql ----------------------------------------- //
+  // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data } = useQuery<GameRolesByUserIdData, GameRolesByUserIdVars>(GAMEROLES_BY_USER_ID, {
     // @ts-ignore
     variables: { id: keycloakId },
     skip: !keycloakId,
   });
-
   const gameRoles = data?.gameRolesByUserId;
 
-  // -------------------------------- Hooking in to react-router ----------------------------------------- //
-  const history = useHistory();
+  // ------------------------------------------------------- Effects -------------------------------------------------------- //
 
-  // ------------------------------------- Render component ---------------------------------------------- //
+  useEffect(() => {
+    !!clearGameContext && clearGameContext();
+  }, [clearGameContext]);
+
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   const renderMenuButtons = () => {
     if (!gameRoles) {

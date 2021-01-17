@@ -53,7 +53,7 @@ const PlayerPage: FC = () => {
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
-  const { game, userGameRole, setGameContext } = useGame();
+  const { game, fetchingGame, userGameRole, setGameContext } = useGame();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
@@ -127,20 +127,22 @@ const PlayerPage: FC = () => {
 
   // Kick the User off the page if they are not a member of the game
   useEffect(() => {
-    if (!!game && !!userId) {
-      const memberIds = game?.players.map((player) => player.id);
-      if (!memberIds.includes(userId)) {
-        history.push('/menu');
+    if (!fetchingGame) {
+      if (!!game && !!userId) {
+        const memberIds = game?.players.map((player) => player.id);
+        if (!memberIds.includes(userId)) {
+          history.push('/menu');
+        }
       }
     }
-  }, [game, userId, history]);
+  }, [fetchingGame, game, userId, history]);
 
   // Sets the GameContext
   useEffect(() => {
-    if (!!gameId && !!userId && !!setGameContext) {
+    if (!fetchingGame && !!gameId && !!userId && !!setGameContext) {
       setGameContext(gameId, userId);
     }
-  }, [gameId, userId, setGameContext]);
+  }, [fetchingGame, gameId, userId, setGameContext]);
 
   // Set character in state if character meets minimum requirements
   useEffect(() => {
