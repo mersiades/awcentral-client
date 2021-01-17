@@ -46,6 +46,47 @@ export const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.
   }
 );
 
+interface LeftMainProps {
+  readonly rightPanel: number;
+}
+
+export const LeftMainContainer = styled(Box as React.FC<LeftMainProps & BoxProps & JSX.IntrinsicElements['div']>)(
+  ({ rightPanel }) => {
+    return css`
+      height: 86vh;
+      width: 100%;
+      transition: width 200ms ease-in-out;
+      ${rightPanel !== 2 &&
+      css`
+        width: 50%;
+      `};
+    `;
+  }
+);
+
+interface RightMainProps {
+  readonly rightPanel: number;
+}
+export const RightMainContainer = styled(Box as React.FC<RightMainProps & BoxProps & JSX.IntrinsicElements['div']>)(
+  ({ rightPanel }) => {
+    return css`
+      border-left: 1px solid transparent;
+      border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), black, rgba(0, 0, 0, 0)) 1 100%;
+      position: absolute;
+      height: 86vh;
+      opacity: 0;
+      transform: translateX(200%);
+      transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+      ${rightPanel !== 2 &&
+      css`
+        transform: translateX(100%);
+        width: 50%;
+        opacity: 1;
+      `};
+    `;
+  }
+);
+
 export const StyledMarkdown = styled(ReactMarkdown)`
   cursor: default;
   & p {

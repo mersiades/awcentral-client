@@ -4,7 +4,7 @@ import { Box, Heading } from 'grommet';
 import { Stats } from '../../@types/enums';
 import { CharacterStat } from '../../@types/dataInterfaces';
 import { accentColors, RedBox } from '../../config/grommetConfig';
-import CharacterSheetBox from './CharacterSheetBox';
+import CollapsiblePanelBox from '../CollapsiblePanelBox';
 
 interface StatsBoxProps {
   stats: CharacterStat[];
@@ -20,7 +20,7 @@ const StatsBox: FC<StatsBoxProps> = ({ stats, togglingHighlight, handleToggleHig
   });
 
   return (
-    <CharacterSheetBox open title="Stats" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="4">
+    <CollapsiblePanelBox open title="Stats" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="4">
       <Box
         fill="horizontal"
         direction="row"
@@ -51,7 +51,7 @@ const StatsBox: FC<StatsBoxProps> = ({ stats, togglingHighlight, handleToggleHig
           );
         })}
       </Box>
-    </CharacterSheetBox>
+    </CollapsiblePanelBox>
   );
 };
 

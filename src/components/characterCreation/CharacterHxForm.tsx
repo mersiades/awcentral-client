@@ -13,7 +13,7 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../.
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
 import { useGame } from '../../contexts/gameContext';
-import StatsBox from '../characterSheet/StatsBox';
+import StatsBox from '../playbookPanel/StatsBox';
 
 //     margin: unset;
 const StyledMarkdown = styled(ReactMarkdown)`

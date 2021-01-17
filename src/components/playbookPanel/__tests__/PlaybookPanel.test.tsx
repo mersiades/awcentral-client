@@ -7,13 +7,13 @@ import { customRenderForComponent } from '../../../tests/test-utils';
 import { mockCharacter2, mockPlaybookAngel } from '../../../tests/mocks';
 import { mockPlaybook } from '../../../tests/mockQueries';
 import { decapitalize } from '../../../helpers/decapitalize';
-import CharacterSheet from '../CharacterSheet';
+import PlaybookPanel from '../PlaybookPanel';
 import { MoveKinds } from '../../../@types/enums';
 
-describe('Rendering CharacterSheet', () => {
+describe('Rendering PlaybookPanel', () => {
   test('should render NameAndLooksBox properly', async () => {
     customRenderForComponent(
-      <CharacterSheet
+      <PlaybookPanel
         character={mockCharacter2}
         settingBarter={false}
         adjustingHx={false}
@@ -51,7 +51,7 @@ describe('Rendering CharacterSheet', () => {
   test('should render BarterBox properly', async () => {
     const mockHandleSetBarter = jest.fn();
     customRenderForComponent(
-      <CharacterSheet
+      <PlaybookPanel
         character={mockCharacter2}
         settingBarter={false}
         adjustingHx={false}
@@ -90,7 +90,7 @@ describe('Rendering CharacterSheet', () => {
 
     let harm = mockCharacter2.harm;
     customRenderForComponent(
-      <CharacterSheet
+      <PlaybookPanel
         character={mockCharacter2}
         settingBarter={false}
         adjustingHx={false}
@@ -153,7 +153,7 @@ describe('Rendering CharacterSheet', () => {
   test('should render HxBox properly', async () => {
     const mockHandleAdjustHx = jest.fn();
     customRenderForComponent(
-      <CharacterSheet
+      <PlaybookPanel
         character={mockCharacter2}
         settingBarter={false}
         adjustingHx={false}
@@ -195,7 +195,7 @@ describe('Rendering CharacterSheet', () => {
 
   test('should render MovesBox properly', async () => {
     customRenderForComponent(
-      <CharacterSheet
+      <PlaybookPanel
         character={mockCharacter2}
         settingBarter={false}
         adjustingHx={false}

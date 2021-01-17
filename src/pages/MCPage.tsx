@@ -1,80 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
-import {
-  Box,
-  Header,
-  Menu,
-  BoxProps,
-  Button,
-  Tabs,
-  Tab,
-  ThemeContext,
-  Layer,
-  Heading,
-  Paragraph,
-  Collapsible,
-} from 'grommet';
-import styled, { css } from 'styled-components';
+import { Box, Header, Menu, Button, Tabs, Tab, ThemeContext, Layer, Heading, Paragraph, Collapsible } from 'grommet';
 import { useMutation, useQuery } from '@apollo/client';
 
-import GamePanel from '../components/GamePanel';
+import GamePanel from '../components/gamePanel/GamePanel';
 import MovesPanel from '../components/MovesPanel';
 import CommsFormShort from '../components/CommsFormShort';
 import InvitationForm from '../components/InvitationForm';
-import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
-import GAME, { GameData, GameVars } from '../queries/game';
+import { Footer, LeftMainContainer, MainContainer, RightMainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
 import ADD_INVITEE, { AddInviteeData, AddInviteeVars } from '../mutations/addInvitee';
 import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
-import { GameRole } from '../@types/dataInterfaces';
 import { Roles } from '../@types/enums';
+import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import { customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import { useGame } from '../contexts/gameContext';
+import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
 
-interface LeftMainProps {
-  readonly rightPanel: number;
-}
-
-const LeftMainContainer = styled(Box as React.FC<LeftMainProps & BoxProps & JSX.IntrinsicElements['div']>)(
-  ({ rightPanel }) => {
-    return css`
-      height: calc(100vh - 95px);
-      width: 100%;
-      transition: width 200ms ease-in-out;
-      ${rightPanel !== 2 &&
-      css`
-        width: 50%;
-      `};
-    `;
-  }
-);
-
-interface RightMainProps {
-  readonly rightPanel: number;
-}
-const RightMainContainer = styled(Box as React.FC<RightMainProps & BoxProps & JSX.IntrinsicElements['div']>)(
-  ({ rightPanel }) => {
-    return css`
-      border-left: 1px solid transparent;
-      border-image: linear-gradient(to bottom, rgba(0, 0, 0, 0), black, rgba(0, 0, 0, 0)) 1 100%;
-      position: absolute;
-      height: calc(100vh - 95px);
-      opacity: 0;
-      transform: translateX(200%);
-      transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
-      ${rightPanel !== 2 &&
-      css`
-        transform: translateX(100%);
-        width: 50%;
-        opacity: 1;
-      `};
-    `;
-  }
-);
+export const background = {
+  color: 'black',
+  dark: true,
+  size: 'contain',
+  image: 'url(/images/background-image-9.jpg)',
+  position: 'bottom center',
+};
 
 export interface ShowInvitation {
   show: boolean;
@@ -82,7 +35,7 @@ export interface ShowInvitation {
   existingEmail: string;
 }
 
-const MCPage = () => {
+const MCPage: FC = () => {
   const maxSidePanel = 3;
   const sidePanelWidth = 25;
   const resetInvitationForm: ShowInvitation = {
@@ -91,6 +44,7 @@ const MCPage = () => {
     existingEmail: '',
   };
 
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   /**
    * Number that indicates what should be shown in the right panel
    * 0 - ThreatsPanel
@@ -106,22 +60,29 @@ const MCPage = () => {
    * 2 - MCMovesPanel
    * 3 - None, side panel is closed
    */
-  const [sidePanel, setSidePanel] = useState<number>(3);
+  const [sidePanel, setSidePanel] = useState<number>(0);
   const [showDeleteGameDialog, setShowDeleteGameDialog] = useState(false);
   const [showInvitationForm, setShowInvitationForm] = useState<ShowInvitation>(resetInvitationForm);
   const [showCommsForm, setShowCommsForm] = useState(false);
 
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+
+  const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
   const { keycloak } = useKeycloak();
+
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game, setGameContext } = useGame();
   const { id: userId } = useKeycloakUser();
-  // const { stompClient } = useWebsocketContext();
-  const { gameId } = useParams<{ gameId: string }>();
+
+  // ------------------------------------------------------ graphQL -------------------------------------------------------- //
+  const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
+  const allMoves = allMovesData?.allMoves;
   const [deleteGame] = useMutation<DeleteGameData, DeleteGameVars>(DELETE_GAME);
   const [addInvitee] = useMutation<AddInviteeData, AddInviteeVars>(ADD_INVITEE);
   const [removeInvitee] = useMutation<RemoveInviteeData, RemoveInviteeVars>(REMOVE_INVITEE);
-  const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
 
-  const { data: gameData, loading: loadingGame } = useQuery<GameData, GameVars>(GAME, { variables: { gameId } });
+  // ------------------------------------------------- Component functions -------------------------------------------------- //
 
   const handleDeleteGame = () => {
     console.log('handleDeleteGame', handleDeleteGame);
@@ -141,9 +102,9 @@ const MCPage = () => {
     }
   };
 
-  const game = gameData?.game;
-  const allMoves = allMovesData?.allMoves;
+  // ------------------------------------------------------- Effects -------------------------------------------------------- //
 
+  // Kick the User off the page if they are not a mc of the game
   useEffect(() => {
     if (!!game && !!userId) {
       if (game.mc.id !== userId) {
@@ -152,20 +113,23 @@ const MCPage = () => {
     }
   }, [game, userId, history]);
 
-  if (loadingGame || !game) {
-    return <div> Loading </div>;
-  }
+  // Sets the GameContext
+  useEffect(() => {
+    if (!!gameId && !!userId && !!setGameContext) {
+      setGameContext(gameId, userId);
+    }
+  }, [gameId, userId, setGameContext]);
 
   return (
     <>
       {showCommsForm && (
         <Layer onEsc={() => setShowCommsForm(false)} onClickOutside={() => setShowCommsForm(false)}>
           <Box gap="24px" pad="24px">
-            <CommsFormShort game={game} setShowCommsForm={setShowCommsForm} />
+            {!!game && <CommsFormShort game={game} setShowCommsForm={setShowCommsForm} />}
           </Box>
         </Layer>
       )}
-      {showDeleteGameDialog && (
+      {!!game && showDeleteGameDialog && (
         <Layer onEsc={() => setShowDeleteGameDialog(false)} onClickOutside={() => setShowDeleteGameDialog(false)}>
           <Box gap="24px" pad="24px">
             <Heading level={3}>Delete game?</Heading>
@@ -177,7 +141,7 @@ const MCPage = () => {
           </Box>
         </Layer>
       )}
-      {showInvitationForm.show && (
+      {!!game && showInvitationForm.show && (
         <Layer
           onEsc={() => setShowInvitationForm(resetInvitationForm)}
           onClickOutside={() => setShowInvitationForm(resetInvitationForm)}
@@ -194,80 +158,97 @@ const MCPage = () => {
           </Box>
         </Layer>
       )}
-      <Header background="neutral-1">
-        <ThemeContext.Extend value={customDefaultButtonStyles}>
-          <Menu
-            dropBackground="neutral-1"
-            label="AW Central"
-            items={[
-              { label: 'Main menu', onClick: () => history.push('/menu') },
-              {
-                label: 'Log out',
-                onClick: () => keycloak.logout(),
-              },
-            ]}
-          />
-          {game.gameRoles
-            .filter((gameRole: GameRole) => gameRole.role === Roles.player)
-            .map((gameRole: GameRole) =>
-              gameRole.characters?.map((character: any) => <Button key={character.name} label={character.name} />)
-            )}
-          <Button label="THREAT MAP" />
-          {!game.hasFinishedPreGame && <Button label="PRE-GAME" onClick={() => history.push(`/pre-game/${game.id}`)} />}
-        </ThemeContext.Extend>
-      </Header>
-      <div data-testid="mc-page">
-        <Collapsible direction="horizontal" open={sidePanel < 3}>
-          <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
-            {sidePanel === 0 && (
-              <GamePanel
-                closePanel={setSidePanel}
-                setShowDeleteGameDialog={setShowDeleteGameDialog}
-                setShowInvitationForm={setShowInvitationForm}
-                setShowCommsForm={setShowCommsForm}
-                handleRemoveInvitee={handleRemoveInvitee}
-                game={game}
+      <Box fill background={background}>
+        <Header
+          background={{ color: 'rgba(76, 104, 76, 0.5)' }}
+          style={{ borderBottom: `1px solid ${accentColors[0]}` }}
+          height="4vh"
+        >
+          <ThemeContext.Extend value={customDefaultButtonStyles}>
+            <Menu
+              style={{ backgroundColor: 'transparent' }}
+              dropBackground={{ color: 'rgba(76, 104, 76, 0.5)' }}
+              label="AW Central"
+              items={[
+                { label: 'Main menu', onClick: () => history.push('/menu') },
+                {
+                  label: 'Log out',
+                  onClick: () => keycloak.logout(),
+                },
+              ]}
+            />
+            {game?.gameRoles
+              .filter((gameRole: GameRole) => gameRole.role === Roles.player)
+              .map((gameRole: GameRole) =>
+                gameRole.characters?.map((character: any) => (
+                  <Button
+                    key={character.name}
+                    label={character.name}
+                    style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
+                  />
+                ))
+              )}
+            <Button label="THREAT MAP" style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }} />
+            {!!game && !game?.hasFinishedPreGame && (
+              <Button
+                label="PRE-GAME"
+                onClick={() => history.push(`/pre-game/${game.id}`)}
+                style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
               />
             )}
-            {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} />}
-            {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
-          </SidePanel>
-        </Collapsible>
-        <MainContainer sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
-          <LeftMainContainer rightPanel={rightPanel}>
-            <p>Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre</p>
-          </LeftMainContainer>
-          <RightMainContainer rightPanel={rightPanel}>
-            {rightPanel === 0 && <p>Threats</p>}
-            {rightPanel === 1 && <p>NPCs</p>}
-          </RightMainContainer>
-        </MainContainer>
-      </div>
-      <ThemeContext.Extend value={customTabStyles}>
-        <Footer direction="row" justify="between">
-          <Tabs
-            activeIndex={sidePanel}
-            onActive={(tab) => {
-              console.log('clicked', tab);
-              tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
-            }}
-          >
-            <Tab title="Game" />
-            {allMoves && <Tab title="Moves" />}
-            <Tab title="MC Moves" />
-          </Tabs>
-          <Tabs
-            activeIndex={rightPanel}
-            onActive={(tab) => {
-              console.log('clicked', tab);
-              tab === rightPanel ? setRightPanel(2) : setRightPanel(tab);
-            }}
-          >
-            <Tab title="Threats" />
-            <Tab title="NPCs" />
-          </Tabs>
+          </ThemeContext.Extend>
+        </Header>
+        <div data-testid="mc-page">
+          <Collapsible direction="horizontal" open={sidePanel < 3}>
+            <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
+              {!!game && sidePanel === 0 && (
+                <GamePanel
+                  setShowDeleteGameDialog={setShowDeleteGameDialog}
+                  setShowInvitationForm={setShowInvitationForm}
+                  setShowCommsForm={setShowCommsForm}
+                  handleRemoveInvitee={handleRemoveInvitee}
+                />
+              )}
+              {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} />}
+              {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
+            </SidePanel>
+          </Collapsible>
+          <MainContainer sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
+            <LeftMainContainer rightPanel={rightPanel}>
+              <p>Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre Centre</p>
+            </LeftMainContainer>
+            <RightMainContainer rightPanel={rightPanel}>
+              {rightPanel === 0 && <p>Threats</p>}
+              {rightPanel === 1 && <p>NPCs</p>}
+            </RightMainContainer>
+          </MainContainer>
+        </div>
+        <Footer direction="row" justify="between" align="center" height="10vh">
+          <ThemeContext.Extend value={customTabStyles}>
+            <Tabs
+              activeIndex={sidePanel}
+              onActive={(tab) => {
+                console.log('clicked', tab);
+                tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
+              }}
+            >
+              <Tab title="Game" />
+              {allMoves && <Tab title="Moves" />}
+              <Tab title="MC Moves" />
+            </Tabs>
+            <Tabs
+              activeIndex={rightPanel}
+              onActive={(tab) => {
+                console.log('clicked', tab);
+                tab === rightPanel ? setRightPanel(2) : setRightPanel(tab);
+              }}
+            >
+              <Tab title="Threats" />
+              <Tab title="NPCs" />
+            </Tabs>
+          </ThemeContext.Extend>
         </Footer>
-      </ThemeContext.Extend>
+      </Box>
     </>
   );
 };

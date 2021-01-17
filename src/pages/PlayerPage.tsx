@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
 
 import MovesPanel from '../components/MovesPanel';
-import CharacterSheet from '../components/characterSheet/CharacterSheet';
+import PlaybookPanel from '../components/playbookPanel/PlaybookPanel';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES from '../queries/allMoves';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
@@ -39,7 +39,7 @@ const PlayerPage: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   /**
    * Number that indicates what should be shown in the side panel
-   * 0 - CharacterPanel
+   * 0 - PlaybookPanel
    * 1 - MovesPanel
    * 2 - None, side panel is closed
    */
@@ -154,12 +154,6 @@ const PlayerPage: FC = () => {
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
-  useEffect(() => {
-    // console.log('allMoves', allMoves);
-    // console.log('game', game);
-    // console.log('userGameRole', userGameRole);
-  }, [allMoves, game, userGameRole]);
-
   return (
     <Box fill background={background}>
       <Header
@@ -186,7 +180,7 @@ const PlayerPage: FC = () => {
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>
             {sidePanel === 0 && !!character && (
-              <CharacterSheet
+              <PlaybookPanel
                 character={character}
                 settingBarter={settingBarter}
                 adjustingHx={adjustingHx}
@@ -209,14 +203,16 @@ const PlayerPage: FC = () => {
           sidePanel={sidePanel}
           maxPanels={MAX_SIDE_PANEL}
           shinkWidth={SIDE_PANEL_WIDTH}
-        ></MainContainer>
+        >
+          Main container
+        </MainContainer>
       </div>
       <Footer direction="row" justify="between" align="center" height="10vh">
         <ThemeContext.Extend value={customTabStyles}>
           <Tabs
             activeIndex={sidePanel}
             onActive={(tab) => {
-              // If user tries to open CharacterSheet without a minimal character
+              // If user tries to open PlaybookPanel without a minimal character
               tab === 0 && !character && navigateToCharacterCreation('0');
               // Toggle open panel
               tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
