@@ -1,9 +1,8 @@
+import { FC } from 'react';
 import { rgba } from 'polished';
 import { deepMerge } from 'grommet/utils';
 import { grommet } from 'grommet/themes/grommet';
 import styled, { css } from 'styled-components';
-
-import '../assets/styles/main.css';
 import {
   Box,
   BoxProps,
@@ -13,13 +12,12 @@ import {
   HeadingProps,
   Paragraph,
   ParagraphProps,
-  Select,
-  SelectProps,
   Text,
   TextProps,
 } from 'grommet';
 import { Close, IconProps } from 'grommet-icons';
-import { ComponentClass, FC } from 'react';
+
+import '../assets/styles/main.css';
 
 export const brandColor = '#CD3F3E';
 

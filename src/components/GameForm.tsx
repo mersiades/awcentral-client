@@ -1,10 +1,12 @@
 import { useMutation } from '@apollo/client';
-import { Box, Select, Button, TextArea, FormField, TextInput } from 'grommet';
+import { Box, Select, TextArea, TextInput } from 'grommet';
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { ButtonWS } from '../config/grommetConfig';
 import { useGame } from '../contexts/gameContext';
 import ADD_COMMS_APP, { AddCommsAppData, AddCommsAppVars } from '../mutations/addCommsApp';
 import ADD_COMMS_URL, { AddCommsUrlData, AddCommsUrlVars } from '../mutations/addCommsUrl';
+import SET_GAME_NAME, { SetGameNameData, SetGameNameVars } from '../mutations/setGameName';
 import CloseButton from './CloseButton';
 import Spinner from './Spinner';
 
@@ -24,11 +26,15 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
   const { gameId } = useParams<{ gameId: string }>();
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
-  const [addCommsApp] = useMutation<AddCommsAppData, AddCommsAppVars>(ADD_COMMS_APP, {
+  const [addCommsApp, { loading: settingApp }] = useMutation<AddCommsAppData, AddCommsAppVars>(ADD_COMMS_APP, {
     variables: { gameId, app },
   });
-  const [addCommsUrl] = useMutation<AddCommsUrlData, AddCommsUrlVars>(ADD_COMMS_URL, {
+  const [addCommsUrl, { loading: settingUrl }] = useMutation<AddCommsUrlData, AddCommsUrlVars>(ADD_COMMS_URL, {
     variables: { gameId, url },
+  });
+
+  const [setGameName, { loading: settingName }] = useMutation<SetGameNameData, SetGameNameVars>(SET_GAME_NAME, {
+    variables: { gameId, name },
   });
 
   // ------------------------------------------------ Component functions -------------------------------------------------- //
@@ -37,7 +43,7 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
   const handleSetApp = () => {
     if (!!app && !!game) {
       try {
-        addCommsApp({ variables: { gameId: game.id, app } });
+        addCommsApp({ variables: { gameId, app } });
       } catch (e) {
         console.warn(e);
       }
@@ -47,7 +53,7 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
   const handleSetUrl = () => {
     if (!!url && !!game) {
       try {
-        addCommsUrl({ variables: { gameId: game.id, url } });
+        addCommsUrl({ variables: { gameId, url } });
       } catch (e) {
         console.warn(e);
       }
@@ -55,7 +61,13 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
   };
 
   const handleSetName = () => {
-    console.log('setting name');
+    if (!!name && !!game) {
+      try {
+        setGameName({ variables: { gameId, name } });
+      } catch (e) {
+        console.warn(e);
+      }
+    }
   };
 
   // ------------------------------------------------------ Effects -------------------------------------------------------- //
@@ -85,7 +97,14 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
           placeholder={game.name}
           onChange={(e) => setName(e.target.value)}
         />
-        <Button label="SET" primary size="large" alignSelf="center" onClick={() => handleSetName()} disabled={!name} />
+        <ButtonWS
+          label="SET"
+          primary
+          size="large"
+          alignSelf="center"
+          onClick={() => handleSetName()}
+          disabled={!name || settingName}
+        />
       </Box>
       <Box gap="12px" width="100%" direction="row" justify="between">
         <Select
@@ -96,7 +115,14 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
           value={app}
           onChange={(e) => setApp(e.value)}
         />
-        <Button label="SET" primary size="large" alignSelf="center" onClick={() => handleSetApp()} disabled={!app} />
+        <ButtonWS
+          label="SET"
+          primary
+          size="large"
+          alignSelf="center"
+          onClick={() => handleSetApp()}
+          disabled={!app || settingApp}
+        />
       </Box>
       <Box fill="horizontal" gap="small" justify="between">
         <TextArea
@@ -109,7 +135,14 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
           style={{ height: '100px' }}
         />
 
-        <Button alignSelf="end" label="SET" primary size="large" onClick={() => handleSetUrl()} disabled={!url} />
+        <ButtonWS
+          alignSelf="end"
+          label="SET"
+          primary
+          size="large"
+          onClick={() => handleSetUrl()}
+          disabled={!url || settingUrl}
+        />
       </Box>
     </Box>
   );
