@@ -19,6 +19,7 @@ import SET_CHARACTER_MOVES from '../mutations/setCharacterMoves';
 import SET_CHARACTER_NAME from '../mutations/setCharacterName';
 import SET_CHARACTER_PLAYBOOK from '../mutations/setCharacterPlaybook';
 import SET_CHARACTER_STATS from '../mutations/setCharacterStats';
+import SET_GAME_NAME from '../mutations/setGameName';
 import TOGGLE_STAT_HIGHLIGHT from '../mutations/toggleStatHighlight';
 import ALL_MOVES from '../queries/allMoves';
 import GAME from '../queries/game';
@@ -2129,6 +2130,69 @@ export const mockRemoveInvitee: MockedResponse = {
         deleteGame: {
           ...mockGame7,
           invitees: ['sara@email.com'],
+        },
+      },
+    };
+  },
+};
+
+export const mockSetGameName: MockedResponse = {
+  request: {
+    query: SET_GAME_NAME,
+    variables: {
+      gameId: mockGame7.id,
+      name: 'New Game Name',
+    },
+  },
+  result: () => {
+    // console.log('mockSetGameName');
+    return {
+      data: {
+        deleteGame: {
+          ...mockGame7,
+          name: 'New Game Name',
+        },
+      },
+    };
+  },
+};
+
+export const mockAppCommsApp: MockedResponse = {
+  request: {
+    query: ADD_COMMS_APP,
+    variables: {
+      gameId: mockGame7.id,
+      app: 'Skype',
+    },
+  },
+  result: () => {
+    // console.log('mockAppCommsApp');
+    return {
+      data: {
+        deleteGame: {
+          ...mockGame7,
+          commsApp: 'Skype',
+        },
+      },
+    };
+  },
+};
+
+export const mockAppCommsUrl: MockedResponse = {
+  request: {
+    query: ADD_COMMS_URL,
+    variables: {
+      gameId: mockGame7.id,
+      url: 'https://new.url.com',
+    },
+  },
+  result: () => {
+    // console.log('mockAppCommsUrl');
+    return {
+      data: {
+        deleteGame: {
+          ...mockGame7,
+          commsUrl: 'https://new.url.com',
         },
       },
     };
