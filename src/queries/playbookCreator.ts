@@ -48,9 +48,28 @@ const PLAYBOOK_CREATOR = gql`
       }
       defaultMoveCount
       moveChoiceCount
-      playbookMoves {
+      optionalMoves {
         id
-        isSelected
+        name
+        kind
+        description
+        playbook
+        stat
+        statModifier {
+          id
+          statToModify
+          modification
+        }
+        rollModifier {
+          id
+          movesToModify {
+            id
+          }
+          statToRollWith
+        }
+      }
+      defaultMoves {
+        id
         name
         kind
         description
@@ -91,7 +110,7 @@ const PLAYBOOK_CREATOR = gql`
             id
             description
             tag
-          } 
+          }
           handTitle
           handBaseInstructions
           handBaseOptions {

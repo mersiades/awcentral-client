@@ -32,8 +32,6 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
   settingMoves,
   handleSubmitCharacterMoves,
 }) => {
-  const [selectedMoveIds, setSelectedMoveIds] = useState<string[]>([]);
-
   const { crustReady } = useFonts();
 
   const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
@@ -43,12 +41,13 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
     }
   );
 
-  const playbookMoves = pbCreatorData?.playbookCreator.playbookMoves;
+  const playbookMoves = pbCreatorData?.playbookCreator.optionalMoves;
+  const defaultMoves = pbCreatorData?.playbookCreator.defaultMoves;
   const defaultMoveCount = pbCreatorData?.playbookCreator.defaultMoveCount;
   const moveChoiceCount = pbCreatorData?.playbookCreator.moveChoiceCount;
-  const defaultMoves = playbookMoves?.filter((move) => !!move.isSelected);
   const defaultMoveIds = defaultMoves?.map((move) => move.id);
-  const moveOptions = playbookMoves?.filter((move) => !move.isSelected);
+
+  const [selectedMoveIds, setSelectedMoveIds] = useState<string[]>([]);
 
   const handleSelectMove = (moveId: string) => {
     if (selectedMoveIds.includes(moveId)) {
@@ -65,7 +64,6 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
     !pbCreatorData ||
     !playbookMoves ||
     !defaultMoves ||
-    !moveOptions ||
     !defaultMoveCount ||
     !moveChoiceCount ||
     !defaultMoveIds
@@ -97,7 +95,7 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
           return (
             <CheckBox
               key={move.id}
-              checked={move.isSelected}
+              checked
               label={
                 <div>
                   <Text weight="bold">{move.name}</Text>
@@ -111,7 +109,7 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
           Select {moveChoiceCount}
         </Text>
         <Box align="start" gap="12px">
-          {moveOptions.map((move) => {
+          {playbookMoves.map((move) => {
             return (
               <CheckBox
                 key={move.id}

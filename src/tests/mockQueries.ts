@@ -604,7 +604,7 @@ export const mockPlaybookCreator: MockedResponse = {
           statsOptions: mockPlaybookCreatorAngel.statsOptions,
           defaultMoveCount: mockPlaybookCreatorAngel.defaultMoveCount,
           moveChoiceCount: mockPlaybookCreatorAngel.moveChoiceCount,
-          playbookMoves: mockPlaybookCreatorAngel.playbookMoves,
+          playbookMoves: mockPlaybookCreatorAngel.optionalMoves,
           playbookUniqueCreator: {
             id: mockPlaybookCreatorAngel.playbookUniqueCreator.id,
             type: mockPlaybookCreatorAngel.playbookUniqueCreator.type,
@@ -1574,9 +1574,9 @@ export const mockSetCharacterMoves: MockedResponse = {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
       moveIds: [
-        mockPlaybookCreatorAngel.playbookMoves[1].id,
-        mockPlaybookCreatorAngel.playbookMoves[2].id,
-        mockPlaybookCreatorAngel.playbookMoves[0].id,
+        mockPlaybookCreatorAngel.optionalMoves[1].id,
+        mockPlaybookCreatorAngel.optionalMoves[2].id,
+        mockPlaybookCreatorAngel.optionalMoves[0].id,
       ],
     },
   },

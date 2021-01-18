@@ -5,15 +5,16 @@ export enum Roles {
 
 export enum Stats {
   cool = 'COOL',
-  hard ='HARD',
+  hard = 'HARD',
   hot = 'HOT',
   sharp = 'SHARP',
   weird = 'WEIRD',
-  hx = 'HX'
+  hx = 'HX',
 }
 
 export enum MoveKinds {
   character = 'CHARACTER',
+  default = 'DEFAULT_CHARACTER',
   basic = 'BASIC',
   peripheral = 'PERIPHERAL',
   battle = 'BATTLE',
@@ -31,7 +32,7 @@ export enum PlayBooks {
   hocus = 'HOCUS',
   maestroD = 'MAESTRO_D',
   savvyhead = 'SAVVYHEAD',
-  skinner = 'SKINNER'
+  skinner = 'SKINNER',
 }
 
 export enum CharacterCreationSteps {
@@ -43,7 +44,7 @@ export enum CharacterCreationSteps {
   selectGear = 5,
   setUnique = 6,
   selectMoves = 7,
-  setHx = 8
+  setHx = 8,
 }
 
 export enum LookCategories {
@@ -51,7 +52,7 @@ export enum LookCategories {
   clothes = 'CLOTHES',
   face = 'FACE',
   eyes = 'EYES',
-  body = 'BODY'
+  body = 'BODY',
 }
 
 export enum UniqueTypes {
@@ -65,7 +66,7 @@ export enum UniqueTypes {
   followers = 'FOLLOWERS',
   establishment = 'ESTABLISHMENT',
   workspace = 'WORKSPACE',
-  skinnerGear = 'SKINNER_GEAR'
+  skinnerGear = 'SKINNER_GEAR',
 }
 
 export enum Threats {
@@ -75,5 +76,5 @@ export enum Threats {
   'AFFLICTION',
   'LANDSCAPE',
   'TERRAIN',
-  'VEHICLE',   
+  'VEHICLE',
 }

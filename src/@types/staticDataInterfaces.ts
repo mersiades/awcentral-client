@@ -20,7 +20,6 @@ export interface Playbook {
 export interface PlaybookCreator {
   id: string;
   playbookType: PlayBooks;
-  // playbook: Playbook
   gearInstructions: GearInstructions;
   improvementInstructions: string;
   movesInstructions: string;
@@ -29,7 +28,8 @@ export interface PlaybookCreator {
   looks: Look[];
   statsOptions: StatsOption[];
   playbookUniqueCreator: PlaybookUniqueCreator;
-  playbookMoves: CharacterMove[];
+  optionalMoves: Move[];
+  defaultMoves: Move[];
   defaultMoveCount: number;
   moveChoiceCount: number;
 }

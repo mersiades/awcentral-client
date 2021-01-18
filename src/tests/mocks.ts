@@ -181,7 +181,7 @@ export const mockCharacterMoveAngel1: CharacterMove = {
   id: 'angel-move-id-1',
   name: 'ANGEL SPECIAL',
   description: 'If you and another character have sex,',
-  kind: MoveKinds.character,
+  kind: MoveKinds.default,
   playbook: PlayBooks.angel,
   stat: Stats.hx,
   rollModifier: dummyRollModifier,
@@ -772,7 +772,8 @@ export const mockPlaybookCreatorAngel: PlaybookCreator = {
   ],
   statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
   playbookUniqueCreator: mockUniqueCreatorAngel,
-  playbookMoves: [mockCharacterMoveAngel1, mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  defaultMoves: [mockCharacterMoveAngel1],
   defaultMoveCount: 1,
   moveChoiceCount: 2,
 };
