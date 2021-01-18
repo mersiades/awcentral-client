@@ -65,6 +65,8 @@ const AppProviders = ({
   crustReady = true,
   apolloMocks = [],
   keycloakUser = mockKeycloakUser1,
+  injectedGame,
+  injectedUserId,
 }: any) => {
   return (
     <BrowserRouter>
@@ -77,7 +79,7 @@ const AppProviders = ({
                 onLoad: 'login-required',
               }}
             >
-              <GameProvider>
+              <GameProvider injectedGame={injectedGame} injectedUserId={injectedUserId}>
                 <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
               </GameProvider>
             </ReactKeycloakProvider>

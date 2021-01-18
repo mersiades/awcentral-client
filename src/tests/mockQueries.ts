@@ -6,8 +6,10 @@ import ADD_INVITEE from '../mutations/addInvitee';
 import ADD_USER_TO_GAME from '../mutations/addUserToGame';
 import CREATE_CHARACTER from '../mutations/createCharacter';
 import CREATE_GAME from '../mutations/createGame';
+import DELETE_GAME from '../mutations/deleteGame';
 import FINISH_CHARACTER_CREATION from '../mutations/finishCharacterCreation';
 import FINISH_PRE_GAME from '../mutations/finishPreGame';
+import REMOVE_INVITEE from '../mutations/removeInvitee';
 import SET_ANGEL_KIT from '../mutations/setAngelKit';
 import SET_CHARACTER_BARTER from '../mutations/setCharacterBarter';
 import SET_CHARACTER_GEAR from '../mutations/setCharacterGear';
@@ -35,10 +37,12 @@ import {
   mockGame4,
   mockGame5,
   mockGame6,
+  mockGame7,
   mockGameRole1,
   mockGameRole2,
   mockHxInput,
   mockKeycloakUser1,
+  mockKeycloakUser2,
   mockNewGameName,
   mockPlaybookAngel,
   mockPlaybookCreatorAngel,
@@ -2055,6 +2059,77 @@ export const mockPlaybook: MockedResponse = {
     return {
       data: {
         playbook: mockPlaybookAngel,
+      },
+    };
+  },
+};
+
+export const mockDeleteGame: MockedResponse = {
+  request: {
+    query: DELETE_GAME,
+    variables: {
+      gameId: mockGame7.id,
+    },
+  },
+  result: () => {
+    // console.log('mockDeleteGame');
+    return {
+      data: {
+        deleteGame: {
+          id: 'mock-id',
+        },
+      },
+    };
+  },
+};
+
+export const mockGameRolesByUserId2: MockedResponse = {
+  request: {
+    query: GAMEROLES_BY_USER_ID,
+    variables: { id: mockKeycloakUser2.id },
+  },
+  result: {
+    data: {
+      gameRolesByUserId: [
+        {
+          id: mockGameRole1.id,
+          role: mockGameRole1.role,
+          game: {
+            id: mockGame1.id,
+            name: mockGame1.name,
+          },
+          characters: [],
+        },
+        {
+          id: mockGameRole2.id,
+          role: mockGameRole2.role,
+          game: {
+            id: mockGame2.id,
+            name: mockGame2.name,
+          },
+          characters: [],
+        },
+      ],
+    },
+  },
+};
+
+export const mockRemoveInvitee: MockedResponse = {
+  request: {
+    query: REMOVE_INVITEE,
+    variables: {
+      gameId: mockGame7.id,
+      email: 'john@email.com',
+    },
+  },
+  result: () => {
+    // console.log('mockRemoveInvitee');
+    return {
+      data: {
+        deleteGame: {
+          ...mockGame7,
+          invitees: ['sara@email.com'],
+        },
       },
     };
   },

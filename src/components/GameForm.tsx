@@ -77,9 +77,9 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
     return <Spinner />;
   }
 
-  console.log('name', name);
   return (
     <Box
+      data-testid="game-form"
       align="start"
       height="500px"
       width="520px"

@@ -86,7 +86,6 @@ const MCPage: FC = () => {
   // ------------------------------------------------- Component functions -------------------------------------------------- //
 
   const handleDeleteGame = () => {
-    console.log('handleDeleteGame', handleDeleteGame);
     deleteGame({ variables: { gameId }, refetchQueries: [{ query: GAMEROLES_BY_USER_ID, variables: { id: userId } }] });
     history.push('/menu');
   };
@@ -233,7 +232,6 @@ const MCPage: FC = () => {
             <Tabs
               activeIndex={sidePanel}
               onActive={(tab) => {
-                console.log('clicked', tab);
                 tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
               }}
             >

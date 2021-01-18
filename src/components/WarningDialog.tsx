@@ -16,6 +16,7 @@ const WarningDialog: FC<WarningDialogProps> = ({ title, buttonTitle, text, handl
   return (
     <Layer onEsc={handleClose} onClickOutside={handleClose}>
       <Box
+        data-testid={`${title.toLowerCase()}-warning-dialog`}
         direction="column"
         fill
         align="center"
