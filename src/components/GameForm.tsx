@@ -77,9 +77,9 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
     return <Spinner />;
   }
 
-  console.log('name', name);
   return (
     <Box
+      data-testid="game-form"
       align="start"
       height="500px"
       width="520px"
@@ -91,6 +91,7 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
       <CloseButton handleClose={handleClose} />
       <Box gap="12px" width="100%" direction="row" justify="between">
         <TextInput
+          aria-label="name-input"
           id="text-input-id"
           value={name}
           name="name"
@@ -110,6 +111,7 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
       <Box gap="12px" width="100%" direction="row" justify="between">
         <Select
           id="app-input"
+          aria-label="app-input"
           name="app"
           placeholder="App"
           options={appOptions}
@@ -128,6 +130,7 @@ const GameForm: FC<GameFormProps> = ({ handleClose }) => {
       <Box fill="horizontal" gap="small" justify="between">
         <TextArea
           id="url-input"
+          aria-label="url-input"
           name="url"
           size="large"
           value={url}

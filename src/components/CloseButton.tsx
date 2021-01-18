@@ -21,7 +21,7 @@ interface CloseButtonProps {
 
 const CloseButton: FC<CloseButtonProps> = ({ handleClose }) => {
   return (
-    <StyledDiv>
+    <StyledDiv data-testid="close-icon-button">
       <Close color="accent-1" onClick={handleClose} />
     </StyledDiv>
   );

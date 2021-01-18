@@ -60,7 +60,7 @@ const InvitationForm: FC<InvitationFormProps> = ({ handleClose, existingEmail = 
   };
 
   return (
-    <Box pad="12px">
+    <Box data-testid="invitation-form" pad="12px">
       <CloseButton handleClose={handleClose} />
       <HeadingWS
         crustReady={crustReady}

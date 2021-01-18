@@ -6,8 +6,10 @@ import ADD_INVITEE from '../mutations/addInvitee';
 import ADD_USER_TO_GAME from '../mutations/addUserToGame';
 import CREATE_CHARACTER from '../mutations/createCharacter';
 import CREATE_GAME from '../mutations/createGame';
+import DELETE_GAME from '../mutations/deleteGame';
 import FINISH_CHARACTER_CREATION from '../mutations/finishCharacterCreation';
 import FINISH_PRE_GAME from '../mutations/finishPreGame';
+import REMOVE_INVITEE from '../mutations/removeInvitee';
 import SET_ANGEL_KIT from '../mutations/setAngelKit';
 import SET_CHARACTER_BARTER from '../mutations/setCharacterBarter';
 import SET_CHARACTER_GEAR from '../mutations/setCharacterGear';
@@ -17,6 +19,7 @@ import SET_CHARACTER_MOVES from '../mutations/setCharacterMoves';
 import SET_CHARACTER_NAME from '../mutations/setCharacterName';
 import SET_CHARACTER_PLAYBOOK from '../mutations/setCharacterPlaybook';
 import SET_CHARACTER_STATS from '../mutations/setCharacterStats';
+import SET_GAME_NAME from '../mutations/setGameName';
 import TOGGLE_STAT_HIGHLIGHT from '../mutations/toggleStatHighlight';
 import ALL_MOVES from '../queries/allMoves';
 import GAME from '../queries/game';
@@ -35,10 +38,12 @@ import {
   mockGame4,
   mockGame5,
   mockGame6,
+  mockGame7,
   mockGameRole1,
   mockGameRole2,
   mockHxInput,
   mockKeycloakUser1,
+  mockKeycloakUser2,
   mockNewGameName,
   mockPlaybookAngel,
   mockPlaybookCreatorAngel,
@@ -2055,6 +2060,140 @@ export const mockPlaybook: MockedResponse = {
     return {
       data: {
         playbook: mockPlaybookAngel,
+      },
+    };
+  },
+};
+
+export const mockDeleteGame: MockedResponse = {
+  request: {
+    query: DELETE_GAME,
+    variables: {
+      gameId: mockGame7.id,
+    },
+  },
+  result: () => {
+    // console.log('mockDeleteGame');
+    return {
+      data: {
+        deleteGame: {
+          id: 'mock-id',
+        },
+      },
+    };
+  },
+};
+
+export const mockGameRolesByUserId2: MockedResponse = {
+  request: {
+    query: GAMEROLES_BY_USER_ID,
+    variables: { id: mockKeycloakUser2.id },
+  },
+  result: {
+    data: {
+      gameRolesByUserId: [
+        {
+          id: mockGameRole1.id,
+          role: mockGameRole1.role,
+          game: {
+            id: mockGame1.id,
+            name: mockGame1.name,
+          },
+          characters: [],
+        },
+        {
+          id: mockGameRole2.id,
+          role: mockGameRole2.role,
+          game: {
+            id: mockGame2.id,
+            name: mockGame2.name,
+          },
+          characters: [],
+        },
+      ],
+    },
+  },
+};
+
+export const mockRemoveInvitee: MockedResponse = {
+  request: {
+    query: REMOVE_INVITEE,
+    variables: {
+      gameId: mockGame7.id,
+      email: 'john@email.com',
+    },
+  },
+  result: () => {
+    // console.log('mockRemoveInvitee');
+    return {
+      data: {
+        deleteGame: {
+          ...mockGame7,
+          invitees: ['sara@email.com'],
+        },
+      },
+    };
+  },
+};
+
+export const mockSetGameName: MockedResponse = {
+  request: {
+    query: SET_GAME_NAME,
+    variables: {
+      gameId: mockGame7.id,
+      name: 'New Game Name',
+    },
+  },
+  result: () => {
+    // console.log('mockSetGameName');
+    return {
+      data: {
+        deleteGame: {
+          ...mockGame7,
+          name: 'New Game Name',
+        },
+      },
+    };
+  },
+};
+
+export const mockAppCommsApp: MockedResponse = {
+  request: {
+    query: ADD_COMMS_APP,
+    variables: {
+      gameId: mockGame7.id,
+      app: 'Skype',
+    },
+  },
+  result: () => {
+    // console.log('mockAppCommsApp');
+    return {
+      data: {
+        deleteGame: {
+          ...mockGame7,
+          commsApp: 'Skype',
+        },
+      },
+    };
+  },
+};
+
+export const mockAppCommsUrl: MockedResponse = {
+  request: {
+    query: ADD_COMMS_URL,
+    variables: {
+      gameId: mockGame7.id,
+      url: 'https://new.url.com',
+    },
+  },
+  result: () => {
+    // console.log('mockAppCommsUrl');
+    return {
+      data: {
+        deleteGame: {
+          ...mockGame7,
+          commsUrl: 'https://new.url.com',
+        },
       },
     };
   },
