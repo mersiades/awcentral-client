@@ -1,5 +1,5 @@
 import { ItemCharacteristic, TaggedItem } from '.';
-import { LookCategories, MoveKinds, PlayBooks, Stats, UniqueTypes } from './enums';
+import { LookType, MoveType, PlayBookType, StatType, UniqueTypes } from './enums';
 
 /**
  * This file contains interfaces that represent static data models.
@@ -10,7 +10,7 @@ import { LookCategories, MoveKinds, PlayBooks, Stats, UniqueTypes } from './enum
 
 export interface Playbook {
   id: string;
-  playbookType: PlayBooks;
+  playbookType: PlayBookType;
   barterInstructions: string;
   intro: string;
   introComment: string;
@@ -19,7 +19,7 @@ export interface Playbook {
 
 export interface PlaybookCreator {
   id: string;
-  playbookType: PlayBooks;
+  playbookType: PlayBookType;
   gearInstructions: GearInstructions;
   improvementInstructions: string;
   movesInstructions: string;
@@ -42,7 +42,7 @@ export interface Name {
 export interface Look {
   id: string;
   look: string;
-  category: LookCategories;
+  category: LookType;
 }
 
 export interface GearInstructions {
@@ -71,9 +71,9 @@ export interface Move {
   id: string;
   name: string;
   description: string;
-  kind: MoveKinds;
-  playbook?: PlayBooks;
-  stat?: Stats;
+  kind: MoveType;
+  playbook?: PlayBookType;
+  stat?: StatType;
   statModifier?: StatModifier;
   rollModifier?: RollModifier;
 }
@@ -85,12 +85,12 @@ export interface CharacterMove extends Move {
 export interface RollModifier {
   id: string;
   movesToModify: Move[];
-  statToRollWith: Stats;
+  statToRollWith: StatType;
 }
 
 export interface StatModifier {
   id: string;
-  statToModify: Stats;
+  statToModify: StatType;
   modification: number;
 }
 

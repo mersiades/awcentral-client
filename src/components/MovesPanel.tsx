@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box } from 'grommet';
 import { Move } from '../@types/staticDataInterfaces';
-import { MoveKinds } from '../@types/enums';
+import { MoveType } from '../@types/enums';
 import MovesBox from './playbookPanel/MovesBox';
 
 interface MovesPanelProps {
@@ -9,17 +9,17 @@ interface MovesPanelProps {
 }
 
 const MovesPanel: FC<MovesPanelProps> = ({ allMoves }) => {
-  const basicMoves = allMoves.filter((move) => move.kind === MoveKinds.basic);
-  const peripheralMoves = allMoves.filter((move) => move.kind === MoveKinds.peripheral);
-  const battleMoves = allMoves.filter((move) => move.kind === MoveKinds.battle);
-  const roadWarMoves = allMoves.filter((move) => move.kind === MoveKinds.roadWar);
+  const basicMoves = allMoves.filter((move) => move.kind === MoveType.basic);
+  const peripheralMoves = allMoves.filter((move) => move.kind === MoveType.peripheral);
+  const battleMoves = allMoves.filter((move) => move.kind === MoveType.battle);
+  const roadWarMoves = allMoves.filter((move) => move.kind === MoveType.roadWar);
 
   return (
     <Box data-testid="moves-panel" direction="row" wrap pad="12px" overflow="auto">
-      <MovesBox moves={basicMoves} moveCategory={MoveKinds.basic} />
-      <MovesBox moves={peripheralMoves} moveCategory={MoveKinds.peripheral} />
-      <MovesBox moves={battleMoves} moveCategory={MoveKinds.battle} />
-      <MovesBox moves={roadWarMoves} moveCategory={MoveKinds.roadWar} />
+      <MovesBox moves={basicMoves} moveCategory={MoveType.basic} />
+      <MovesBox moves={peripheralMoves} moveCategory={MoveType.peripheral} />
+      <MovesBox moves={battleMoves} moveCategory={MoveType.battle} />
+      <MovesBox moves={roadWarMoves} moveCategory={MoveType.roadWar} />
     </Box>
   );
 };

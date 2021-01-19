@@ -8,7 +8,7 @@ import { mockCharacter2, mockPlaybookAngel } from '../../../tests/mocks';
 import { mockPlaybook } from '../../../tests/mockQueries';
 import { decapitalize } from '../../../helpers/decapitalize';
 import PlaybookPanel from '../PlaybookPanel';
-import { MoveKinds } from '../../../@types/enums';
+import { MoveType } from '../../../@types/enums';
 
 describe('Rendering PlaybookPanel', () => {
   test('should render NameAndLooksBox properly', async () => {
@@ -214,7 +214,7 @@ describe('Rendering PlaybookPanel', () => {
     );
 
     // Check MovesBox has rendered initially
-    await screen.findByRole('heading', { name: `${decapitalize(MoveKinds.character)} moves` });
+    await screen.findByRole('heading', { name: `${decapitalize(MoveType.character)} moves` });
     expect(screen.getByTestId('moves-box').textContent).toContain(decapitalize(mockCharacter2.characterMoves[0].name));
     expect(screen.getByTestId('moves-box').textContent).toContain(decapitalize(mockCharacter2.characterMoves[1].name));
     expect(screen.getByTestId('moves-box').textContent).toContain(decapitalize(mockCharacter2.characterMoves[2].name));

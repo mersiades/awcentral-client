@@ -1,4 +1,4 @@
-import { PlayBooks, Roles, Stats, Threats, UniqueTypes } from './enums';
+import { PlayBookType, RoleType, StatType, Threats, UniqueTypes } from './enums';
 import { CharacterMove, Look, Move } from './staticDataInterfaces';
 
 /**
@@ -30,7 +30,7 @@ export interface Game {
 
 export interface GameRole {
   id: string;
-  role: Roles;
+  role: RoleType;
   userId: string;
   characters: Character[];
   npcs: Npc[];
@@ -41,7 +41,7 @@ export interface GameRole {
 
 export interface Character {
   id: string;
-  playbook: PlayBooks;
+  playbook: PlayBookType;
   hasCompletedCharacterCreation: boolean;
   statsBlock: StatsBlock;
   hxBlock: HxStat[];
@@ -72,7 +72,7 @@ export interface StatsBlock {
 
 export interface CharacterStat {
   id: string;
-  stat: Stats;
+  stat: StatType;
   value: number;
   isHighlighted: boolean;
 }

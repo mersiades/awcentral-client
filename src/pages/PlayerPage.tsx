@@ -12,7 +12,7 @@ import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } 
 import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
 import SET_CHARACTER_HARM, { SetCharacterHarmData, SetCharacterHarmVars } from '../mutations/setCharacterHarm';
 import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
-import { Stats } from '../@types/enums';
+import { StatType } from '../@types/enums';
 import { HarmInput } from '../@types';
 import { Move } from '../@types/staticDataInterfaces';
 import { Character } from '../@types/dataInterfaces';
@@ -106,7 +106,7 @@ const PlayerPage: FC = () => {
     }
   };
 
-  const handleToggleHighlight = async (stat: Stats) => {
+  const handleToggleHighlight = async (stat: StatType) => {
     if (!!userGameRole && !!character) {
       try {
         await toggleStatHighlight({ variables: { gameRoleId: userGameRole.id, characterId: character.id, stat } });

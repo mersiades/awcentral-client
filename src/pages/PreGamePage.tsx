@@ -9,7 +9,7 @@ import FINISH_PRE_GAME, { FinishPreGameData, FinishPreGameVars } from '../mutati
 import { useGame } from '../contexts/gameContext';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { Character } from '../@types/dataInterfaces';
-import { PlayBooks, Roles } from '../@types/enums';
+import { PlayBookType, RoleType } from '../@types/enums';
 import { decapitalize } from '../helpers/decapitalize';
 import { Checkbox, Checkmark } from 'grommet-icons';
 import ScrollableIndicator from '../components/ScrollableIndicator';
@@ -48,7 +48,7 @@ const PreGamePage = () => {
 
   // ----------------------------------------- Component functions and variables ------------------------------------------- //
 
-  const pathToGame = userGameRole?.role === Roles.mc ? `/mc-game/${game?.id}` : `/player-game/${game?.id}`;
+  const pathToGame = userGameRole?.role === RoleType.mc ? `/mc-game/${game?.id}` : `/player-game/${game?.id}`;
 
   // TODO: refactor out into HOC
   const handleScroll = (e: any) => {
@@ -71,29 +71,29 @@ const PreGamePage = () => {
     }
   };
 
-  const getUnique = (playbookType: PlayBooks) => {
+  const getUnique = (playbookType: PlayBookType) => {
     switch (playbookType) {
-      case PlayBooks.angel:
+      case PlayBookType.angel:
         return 'Angel kit';
-      case PlayBooks.battlebabe:
+      case PlayBookType.battlebabe:
         return 'Custom weapons';
-      case PlayBooks.brainer:
+      case PlayBookType.brainer:
         return 'Brainer gear';
-      case PlayBooks.chopper:
+      case PlayBookType.chopper:
         return 'Bike & gang';
-      case PlayBooks.driver:
+      case PlayBookType.driver:
         return 'Cars';
-      case PlayBooks.gunlugger:
+      case PlayBookType.gunlugger:
         return 'Weapons';
-      case PlayBooks.hardholder:
+      case PlayBookType.hardholder:
         return 'Holding';
-      case PlayBooks.hocus:
+      case PlayBookType.hocus:
         return 'Followers';
-      case PlayBooks.maestroD:
+      case PlayBookType.maestroD:
         return 'Establishment';
-      case PlayBooks.savvyhead:
+      case PlayBookType.savvyhead:
         return 'Workspace';
-      case PlayBooks.skinner:
+      case PlayBookType.skinner:
         return 'Skinner gear';
       default:
         return 'Unique';
@@ -254,7 +254,7 @@ const PreGamePage = () => {
       <CloseButton handleClose={() => history.push(pathToGame)} />
       <ScrollableIndicator show={showScrollable} />
       <HeadingWS level="2">PRE-GAME</HeadingWS>
-      {userGameRole?.role === Roles.mc && (
+      {userGameRole?.role === RoleType.mc && (
         <Box flex="grow" style={{ maxWidth: '812px' }} gap="3px">
           <Button
             alignSelf="center"

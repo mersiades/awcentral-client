@@ -1,19 +1,19 @@
 import { gql } from '@apollo/client';
 import { Character } from '../@types/dataInterfaces';
-import { PlayBooks } from '../@types/enums';
+import { PlayBookType } from '../@types/enums';
 
 export interface SetCharacterPlaybookData {
-  setPlaybookCharacter: Character
+  setPlaybookCharacter: Character;
 }
 
 export interface SetCharacterPlaybookVars {
-  gameRoleId: string
-  characterId: string
-  playbookType: PlayBooks
+  gameRoleId: string;
+  characterId: string;
+  playbookType: PlayBookType;
 }
 
 const SET_CHARACTER_PLAYBOOK = gql`
-  mutation SetCharacterPlaybook($gameRoleId: String!, $characterId: String!, $playbookType: PlayBooks!) {
+  mutation SetCharacterPlaybook($gameRoleId: String!, $characterId: String!, $playbookType: PlayBookType!) {
     setCharacterPlaybook(gameRoleId: $gameRoleId, characterId: $characterId, playbookType: $playbookType) {
       id
       name
@@ -25,6 +25,6 @@ const SET_CHARACTER_PLAYBOOK = gql`
       }
     }
   }
-`
+`;
 
-export default SET_CHARACTER_PLAYBOOK
+export default SET_CHARACTER_PLAYBOOK;

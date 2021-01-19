@@ -17,7 +17,7 @@ import {
   mockSetGameName,
 } from '../../tests/mockQueries';
 import MCPage from '../MCPage';
-import { Roles } from '../../@types/enums';
+import { RoleType } from '../../@types/enums';
 import App from '../../components/App';
 import { scryRenderedDOMComponentsWithTag } from 'react-dom/test-utils';
 
@@ -42,7 +42,7 @@ describe('Rendering MCPage', () => {
     screen.getByRole('banner');
     screen.getByRole('button', { name: 'Open Menu' });
     mockGame7.gameRoles.forEach((gameRole) => {
-      if (gameRole.role === Roles.player) {
+      if (gameRole.role === RoleType.player) {
         screen.getByRole('button', { name: gameRole.characters[0].name });
       }
     });

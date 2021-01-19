@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { Game, GameRole } from '../@types/dataInterfaces';
-import { Roles } from '../@types/enums';
+import { RoleType } from '../@types/enums';
 import GAME, { GameData, GameVars } from '../queries/game';
 
 /**
@@ -70,10 +70,10 @@ export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, in
   useEffect(() => {
     if (!!game) {
       const userGameRole = game.gameRoles.find((gameRole) => gameRole.userId === userId);
-      const mcGameRole = game.gameRoles.find((gameRole) => gameRole.role === Roles.mc);
-      const allPlayerGameRoles = game.gameRoles.filter((gameRole) => gameRole.role === Roles.player);
+      const mcGameRole = game.gameRoles.find((gameRole) => gameRole.role === RoleType.mc);
+      const allPlayerGameRoles = game.gameRoles.filter((gameRole) => gameRole.role === RoleType.player);
       const otherPlayerGameRoles = game.gameRoles.filter(
-        (gameRole) => gameRole.role === Roles.player && gameRole.userId !== userId
+        (gameRole) => gameRole.role === RoleType.player && gameRole.userId !== userId
       );
       setUserGameRole(userGameRole);
       setMcGameRole(mcGameRole);

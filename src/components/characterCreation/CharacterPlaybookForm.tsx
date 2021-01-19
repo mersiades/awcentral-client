@@ -4,7 +4,7 @@ import { Box } from 'grommet';
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
 import { StyledMarkdown } from '../styledComponents';
-import { PlayBooks } from '../../@types/enums';
+import { PlayBookType } from '../../@types/enums';
 import { Playbook } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
@@ -13,9 +13,9 @@ import '../../assets/styles/transitions.css';
 interface CharacterPlaybookProps {
   creatingCharacter: boolean;
   settingPlaybook: boolean;
-  checkPlaybookReset: (playbookType: PlayBooks) => void;
+  checkPlaybookReset: (playbookType: PlayBookType) => void;
   playbooks?: Playbook[];
-  playbook?: PlayBooks;
+  playbook?: PlayBookType;
 }
 
 const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
@@ -102,7 +102,7 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
               </em>
             </Box>
 
-            {[PlayBooks.angel, PlayBooks.battlebabe, PlayBooks.brainer].includes(selectedPlaybook.playbookType) && (
+            {[PlayBookType.angel, PlayBookType.battlebabe, PlayBookType.brainer].includes(selectedPlaybook.playbookType) && (
               <ButtonWS
                 label={
                   settingPlaybook || creatingCharacter ? (

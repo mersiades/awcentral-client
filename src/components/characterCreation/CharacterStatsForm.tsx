@@ -4,13 +4,13 @@ import { Box } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
-import { PlayBooks } from '../../@types/enums';
+import { PlayBookType } from '../../@types/enums';
 import { PlaybookCreator, StatsOption } from '../../@types/staticDataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
 
 interface CharacterStatsFormProps {
-  playbookType: PlayBooks;
+  playbookType: PlayBookType;
   settingStats: boolean;
   characterName: string;
   handleSubmitStats: (statsOptionId: string) => void;

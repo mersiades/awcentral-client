@@ -7,11 +7,11 @@ import AngelKitForm from './uniques/AngelKitForm';
 import CustomWeaponsForm from './uniques/CustomWeaponsForm';
 import BrainerGearForm from './uniques/BrainerGearForm';
 import { AngelKit, BrainerGear, CustomWeapons } from '../../@types/dataInterfaces';
-import { PlayBooks } from '../../@types/enums';
+import { PlayBookType } from '../../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 
 interface PlaybookUniqueRouterProps {
-  playbookType: PlayBooks;
+  playbookType: PlayBookType;
   characterName: string;
   settingAngelKit: boolean;
   settingCustomWeapons: boolean;
@@ -63,7 +63,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
 
   const renderForm = () => {
     switch (playbookType) {
-      case PlayBooks.angel:
+      case PlayBookType.angel:
         return (
           <AngelKitForm
             characterName={characterName}
@@ -73,7 +73,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
             existingAngelKit={existingAngelKit}
           />
         );
-      case PlayBooks.battlebabe:
+      case PlayBookType.battlebabe:
         return (
           <CustomWeaponsForm
             characterName={characterName}
@@ -83,7 +83,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
             existingCustomWeapons={existingCustomWeapons}
           />
         );
-      case PlayBooks.brainer:
+      case PlayBookType.brainer:
         return (
           <BrainerGearForm
             characterName={characterName}

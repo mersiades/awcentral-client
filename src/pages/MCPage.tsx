@@ -12,7 +12,7 @@ import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
 import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
-import { Roles } from '../@types/enums';
+import { RoleType } from '../@types/enums';
 import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
@@ -170,7 +170,7 @@ const MCPage: FC = () => {
               ]}
             />
             {game?.gameRoles
-              .filter((gameRole: GameRole) => gameRole.role === Roles.player)
+              .filter((gameRole: GameRole) => gameRole.role === RoleType.player)
               .map((gameRole: GameRole) =>
                 gameRole.characters?.map((character: any) => (
                   <Button

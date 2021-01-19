@@ -4,7 +4,7 @@ import { FormUp, FormDown, Edit } from 'grommet-icons';
 
 import { StyledMarkdown } from '../styledComponents';
 import { useGame } from '../../contexts/gameContext';
-import { Roles } from '../../@types/enums';
+import { RoleType } from '../../@types/enums';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
 import { HeadingWS } from '../../config/grommetConfig';
@@ -94,7 +94,7 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
                     {decapitalize(move.name)}
                   </HeadingWS>
                 </Box>
-                {!!move.stat && userGameRole?.role !== Roles.mc && <Button secondary label="ROLL" />}
+                {!!move.stat && userGameRole?.role !== RoleType.mc && <Button secondary label="ROLL" />}
               </Box>
 
               {showMoveDetails.includes(move.id) && (

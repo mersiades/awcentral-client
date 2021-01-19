@@ -32,7 +32,7 @@ import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/se
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
-import { PlayBooks, CharacterCreationSteps, LookCategories, Stats } from '../@types/enums';
+import { PlayBookType, CharacterCreationSteps, LookType, StatType } from '../@types/enums';
 import { HxInput } from '../@types';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
@@ -58,7 +58,7 @@ const CharacterCreationPage: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [creationStep, setCreationStep] = useState<number>(step ? parseInt(step) : 0);
   const [character, setCharacter] = useState<Character | undefined>();
-  const [showResetWarning, setShowResetWarning] = useState<PlayBooks | undefined>();
+  const [showResetWarning, setShowResetWarning] = useState<PlayBookType | undefined>();
   const [showScrollable, setShowScrollable] = useState(false);
 
   // ------------------------------------------------------- Refs -------------------------------------------------------- //
@@ -119,7 +119,7 @@ const CharacterCreationPage: FC = () => {
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
-  const checkPlaybookReset = (playbookType: PlayBooks) => {
+  const checkPlaybookReset = (playbookType: PlayBookType) => {
     if (
       !!userGameRole &&
       !!userGameRole.characters &&
@@ -133,7 +133,7 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  const handlePlaybookSelect = async (playbookType: PlayBooks) => {
+  const handlePlaybookSelect = async (playbookType: PlayBookType) => {
     if (!!userGameRole) {
       if (userGameRole.characters?.length === 0) {
         let characterId;
@@ -186,7 +186,7 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  const handleSubmitLook = async (look: string, category: LookCategories) => {
+  const handleSubmitLook = async (look: string, category: LookType) => {
     // console.log('handleSubmitLook');
     if (!!userGameRole && !!character) {
       try {
@@ -297,7 +297,7 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  const handleToggleHighlight = async (stat: Stats) => {
+  const handleToggleHighlight = async (stat: StatType) => {
     if (!!userGameRole && !!character) {
       try {
         await toggleStatHighlight({
@@ -477,11 +477,11 @@ const CharacterCreationPage: FC = () => {
             settingLooks={settingLooks}
             handleSubmitLook={handleSubmitLook}
             existingLooks={{
-              gender: character.looks?.filter((look) => look.category === LookCategories.gender)[0]?.look || '',
-              clothes: character.looks?.filter((look) => look.category === LookCategories.clothes)[0]?.look || '',
-              face: character.looks?.filter((look) => look.category === LookCategories.face)[0]?.look || '',
-              eyes: character.looks?.filter((look) => look.category === LookCategories.eyes)[0]?.look || '',
-              body: character.looks?.filter((look) => look.category === LookCategories.body)[0]?.look || '',
+              gender: character.looks?.filter((look) => look.category === LookType.gender)[0]?.look || '',
+              clothes: character.looks?.filter((look) => look.category === LookType.clothes)[0]?.look || '',
+              face: character.looks?.filter((look) => look.category === LookType.face)[0]?.look || '',
+              eyes: character.looks?.filter((look) => look.category === LookType.eyes)[0]?.look || '',
+              body: character.looks?.filter((look) => look.category === LookType.body)[0]?.look || '',
             }}
           />
         )}

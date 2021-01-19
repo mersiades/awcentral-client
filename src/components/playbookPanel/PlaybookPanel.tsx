@@ -6,7 +6,7 @@ import PLAYBOOK, { PlaybookData, PlaybookVars } from '../../queries/playbook';
 import { HarmInput } from '../../@types';
 import { Character } from '../../@types/dataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
-import { MoveKinds, Stats } from '../../@types/enums';
+import { MoveType, StatType } from '../../@types/enums';
 import StatsBox from './StatsBox';
 import MovesBox from './MovesBox';
 import NameAndLooksBox from './NameAndLooksBox';
@@ -24,7 +24,7 @@ interface PlaybookPanelProps {
   handleSetBarter: (amount: number) => void;
   handleAdjustHx: (hxId: string, value: number) => void;
   handleSetHarm: (harm: HarmInput) => void;
-  handleToggleHighlight: (stat: Stats) => void;
+  handleToggleHighlight: (stat: StatType) => void;
   navigateToCharacterCreation: (step: string) => void;
 }
 
@@ -65,7 +65,7 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
         <MovesBox
           moves={character.characterMoves}
           open
-          moveCategory={MoveKinds.character}
+          moveCategory={MoveType.character}
           navigateToCharacterCreation={navigateToCharacterCreation}
         />
       )}

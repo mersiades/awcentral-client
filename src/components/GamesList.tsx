@@ -2,7 +2,7 @@ import { List } from 'grommet';
 import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import { GameRole } from '../@types/dataInterfaces';
-import { Roles } from '../@types/enums';
+import { RoleType } from '../@types/enums';
 
 interface GamesListProps {
   gameRoles: GameRole[];
@@ -10,7 +10,7 @@ interface GamesListProps {
 
 interface GameInList {
   name: string;
-  role: Roles;
+  role: RoleType;
   gameId: string;
   numberOfCharacters: number;
 }
@@ -45,10 +45,10 @@ const GamesList: FC<GamesListProps> = ({ gameRoles }) => {
       secondaryKey="role"
       data={transformGames()}
       onClickItem={async (e: any) => {
-        if (e.item.role === Roles.player && e.item.numberOfCharacters === 0) {
+        if (e.item.role === RoleType.player && e.item.numberOfCharacters === 0) {
           console.log(`/character-creation/${e.item.gameId}?step=0`);
           history.push(`/character-creation/${e.item.gameId}?step=0`);
-        } else if (e.item.role === Roles.player) {
+        } else if (e.item.role === RoleType.player) {
           console.log(`/player-game/${e.item.gameId}`);
           history.push(`/player-game/${e.item.gameId}`);
         } else {

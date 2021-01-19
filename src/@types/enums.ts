@@ -1,9 +1,9 @@
-export enum Roles {
+export enum RoleType {
   mc = 'MC',
   player = 'PLAYER',
 }
 
-export enum Stats {
+export enum StatType {
   cool = 'COOL',
   hard = 'HARD',
   hot = 'HOT',
@@ -12,7 +12,7 @@ export enum Stats {
   hx = 'HX',
 }
 
-export enum MoveKinds {
+export enum MoveType {
   character = 'CHARACTER',
   default = 'DEFAULT_CHARACTER',
   basic = 'BASIC',
@@ -21,7 +21,7 @@ export enum MoveKinds {
   roadWar = 'ROAD_WAR',
 }
 
-export enum PlayBooks {
+export enum PlayBookType {
   angel = 'ANGEL',
   battlebabe = 'BATTLEBABE',
   brainer = 'BRAINER',
@@ -47,7 +47,7 @@ export enum CharacterCreationSteps {
   setHx = 8,
 }
 
-export enum LookCategories {
+export enum LookType {
   gender = 'GENDER',
   clothes = 'CLOTHES',
   face = 'FACE',

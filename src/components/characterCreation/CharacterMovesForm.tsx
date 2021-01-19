@@ -6,7 +6,7 @@ import { Box, CheckBox, Text } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
-import { PlayBooks } from '../../@types/enums';
+import { PlayBookType } from '../../@types/enums';
 import { CharacterMove } from '../../@types/staticDataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
@@ -19,7 +19,7 @@ const StyledMarkdown = styled(ReactMarkdown)`
 `;
 
 interface CharacterMovesFormProps {
-  playbookType: PlayBooks;
+  playbookType: PlayBookType;
   characterName: string;
   settingMoves: boolean;
   handleSubmitCharacterMoves: (moveIds: string[]) => void;

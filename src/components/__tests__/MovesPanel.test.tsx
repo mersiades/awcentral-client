@@ -6,7 +6,7 @@ import { customRenderForComponent } from '../../tests/test-utils';
 import { mockAllMovesArray } from '../../tests/mocks';
 import { mockPlaybook } from '../../tests/mockQueries';
 import { decapitalize } from '../../helpers/decapitalize';
-import { MoveKinds } from '../../@types/enums';
+import { MoveType } from '../../@types/enums';
 import MovesPanel from '../MovesPanel';
 
 describe('Rendering MovesPanel', () => {
@@ -16,9 +16,9 @@ describe('Rendering MovesPanel', () => {
       apolloMocks: [mockPlaybook],
     });
 
-    screen.getByRole('heading', { name: `${decapitalize(MoveKinds.basic)} moves` });
-    screen.getByRole('heading', { name: `${decapitalize(MoveKinds.peripheral)} moves` });
-    screen.getByRole('heading', { name: `${decapitalize(MoveKinds.battle)} moves` });
-    screen.getByRole('heading', { name: `${decapitalize(MoveKinds.roadWar)} moves` });
+    screen.getByRole('heading', { name: `${decapitalize(MoveType.basic)} moves` });
+    screen.getByRole('heading', { name: `${decapitalize(MoveType.peripheral)} moves` });
+    screen.getByRole('heading', { name: `${decapitalize(MoveType.battle)} moves` });
+    screen.getByRole('heading', { name: `${decapitalize(MoveType.roadWar)} moves` });
   });
 });

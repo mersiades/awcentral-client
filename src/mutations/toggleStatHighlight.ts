@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { Character } from '../@types/dataInterfaces';
-import { Stats } from '../@types/enums';
+import { StatType } from '../@types/enums';
 
 export interface ToggleStatHighlightData {
   toggleStatHighlight: Character;
@@ -9,11 +9,11 @@ export interface ToggleStatHighlightData {
 export interface ToggleStatHighlightVars {
   gameRoleId: string;
   characterId: string;
-  stat: Stats;
+  stat: StatType;
 }
 
 const TOGGLE_STAT_HIGHLIGHT = gql`
-  mutation ToggleStatHighlight($gameRoleId: String!, $characterId: String!, $stat: Stats!) {
+  mutation ToggleStatHighlight($gameRoleId: String!, $characterId: String!, $stat: StatType!) {
     toggleStatHighlight(gameRoleId: $gameRoleId, characterId: $characterId, stat: $stat) {
       id
       name
