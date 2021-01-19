@@ -2198,3 +2198,18 @@ export const mockAppCommsUrl: MockedResponse = {
     };
   },
 };
+
+export const mockAddInvitee3: MockedResponse = {
+  request: {
+    query: ADD_INVITEE,
+    variables: { gameId: mockGame7.id, email: 'new@email.com' },
+  },
+  result: {
+    data: {
+      game: {
+        ...mockGame7,
+        invitees: ['new@email.com'],
+      },
+    },
+  },
+};

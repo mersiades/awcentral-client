@@ -35,12 +35,15 @@ export const FontsProvider: FC<FontsProviderProps> = ({ children, isVtksReady = 
   const vtksFont = new FontFaceObserver('Vtks good luck for you');
   const crustFont = new FontFaceObserver('crust_clean');
 
-  vtksFont.load(null, 15000).then(
+  // Sets a longer timeout for running tests
+  const timeout = typeof jest === 'undefined' ? 15000 : 60000;
+
+  vtksFont.load(null, timeout).then(
     () => setVtksReady(true),
     () => console.warn('vtks failed to load')
   );
 
-  crustFont.load(null, 15000).then(
+  crustFont.load(null, timeout).then(
     () => setCrustReady(true),
     () => console.warn('crust failed to load')
   );

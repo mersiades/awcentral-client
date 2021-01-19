@@ -7,6 +7,7 @@ import { customRenderForComponent, renderWithRouter } from '../../tests/test-uti
 import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
 import { mockGame7, mockKeycloakUser2, mockKeycloakUserInfo1, mockKeycloakUserInfo2 } from '../../tests/mocks';
 import {
+  mockAddInvitee3,
   mockAllMoves,
   mockAppCommsApp,
   mockAppCommsUrl,
@@ -315,41 +316,56 @@ describe('Testing MCPage functionality', () => {
     // FAILING: the mock mutation is getting found, but it's payload isn't updating the graphQl cache
     // expect(screen.getByTestId('game-box').textContent).toContain('https://new.url.com');
   });
+
+  test('should invite a player', async () => {
+    jest.mock('../../helpers/copyToClipboard');
+    const originalExecCommand = document.execCommand;
+    document.execCommand = jest.fn();
+    renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
+      isAuthenticated: true,
+      apolloMocks: [mockAllMoves, mockAddInvitee3],
+      injectedGame: mockGame7,
+      keycloakUser: mockKeycloakUser2,
+      injectedUserId: mockKeycloakUser2.id,
+    });
+
+    await screen.findByRole('tab', { name: 'Moves' });
+    // Open InvitationForm
+    userEvent.click(screen.getByRole('button', { name: /INVITE PLAYER/ }));
+    screen.getByTestId('invitation-form');
+    screen.getByRole('heading', { name: `Invite a player to ${mockGame7.name}` });
+
+    // Enter invitee's email address
+    userEvent.type(screen.getByRole('textbox', { name: 'Email input' }), 'new@email.com');
+    // @ts-ignore
+    expect(screen.getByRole('textbox', { name: 'Email input' }).value).toEqual('new@email.com');
+
+    // Add invitee
+    userEvent.click(screen.getByRole('button', { name: /ADD/ }));
+
+    // Check that InvitationForm has transitioned to second part
+    await screen.findByRole('button', { name: /INVITE ANOTHER/ });
+
+    // FAILING: the mock mutation is getting found, but it's payload isn't updating the graphQl cache
+    // expect(screen.getByTestId('invitations-box').textContent).toContain('new@email.com');
+
+    // Check that the textarea contains the correct invitation message
+    const textArea = screen.getByRole('textbox');
+    // @ts-ignore
+    expect(textArea.value).toContain(`${process.env.REACT_APP_ROOT_URL}/join-game`);
+    // @ts-ignore
+    expect(textArea.value).toContain('new@email.com');
+    // @ts-ignore
+    expect(textArea.value).toContain(mockGame7.name);
+
+    // Copy message to clipboard
+    // TODO: figure out how to check what copyToClipboard was called with
+    userEvent.click(screen.getByRole('button', { name: /COPY TO CLIPBOARD/ }));
+    expect(document.execCommand).toHaveBeenCalledWith('copy');
+
+    // Close InvitationForm
+    userEvent.click(screen.getByTestId('close-icon-button'));
+
+    document.execCommand = originalExecCommand;
+  });
 });
-
-/**
- * --------------------------------------------------
-      textbox:
-
-      Name "":
-      <input
-        autocomplete="off"
-        class="StyledTextInput-sc-1x30a0s-0 jfheQE"
-        id="text-input-id"
-        name="name"
-        placeholder="Mock Game 7"
-        value="Mock Game 7"
-      />
-
-      Name "":
-      <input
-        autocomplete="off"
-        class="StyledTextInput-sc-1x30a0s-0 da-dGJS Select__SelectTextInput-sc-17idtfo-0 bIurki"
-        id="app-input__input"
-        name="app"
-        placeholder="App"
-        readonly=""
-        tabindex="-1"
-        type="text"
-        value="Discord"
-      />
-
-      Name "":
-      <textarea
-        class="StyledTextArea-sc-17i3mwp-0 LjETq"
-        id="url-input"
-        name="url"
-        placeholder="https://"
-        style="height: 100px;"
-      />
- */

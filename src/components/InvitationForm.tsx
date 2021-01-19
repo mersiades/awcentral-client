@@ -100,7 +100,14 @@ const InvitationForm: FC<InvitationFormProps> = ({ handleClose, existingEmail = 
           >
             <Box>
               <FormField name="email" width="100%">
-                <TextInput placeholder="Type player's email" type="email" name="email" size="xlarge" icon={<Mail />} />
+                <TextInput
+                  aria-label="Email input"
+                  placeholder="Type player's email"
+                  type="email"
+                  name="email"
+                  size="xlarge"
+                  icon={<Mail />}
+                />
               </FormField>
               <ButtonWS type="submit" primary label="ADD" alignSelf="end" disabled={!formValues.email} />
             </Box>
