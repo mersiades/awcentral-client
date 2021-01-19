@@ -1,3 +1,15 @@
+export enum CharacterCreationSteps {
+  intro = 0,
+  selectPlaybook = 1,
+  selectName = 2,
+  selectLooks = 3,
+  selectStats = 4,
+  selectGear = 5,
+  setUnique = 6,
+  selectMoves = 7,
+  setHx = 8,
+}
+
 export enum RoleType {
   mc = 'MC',
   player = 'PLAYER',
@@ -35,18 +47,6 @@ export enum PlayBookType {
   skinner = 'SKINNER',
 }
 
-export enum CharacterCreationSteps {
-  intro = 0,
-  selectPlaybook = 1,
-  selectName = 2,
-  selectLooks = 3,
-  selectStats = 4,
-  selectGear = 5,
-  setUnique = 6,
-  selectMoves = 7,
-  setHx = 8,
-}
-
 export enum LookType {
   gender = 'GENDER',
   clothes = 'CLOTHES',
@@ -77,4 +77,26 @@ export enum Threats {
   'LANDSCAPE',
   'TERRAIN',
   'VEHICLE',
+}
+
+export enum MoveActionType {
+  roll = 'ROLL',
+  print = 'PRINT',
+  barter = 'BARTER',
+  adjustHx = 'ADJUST_HX',
+  stock = 'STOCK',
+}
+
+export enum RollType {
+  stat = 'STAT',
+  hx = 'HX',
+  harm = 'HARM',
+  barter = 'BARTER',
+  speed = 'SPEED',
+  handling = 'HANDLING',
+  stock = 'STOCK',
+}
+
+export enum MessageType {
+  printMove = 'PRINT_MOVE',
 }

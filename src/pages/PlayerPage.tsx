@@ -19,6 +19,7 @@ import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import MessagesPanel from '../components/MessagesPanel';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -206,7 +207,7 @@ const PlayerPage: FC = () => {
           maxPanels={MAX_SIDE_PANEL}
           shinkWidth={SIDE_PANEL_WIDTH}
         >
-          Main container
+          <MessagesPanel />
         </MainContainer>
       </div>
       <Footer direction="row" justify="between" align="center" height="10vh">

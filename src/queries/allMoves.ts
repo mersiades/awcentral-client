@@ -13,7 +13,25 @@ const ALL_MOVES = gql`
       description
       kind
       playbook
-      stat
+      moveAction {
+        id
+        actionType
+        rollType
+        statToRollWith
+        holdConditions {
+          id
+          onTenPlus
+          onSevenToNine
+          onMiss
+        }
+        plusOneForwardConditions {
+          id
+          isManualGrant
+          onTenPlus
+          onSevenToNine
+          onMiss
+        }
+      }
     }
   }
 `;

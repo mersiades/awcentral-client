@@ -1,4 +1,4 @@
-import { PlayBookType, RoleType, StatType, Threats, UniqueTypes } from './enums';
+import { MessageType, PlayBookType, RoleType, StatType, Threats, UniqueTypes } from './enums';
 import { CharacterMove, Look, Move } from './staticDataInterfaces';
 
 /**
@@ -26,6 +26,7 @@ export interface Game {
   players: { displayName: string; id: string }[];
   gameRoles: GameRole[];
   invitees: string[];
+  gameMessages: GameMessage[];
 }
 
 export interface GameRole {
@@ -125,4 +126,13 @@ export interface Threat {
   impulse: string;
   description?: string;
   stakes?: string;
+}
+
+// --------------------------------------------------- Message interfaces --------------------------------------------------- //
+
+export interface GameMessage {
+  id: string;
+  messageType: MessageType;
+  senderName: string;
+  content: string;
 }

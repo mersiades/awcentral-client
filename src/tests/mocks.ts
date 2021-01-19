@@ -11,17 +11,29 @@ import {
   PlaybookUnique,
   StatsBlock,
 } from '../@types/dataInterfaces';
-import { LookType, MoveType, PlayBookType, RoleType, StatType, UniqueTypes } from '../@types/enums';
+import {
+  LookType,
+  MoveActionType,
+  MoveType,
+  PlayBookType,
+  RoleType,
+  RollType,
+  StatType,
+  UniqueTypes,
+} from '../@types/enums';
 import {
   AngelKitCreator,
   CharacterMove,
   GearInstructions,
+  HoldConditions,
   Look,
   Move,
+  MoveAction,
   Name,
   Playbook,
   PlaybookCreator,
   PlaybookUniqueCreator,
+  PlusOneForwardConditions,
   RollModifier,
   StatModifier,
   StatsOption,
@@ -475,6 +487,7 @@ export const mockGame1: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 export const mockGame2: Game = {
@@ -504,6 +517,7 @@ export const mockGame2: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 export const mockGame3: Game = {
@@ -525,6 +539,7 @@ export const mockGame3: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 // mockgame4 is used to test joining a game
@@ -555,6 +570,7 @@ export const mockGame4: Game = {
     },
   ],
   invitees: ['mockUser1@email.com'],
+  gameMessages: [],
 };
 
 // mockGame5 is a continuation of mockGame4, and is used for testing character creation
@@ -596,6 +612,7 @@ export const mockGame5: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 // Used for testing starting a game from the PreGamePage
@@ -637,6 +654,7 @@ export const mockGame6: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 // Used for testing PlayerPage, GamePanel
@@ -678,6 +696,7 @@ export const mockGame7: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 export const mockGameRole1: GameRole = {
@@ -797,6 +816,30 @@ export const mockHxInput: HxInput = {
 
 // -------------------------------------- Static move mocks ------------------------------------- //
 
+export const dummyHoldConditions: HoldConditions = {
+  id: 'dummy',
+  onTenPlus: 3,
+  onSevenToNine: 1,
+  onMiss: 0,
+};
+
+export const dummyPlusOneForwardConditions: PlusOneForwardConditions = {
+  id: 'dummy',
+  isManualGrant: false,
+  onTenPlus: false,
+  onSevenToNine: false,
+  onMiss: false,
+};
+
+export const dummyMoveAction: MoveAction = {
+  id: 'dummy',
+  actionType: MoveActionType.roll,
+  rollType: RollType.stat,
+  statToRollWith: StatType.hard,
+  holdConditions: dummyHoldConditions,
+  plusOneForwardConditions: dummyPlusOneForwardConditions,
+};
+
 export const doSomethingUnderFire: Move = {
   id: 'mock-move-id-1',
   name: 'DO SOMETHING UNDER FIRE',
@@ -806,6 +849,14 @@ export const doSomethingUnderFire: Move = {
   stat: StatType.cool,
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: {
+    id: 'under-fire-id',
+    actionType: MoveActionType.roll,
+    rollType: RollType.stat,
+    statToRollWith: StatType.cool,
+    holdConditions: dummyHoldConditions,
+    plusOneForwardConditions: dummyPlusOneForwardConditions,
+  },
 };
 
 export const goAggro: Move = {
@@ -818,6 +869,14 @@ export const goAggro: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: {
+    id: 'aggro-id',
+    actionType: MoveActionType.roll,
+    rollType: RollType.stat,
+    statToRollWith: StatType.hard,
+    holdConditions: dummyHoldConditions,
+    plusOneForwardConditions: dummyPlusOneForwardConditions,
+  },
 };
 
 export const sucker: Move = {
@@ -829,6 +888,7 @@ export const sucker: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const sufferHarm: Move = {
@@ -840,6 +900,7 @@ export const sufferHarm: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const goToMarket: Move = {
@@ -852,6 +913,7 @@ export const goToMarket: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const augury: Move = {
@@ -863,6 +925,7 @@ export const augury: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const exchangeHarm: Move = {
@@ -874,6 +937,7 @@ export const exchangeHarm: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const seizeByForce: Move = {
@@ -885,6 +949,7 @@ export const seizeByForce: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 export const standOverwatch: Move = {
   id: 'mock-move-id-9',
@@ -895,6 +960,7 @@ export const standOverwatch: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const boardAMovingVehicle: Move = {
@@ -907,6 +973,7 @@ export const boardAMovingVehicle: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const dealWithBadTerrain: Move = {
@@ -918,6 +985,7 @@ export const dealWithBadTerrain: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 export const shoulderAnotherVehicle: Move = {
   id: 'mock-move-id-12',
@@ -929,6 +997,7 @@ export const shoulderAnotherVehicle: Move = {
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const mockAllMovesArray = [

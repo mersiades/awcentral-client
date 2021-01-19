@@ -1,5 +1,5 @@
 import { ItemCharacteristic, TaggedItem } from '.';
-import { LookType, MoveType, PlayBookType, StatType, UniqueTypes } from './enums';
+import { LookType, MoveActionType, MoveType, PlayBookType, RollType, StatType, UniqueTypes } from './enums';
 
 /**
  * This file contains interfaces that represent static data models.
@@ -67,6 +67,31 @@ export interface StatsOption {
 }
 
 // -------------------------------------------------- Move interfaces -------------------------------------------------- //
+
+export interface HoldConditions {
+  id: string;
+  onTenPlus: number;
+  onSevenToNine: number;
+  onMiss: number;
+}
+
+export interface PlusOneForwardConditions {
+  id: string;
+  isManualGrant: boolean;
+  onTenPlus: boolean;
+  onSevenToNine: boolean;
+  onMiss: boolean;
+}
+
+export interface MoveAction {
+  id: string;
+  actionType: MoveActionType;
+  rollType?: RollType;
+  statToRollWith?: StatType;
+  holdConditions?: HoldConditions;
+  plusOneForwardConditions?: PlusOneForwardConditions;
+}
+
 export interface Move {
   id: string;
   name: string;
@@ -76,6 +101,7 @@ export interface Move {
   stat?: StatType;
   statModifier?: StatModifier;
   rollModifier?: RollModifier;
+  moveAction?: MoveAction;
 }
 
 export interface CharacterMove extends Move {

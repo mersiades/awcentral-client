@@ -18,6 +18,12 @@ const GAME = gql`
       commsApp
       commsUrl
       hasFinishedPreGame
+      gameMessages {
+        id
+        messageType
+        senderName
+        content
+      }
       mc {
         id
         displayName

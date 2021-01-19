@@ -19,7 +19,6 @@ import {
 import MCPage from '../MCPage';
 import { RoleType } from '../../@types/enums';
 import App from '../../components/App';
-import { scryRenderedDOMComponentsWithTag } from 'react-dom/test-utils';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');

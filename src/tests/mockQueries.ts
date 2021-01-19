@@ -1949,6 +1949,7 @@ export const mockGameForPreGame1: MockedResponse = {
           mc: mockGame5.mc,
           players: mockGame5.players,
           gameRoles: mockGame5.gameRoles,
+          gameMessages: mockGame5.gameMessages,
         },
       },
     };
