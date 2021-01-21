@@ -29,7 +29,7 @@ export const background = {
   color: 'black',
   dark: true,
   size: 'contain',
-  image: 'url(/images/background-image-8.jpg)',
+  image: 'url(/images/background-image-9.jpg)',
   position: 'bottom center',
 };
 

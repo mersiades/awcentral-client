@@ -60,13 +60,6 @@ const PLAYBOOK_CREATOR = gql`
           statToModify
           modification
         }
-        rollModifier {
-          id
-          movesToModify {
-            id
-          }
-          statToRollWith
-        }
         moveAction {
           id
           actionType
@@ -88,7 +81,7 @@ const PLAYBOOK_CREATOR = gql`
         }
         rollModifier {
           id
-          movesToModify {
+          moveToModify {
             id
           }
           statToRollWith

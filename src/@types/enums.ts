@@ -99,4 +99,5 @@ export enum RollType {
 
 export enum MessageType {
   printMove = 'PRINT_MOVE',
+  rollMove = 'ROLL_MOVE',
 }

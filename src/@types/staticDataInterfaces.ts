@@ -110,7 +110,7 @@ export interface CharacterMove extends Move {
 
 export interface RollModifier {
   id: string;
-  movesToModify: Move[];
+  moveToModify: Move;
   statToRollWith: StatType;
 }
 

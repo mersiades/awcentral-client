@@ -138,4 +138,9 @@ export interface GameMessage {
   title: string;
   content: string;
   sentOn: string;
+  roll1: number;
+  roll2: number;
+  rollModifier: number;
+  rollResult: number;
+  modifierStatName: StatType;
 }

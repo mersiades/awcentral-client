@@ -26,6 +26,11 @@ const GAME = gql`
         title
         content
         sentOn
+        roll1
+        roll2
+        rollModifier
+        rollResult
+        modifierStatName
       }
       mc {
         id
@@ -89,13 +94,6 @@ const GAME = gql`
             description
             playbook
             stat
-            rollModifier {
-              id
-              movesToModify {
-                id
-              }
-              statToRollWith
-            }
             moveAction {
               id
               actionType

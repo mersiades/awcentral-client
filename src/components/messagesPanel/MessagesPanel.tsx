@@ -6,6 +6,7 @@ import { accentColors } from '../../config/grommetConfig';
 import { MessageType } from '../../@types/enums';
 import { GameMessage } from '../../@types/dataInterfaces';
 import { useGame } from '../../contexts/gameContext';
+import StatRollMessage from './StatRollMessage';
 
 const MessagesPanel: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -48,6 +49,8 @@ const MessagesPanel: FC = () => {
   // Renders message based on messageType
   const renderMoveMessage = (message: GameMessage, index: number, ticker: number) => {
     switch (message.messageType) {
+      case MessageType.rollMove:
+        return <StatRollMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       case MessageType.printMove:
         return <PrintMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       default:
@@ -56,7 +59,7 @@ const MessagesPanel: FC = () => {
   };
 
   return (
-    <Box fill pad="12px" overflow="auto" gap="12px">
+    <Box fill pad="12px" overflow="auto" gap="12px" style={{ maxWidth: '812px' }}>
       {limitMessages().map((message, index) => {
         const isUserSender = userGameRole?.id === message.gameroleId;
         return (
@@ -64,7 +67,7 @@ const MessagesPanel: FC = () => {
             key={index}
             pad="12px"
             border={{ color: isUserSender ? '#FFF' : accentColors[0] }}
-            style={{ minHeight: 'fit-content' }}
+            style={{ minHeight: 'min-content' }}
           >
             {renderMoveMessage(message, index, ticker)}
           </Box>

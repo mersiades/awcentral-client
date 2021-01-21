@@ -171,15 +171,13 @@ export const mockStatsBlockWithHighlight: StatsBlock = {
 
 export const dummyRollModifier: RollModifier = {
   id: 'dummy',
-  movesToModify: [
-    {
-      id: 'dummy',
-      name: 'dummy',
-      description: 'dummy',
-      kind: MoveType.basic,
-      playbook: PlayBookType.angel,
-    },
-  ],
+  moveToModify: {
+    id: 'dummy',
+    name: 'dummy',
+    description: 'dummy',
+    kind: MoveType.basic,
+    playbook: PlayBookType.angel,
+  },
   statToRollWith: StatType.sharp,
 };
 

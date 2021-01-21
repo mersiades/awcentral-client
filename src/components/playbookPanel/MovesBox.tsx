@@ -12,6 +12,10 @@ import { useFonts } from '../../contexts/fontContext';
 import { useMutation } from '@apollo/client';
 import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
 import { useParams } from 'react-router-dom';
+import PERFORM_STAT_ROLL_MOVE, {
+  PerformStatRollMoveData,
+  PerformStatRollMoveVars,
+} from '../../mutations/performStatRollMove';
 
 interface MovesBoxProps {
   moves: Array<CharacterMove | Move>;
@@ -36,6 +40,10 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
 
   const [performPrintMove, { loading: performingPrintMove }] = useMutation<PerformPrintMoveData, PerformPrintMoveVars>(
     PERFORM_PRINT_MOVE
+  );
+
+  const [performRollMove, { loading: performingRollMove }] = useMutation<PerformStatRollMoveData, PerformStatRollMoveVars>(
+    PERFORM_STAT_ROLL_MOVE
   );
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
@@ -64,7 +72,19 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
     if (!!userGameRole && userGameRole.characters.length === 1 && !performingPrintMove) {
       try {
         performPrintMove({
-          variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole?.characters[0].id, moveId: move.id },
+          variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole.characters[0].id, moveId: move.id },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleRollMove = (move: Move | CharacterMove) => {
+    if (!!userGameRole && userGameRole.characters.length === 1 && !performingRollMove) {
+      try {
+        performRollMove({
+          variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole.characters[0].id, moveId: move.id },
         });
       } catch (error) {
         console.error(error);
@@ -75,7 +95,8 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
   const handleMoveClick = (move: Move | CharacterMove) => {
     switch (move.moveAction?.actionType) {
       case MoveActionType.roll:
-        return;
+        handleRollMove(move);
+        break;
       case MoveActionType.print:
       // Deliberately falls through
       default:
@@ -138,7 +159,7 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
                     crustReady={crustReady}
                     level="3"
                     margin={{ top: '3px', bottom: '3px' }}
-                    onClick={() => handleMoveClick(move)}
+                    onClick={() => canPerformMove && handleMoveClick(move)}
                     onMouseOver={(e: React.MouseEvent<HTMLHeadingElement>) =>
                       // @ts-ignore
                       (e.target.style.color = canPerformMove ? '#CD3F3E' : '#FFF')

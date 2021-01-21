@@ -21,6 +21,7 @@ import '../assets/styles/transitions.css';
 import { useFonts } from '../contexts/fontContext';
 import GameForm from '../components/GameForm';
 import WarningDialog from '../components/WarningDialog';
+import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 
 export const background = {
   color: 'black',
@@ -131,11 +132,7 @@ const MCPage: FC = () => {
       case 'MESSAGES':
       //deliberately falls through
       default:
-        return (
-          <HeadingWS vtksReady={vtksReady} level={1}>
-            Messages
-          </HeadingWS>
-        );
+        return <MessagesPanel />;
     }
   };
 
@@ -205,8 +202,8 @@ const MCPage: FC = () => {
               {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
             </SidePanel>
           </Collapsible>
-          <MainContainer sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
-            <LeftMainContainer rightPanel={rightPanel}>
+          <MainContainer fill sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
+            <LeftMainContainer fill rightPanel={rightPanel}>
               <Box fill align="center" justify="center" pad="12px">
                 {renderLeftPanel()}
               </Box>
