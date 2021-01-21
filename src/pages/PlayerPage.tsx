@@ -19,7 +19,7 @@ import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
-import MessagesPanel from '../components/MessagesPanel';
+import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 
 interface AllMovesData {
   allMoves: Move[];
