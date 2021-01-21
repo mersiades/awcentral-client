@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Box } from 'grommet';
 import React, { FC, useEffect, useRef } from 'react';
 import { accentColors, HeadingWS, TextWS } from '../config/grommetConfig';
@@ -7,6 +9,8 @@ import { StyledMarkdown } from './styledComponents';
 const MessagesPanel: FC = () => {
   const messageEndRef = useRef<HTMLDivElement>(null);
   const { game } = useGame();
+
+  dayjs.extend(relativeTime);
 
   const scrollToBottom = () => {
     !!messageEndRef.current && messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -43,7 +47,7 @@ const MessagesPanel: FC = () => {
       {limitMessages().map((message, index) => {
         return (
           <Box key={index} pad="12px" border={{ color: accentColors[1] }} style={{ minHeight: 'fit-content' }}>
-            {renderMessage(message.title, message.content, message.sentOn)}
+            {renderMessage(message.title, message.content, dayjs(message.sentOn).fromNow())}
           </Box>
         );
       })}
