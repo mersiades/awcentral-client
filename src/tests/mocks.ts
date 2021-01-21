@@ -57,6 +57,30 @@ interface MockCharacter {
 
 export const mockNewGameName = 'My new mock game';
 
+export const dummyHoldConditions: HoldConditions = {
+  id: 'dummy',
+  onTenPlus: 3,
+  onSevenToNine: 1,
+  onMiss: 0,
+};
+
+export const dummyPlusOneForwardConditions: PlusOneForwardConditions = {
+  id: 'dummy',
+  isManualGrant: false,
+  onTenPlus: false,
+  onSevenToNine: false,
+  onMiss: false,
+};
+
+export const dummyMoveAction: MoveAction = {
+  id: 'dummy',
+  actionType: MoveActionType.roll,
+  rollType: RollType.stat,
+  statToRollWith: StatType.hard,
+  holdConditions: dummyHoldConditions,
+  plusOneForwardConditions: dummyPlusOneForwardConditions,
+};
+
 export const mockKeycloakUserInfo1: KeycloakUserInfo = {
   email: 'mockUser1@email.com',
   email_verified: true,
@@ -196,6 +220,7 @@ export const mockCharacterMoveAngel1: CharacterMove = {
   stat: StatType.hx,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  moveAction: dummyMoveAction,
   isSelected: true,
 };
 
@@ -208,6 +233,7 @@ export const mockCharacterMoveAngel2: CharacterMove = {
   stat: StatType.sharp,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  moveAction: dummyMoveAction,
   isSelected: false,
 };
 
@@ -220,6 +246,7 @@ export const mockCharacterMoveAngel3: CharacterMove = {
   stat: StatType.sharp,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  moveAction: dummyMoveAction,
   isSelected: false,
 };
 
@@ -232,6 +259,7 @@ export const mockCharacterMoveAngel4: CharacterMove = {
   stat: StatType.hx,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  moveAction: dummyMoveAction,
   isSelected: false,
 };
 
@@ -659,9 +687,11 @@ export const mockGame6: Game = {
 export const mockGame7: Game = {
   id: 'mock-game-id-7',
   name: 'Mock Game 7',
+  invitees: [],
   commsApp: 'Discord',
   commsUrl: 'https://discord.com/urltodiscordchannel',
   hasFinishedPreGame: false,
+  gameMessages: [],
   mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2' },
   players: [
     { id: 'mock-keycloak-id-3', displayName: 'mock-user-3' },
@@ -693,8 +723,6 @@ export const mockGame7: Game = {
       characters: [{ ...mockCharacter2, hasCompletedCharacterCreation: true }],
     },
   ],
-  invitees: [],
-  gameMessages: [],
 };
 
 export const mockGameRole1: GameRole = {
@@ -813,30 +841,6 @@ export const mockHxInput: HxInput = {
 };
 
 // -------------------------------------- Static move mocks ------------------------------------- //
-
-export const dummyHoldConditions: HoldConditions = {
-  id: 'dummy',
-  onTenPlus: 3,
-  onSevenToNine: 1,
-  onMiss: 0,
-};
-
-export const dummyPlusOneForwardConditions: PlusOneForwardConditions = {
-  id: 'dummy',
-  isManualGrant: false,
-  onTenPlus: false,
-  onSevenToNine: false,
-  onMiss: false,
-};
-
-export const dummyMoveAction: MoveAction = {
-  id: 'dummy',
-  actionType: MoveActionType.roll,
-  rollType: RollType.stat,
-  statToRollWith: StatType.hard,
-  holdConditions: dummyHoldConditions,
-  plusOneForwardConditions: dummyPlusOneForwardConditions,
-};
 
 export const doSomethingUnderFire: Move = {
   id: 'mock-move-id-1',

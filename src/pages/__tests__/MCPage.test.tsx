@@ -29,6 +29,16 @@ jest.mock('@react-keycloak/web', () => {
 });
 
 describe('Rendering MCPage', () => {
+  const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
+  const mockScrollIntoView = jest.fn();
+  beforeEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = mockScrollIntoView;
+  });
+
+  afterEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
+
   test('should render initial MCPage with GamePanel open', async () => {
     customRenderForComponent(<MCPage />, {
       isAuthenticated: true,
@@ -147,6 +157,16 @@ describe('Rendering MCPage', () => {
 });
 
 describe('Testing MCPage functionality', () => {
+  const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
+  const mockScrollIntoView = jest.fn();
+  beforeEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = mockScrollIntoView;
+  });
+
+  afterEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
+
   test('should delete game and navigate to /menu', async () => {
     renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
       isAuthenticated: true,

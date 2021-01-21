@@ -26,6 +26,16 @@ jest.mock('@react-keycloak/web', () => {
 });
 
 describe('Rendering PreGamePage', () => {
+  const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
+  const mockScrollIntoView = jest.fn();
+  beforeEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = mockScrollIntoView;
+  });
+
+  afterEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
+
   test('should render for MC with two incomplete Characters', async () => {
     renderWithRouter(<App />, `/pre-game/${mockGame5.id}`, {
       isAuthenticated: true,
