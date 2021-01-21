@@ -20,9 +20,12 @@ const GAME = gql`
       hasFinishedPreGame
       gameMessages {
         id
+        gameId
+        gameroleId
         messageType
-        senderName
+        title
         content
+        sentOn
       }
       mc {
         id
@@ -91,6 +94,12 @@ const GAME = gql`
               movesToModify {
                 id
               }
+              statToRollWith
+            }
+            moveAction {
+              id
+              actionType
+              rollType
               statToRollWith
             }
           }

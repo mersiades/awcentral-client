@@ -46,6 +46,7 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
   const defaultMoveCount = pbCreatorData?.playbookCreator.defaultMoveCount;
   const moveChoiceCount = pbCreatorData?.playbookCreator.moveChoiceCount;
   const defaultMoveIds = defaultMoves?.map((move) => move.id);
+  console.log('defaultMoveIds', defaultMoveIds);
 
   const [selectedMoveIds, setSelectedMoveIds] = useState<string[]>([]);
 

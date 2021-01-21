@@ -7,19 +7,23 @@ export interface PerformPrintMoveData {
 
 export interface PerformPrintMoveVars {
   gameId: string;
+  gameroleId: string;
   characterId: string;
   moveId: string;
 }
 
 const PERFORM_PRINT_MOVE = gql`
-  mutation PerformPrintMove($gameId: String!, $characterId: String!, $moveId: String!) {
-    performPrintMove(gameId: $gameId, characterId: $characterId, moveId: $moveId) {
+  mutation PerformPrintMove($gameId: String!, $gameroleId: String!, $characterId: String!, $moveId: String!) {
+    performPrintMove(gameId: $gameId, gameroleId: $gameroleId, characterId: $characterId, moveId: $moveId) {
       id
       gameMessages {
         id
+        gameId
+        gameroleId
         messageType
-        senderName
+        title
         content
+        sentOn
       }
     }
   }

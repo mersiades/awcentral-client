@@ -283,6 +283,7 @@ const CharacterCreationPage: FC = () => {
   };
 
   const handleSubmitCharacterMoves = async (moveIds: string[]) => {
+    console.log('moveIds', moveIds);
     if (!!userGameRole && !!character) {
       try {
         await setCharacterMoves({

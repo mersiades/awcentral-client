@@ -63,7 +63,9 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
   const handlePrintMove = (move: Move | CharacterMove) => {
     if (!!userGameRole && userGameRole.characters.length === 1 && !performingPrintMove) {
       try {
-        performPrintMove({ variables: { gameId, characterId: userGameRole?.characters[0].id, moveId: move.id } });
+        performPrintMove({
+          variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole?.characters[0].id, moveId: move.id },
+        });
       } catch (error) {
         console.error(error);
       }

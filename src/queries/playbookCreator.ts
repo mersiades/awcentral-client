@@ -11,7 +11,7 @@ export interface PlaybookCreatorVars {
 }
 
 const PLAYBOOK_CREATOR = gql`
-  query PlaybookCreator($playbookType: PlayBookType!) {
+  query PlaybookCreator($playbookType: PlaybookType!) {
     playbookCreator(playbookType: $playbookType) {
       id
       playbookType
@@ -67,6 +67,12 @@ const PLAYBOOK_CREATOR = gql`
           }
           statToRollWith
         }
+        moveAction {
+          id
+          actionType
+          rollType
+          statToRollWith
+        }
       }
       defaultMoves {
         id
@@ -85,6 +91,12 @@ const PLAYBOOK_CREATOR = gql`
           movesToModify {
             id
           }
+          statToRollWith
+        }
+        moveAction {
+          id
+          actionType
+          rollType
           statToRollWith
         }
       }

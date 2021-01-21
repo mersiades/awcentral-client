@@ -132,7 +132,10 @@ export interface Threat {
 
 export interface GameMessage {
   id: string;
+  gameId: string;
+  gameroleId: string;
   messageType: MessageType;
-  senderName: string;
+  title: string;
   content: string;
+  sentOn: string;
 }
