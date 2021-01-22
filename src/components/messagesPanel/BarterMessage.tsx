@@ -17,7 +17,7 @@ const BarterMessage: FC<BarterMessageProps> = ({ message, messagesLength, index,
   return (
     <MoveMessage message={message} messagesLength={messagesLength} index={index} ticker={ticker}>
       <>
-        <Box direction="row" justify="between" align="center">
+        <Box fill="horizontal" direction="row" justify="around" align="center">
           <ParagraphWS alignSelf="start">{`Barter spent: ${message.barterSpent}`}</ParagraphWS>
           <ParagraphWS alignSelf="start">{`Barter left: ${message.currentBarter}`}</ParagraphWS>
         </Box>

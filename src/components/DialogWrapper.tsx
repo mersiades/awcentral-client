@@ -12,7 +12,6 @@ const DialogWrapper: FC<DialogWrapperProps> = ({ children, background, handleClo
   return (
     <Layer onEsc={handleClose} onClickOutside={handleClose}>
       <Box
-        data-testid={`hx-roll-dialog`}
         direction="column"
         fill
         align="center"

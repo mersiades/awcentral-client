@@ -17,7 +17,7 @@ const WarningDialog: FC<WarningDialogProps> = ({ title, buttonTitle, text, handl
   const { crustReady } = useFonts();
   return (
     <DialogWrapper background={WarningDialogBackground} handleClose={handleClose}>
-      <Box gap="12px">
+      <Box data-testid={`${title.toLowerCase()}-warning-dialog`} gap="12px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {title}
         </HeadingWS>

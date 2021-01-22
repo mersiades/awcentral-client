@@ -9,6 +9,7 @@ import { accentColors } from '../../config/grommetConfig';
 import { MessageType } from '../../@types/enums';
 import { GameMessage } from '../../@types/dataInterfaces';
 import { useGame } from '../../contexts/gameContext';
+import BarterRollMessage from './BarterRollMessage';
 
 const MessagesPanel: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -59,6 +60,8 @@ const MessagesPanel: FC = () => {
         return <PrintMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       case MessageType.barterMove:
         return <BarterMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
+      case MessageType.rollBarterMove:
+        return <BarterRollMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       default:
         return;
     }

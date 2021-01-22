@@ -5,17 +5,17 @@ import MoveMessage from './MoveMessage';
 import { StyledMarkdown } from '../styledComponents';
 import { GameMessage } from '../../@types/dataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
-import { HeadingWS, TextWS } from '../../config/grommetConfig';
+import { HeadingWS, ParagraphWS, TextWS } from '../../config/grommetConfig';
 import { getDiceImage } from '../../helpers/getDiceImage';
 
-export interface StatRollMessageProps {
+export interface BarterRollMessageProps {
   message: GameMessage;
   messagesLength: number;
   index: number;
   ticker: number;
 }
 
-const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, index, ticker }) => {
+const BarterRollMessage: FC<BarterRollMessageProps> = ({ message, messagesLength, index, ticker }) => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { crustReady, vtksReady } = useFonts();
 
@@ -39,9 +39,9 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
                 color="brand"
                 margin={{ top: '32px', bottom: '0px', horizontal: '3px' }}
               >
-                {message.rollModifier}
+                {message.barterSpent}
               </HeadingWS>
-              <TextWS>{message.modifierStatName}</TextWS>
+              <TextWS>BARTER</TextWS>
             </Box>
             <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">
               =
@@ -53,10 +53,14 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
             </Box>
           </Box>
         </Box>
+        <Box direction="row" justify="around" align="center">
+          <ParagraphWS alignSelf="start">{`Barter spent: ${message.barterSpent}`}</ParagraphWS>
+          <ParagraphWS alignSelf="start">{`Barter left: ${message.currentBarter}`}</ParagraphWS>
+        </Box>
         <StyledMarkdown>{message.content}</StyledMarkdown>
       </Box>
     </MoveMessage>
   );
 };
 
-export default StatRollMessage;
+export default BarterRollMessage;

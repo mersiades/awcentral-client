@@ -99,6 +99,8 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
       case RollType.stat:
         handleStatRollMove(move);
         break;
+      case RollType.barter:
+      // deliberately falls through
       case RollType.hx:
         !!openDialog && openDialog(move);
         break;

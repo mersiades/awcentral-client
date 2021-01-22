@@ -102,4 +102,5 @@ export enum MessageType {
   rollStatMove = 'ROLL_STAT_MOVE',
   rollHxMove = 'ROLL_HX_MOVE',
   barterMove = 'BARTER_MOVE',
+  rollBarterMove = 'ROLL_BARTER_MOVE',
 }

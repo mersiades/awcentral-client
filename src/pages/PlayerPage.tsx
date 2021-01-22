@@ -9,6 +9,7 @@ import PlaybookPanel from '../components/playbookPanel/PlaybookPanel';
 import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 import HxRollDialog from '../components/HxRollDialog';
 import BarterDialog from '../components/BarterDialog';
+import BarterRollDialog from '../components/BarterRollDialog';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES from '../queries/allMoves';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
@@ -169,6 +170,9 @@ const PlayerPage: FC = () => {
       >
         {dialog?.moveAction?.rollType === RollType.hx && (
           <HxRollDialog move={dialog} buttonTitle="ROLL" handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.moveAction?.rollType === RollType.barter && (
+          <BarterRollDialog move={dialog} handleClose={() => setDialog(undefined)} />
         )}
         {dialog?.moveAction?.actionType === MoveActionType.barter && (
           <BarterDialog move={dialog} handleClose={() => setDialog(undefined)} />

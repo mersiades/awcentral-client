@@ -650,3 +650,11 @@ export const BarterBackground = {
   size: 'cover',
   image: 'url(/images/background-image-11.jpg)',
 };
+
+export const BarterRollBackground = {
+  color: 'black',
+  dark: true,
+  position: 'center bottom',
+  size: 'cover',
+  image: 'url(/images/background-image-13.jpg)',
+};
