@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { Box, Layer, Select } from 'grommet';
+import { Box, Select } from 'grommet';
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CharacterMove, Move } from '../@types/staticDataInterfaces';
@@ -7,6 +7,7 @@ import { HeadingWS, ParagraphWS, ButtonWS, HxRollBackground } from '../config/gr
 import { useFonts } from '../contexts/fontContext';
 import { useGame } from '../contexts/gameContext';
 import PERFORM_HX_ROLL_MOVE, { PerformHxRollMoveData, PerformHxRollMoveVars } from '../mutations/performHxRollMove';
+import DialogWrapper from './DialogWrapper';
 
 interface HxRollDialogProps {
   move: Move | CharacterMove;
@@ -61,20 +62,8 @@ const HxRollDialog: FC<HxRollDialogProps> = ({ move, buttonTitle, handleClose })
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <Layer onEsc={handleClose} onClickOutside={handleClose}>
-      <Box
-        data-testid={`hx-roll-dialog`}
-        direction="column"
-        fill
-        align="center"
-        justify="center"
-        pad="24px"
-        gap="24px"
-        border={{ color: 'brand' }}
-        background={HxRollBackground}
-        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
-        style={{ boxShadow: '0 0 15px 1px #000, 0 0 20px 3px #000' }}
-      >
+    <DialogWrapper background={HxRollBackground} handleClose={handleClose}>
+      <Box gap="12px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}
         </HeadingWS>
@@ -102,10 +91,11 @@ const HxRollDialog: FC<HxRollDialogProps> = ({ move, buttonTitle, handleClose })
             label={buttonTitle.toUpperCase()}
             primary
             onClick={() => !!targetId && !performingHxRollMove && handleHxRollMove(move, targetId)}
+            disabled={!targetId || performingHxRollMove}
           />
         </Box>
       </Box>
-    </Layer>
+    </DialogWrapper>
   );
 };
 

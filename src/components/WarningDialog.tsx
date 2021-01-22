@@ -1,5 +1,7 @@
-import { Layer, Box } from 'grommet';
 import React, { FC } from 'react';
+import { Box } from 'grommet';
+
+import DialogWrapper from './DialogWrapper';
 import { WarningDialogBackground, HeadingWS, ButtonWS, ParagraphWS } from '../config/grommetConfig';
 import { useFonts } from '../contexts/fontContext';
 
@@ -14,20 +16,8 @@ interface WarningDialogProps {
 const WarningDialog: FC<WarningDialogProps> = ({ title, buttonTitle, text, handleClose, handleConfirm }) => {
   const { crustReady } = useFonts();
   return (
-    <Layer onEsc={handleClose} onClickOutside={handleClose}>
-      <Box
-        data-testid={`${title.toLowerCase()}-warning-dialog`}
-        direction="column"
-        fill
-        align="center"
-        justify="center"
-        pad="24px"
-        gap="24px"
-        border={{ color: 'brand' }}
-        background={WarningDialogBackground}
-        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
-        style={{ boxShadow: '0 0 15px 1px #000, 0 0 20px 3px #000' }}
-      >
+    <DialogWrapper background={WarningDialogBackground} handleClose={handleClose}>
+      <Box gap="12px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {title}
         </HeadingWS>
@@ -44,7 +34,7 @@ const WarningDialog: FC<WarningDialogProps> = ({ title, buttonTitle, text, handl
           <ButtonWS label={buttonTitle.toUpperCase()} primary onClick={handleConfirm} />
         </Box>
       </Box>
-    </Layer>
+    </DialogWrapper>
   );
 };
 
