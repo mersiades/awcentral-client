@@ -7,14 +7,14 @@ import { HeadingWS, TextWS } from '../../config/grommetConfig';
 import { Box } from 'grommet';
 import { useFonts } from '../../contexts/fontContext';
 
-export interface StatRollMessageProps {
+export interface HxRollMessageProps {
   message: GameMessage;
   messagesLength: number;
   index: number;
   ticker: number;
 }
 
-const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, index, ticker }) => {
+const HxRollMessage: FC<HxRollMessageProps> = ({ message, messagesLength, index, ticker }) => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { crustReady, vtksReady } = useFonts();
 
@@ -74,4 +74,4 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
   );
 };
 
-export default StatRollMessage;
+export default HxRollMessage;

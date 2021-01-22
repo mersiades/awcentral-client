@@ -14,6 +14,7 @@ import BarterBox from './BarterBox';
 import GearBox from './GearBox';
 import HxBox from './HxBox';
 import HarmBox from './HarmBox';
+import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -26,6 +27,7 @@ interface PlaybookPanelProps {
   handleSetHarm: (harm: HarmInput) => void;
   handleToggleHighlight: (stat: StatType) => void;
   navigateToCharacterCreation: (step: string) => void;
+  openDialog: (move: Move | CharacterMove) => void;
 }
 
 const PlaybookPanel: FC<PlaybookPanelProps> = ({
@@ -39,6 +41,7 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
   handleSetHarm,
   handleToggleHighlight,
   navigateToCharacterCreation,
+  openDialog,
 }) => {
   const { data } = useQuery<PlaybookData, PlaybookVars>(PLAYBOOK, { variables: { playbookType: character.playbook } });
 
@@ -67,6 +70,7 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
           open
           moveCategory={MoveType.character}
           navigateToCharacterCreation={navigateToCharacterCreation}
+          openDialog={openDialog}
         />
       )}
 

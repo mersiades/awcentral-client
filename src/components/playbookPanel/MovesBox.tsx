@@ -4,7 +4,7 @@ import { FormUp, FormDown, Edit } from 'grommet-icons';
 
 import { StyledMarkdown } from '../styledComponents';
 import { useGame } from '../../contexts/gameContext';
-import { MoveActionType, RoleType } from '../../@types/enums';
+import { MoveActionType, RoleType, RollType } from '../../@types/enums';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
 import { brandColor, HeadingWS } from '../../config/grommetConfig';
@@ -22,9 +22,10 @@ interface MovesBoxProps {
   moveCategory: string;
   open?: boolean;
   navigateToCharacterCreation?: (step: string) => void;
+  openDialog?: (move: Move | CharacterMove) => void;
 }
 
-const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToCharacterCreation }) => {
+const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToCharacterCreation, openDialog }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [showMoves, setShowMoves] = useState(open);
   const [showMoveDetails, setShowMoveDetails] = useState<string[]>([]);
@@ -42,9 +43,10 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
     PERFORM_PRINT_MOVE
   );
 
-  const [performRollMove, { loading: performingRollMove }] = useMutation<PerformStatRollMoveData, PerformStatRollMoveVars>(
-    PERFORM_STAT_ROLL_MOVE
-  );
+  const [performStatRollMove, { loading: performingStatRollMove }] = useMutation<
+    PerformStatRollMoveData,
+    PerformStatRollMoveVars
+  >(PERFORM_STAT_ROLL_MOVE);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const toggleShowMoves = () => setShowMoves(!showMoves);
@@ -80,10 +82,10 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
     }
   };
 
-  const handleRollMove = (move: Move | CharacterMove) => {
-    if (!!userGameRole && userGameRole.characters.length === 1 && !performingRollMove) {
+  const handleStatRollMove = (move: Move | CharacterMove) => {
+    if (!!userGameRole && userGameRole.characters.length === 1 && !performingStatRollMove) {
       try {
-        performRollMove({
+        performStatRollMove({
           variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole.characters[0].id, moveId: move.id },
         });
       } catch (error) {
@@ -92,10 +94,22 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
     }
   };
 
+  const handleRollClick = (move: Move | CharacterMove) => {
+    switch (move.moveAction?.rollType) {
+      case RollType.stat:
+        handleStatRollMove(move);
+        break;
+      case RollType.hx:
+        !!openDialog && openDialog(move);
+        break;
+      default:
+    }
+  };
+
   const handleMoveClick = (move: Move | CharacterMove) => {
     switch (move.moveAction?.actionType) {
       case MoveActionType.roll:
-        handleRollMove(move);
+        handleRollClick(move);
         break;
       case MoveActionType.print:
       // Deliberately falls through

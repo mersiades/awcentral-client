@@ -11,7 +11,7 @@ export interface PlaybookVars {
 }
 
 const PLAYBOOK = gql`
-  query Playbook($playbookType: PlayBookType!) {
+  query Playbook($playbookType: PlaybookType!) {
     playbook(playbookType: $playbookType) {
       id
       playbookType

@@ -12,14 +12,15 @@ import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } 
 import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
 import SET_CHARACTER_HARM, { SetCharacterHarmData, SetCharacterHarmVars } from '../mutations/setCharacterHarm';
 import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
-import { StatType } from '../@types/enums';
+import { RollType, StatType } from '../@types/enums';
 import { HarmInput } from '../@types';
-import { Move } from '../@types/staticDataInterfaces';
+import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import MessagesPanel from '../components/messagesPanel/MessagesPanel';
+import HxRollDialog from '../components/HxRollDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -46,6 +47,7 @@ const PlayerPage: FC = () => {
    */
   const [sidePanel, setSidePanel] = useState<number>(2);
   const [character, setCharacter] = useState<Character | undefined>();
+  const [dialog, setDialog] = useState<Move | CharacterMove | undefined>();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
@@ -164,6 +166,9 @@ const PlayerPage: FC = () => {
         style={{ borderBottom: `1px solid ${accentColors[0]}` }}
         height="4vh"
       >
+        {dialog?.moveAction?.rollType === RollType.hx && (
+          <HxRollDialog move={dialog} buttonTitle="ROLL" handleClose={() => setDialog(undefined)} />
+        )}
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
             style={{ backgroundColor: 'transparent' }}
@@ -194,9 +199,10 @@ const PlayerPage: FC = () => {
                 handleSetHarm={handleSetHarm}
                 handleToggleHighlight={handleToggleHighlight}
                 navigateToCharacterCreation={navigateToCharacterCreation}
+                openDialog={setDialog}
               />
             )}
-            {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} />}
+            {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} openDialog={setDialog} />}
           </SidePanel>
         </Collapsible>
         <MainContainer

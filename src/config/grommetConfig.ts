@@ -648,3 +648,11 @@ export const WarningDialogBackground = {
   size: 'cover',
   image: 'url(/images/background-image-6.jpg)',
 };
+
+export const HxRollBackground = {
+  color: 'black',
+  dark: true,
+  position: 'center bottom',
+  size: 'cover',
+  image: 'url(/images/background-image-10.jpg)',
+};
