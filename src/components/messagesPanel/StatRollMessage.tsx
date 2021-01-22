@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
+import { Box } from 'grommet';
 
 import MoveMessage from './MoveMessage';
 import { StyledMarkdown } from '../styledComponents';
 import { GameMessage } from '../../@types/dataInterfaces';
-import { HeadingWS, TextWS } from '../../config/grommetConfig';
-import { Box } from 'grommet';
 import { useFonts } from '../../contexts/fontContext';
+import { HeadingWS, TextWS } from '../../config/grommetConfig';
 
 export interface StatRollMessageProps {
   message: GameMessage;

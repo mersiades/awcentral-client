@@ -6,21 +6,22 @@ import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet
 
 import MovesPanel from '../components/MovesPanel';
 import PlaybookPanel from '../components/playbookPanel/PlaybookPanel';
+import MessagesPanel from '../components/messagesPanel/MessagesPanel';
+import HxRollDialog from '../components/HxRollDialog';
+import BarterDialog from '../components/BarterDialog';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES from '../queries/allMoves';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
 import SET_CHARACTER_HARM, { SetCharacterHarmData, SetCharacterHarmVars } from '../mutations/setCharacterHarm';
 import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
-import { RollType, StatType } from '../@types/enums';
+import { MoveActionType, RollType, StatType } from '../@types/enums';
 import { HarmInput } from '../@types';
 import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
-import MessagesPanel from '../components/messagesPanel/MessagesPanel';
-import HxRollDialog from '../components/HxRollDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -168,6 +169,9 @@ const PlayerPage: FC = () => {
       >
         {dialog?.moveAction?.rollType === RollType.hx && (
           <HxRollDialog move={dialog} buttonTitle="ROLL" handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.moveAction?.actionType === MoveActionType.barter && (
+          <BarterDialog move={dialog} handleClose={() => setDialog(undefined)} />
         )}
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu

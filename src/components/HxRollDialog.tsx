@@ -1,13 +1,14 @@
-import { useMutation } from '@apollo/client';
-import { Box, Select } from 'grommet';
 import React, { FC, useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { CharacterMove, Move } from '../@types/staticDataInterfaces';
+import { Box, Select } from 'grommet';
+
+import DialogWrapper from './DialogWrapper';
 import { HeadingWS, ParagraphWS, ButtonWS, HxRollBackground } from '../config/grommetConfig';
+import PERFORM_HX_ROLL_MOVE, { PerformHxRollMoveData, PerformHxRollMoveVars } from '../mutations/performHxRollMove';
+import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 import { useFonts } from '../contexts/fontContext';
 import { useGame } from '../contexts/gameContext';
-import PERFORM_HX_ROLL_MOVE, { PerformHxRollMoveData, PerformHxRollMoveVars } from '../mutations/performHxRollMove';
-import DialogWrapper from './DialogWrapper';
 
 interface HxRollDialogProps {
   move: Move | CharacterMove;

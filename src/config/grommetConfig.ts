@@ -513,20 +513,6 @@ export const CustomUL = styled.ul`
   }
 `;
 
-// export const FooterTabs = styled(Tabs as FC<TabsProps & JSX.IntrinsicElements['div']>)(() => {
-//   return css``;
-// });
-
-// export const FooterTab = styled(Tab as React.ComponentClass<TabProps & Omit<JSX.IntrinsicElements['button'], 'title'>>)(
-//   () => {
-//     return css`
-//       font-size: 36px;
-//       font-family: 'crust_clean', sans-serif;
-//       line-height: normal;
-//     `;
-//   }
-// );
-
 // Renders Grommet Heading with black text shadow
 export const HeadingWS = styled(
   Heading as React.FC<
@@ -655,4 +641,12 @@ export const HxRollBackground = {
   position: 'center bottom',
   size: 'cover',
   image: 'url(/images/background-image-10.jpg)',
+};
+
+export const BarterBackground = {
+  color: 'black',
+  dark: true,
+  position: 'left bottom',
+  size: 'cover',
+  image: 'url(/images/background-image-11.jpg)',
 };

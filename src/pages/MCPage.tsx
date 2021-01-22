@@ -7,6 +7,9 @@ import { useMutation, useQuery } from '@apollo/client';
 import GamePanel from '../components/gamePanel/GamePanel';
 import MovesPanel from '../components/MovesPanel';
 import InvitationForm from '../components/InvitationForm';
+import GameForm from '../components/GameForm';
+import WarningDialog from '../components/WarningDialog';
+import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 import { Footer, LeftMainContainer, MainContainer, RightMainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
@@ -16,12 +19,9 @@ import { RoleType } from '../@types/enums';
 import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
+import { useFonts } from '../contexts/fontContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles, HeadingWS } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
-import { useFonts } from '../contexts/fontContext';
-import GameForm from '../components/GameForm';
-import WarningDialog from '../components/WarningDialog';
-import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 
 export const background = {
   color: 'black',

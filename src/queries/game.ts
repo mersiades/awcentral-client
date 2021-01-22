@@ -31,6 +31,8 @@ const GAME = gql`
         rollModifier
         rollResult
         modifierStatName
+        barterSpent
+        currentBarter
       }
       mc {
         id

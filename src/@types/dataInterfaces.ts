@@ -143,4 +143,6 @@ export interface GameMessage {
   rollModifier: number;
   rollResult: number;
   modifierStatName: StatType;
+  barterSpent: number;
+  currentBarter: number;
 }

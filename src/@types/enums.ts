@@ -101,4 +101,5 @@ export enum MessageType {
   printMove = 'PRINT_MOVE',
   rollStatMove = 'ROLL_STAT_MOVE',
   rollHxMove = 'ROLL_HX_MOVE',
+  barterMove = 'BARTER_MOVE',
 }

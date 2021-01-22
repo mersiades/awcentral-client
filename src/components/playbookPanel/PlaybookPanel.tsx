@@ -2,11 +2,6 @@ import React, { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from 'grommet';
 
-import PLAYBOOK, { PlaybookData, PlaybookVars } from '../../queries/playbook';
-import { HarmInput } from '../../@types';
-import { Character } from '../../@types/dataInterfaces';
-import { decapitalize } from '../../helpers/decapitalize';
-import { MoveType, StatType } from '../../@types/enums';
 import StatsBox from './StatsBox';
 import MovesBox from './MovesBox';
 import NameAndLooksBox from './NameAndLooksBox';
@@ -14,6 +9,11 @@ import BarterBox from './BarterBox';
 import GearBox from './GearBox';
 import HxBox from './HxBox';
 import HarmBox from './HarmBox';
+import PLAYBOOK, { PlaybookData, PlaybookVars } from '../../queries/playbook';
+import { MoveType, StatType } from '../../@types/enums';
+import { HarmInput } from '../../@types';
+import { Character } from '../../@types/dataInterfaces';
+import { decapitalize } from '../../helpers/decapitalize';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 
 interface PlaybookPanelProps {

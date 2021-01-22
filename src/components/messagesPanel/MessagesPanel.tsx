@@ -2,12 +2,13 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { Box } from 'grommet';
 
 import PrintMessage from './PrintMessage';
+import StatRollMessage from './StatRollMessage';
+import HxRollMessage from './HxRollMessage';
+import BarterMessage from './BarterMessage';
 import { accentColors } from '../../config/grommetConfig';
 import { MessageType } from '../../@types/enums';
 import { GameMessage } from '../../@types/dataInterfaces';
 import { useGame } from '../../contexts/gameContext';
-import StatRollMessage from './StatRollMessage';
-import HxRollMessage from './HxRollMessage';
 
 const MessagesPanel: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -56,11 +57,12 @@ const MessagesPanel: FC = () => {
         return <HxRollMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       case MessageType.printMove:
         return <PrintMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
+      case MessageType.barterMove:
+        return <BarterMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       default:
         return;
     }
   };
-  console.log('limitMessages', limitMessages());
 
   return (
     <Box fill pad="12px" overflow="auto" gap="12px" style={{ maxWidth: '812px' }}>

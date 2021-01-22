@@ -1,21 +1,21 @@
 import React, { FC, useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { useParams } from 'react-router-dom';
 import { Box } from 'grommet';
 import { FormUp, FormDown, Edit } from 'grommet-icons';
 
 import { StyledMarkdown } from '../styledComponents';
-import { useGame } from '../../contexts/gameContext';
-import { MoveActionType, RoleType, RollType } from '../../@types/enums';
-import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
-import { decapitalize } from '../../helpers/decapitalize';
-import { brandColor, HeadingWS } from '../../config/grommetConfig';
-import { useFonts } from '../../contexts/fontContext';
-import { useMutation } from '@apollo/client';
 import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
-import { useParams } from 'react-router-dom';
 import PERFORM_STAT_ROLL_MOVE, {
   PerformStatRollMoveData,
   PerformStatRollMoveVars,
 } from '../../mutations/performStatRollMove';
+import { MoveActionType, RoleType, RollType } from '../../@types/enums';
+import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
+import { useGame } from '../../contexts/gameContext';
+import { useFonts } from '../../contexts/fontContext';
+import { brandColor, HeadingWS } from '../../config/grommetConfig';
+import { decapitalize } from '../../helpers/decapitalize';
 
 interface MovesBoxProps {
   moves: Array<CharacterMove | Move>;
@@ -107,9 +107,13 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
   };
 
   const handleMoveClick = (move: Move | CharacterMove) => {
+    console.log('move.moveAction?.actionType', move.moveAction?.actionType);
     switch (move.moveAction?.actionType) {
       case MoveActionType.roll:
         handleRollClick(move);
+        break;
+      case MoveActionType.barter:
+        !!openDialog && openDialog(move);
         break;
       case MoveActionType.print:
       // Deliberately falls through

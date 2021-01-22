@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { Box } from 'grommet';
-import { CharacterMove, Move } from '../@types/staticDataInterfaces';
-import { MoveType } from '../@types/enums';
+
 import MovesBox from './playbookPanel/MovesBox';
+import { MoveType } from '../@types/enums';
+import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 
 interface MovesPanelProps {
   allMoves: Move[];
