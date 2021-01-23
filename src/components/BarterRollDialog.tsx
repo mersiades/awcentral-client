@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Box, FormField, TextInput } from 'grommet';
 
 import DialogWrapper from './DialogWrapper';
-import { HeadingWS, ParagraphWS, RedBox, ButtonWS, BarterRollBackground } from '../config/grommetConfig';
+import { HeadingWS, ParagraphWS, RedBox, ButtonWS, barterRollBackground } from '../config/grommetConfig';
 import PERFORM_BARTER_ROLL_MOVE, {
   PerformBarterRollMoveData,
   PerformBarterRollMoveVars,
@@ -62,7 +62,7 @@ const BarterRollDialog: FC<BarterRollDialogProps> = ({ move, handleClose }) => {
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <DialogWrapper background={BarterRollBackground} handleClose={handleClose}>
+    <DialogWrapper background={barterRollBackground} handleClose={handleClose}>
       <Box gap="24px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}

@@ -11,6 +11,7 @@ import { GameMessage } from '../../@types/dataInterfaces';
 import { useGame } from '../../contexts/gameContext';
 import BarterRollMessage from './BarterRollMessage';
 import SufferHarmMessage from './SufferHarmMessage';
+import AdjustHxMessage from './AdjustsHxMessage';
 
 const MessagesPanel: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -65,6 +66,8 @@ const MessagesPanel: FC = () => {
         return <BarterRollMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       case MessageType.sufferHarmMove:
         return <SufferHarmMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
+      case MessageType.adjustHxMove:
+        return <AdjustHxMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       default:
         return;
     }

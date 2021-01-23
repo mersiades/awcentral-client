@@ -4,7 +4,7 @@ import { useMutation } from '@apollo/client';
 import { Box, FormField, TextInput } from 'grommet';
 
 import DialogWrapper from './DialogWrapper';
-import { HeadingWS, ParagraphWS, ButtonWS, BarterBackground, RedBox } from '../config/grommetConfig';
+import { HeadingWS, ParagraphWS, ButtonWS, barterBackground, RedBox } from '../config/grommetConfig';
 import PERFORM_BARTER_MOVE, { PerformBarterMoveData, PerformBarterMoveVars } from '../mutations/performBarterMove';
 import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 import { useFonts } from '../contexts/fontContext';
@@ -68,7 +68,7 @@ const BarterDialog: FC<BarterDialogProps> = ({ move, handleClose }) => {
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <DialogWrapper background={BarterBackground} handleClose={handleClose}>
+    <DialogWrapper background={barterBackground} handleClose={handleClose}>
       <Box gap="24px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}

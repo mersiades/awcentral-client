@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Select } from 'grommet';
 
 import DialogWrapper from './DialogWrapper';
-import { HeadingWS, ParagraphWS, ButtonWS, HxRollBackground } from '../config/grommetConfig';
+import { HeadingWS, ParagraphWS, ButtonWS, hxRollBackground } from '../config/grommetConfig';
 import PERFORM_HX_ROLL_MOVE, { PerformHxRollMoveData, PerformHxRollMoveVars } from '../mutations/performHxRollMove';
 import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 import { useFonts } from '../contexts/fontContext';
@@ -63,7 +63,7 @@ const HxRollDialog: FC<HxRollDialogProps> = ({ move, buttonTitle, handleClose })
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <DialogWrapper background={HxRollBackground} handleClose={handleClose}>
+    <DialogWrapper background={hxRollBackground} handleClose={handleClose}>
       <Box gap="12px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}

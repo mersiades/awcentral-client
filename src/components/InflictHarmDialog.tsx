@@ -1,56 +1,69 @@
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { Box, FormField, TextInput } from 'grommet';
+import { Box, FormField, Select, TextInput } from 'grommet';
 
 import DialogWrapper from './DialogWrapper';
-import { HeadingWS, ParagraphWS, ButtonWS, RedBox, sufferHarmBackground } from '../config/grommetConfig';
+import { HeadingWS, ParagraphWS, ButtonWS, RedBox, inflictHarmBackground } from '../config/grommetConfig';
 import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 import { useFonts } from '../contexts/fontContext';
 import { useGame } from '../contexts/gameContext';
-import PERFORM_SUFFER_HARM_MOVE, {
-  PerformSufferHarmMoveData,
-  PerformSufferHarmMoveVars,
-} from '../mutations/performSufferHarmMove';
-import HarmClock from './HarmClock';
+import { StyledMarkdown } from './styledComponents';
+import PERFORM_INFLICT_HARM_MOVE, {
+  PerformInflictHarmMoveData,
+  PerformInflictHarmMoveVars,
+} from '../mutations/performInflictHarmMove';
 
-interface HarmDialogProps {
+interface InflictHarmDialogProps {
   move: Move | CharacterMove;
   handleClose: () => void;
 }
 
-const HarmDialog: FC<HarmDialogProps> = ({ move, handleClose }) => {
+const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
+  const [otherCharacterId, setotherCharacterId] = useState('');
   const [harm, setHarm] = useState(0);
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const { gameId } = useParams<{ gameId: string }>();
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { crustReady } = useFonts();
-  const { userGameRole } = useGame();
+  const { userGameRole, otherPlayerGameRoles } = useGame();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
-  const [performSufferHarmMove, { loading: performingSufferHarmMove }] = useMutation<
-    PerformSufferHarmMoveData,
-    PerformSufferHarmMoveVars
-  >(PERFORM_SUFFER_HARM_MOVE);
+  const [performInflictHarmMove, { loading: performingInflictHarmMove }] = useMutation<
+    PerformInflictHarmMoveData,
+    PerformInflictHarmMoveVars
+  >(PERFORM_INFLICT_HARM_MOVE);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
-  const currentHarm = userGameRole?.characters[0].harm;
+  const characters = otherPlayerGameRoles?.map((gameRole) => gameRole.characters[0]) || [];
+  const handleInflictHarmMove = () => {
+    if (
+      !!userGameRole &&
+      userGameRole.characters.length === 1 &&
+      !performingInflictHarmMove &&
+      harm > 0 &&
+      !!otherCharacterId
+    ) {
+      const otherGameroleId = otherPlayerGameRoles?.find((gameRole) => {
+        let isMatch = false;
+        gameRole.characters.forEach((character) => {
+          if (character.id === otherCharacterId) isMatch = true;
+        });
+        return isMatch;
+      })?.id;
 
-  const handleSufferHarmMove = (move: Move | CharacterMove, barter: number) => {
-    if ((currentHarm?.value || 0) + harm >= 6) {
-      console.warn("You're dead");
-      return;
-    }
-    if (!!userGameRole && userGameRole.characters.length === 1 && !performingSufferHarmMove) {
+      if (!otherGameroleId) return;
+
       try {
-        performSufferHarmMove({
+        performInflictHarmMove({
           variables: {
             gameId,
             gameroleId: userGameRole.id,
+            otherGameroleId,
             characterId: userGameRole.characters[0].id,
-            moveId: move.id,
+            otherCharacterId,
             harm,
           },
         });
@@ -64,26 +77,29 @@ const HarmDialog: FC<HarmDialogProps> = ({ move, handleClose }) => {
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <DialogWrapper background={sufferHarmBackground} handleClose={handleClose}>
+    <DialogWrapper background={inflictHarmBackground} handleClose={handleClose}>
       <Box gap="24px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}
         </HeadingWS>
+        <StyledMarkdown>{move.description}</StyledMarkdown>
         <Box fill direction="row" align="start" justify="between" pad="12px" gap="12px">
           <Box fill>
-            <ParagraphWS alignSelf="center">Your current harm</ParagraphWS>
-            {!!currentHarm && <HarmClock harmValue={currentHarm.value} isStabilized={currentHarm.isStabilized} />}
+            <ParagraphWS alignSelf="start">Who did you hurt?</ParagraphWS>
+            <Select
+              id="target-character-input"
+              aria-label="target-character-input"
+              name="target-character"
+              placeholder="Who?"
+              options={characters}
+              labelKey={'name'}
+              valueKey={'id'}
+              onChange={(e) => setotherCharacterId(e.value.id)}
+            />
           </Box>
           <Box fill>
-            <ParagraphWS alignSelf="center">How much harm did you suffer? (after armor, if you’re wearing any)</ParagraphWS>
-            <RedBox
-              alignSelf="center"
-              width="150px"
-              align="center"
-              justify="between"
-              pad="24px"
-              margin={{ vertical: '52px' }}
-            >
+            <ParagraphWS alignSelf="center">...and how bad was it?</ParagraphWS>
+            <RedBox alignSelf="center" width="150px" align="center" justify="between" pad="24px">
               <FormField>
                 <TextInput
                   type="number"
@@ -106,10 +122,10 @@ const HarmDialog: FC<HarmDialogProps> = ({ move, handleClose }) => {
             onClick={handleClose}
           />
           <ButtonWS
-            label="ROLL"
+            label="OKAY"
             primary
-            onClick={() => !!harm && !performingSufferHarmMove && handleSufferHarmMove(move, harm)}
-            disabled={!harm || performingSufferHarmMove}
+            onClick={() => !performingInflictHarmMove && harm > 0 && !!otherCharacterId && handleInflictHarmMove()}
+            disabled={performingInflictHarmMove || harm === 0 || !otherCharacterId}
           />
         </Box>
       </Box>
@@ -117,4 +133,4 @@ const HarmDialog: FC<HarmDialogProps> = ({ move, handleClose }) => {
   );
 };
 
-export default HarmDialog;
+export default InflictHarmDialog;

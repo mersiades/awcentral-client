@@ -627,7 +627,7 @@ export const RedBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>)
   `;
 });
 
-export const WarningDialogBackground = {
+export const warningDialogBackground = {
   color: 'black',
   dark: true,
   position: 'center bottom',
@@ -635,7 +635,7 @@ export const WarningDialogBackground = {
   image: 'url(/images/background-image-6.jpg)',
 };
 
-export const HxRollBackground = {
+export const hxRollBackground = {
   color: 'black',
   dark: true,
   position: 'center bottom',
@@ -643,7 +643,7 @@ export const HxRollBackground = {
   image: 'url(/images/background-image-10.jpg)',
 };
 
-export const BarterBackground = {
+export const barterBackground = {
   color: 'black',
   dark: true,
   position: 'left bottom',
@@ -651,7 +651,7 @@ export const BarterBackground = {
   image: 'url(/images/background-image-11.jpg)',
 };
 
-export const BarterRollBackground = {
+export const barterRollBackground = {
   color: 'black',
   dark: true,
   position: 'center bottom',
@@ -659,10 +659,18 @@ export const BarterRollBackground = {
   image: 'url(/images/background-image-13.jpg)',
 };
 
-export const SufferHarmBackground = {
+export const sufferHarmBackground = {
   color: 'black',
   dark: true,
   position: 'center bottom',
   size: 'cover',
   image: 'url(/images/background-image-12.jpg)',
+};
+
+export const inflictHarmBackground = {
+  color: 'black',
+  dark: true,
+  position: 'center bottom',
+  size: 'contain',
+  image: 'url(/images/background-image-14.jpg)',
 };
