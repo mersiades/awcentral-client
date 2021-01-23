@@ -23,6 +23,7 @@ import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import HarmDialog from '../components/HarmDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -173,6 +174,9 @@ const PlayerPage: FC = () => {
         )}
         {dialog?.moveAction?.rollType === RollType.barter && (
           <BarterRollDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.moveAction?.rollType === RollType.harm && (
+          <HarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
         )}
         {dialog?.moveAction?.actionType === MoveActionType.barter && (
           <BarterDialog move={dialog} handleClose={() => setDialog(undefined)} />

@@ -103,4 +103,5 @@ export enum MessageType {
   rollHxMove = 'ROLL_HX_MOVE',
   barterMove = 'BARTER_MOVE',
   rollBarterMove = 'ROLL_BARTER_MOVE',
+  sufferHarmMove = 'SUFFER_HARM_MOVE',
 }

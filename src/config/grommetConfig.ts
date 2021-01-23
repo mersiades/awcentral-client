@@ -658,3 +658,11 @@ export const BarterRollBackground = {
   size: 'cover',
   image: 'url(/images/background-image-13.jpg)',
 };
+
+export const SufferHarmBackground = {
+  color: 'black',
+  dark: true,
+  position: 'center bottom',
+  size: 'cover',
+  image: 'url(/images/background-image-12.jpg)',
+};

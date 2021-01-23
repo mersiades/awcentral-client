@@ -10,6 +10,7 @@ import { MessageType } from '../../@types/enums';
 import { GameMessage } from '../../@types/dataInterfaces';
 import { useGame } from '../../contexts/gameContext';
 import BarterRollMessage from './BarterRollMessage';
+import SufferHarmMessage from './SufferHarmMessage';
 
 const MessagesPanel: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -62,10 +63,14 @@ const MessagesPanel: FC = () => {
         return <BarterMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       case MessageType.rollBarterMove:
         return <BarterRollMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
+      case MessageType.sufferHarmMove:
+        return <SufferHarmMessage messagesLength={limitMessages().length} index={index} message={message} ticker={ticker} />;
       default:
         return;
     }
   };
+
+  // console.log('limitMessages()', limitMessages());
 
   return (
     <Box fill pad="12px" overflow="auto" gap="12px" style={{ maxWidth: '812px' }}>

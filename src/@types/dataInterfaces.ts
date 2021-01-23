@@ -145,4 +145,6 @@ export interface GameMessage {
   modifierStatName: StatType;
   barterSpent: number;
   currentBarter: number;
+  harmSuffered: number;
+  currentHarm: number;
 }

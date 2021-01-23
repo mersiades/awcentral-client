@@ -33,6 +33,8 @@ const GAME = gql`
         modifierStatName
         barterSpent
         currentBarter
+        harmSuffered
+        currentHarm
       }
       mc {
         id
