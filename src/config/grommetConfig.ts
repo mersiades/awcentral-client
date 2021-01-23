@@ -674,3 +674,11 @@ export const inflictHarmBackground = {
   size: 'contain',
   image: 'url(/images/background-image-14.jpg)',
 };
+
+export const healHarmBackground = {
+  color: 'black',
+  dark: true,
+  position: 'center bottom',
+  size: 'contain',
+  image: 'url(/images/background-image-15.jpg)',
+};

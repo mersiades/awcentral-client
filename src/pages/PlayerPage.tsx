@@ -25,6 +25,7 @@ import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import HarmDialog from '../components/HarmDialog';
 import InflictHarmDialog from '../components/InflictHarmDialog';
+import HealHarmDialog from '../components/HealHarmDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -185,6 +186,7 @@ const PlayerPage: FC = () => {
         {dialog?.name === 'INFLICT HARM ON PC' && (
           <InflictHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
         )}
+        {dialog?.name === 'HEAL PC HARM' && <HealHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
             style={{ backgroundColor: 'transparent' }}
