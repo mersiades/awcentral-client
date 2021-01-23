@@ -682,3 +682,11 @@ export const healHarmBackground = {
   size: 'contain',
   image: 'url(/images/background-image-15.jpg)',
 };
+
+export const angelSpecialBackground = {
+  color: 'black',
+  dark: true,
+  position: 'center bottom',
+  size: 'cover',
+  image: 'url(/images/background-image-16.jpg)',
+};

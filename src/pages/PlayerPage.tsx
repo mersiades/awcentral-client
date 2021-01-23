@@ -26,6 +26,7 @@ import { accentColors, customDefaultButtonStyles, customTabStyles } from '../con
 import HarmDialog from '../components/HarmDialog';
 import InflictHarmDialog from '../components/InflictHarmDialog';
 import HealHarmDialog from '../components/HealHarmDialog';
+import AngelSpecialDialog from '../components/AngelSpecialDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -187,6 +188,7 @@ const PlayerPage: FC = () => {
           <InflictHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
         )}
         {dialog?.name === 'HEAL PC HARM' && <HealHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+        {dialog?.name === 'ANGEL SPECIAL' && <AngelSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />}
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
             style={{ backgroundColor: 'transparent' }}
