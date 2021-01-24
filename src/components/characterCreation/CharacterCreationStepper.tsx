@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Text } from 'grommet';
 
-import { CharacterCreationSteps, PlayBookType, UniqueTypes } from '../../@types/enums';
+import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../@types/enums';
 import { Character } from '../../@types/dataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
 import { CustomUL } from '../../config/grommetConfig';
@@ -14,7 +14,7 @@ interface CharacterCreationStepperProps {
   currentStep: number;
   setCreationStep: (step: number) => void;
   character?: Character;
-  playbookType?: PlayBookType;
+  playbookType?: PlaybookType;
 }
 
 const NextWithHover = styled(Next as React.FC<IconProps & JSX.IntrinsicElements['svg']>)(() => {

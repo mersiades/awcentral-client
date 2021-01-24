@@ -33,7 +33,7 @@ export enum MoveType {
   roadWar = 'ROAD_WAR',
 }
 
-export enum PlayBookType {
+export enum PlaybookType {
   angel = 'ANGEL',
   battlebabe = 'BATTLEBABE',
   brainer = 'BRAINER',
@@ -105,4 +105,5 @@ export enum MessageType {
   rollBarterMove = 'ROLL_BARTER_MOVE',
   sufferHarmMove = 'SUFFER_HARM_MOVE',
   adjustHxMove = 'ADJUST_HX_MOVE',
+  rollStockMove = 'ROLL_STOCK_MOVE',
 }

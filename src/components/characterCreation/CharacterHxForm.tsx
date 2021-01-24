@@ -6,7 +6,7 @@ import { Box, FormField, TextInput } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS, RedBox, TextWS } from '../../config/grommetConfig';
-import { PlayBookType, StatType } from '../../@types/enums';
+import { PlaybookType, StatType } from '../../@types/enums';
 import { HxInput } from '../../@types';
 import { Character } from '../../@types/dataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
@@ -26,7 +26,7 @@ const StyledMarkdown = styled(ReactMarkdown)`
 `;
 
 interface CharacterHxFormProps {
-  playbookType: PlayBookType;
+  playbookType: PlaybookType;
   character: Character;
   settingHx: boolean;
   togglingHighlight: boolean;

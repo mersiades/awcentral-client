@@ -1,5 +1,5 @@
 import { MockedResponse } from '@apollo/client/testing';
-import { PlayBookType, RoleType, StatType } from '../@types/enums';
+import { PlaybookType, RoleType, StatType } from '../@types/enums';
 import ADD_COMMS_APP from '../mutations/addCommsApp';
 import ADD_COMMS_URL from '../mutations/addCommsUrl';
 import ADD_INVITEE from '../mutations/addInvitee';
@@ -498,7 +498,7 @@ export const mockCreateCharacter: MockedResponse = {
 export const mockSetCharacterPlaybook: MockedResponse = {
   request: {
     query: SET_CHARACTER_PLAYBOOK,
-    variables: { gameRoleId: mockGame5.gameRoles[2].id, characterId: mockCharacter2.id, playbookType: PlayBookType.angel },
+    variables: { gameRoleId: mockGame5.gameRoles[2].id, characterId: mockCharacter2.id, playbookType: PlaybookType.angel },
   },
   result: () => {
     // console.log('mockSetCharacterPlaybook');
@@ -586,7 +586,7 @@ export const mockGameForCharacterCreation2: MockedResponse = {
 export const mockPlaybookCreator: MockedResponse = {
   request: {
     query: PLAYBOOK_CREATOR,
-    variables: { playbookType: PlayBookType.angel },
+    variables: { playbookType: PlaybookType.angel },
   },
   result: () => {
     // console.log('mockPlaybookCreator');

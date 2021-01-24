@@ -15,7 +15,7 @@ import {
   LookType,
   MoveActionType,
   MoveType,
-  PlayBookType,
+  PlaybookType,
   RoleType,
   RollType,
   StatType,
@@ -49,7 +49,7 @@ interface MockCharacter {
   looks: Look[]; // Does graphql return an empty array or undefined? // May need an id-less version of Look "EmbeddedLook"
   name: string;
   barter: number;
-  playbook: PlayBookType;
+  playbook: PlaybookType;
   harm: CharacterHarm;
   hasCompletedCharacterCreation: boolean;
   playbookUnique: PlaybookUnique;
@@ -201,7 +201,7 @@ export const dummyRollModifier: RollModifier = {
     name: 'dummy',
     description: 'dummy',
     kind: MoveType.basic,
-    playbook: PlayBookType.angel,
+    playbook: PlaybookType.angel,
   },
   statToRollWith: StatType.sharp,
 };
@@ -217,7 +217,7 @@ export const mockCharacterMoveAngel1: CharacterMove = {
   name: ANGEL_SPECIAL_NAME,
   description: 'If you and another character have sex,',
   kind: MoveType.default,
-  playbook: PlayBookType.angel,
+  playbook: PlaybookType.angel,
   stat: StatType.hx,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
@@ -230,7 +230,7 @@ export const mockCharacterMoveAngel2: CharacterMove = {
   name: 'SIXTH SENSE',
   kind: MoveType.character,
   description: 'when you open your brain to the world’s psychic maelstrom...',
-  playbook: PlayBookType.angel,
+  playbook: PlaybookType.angel,
   stat: StatType.sharp,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
@@ -243,7 +243,7 @@ export const mockCharacterMoveAngel3: CharacterMove = {
   name: 'INFIRMARY',
   description: 'you get an infirmary, a workspace with life support...',
   kind: MoveType.character,
-  playbook: PlayBookType.angel,
+  playbook: PlaybookType.angel,
   stat: StatType.sharp,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
@@ -256,7 +256,7 @@ export const mockCharacterMoveAngel4: CharacterMove = {
   name: 'PROFESSIONAL COMPASSION',
   description: 'you can roll+sharp instead of roll+Hx when you help someone who’s rolling.',
   kind: MoveType.character,
-  playbook: PlayBookType.angel,
+  playbook: PlaybookType.angel,
   stat: StatType.hx,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
@@ -393,7 +393,7 @@ export const dummyAngelKitMove: Move = {
   name: 'dummy',
   description: 'dummy',
   kind: MoveType.character,
-  playbook: PlayBookType.angel,
+  playbook: PlaybookType.angel,
   stat: StatType.cool,
   statModifier: dummyStatModifier,
   rollModifier: dummyRollModifier,
@@ -446,7 +446,7 @@ export const mockCharacterHarm: CharacterHarm = {
 export const mockCharacter1: MockCharacter = {
   id: 'mock-character-id-1',
   name: 'Mock Character 1',
-  playbook: PlayBookType.battlebabe,
+  playbook: PlaybookType.battlebabe,
   hasCompletedCharacterCreation: false,
   gear: ['leather jacket', 'Timberland boots'],
   statsBlock: mockStatsBlock1,
@@ -465,7 +465,7 @@ export const mockCharacter1: MockCharacter = {
 export const mockCharacter2: MockCharacter = {
   id: 'mock-character-id-2',
   name: 'Mock Character 2',
-  playbook: PlayBookType.angel,
+  playbook: PlaybookType.angel,
   hasCompletedCharacterCreation: false,
   gear: ['Grimey green raincoat', '9mm (2-harm close loud)'],
   statsBlock: mockStatsBlock1,
@@ -798,7 +798,7 @@ export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
 
 export const mockPlaybookCreatorAngel: PlaybookCreator = {
   id: 'angel-playbook-creator-id',
-  playbookType: PlayBookType.angel,
+  playbookType: PlaybookType.angel,
   gearInstructions: mockgearInstructionsAngel,
   improvementInstructions: 'Whenever you roll a highlighted stat...',
   movesInstructions: 'You get all the basic moves. Choose 2 angel moves.',
@@ -826,7 +826,7 @@ export const mockPlaybookCreatorAngel: PlaybookCreator = {
 
 export const mockPlaybookAngel: Playbook = {
   id: 'mock-playbook-angel-id',
-  playbookType: PlayBookType.angel,
+  playbookType: PlaybookType.angel,
   barterInstructions: 'At the beginning of the session, spend 1- or 2-barter for your lifestyle.',
   intro: 'When you’re lying in the dust of Apocalypse World guts aspilled...',
   introComment: 'Angels are medics. If you want everybody to love you...',
@@ -848,7 +848,7 @@ export const doSomethingUnderFire: Move = {
   name: UNDER_FIRE_NAME,
   description: 'When you _**do something under fire**_, or dig in to endure fire, roll+cool.',
   kind: MoveType.basic,
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   stat: StatType.cool,
   statModifier: undefined,
   rollModifier: undefined,
@@ -869,7 +869,7 @@ export const goAggro: Move = {
     'When you _**go aggro on someone**_, make it clear what you want them to do and what you’ll do to them. Roll+hard.',
   kind: MoveType.basic,
   stat: StatType.hard,
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: {
@@ -888,7 +888,7 @@ export const sucker: Move = {
   description: 'When you _**attack someone unsuspecting or helpless**_, ask the MC if you could miss.',
   kind: MoveType.basic,
   stat: StatType.cool, // Apollo MockProvider won't allow undefined here
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,
@@ -900,7 +900,7 @@ export const sufferHarm: Move = {
   description: 'When you _**suffer harm**_, roll+harm suffered (after armor, if you’re wearing any).',
   kind: MoveType.peripheral,
   stat: StatType.cool, // Apollo MockProvider won't allow undefined here
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,
@@ -913,7 +913,7 @@ export const goToMarket: Move = {
     'When you _**go into a holding’s bustling market**_, looking for some particular thing to buy, and it’s not obvious whether you should be able to just go buy one like that, roll+sharp.',
   kind: MoveType.peripheral,
   stat: StatType.sharp,
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,
@@ -925,7 +925,7 @@ export const augury: Move = {
   description: 'When you are able to use something for _**augury**_, roll+weird.',
   kind: MoveType.peripheral,
   stat: StatType.weird,
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,
@@ -937,7 +937,7 @@ export const exchangeHarm: Move = {
   description: 'When you _**exchange harm**_, both sides simultaneously inflict and suffer harm as established:',
   kind: MoveType.battle,
   stat: StatType.cool, // Apollo MockProvider won't allow undefined here
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,
@@ -949,7 +949,7 @@ export const seizeByForce: Move = {
   description: 'To _**seize something by force**_, exchange harm, but first roll+hard.',
   kind: MoveType.battle,
   stat: StatType.hard,
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,
@@ -960,7 +960,7 @@ export const standOverwatch: Move = {
   description: 'When you _**stand overwatch**_ for an ally, roll+cool. ',
   kind: MoveType.battle,
   stat: StatType.cool,
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,
@@ -973,7 +973,7 @@ export const boardAMovingVehicle: Move = {
     'To _**board a moving vehicle**_, roll+cool, minus its speed. To board one moving vehicle from another, roll+cool, minus the difference between their speeds.',
   kind: MoveType.roadWar,
   stat: StatType.cool,
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,
@@ -985,7 +985,7 @@ export const dealWithBadTerrain: Move = {
   description: 'When you have to _**deal with bad terrain**_, roll+cool, plus your vehicle’s handling.',
   kind: MoveType.roadWar,
   stat: StatType.cool,
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,
@@ -997,7 +997,7 @@ export const shoulderAnotherVehicle: Move = {
     'To _**shoulder another vehicle**_, roll+cool. On a hit, you shoulder it aside, inflicting v-harm as established.',
   kind: MoveType.roadWar,
   stat: StatType.cool,
-  playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
   moveAction: dummyMoveAction,

@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { PlayBookType } from '../@types/enums';
+import { PlaybookType } from '../@types/enums';
 import { Playbook } from '../@types/staticDataInterfaces';
 
 export interface PlaybookData {
@@ -7,7 +7,7 @@ export interface PlaybookData {
 }
 
 export interface PlaybookVars {
-  playbookType: PlayBookType;
+  playbookType: PlaybookType;
 }
 
 const PLAYBOOK = gql`

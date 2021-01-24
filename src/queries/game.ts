@@ -35,6 +35,8 @@ const GAME = gql`
         currentBarter
         harmSuffered
         currentHarm
+        stockSpent
+        currentStock
       }
       mc {
         id
@@ -118,6 +120,17 @@ const GAME = gql`
               stock
               angelKitMoves {
                 id
+                name
+                kind
+                description
+                playbook
+                stat
+                moveAction {
+                  id
+                  actionType
+                  rollType
+                  statToRollWith
+                }
               }
               hasSupplier
               supplierText

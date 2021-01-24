@@ -15,6 +15,7 @@ import { HarmInput } from '../../@types';
 import { Character } from '../../@types/dataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
+import AngelKitBox from './AngelKitBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -87,12 +88,19 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
 
       <GearBox gear={character.gear} navigateToCharacterCreation={navigateToCharacterCreation} />
 
-      {!!character.barter && data?.playbook.barterInstructions && (
+      {data?.playbook.barterInstructions && (
         <BarterBox
-          barter={character.barter}
+          barter={character.barter || 0}
           instructions={data?.playbook.barterInstructions}
           settingBarter={settingBarter}
           handleSetBarter={handleSetBarter}
+        />
+      )}
+      {!!character.playbookUnique?.angelKit && (
+        <AngelKitBox
+          angelKit={character.playbookUnique.angelKit}
+          navigateToCharacterCreation={navigateToCharacterCreation}
+          openDialog={openDialog}
         />
       )}
     </Box>

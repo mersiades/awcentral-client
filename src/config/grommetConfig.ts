@@ -627,66 +627,57 @@ export const RedBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>)
   `;
 });
 
-export const warningDialogBackground = {
+const backgroundBase = {
   color: 'black',
   dark: true,
   position: 'center bottom',
   size: 'cover',
+};
+
+export const warningDialogBackground = {
+  ...backgroundBase,
   image: 'url(/images/background-image-6.jpg)',
 };
 
 export const helpOrInterfereBackground = {
-  color: 'black',
-  dark: true,
-  position: 'center bottom',
-  size: 'cover',
+  ...backgroundBase,
   image: 'url(/images/background-image-10.jpg)',
 };
 
 export const barterBackground = {
-  color: 'black',
-  dark: true,
+  ...backgroundBase,
   position: 'left bottom',
-  size: 'cover',
   image: 'url(/images/background-image-11.jpg)',
 };
 
 export const makeWantKnownBackground = {
-  color: 'black',
-  dark: true,
-  position: 'center bottom',
-  size: 'cover',
+  ...backgroundBase,
   image: 'url(/images/background-image-13.jpg)',
 };
 
 export const sufferHarmBackground = {
-  color: 'black',
-  dark: true,
-  position: 'center bottom',
-  size: 'cover',
+  ...backgroundBase,
   image: 'url(/images/background-image-12.jpg)',
 };
 
 export const inflictHarmBackground = {
-  color: 'black',
-  dark: true,
-  position: 'center bottom',
+  ...backgroundBase,
   size: 'contain',
   image: 'url(/images/background-image-14.jpg)',
 };
 
 export const healHarmBackground = {
-  color: 'black',
-  dark: true,
-  position: 'center bottom',
+  ...backgroundBase,
   size: 'contain',
   image: 'url(/images/background-image-15.jpg)',
 };
 
 export const angelSpecialBackground = {
-  color: 'black',
-  dark: true,
-  position: 'center bottom',
-  size: 'cover',
+  ...backgroundBase,
   image: 'url(/images/background-image-16.jpg)',
+};
+
+export const stabilizeBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-17.jpg)',
 };

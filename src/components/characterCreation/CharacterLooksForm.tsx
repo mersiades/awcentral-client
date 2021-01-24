@@ -5,13 +5,13 @@ import { Box, Form, FormField, TextInput, Text } from 'grommet';
 import ActionButtons from '../ActionButtons';
 import Spinner from '../Spinner';
 import { HeadingWS } from '../../config/grommetConfig';
-import { LookType, PlayBookType } from '../../@types/enums';
+import { LookType, PlaybookType } from '../../@types/enums';
 import { Look, PlaybookCreator } from '../../@types/staticDataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
 
 interface CharacterLooksFormProps {
-  playbookType: PlayBookType;
+  playbookType: PlaybookType;
   characterName: string;
   settingLooks: boolean;
   handleSubmitLook: (look: string, category: LookType) => void;

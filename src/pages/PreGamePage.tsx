@@ -9,7 +9,7 @@ import FINISH_PRE_GAME, { FinishPreGameData, FinishPreGameVars } from '../mutati
 import { useGame } from '../contexts/gameContext';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { Character } from '../@types/dataInterfaces';
-import { PlayBookType, RoleType } from '../@types/enums';
+import { PlaybookType, RoleType } from '../@types/enums';
 import { decapitalize } from '../helpers/decapitalize';
 import { Checkbox, Checkmark } from 'grommet-icons';
 import ScrollableIndicator from '../components/ScrollableIndicator';
@@ -71,29 +71,29 @@ const PreGamePage = () => {
     }
   };
 
-  const getUnique = (playbookType: PlayBookType) => {
+  const getUnique = (playbookType: PlaybookType) => {
     switch (playbookType) {
-      case PlayBookType.angel:
+      case PlaybookType.angel:
         return 'Angel kit';
-      case PlayBookType.battlebabe:
+      case PlaybookType.battlebabe:
         return 'Custom weapons';
-      case PlayBookType.brainer:
+      case PlaybookType.brainer:
         return 'Brainer gear';
-      case PlayBookType.chopper:
+      case PlaybookType.chopper:
         return 'Bike & gang';
-      case PlayBookType.driver:
+      case PlaybookType.driver:
         return 'Cars';
-      case PlayBookType.gunlugger:
+      case PlaybookType.gunlugger:
         return 'Weapons';
-      case PlayBookType.hardholder:
+      case PlaybookType.hardholder:
         return 'Holding';
-      case PlayBookType.hocus:
+      case PlaybookType.hocus:
         return 'Followers';
-      case PlayBookType.maestroD:
+      case PlaybookType.maestroD:
         return 'Establishment';
-      case PlayBookType.savvyhead:
+      case PlaybookType.savvyhead:
         return 'Workspace';
-      case PlayBookType.skinner:
+      case PlaybookType.skinner:
         return 'Skinner gear';
       default:
         return 'Unique';

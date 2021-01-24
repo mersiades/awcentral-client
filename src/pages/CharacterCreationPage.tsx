@@ -32,7 +32,7 @@ import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/se
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
-import { PlayBookType, CharacterCreationSteps, LookType, StatType } from '../@types/enums';
+import { PlaybookType, CharacterCreationSteps, LookType, StatType } from '../@types/enums';
 import { HxInput } from '../@types';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
@@ -58,7 +58,7 @@ const CharacterCreationPage: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [creationStep, setCreationStep] = useState<number>(step ? parseInt(step) : 0);
   const [character, setCharacter] = useState<Character | undefined>();
-  const [showResetWarning, setShowResetWarning] = useState<PlayBookType | undefined>();
+  const [showResetWarning, setShowResetWarning] = useState<PlaybookType | undefined>();
   const [showScrollable, setShowScrollable] = useState(false);
 
   // ------------------------------------------------------- Refs -------------------------------------------------------- //
@@ -119,7 +119,7 @@ const CharacterCreationPage: FC = () => {
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
-  const checkPlaybookReset = (playbookType: PlayBookType) => {
+  const checkPlaybookReset = (playbookType: PlaybookType) => {
     if (
       !!userGameRole &&
       !!userGameRole.characters &&
@@ -133,7 +133,7 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  const handlePlaybookSelect = async (playbookType: PlayBookType) => {
+  const handlePlaybookSelect = async (playbookType: PlaybookType) => {
     if (!!userGameRole) {
       if (userGameRole.characters?.length === 0) {
         let characterId;
