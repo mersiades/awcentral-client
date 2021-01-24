@@ -1,32 +1,32 @@
 import { gql } from '@apollo/client';
 import { Game } from '../@types/dataInterfaces';
 
-export interface PerformHxRollMoveData {
-  performHxRollMove: Game;
+export interface PerformMakeWantKnownMoveData {
+  performMakeWantKnownMove: Game;
 }
 
-export interface PerformHxRollMoveVars {
+export interface PerformMakeWantKnownMoveVars {
   gameId: string;
   gameroleId: string;
   characterId: string;
   moveId: string;
-  targetId: string;
+  barter: number;
 }
 
-const PERFORM_HX_ROLL_MOVE = gql`
-  mutation PerformHxRollMove(
+const PERFORM_MAKE_WANT_KNOWN_MOVE = gql`
+  mutation PerformMakeWantKnownMove(
     $gameId: String!
     $gameroleId: String!
     $characterId: String!
     $moveId: String!
-    $targetId: String!
+    $barter: Int!
   ) {
-    performHxRollMove(
+    performMakeWantKnownMove(
       gameId: $gameId
       gameroleId: $gameroleId
       characterId: $characterId
       moveId: $moveId
-      targetId: $targetId
+      barter: $barter
     ) {
       id
       gameMessages {
@@ -42,9 +42,11 @@ const PERFORM_HX_ROLL_MOVE = gql`
         rollModifier
         rollResult
         modifierStatName
+        barterSpent
+        currentBarter
       }
     }
   }
 `;
 
-export default PERFORM_HX_ROLL_MOVE;
+export default PERFORM_MAKE_WANT_KNOWN_MOVE;

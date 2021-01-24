@@ -7,9 +7,9 @@ import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet
 import MovesPanel from '../components/MovesPanel';
 import PlaybookPanel from '../components/playbookPanel/PlaybookPanel';
 import MessagesPanel from '../components/messagesPanel/MessagesPanel';
-import HxRollDialog from '../components/HxRollDialog';
+import HelpOrInterfereDialog from '../components/HelpOrInterfereDialog';
 import BarterDialog from '../components/BarterDialog';
-import BarterRollDialog from '../components/BarterRollDialog';
+import MakeWantKnownDialog from '../components/MakeWantKnownDialog';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES from '../queries/allMoves';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
@@ -27,6 +27,13 @@ import HarmDialog from '../components/HarmDialog';
 import InflictHarmDialog from '../components/InflictHarmDialog';
 import HealHarmDialog from '../components/HealHarmDialog';
 import AngelSpecialDialog from '../components/AngelSpecialDialog';
+import {
+  ANGEL_SPECIAL_NAME,
+  HEAL_HARM_NAME,
+  HELP_OR_INTERFERE_NAME,
+  INFLICT_HARM_NAME,
+  MAKE_WANT_KNOWN_NAME,
+} from '../config/constants';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -172,23 +179,23 @@ const PlayerPage: FC = () => {
         style={{ borderBottom: `1px solid ${accentColors[0]}` }}
         height="4vh"
       >
-        {dialog?.moveAction?.rollType === RollType.hx && (
-          <HxRollDialog move={dialog} buttonTitle="ROLL" handleClose={() => setDialog(undefined)} />
-        )}
-        {dialog?.moveAction?.rollType === RollType.barter && (
-          <BarterRollDialog move={dialog} handleClose={() => setDialog(undefined)} />
-        )}
         {dialog?.moveAction?.rollType === RollType.harm && (
           <HarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
         )}
         {dialog?.moveAction?.actionType === MoveActionType.barter && (
           <BarterDialog move={dialog} handleClose={() => setDialog(undefined)} />
         )}
-        {dialog?.name === 'INFLICT HARM ON PC' && (
-          <InflictHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        {dialog?.name === HELP_OR_INTERFERE_NAME && (
+          <HelpOrInterfereDialog move={dialog} buttonTitle="ROLL" handleClose={() => setDialog(undefined)} />
         )}
-        {dialog?.name === 'HEAL PC HARM' && <HealHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
-        {dialog?.name === 'ANGEL SPECIAL' && <AngelSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+        {dialog?.name === MAKE_WANT_KNOWN_NAME && (
+          <MakeWantKnownDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.name === INFLICT_HARM_NAME && <InflictHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+        {dialog?.name === HEAL_HARM_NAME && <HealHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+        {dialog?.name === ANGEL_SPECIAL_NAME && (
+          <AngelSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
             style={{ backgroundColor: 'transparent' }}

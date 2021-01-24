@@ -4,21 +4,21 @@ import { useParams } from 'react-router-dom';
 import { Box, FormField, TextInput } from 'grommet';
 
 import DialogWrapper from './DialogWrapper';
-import { HeadingWS, ParagraphWS, RedBox, ButtonWS, barterRollBackground } from '../config/grommetConfig';
-import PERFORM_BARTER_ROLL_MOVE, {
-  PerformBarterRollMoveData,
-  PerformBarterRollMoveVars,
-} from '../mutations/performBarterRollMove';
+import { HeadingWS, ParagraphWS, RedBox, ButtonWS, makeWantKnownBackground } from '../config/grommetConfig';
+import PERFORM_MAKE_WANT_KNOWN_MOVE, {
+  PerformMakeWantKnownMoveData,
+  PerformMakeWantKnownMoveVars,
+} from '../mutations/performMakeWantKnownMove';
 import { Move, CharacterMove } from '../@types/staticDataInterfaces';
 import { useFonts } from '../contexts/fontContext';
 import { useGame } from '../contexts/gameContext';
 
-interface BarterRollDialogProps {
+interface MakeWantKnownDialogProps {
   move: Move | CharacterMove;
   handleClose: () => void;
 }
 
-const BarterRollDialog: FC<BarterRollDialogProps> = ({ move, handleClose }) => {
+const MakeWantKnownDialog: FC<MakeWantKnownDialogProps> = ({ move, handleClose }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [barter, setBarter] = useState(0);
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
@@ -29,22 +29,22 @@ const BarterRollDialog: FC<BarterRollDialogProps> = ({ move, handleClose }) => {
   const { userGameRole } = useGame();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
-  const [performBarterRollMove, { loading: performingBarterRollMove }] = useMutation<
-    PerformBarterRollMoveData,
-    PerformBarterRollMoveVars
-  >(PERFORM_BARTER_ROLL_MOVE);
+  const [performMakeWantKnownMove, { loading: performingMakeWantKnownMove }] = useMutation<
+    PerformMakeWantKnownMoveData,
+    PerformMakeWantKnownMoveVars
+  >(PERFORM_MAKE_WANT_KNOWN_MOVE);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const currentBarter = userGameRole?.characters[0].barter || 0;
 
-  const handleBarterRollMove = (move: Move | CharacterMove, barter: number) => {
+  const handleMakeWantKnownMove = (move: Move | CharacterMove, barter: number) => {
     if (currentBarter - barter < 0) {
       console.warn("You don't have enough barter");
       return;
     }
-    if (!!userGameRole && userGameRole.characters.length === 1 && !performingBarterRollMove) {
+    if (!!userGameRole && userGameRole.characters.length === 1 && !performingMakeWantKnownMove) {
       try {
-        performBarterRollMove({
+        performMakeWantKnownMove({
           variables: {
             gameId,
             gameroleId: userGameRole.id,
@@ -62,7 +62,7 @@ const BarterRollDialog: FC<BarterRollDialogProps> = ({ move, handleClose }) => {
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <DialogWrapper background={barterRollBackground} handleClose={handleClose}>
+    <DialogWrapper background={makeWantKnownBackground} handleClose={handleClose}>
       <Box gap="24px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}
@@ -94,8 +94,8 @@ const BarterRollDialog: FC<BarterRollDialogProps> = ({ move, handleClose }) => {
           <ButtonWS
             label={'DROP'}
             primary
-            onClick={() => !!barter && !performingBarterRollMove && handleBarterRollMove(move, barter)}
-            disabled={!barter || performingBarterRollMove || barter > 3}
+            onClick={() => !!barter && !performingMakeWantKnownMove && handleMakeWantKnownMove(move, barter)}
+            disabled={!barter || performingMakeWantKnownMove || barter > 3}
           />
         </Box>
       </Box>
@@ -103,4 +103,4 @@ const BarterRollDialog: FC<BarterRollDialogProps> = ({ move, handleClose }) => {
   );
 };
 
-export default BarterRollDialog;
+export default MakeWantKnownDialog;

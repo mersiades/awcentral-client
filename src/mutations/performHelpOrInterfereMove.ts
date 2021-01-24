@@ -1,32 +1,32 @@
 import { gql } from '@apollo/client';
 import { Game } from '../@types/dataInterfaces';
 
-export interface PerformBarterRollMoveData {
-  performBarterRollMove: Game;
+export interface PerformHelpOrInterfereMoveData {
+  performHelpOrInterfereMove: Game;
 }
 
-export interface PerformBarterRollMoveVars {
+export interface PerformHelpOrInterfereMoveVars {
   gameId: string;
   gameroleId: string;
   characterId: string;
   moveId: string;
-  barter: number;
+  targetId: string;
 }
 
-const PERFORM_BARTER_ROLL_MOVE = gql`
-  mutation PerformBarterRollMove(
+const PERFORM_HELP_OR_INTERFERE_MOVE = gql`
+  mutation PerformHelpOrInterfereMove(
     $gameId: String!
     $gameroleId: String!
     $characterId: String!
     $moveId: String!
-    $barter: Int!
+    $targetId: String!
   ) {
-    performBarterRollMove(
+    performHelpOrInterfereMove(
       gameId: $gameId
       gameroleId: $gameroleId
       characterId: $characterId
       moveId: $moveId
-      barter: $barter
+      targetId: $targetId
     ) {
       id
       gameMessages {
@@ -42,11 +42,9 @@ const PERFORM_BARTER_ROLL_MOVE = gql`
         rollModifier
         rollResult
         modifierStatName
-        barterSpent
-        currentBarter
       }
     }
   }
 `;
 
-export default PERFORM_BARTER_ROLL_MOVE;
+export default PERFORM_HELP_OR_INTERFERE_MOVE;

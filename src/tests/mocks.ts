@@ -38,6 +38,7 @@ import {
   StatModifier,
   StatsOption,
 } from '../@types/staticDataInterfaces';
+import { ANGEL_SPECIAL_NAME, UNDER_FIRE_NAME } from '../config/constants';
 
 // Same as Character, but with no nullable fields
 interface MockCharacter {
@@ -213,7 +214,7 @@ export const dummyStatModifier: StatModifier = {
 
 export const mockCharacterMoveAngel1: CharacterMove = {
   id: 'angel-move-id-1',
-  name: 'ANGEL SPECIAL',
+  name: ANGEL_SPECIAL_NAME,
   description: 'If you and another character have sex,',
   kind: MoveType.default,
   playbook: PlayBookType.angel,
@@ -844,7 +845,7 @@ export const mockHxInput: HxInput = {
 
 export const doSomethingUnderFire: Move = {
   id: 'mock-move-id-1',
-  name: 'DO SOMETHING UNDER FIRE',
+  name: UNDER_FIRE_NAME,
   description: 'When you _**do something under fire**_, or dig in to endure fire, roll+cool.',
   kind: MoveType.basic,
   playbook: PlayBookType.angel, // Apollo MockProvider won't allow undefined here

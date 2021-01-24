@@ -635,7 +635,7 @@ export const warningDialogBackground = {
   image: 'url(/images/background-image-6.jpg)',
 };
 
-export const hxRollBackground = {
+export const helpOrInterfereBackground = {
   color: 'black',
   dark: true,
   position: 'center bottom',
@@ -651,7 +651,7 @@ export const barterBackground = {
   image: 'url(/images/background-image-11.jpg)',
 };
 
-export const barterRollBackground = {
+export const makeWantKnownBackground = {
   color: 'black',
   dark: true,
   position: 'center bottom',

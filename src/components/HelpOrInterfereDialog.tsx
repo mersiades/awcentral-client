@@ -4,19 +4,22 @@ import { useParams } from 'react-router-dom';
 import { Box, Select } from 'grommet';
 
 import DialogWrapper from './DialogWrapper';
-import { HeadingWS, ParagraphWS, ButtonWS, hxRollBackground } from '../config/grommetConfig';
-import PERFORM_HX_ROLL_MOVE, { PerformHxRollMoveData, PerformHxRollMoveVars } from '../mutations/performHxRollMove';
+import { HeadingWS, ParagraphWS, ButtonWS, helpOrInterfereBackground } from '../config/grommetConfig';
+import PERFORM_HELP_OR_INTERFERE_MOVE, {
+  PerformHelpOrInterfereMoveData,
+  PerformHelpOrInterfereMoveVars,
+} from '../mutations/performHelpOrInterfereMove';
 import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 import { useFonts } from '../contexts/fontContext';
 import { useGame } from '../contexts/gameContext';
 
-interface HxRollDialogProps {
+interface HelpOrInterfereDialogProps {
   move: Move | CharacterMove;
   buttonTitle: string;
   handleClose: () => void;
 }
 
-const HxRollDialog: FC<HxRollDialogProps> = ({ move, buttonTitle, handleClose }) => {
+const HelpOrInterfereDialog: FC<HelpOrInterfereDialogProps> = ({ move, buttonTitle, handleClose }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [targetId, setTargetId] = useState('');
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
@@ -27,17 +30,18 @@ const HxRollDialog: FC<HxRollDialogProps> = ({ move, buttonTitle, handleClose })
   const { userGameRole, otherPlayerGameRoles } = useGame();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
-  const [performHxRollMove, { loading: performingHxRollMove }] = useMutation<PerformHxRollMoveData, PerformHxRollMoveVars>(
-    PERFORM_HX_ROLL_MOVE
-  );
+  const [performHelpOrInterfereMove, { loading: performingHelpOrInterfereMove }] = useMutation<
+    PerformHelpOrInterfereMoveData,
+    PerformHelpOrInterfereMoveVars
+  >(PERFORM_HELP_OR_INTERFERE_MOVE);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const characters = otherPlayerGameRoles?.map((gameRole) => gameRole.characters[0]) || [];
 
-  const handleHxRollMove = (move: Move | CharacterMove, targetId: string) => {
-    if (!!userGameRole && userGameRole.characters.length === 1 && !performingHxRollMove) {
+  const handleHelpOrInterfereMove = (move: Move | CharacterMove, targetId: string) => {
+    if (!!userGameRole && userGameRole.characters.length === 1 && !performingHelpOrInterfereMove) {
       try {
-        performHxRollMove({
+        performHelpOrInterfereMove({
           variables: {
             gameId,
             gameroleId: userGameRole.id,
@@ -53,22 +57,15 @@ const HxRollDialog: FC<HxRollDialogProps> = ({ move, buttonTitle, handleClose })
     }
   };
 
-  const getText = () => {
-    switch (move.name) {
-      case 'HELP OR INTERFERE WITH SOMEONE':
-        return 'Who are you helping or interfering?';
-      default:
-    }
-  };
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <DialogWrapper background={hxRollBackground} handleClose={handleClose}>
+    <DialogWrapper background={helpOrInterfereBackground} handleClose={handleClose}>
       <Box gap="12px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}
         </HeadingWS>
-        <ParagraphWS alignSelf="start">{getText()}</ParagraphWS>
+        <ParagraphWS alignSelf="start">Who are you helping or interfering?</ParagraphWS>
         <Select
           id="target-character-input"
           aria-label="target-character-input"
@@ -91,8 +88,8 @@ const HxRollDialog: FC<HxRollDialogProps> = ({ move, buttonTitle, handleClose })
           <ButtonWS
             label={buttonTitle.toUpperCase()}
             primary
-            onClick={() => !!targetId && !performingHxRollMove && handleHxRollMove(move, targetId)}
-            disabled={!targetId || performingHxRollMove}
+            onClick={() => !!targetId && !performingHelpOrInterfereMove && handleHelpOrInterfereMove(move, targetId)}
+            disabled={!targetId || performingHelpOrInterfereMove}
           />
         </Box>
       </Box>
@@ -100,4 +97,4 @@ const HxRollDialog: FC<HxRollDialogProps> = ({ move, buttonTitle, handleClose })
   );
 };
 
-export default HxRollDialog;
+export default HelpOrInterfereDialog;
