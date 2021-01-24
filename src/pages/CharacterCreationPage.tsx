@@ -42,7 +42,7 @@ import FINISH_CHARACTER_CREATION, {
 } from '../mutations/finishCharacterCreation';
 import { useGame } from '../contexts/gameContext';
 import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
-import WarningDialog from '../components/WarningDialog';
+import WarningDialog from '../components/dialogs/WarningDialog';
 
 export const background = {
   color: 'black',

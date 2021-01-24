@@ -3,23 +3,23 @@ import { useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { Box, FormField, Select, TextInput } from 'grommet';
 
-import DialogWrapper from './DialogWrapper';
-import { HeadingWS, ParagraphWS, ButtonWS, RedBox, inflictHarmBackground } from '../config/grommetConfig';
-import { CharacterMove, Move } from '../@types/staticDataInterfaces';
-import { useFonts } from '../contexts/fontContext';
-import { useGame } from '../contexts/gameContext';
-import { StyledMarkdown } from './styledComponents';
-import PERFORM_INFLICT_HARM_MOVE, {
-  PerformInflictHarmMoveData,
-  PerformInflictHarmMoveVars,
-} from '../mutations/performInflictHarmMove';
+import DialogWrapper from '../DialogWrapper';
+import { StyledMarkdown } from '../styledComponents';
+import { HeadingWS, ParagraphWS, ButtonWS, RedBox, healHarmBackground } from '../../config/grommetConfig';
+import PERFORM_HEAL_HARM_MOVE, {
+  PerformHealHarmMoveData,
+  PerformHealHarmMoveVars,
+} from '../../mutations/performHealHarmMove';
+import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 
-interface InflictHarmDialogProps {
+interface HealHarmDialogProps {
   move: Move | CharacterMove;
   handleClose: () => void;
 }
 
-const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) => {
+const HealHarmDialog: FC<HealHarmDialogProps> = ({ move, handleClose }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [otherCharacterId, setotherCharacterId] = useState('');
   const [harm, setHarm] = useState(0);
@@ -31,18 +31,18 @@ const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) =>
   const { userGameRole, otherPlayerGameRoles } = useGame();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
-  const [performInflictHarmMove, { loading: performingInflictHarmMove }] = useMutation<
-    PerformInflictHarmMoveData,
-    PerformInflictHarmMoveVars
-  >(PERFORM_INFLICT_HARM_MOVE);
+  const [performHealHarmMove, { loading: performingHealHarmMove }] = useMutation<
+    PerformHealHarmMoveData,
+    PerformHealHarmMoveVars
+  >(PERFORM_HEAL_HARM_MOVE);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const characters = otherPlayerGameRoles?.map((gameRole) => gameRole.characters[0]) || [];
-  const handleInflictHarmMove = () => {
+  const handleHealHarmMove = () => {
     if (
       !!userGameRole &&
       userGameRole.characters.length === 1 &&
-      !performingInflictHarmMove &&
+      !performingHealHarmMove &&
       harm > 0 &&
       !!otherCharacterId
     ) {
@@ -57,7 +57,7 @@ const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) =>
       if (!otherGameroleId) return;
 
       try {
-        performInflictHarmMove({
+        performHealHarmMove({
           variables: {
             gameId,
             gameroleId: userGameRole.id,
@@ -77,7 +77,7 @@ const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) =>
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <DialogWrapper background={inflictHarmBackground} handleClose={handleClose}>
+    <DialogWrapper background={healHarmBackground} handleClose={handleClose}>
       <Box gap="24px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}
@@ -85,7 +85,7 @@ const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) =>
         <StyledMarkdown>{move.description}</StyledMarkdown>
         <Box fill direction="row" align="start" justify="between" pad="12px" gap="12px">
           <Box fill>
-            <ParagraphWS alignSelf="start">Who did you hurt?</ParagraphWS>
+            <ParagraphWS alignSelf="start">Who did you heal?</ParagraphWS>
             <Select
               id="target-character-input"
               aria-label="target-character-input"
@@ -98,7 +98,7 @@ const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) =>
             />
           </Box>
           <Box fill>
-            <ParagraphWS alignSelf="center">...and how bad was it?</ParagraphWS>
+            <ParagraphWS alignSelf="center">...and how much did you heal?</ParagraphWS>
             <RedBox alignSelf="center" width="150px" align="center" justify="between" pad="24px">
               <FormField>
                 <TextInput
@@ -122,10 +122,10 @@ const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) =>
             onClick={handleClose}
           />
           <ButtonWS
-            label="OKAY"
+            label="APPLY"
             primary
-            onClick={() => !performingInflictHarmMove && harm > 0 && !!otherCharacterId && handleInflictHarmMove()}
-            disabled={performingInflictHarmMove || harm === 0 || !otherCharacterId}
+            onClick={() => !performingHealHarmMove && harm > 0 && !!otherCharacterId && handleHealHarmMove()}
+            disabled={performingHealHarmMove || harm === 0 || !otherCharacterId}
           />
         </Box>
       </Box>
@@ -133,4 +133,4 @@ const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) =>
   );
 };
 
-export default InflictHarmDialog;
+export default HealHarmDialog;

@@ -3,15 +3,15 @@ import { useMutation } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { Box, Select } from 'grommet';
 
-import DialogWrapper from './DialogWrapper';
-import { HeadingWS, ParagraphWS, ButtonWS, helpOrInterfereBackground } from '../config/grommetConfig';
+import DialogWrapper from '../DialogWrapper';
+import { HeadingWS, ParagraphWS, ButtonWS, helpOrInterfereBackground } from '../../config/grommetConfig';
 import PERFORM_HELP_OR_INTERFERE_MOVE, {
   PerformHelpOrInterfereMoveData,
   PerformHelpOrInterfereMoveVars,
-} from '../mutations/performHelpOrInterfereMove';
-import { CharacterMove, Move } from '../@types/staticDataInterfaces';
-import { useFonts } from '../contexts/fontContext';
-import { useGame } from '../contexts/gameContext';
+} from '../../mutations/performHelpOrInterfereMove';
+import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 
 interface HelpOrInterfereDialogProps {
   move: Move | CharacterMove;

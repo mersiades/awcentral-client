@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { Box } from 'grommet';
 
-import DialogWrapper from './DialogWrapper';
-import { warningDialogBackground, HeadingWS, ButtonWS, ParagraphWS } from '../config/grommetConfig';
-import { useFonts } from '../contexts/fontContext';
+import DialogWrapper from '../DialogWrapper';
+import { warningDialogBackground, HeadingWS, ButtonWS, ParagraphWS } from '../../config/grommetConfig';
+import { useFonts } from '../../contexts/fontContext';
 
 interface WarningDialogProps {
   title: string;

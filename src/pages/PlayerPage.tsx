@@ -7,9 +7,9 @@ import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet
 import MovesPanel from '../components/MovesPanel';
 import PlaybookPanel from '../components/playbookPanel/PlaybookPanel';
 import MessagesPanel from '../components/messagesPanel/MessagesPanel';
-import HelpOrInterfereDialog from '../components/HelpOrInterfereDialog';
-import BarterDialog from '../components/BarterDialog';
-import MakeWantKnownDialog from '../components/MakeWantKnownDialog';
+import HelpOrInterfereDialog from '../components/dialogs/HelpOrInterfereDialog';
+import BarterDialog from '../components/dialogs/BarterDialog';
+import MakeWantKnownDialog from '../components/dialogs/MakeWantKnownDialog';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES from '../queries/allMoves';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
@@ -23,10 +23,10 @@ import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
-import HarmDialog from '../components/HarmDialog';
-import InflictHarmDialog from '../components/InflictHarmDialog';
-import HealHarmDialog from '../components/HealHarmDialog';
-import AngelSpecialDialog from '../components/AngelSpecialDialog';
+import HarmDialog from '../components/dialogs/HarmDialog';
+import InflictHarmDialog from '../components/dialogs/InflictHarmDialog';
+import HealHarmDialog from '../components/dialogs/HealHarmDialog';
+import AngelSpecialDialog from '../components/dialogs/AngelSpecialDialog';
 import {
   ANGEL_SPECIAL_NAME,
   HEAL_HARM_NAME,

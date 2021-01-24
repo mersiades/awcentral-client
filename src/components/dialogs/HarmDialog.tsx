@@ -3,16 +3,16 @@ import { useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { Box, FormField, TextInput } from 'grommet';
 
-import DialogWrapper from './DialogWrapper';
-import { HeadingWS, ParagraphWS, ButtonWS, RedBox, sufferHarmBackground } from '../config/grommetConfig';
-import { CharacterMove, Move } from '../@types/staticDataInterfaces';
-import { useFonts } from '../contexts/fontContext';
-import { useGame } from '../contexts/gameContext';
+import DialogWrapper from '../DialogWrapper';
+import { HeadingWS, ParagraphWS, ButtonWS, RedBox, sufferHarmBackground } from '../../config/grommetConfig';
+import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 import PERFORM_SUFFER_HARM_MOVE, {
   PerformSufferHarmMoveData,
   PerformSufferHarmMoveVars,
-} from '../mutations/performSufferHarmMove';
-import HarmClock from './HarmClock';
+} from '../../mutations/performSufferHarmMove';
+import HarmClock from '../HarmClock';
 
 interface HarmDialogProps {
   move: Move | CharacterMove;

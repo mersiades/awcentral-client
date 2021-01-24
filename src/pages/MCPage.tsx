@@ -8,7 +8,7 @@ import GamePanel from '../components/gamePanel/GamePanel';
 import MovesPanel from '../components/MovesPanel';
 import InvitationForm from '../components/InvitationForm';
 import GameForm from '../components/GameForm';
-import WarningDialog from '../components/WarningDialog';
+import WarningDialog from '../components/dialogs/WarningDialog';
 import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 import { Footer, LeftMainContainer, MainContainer, RightMainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
