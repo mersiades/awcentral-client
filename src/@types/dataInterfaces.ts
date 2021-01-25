@@ -1,4 +1,4 @@
-import { PlayBooks, Roles, Stats, Threats, UniqueTypes } from './enums';
+import { MessageType, PlaybookType, RoleType, StatType, Threats, UniqueTypes } from './enums';
 import { CharacterMove, Look, Move } from './staticDataInterfaces';
 
 /**
@@ -26,11 +26,12 @@ export interface Game {
   players: { displayName: string; id: string }[];
   gameRoles: GameRole[];
   invitees: string[];
+  gameMessages: GameMessage[];
 }
 
 export interface GameRole {
   id: string;
-  role: Roles;
+  role: RoleType;
   userId: string;
   characters: Character[];
   npcs: Npc[];
@@ -41,7 +42,7 @@ export interface GameRole {
 
 export interface Character {
   id: string;
-  playbook: PlayBooks;
+  playbook: PlaybookType;
   hasCompletedCharacterCreation: boolean;
   statsBlock: StatsBlock;
   hxBlock: HxStat[];
@@ -72,7 +73,7 @@ export interface StatsBlock {
 
 export interface CharacterStat {
   id: string;
-  stat: Stats;
+  stat: StatType;
   value: number;
   isHighlighted: boolean;
 }
@@ -125,4 +126,27 @@ export interface Threat {
   impulse: string;
   description?: string;
   stakes?: string;
+}
+
+// --------------------------------------------------- Message interfaces --------------------------------------------------- //
+
+export interface GameMessage {
+  id: string;
+  gameId: string;
+  gameroleId: string;
+  messageType: MessageType;
+  title: string;
+  content: string;
+  sentOn: string;
+  roll1: number;
+  roll2: number;
+  rollModifier: number;
+  rollResult: number;
+  modifierStatName: StatType;
+  barterSpent: number;
+  currentBarter: number;
+  harmSuffered: number;
+  currentHarm: number;
+  stockSpent: number;
+  currentStock: number;
 }

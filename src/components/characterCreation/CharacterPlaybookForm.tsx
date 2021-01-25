@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Grid } from 'grommet';
+import { Box } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
 import { StyledMarkdown } from '../styledComponents';
-import { PlayBooks } from '../../@types/enums';
+import { PlaybookType } from '../../@types/enums';
 import { Playbook } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
@@ -13,9 +13,9 @@ import '../../assets/styles/transitions.css';
 interface CharacterPlaybookProps {
   creatingCharacter: boolean;
   settingPlaybook: boolean;
-  checkPlaybookReset: (playbookType: PlayBooks) => void;
+  checkPlaybookReset: (playbookType: PlaybookType) => void;
   playbooks?: Playbook[];
-  playbook?: PlayBooks;
+  playbook?: PlaybookType;
 }
 
 const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
@@ -67,103 +67,91 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
       direction="column"
       background="transparent"
       align="center"
-      justify="start"
+      justify="between"
       className={startFadeOut ? 'fadeOut' : ''}
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Grid
-        fill
-        rows={['85%', '15%']}
-        columns={['100%', '0%']}
-        areas={[
-          { name: 'playbook-display', start: [0, 0], end: [1, 0] },
-          { name: 'playbook-previews', start: [0, 1], end: [0, 1] },
-        ]}
+      {!selectedPlaybook && showIntro && (
+        <Box>
+          <HeadingWS crustReady={crustReady} level={2}>
+            Choose your playbook
+          </HeadingWS>
+          <ParagraphWS>
+            You should probably wait for your MC and the rest of your crew, tho. No headstarts for nobody in Apocalypse
+            World.
+          </ParagraphWS>
+        </Box>
+      )}
+      {!!selectedPlaybook && (
+        <Box direction="row" fill="horizontal" margin={{ bottom: '125px' }} justify="center">
+          <Box animation="fadeIn" justify="center">
+            <img
+              src={selectedPlaybook.playbookImageUrl}
+              alt={decapitalize(selectedPlaybook.playbookType)}
+              style={{ objectFit: 'contain', maxHeight: '45vh' }}
+            />
+          </Box>
+          <Box pad="12px" animation="fadeIn" justify="around" align="center">
+            <HeadingWS crustReady={crustReady} level={2} alignSelf="center" margin="0px">
+              {decapitalize(selectedPlaybook.playbookType)}
+            </HeadingWS>
+            <Box overflow="auto" style={{ maxWidth: '856px', maxHeight: '30vh' }}>
+              <StyledMarkdown>{selectedPlaybook.intro}</StyledMarkdown>
+              <em>
+                <StyledMarkdown>{selectedPlaybook.introComment}</StyledMarkdown>
+              </em>
+            </Box>
+
+            {[PlaybookType.angel, PlaybookType.battlebabe, PlaybookType.brainer].includes(selectedPlaybook.playbookType) && (
+              <ButtonWS
+                label={
+                  settingPlaybook || creatingCharacter ? (
+                    <Spinner fillColor="#FFF" width="200px" height="36px" />
+                  ) : (
+                    `SELECT ${decapitalize(selectedPlaybook.playbookType)}`
+                  )
+                }
+                primary
+                size="large"
+                onClick={() => {
+                  setStartFadeOut(true);
+                  checkPlaybookReset(selectedPlaybook.playbookType);
+                }}
+                margin="12px"
+              />
+            )}
+          </Box>
+        </Box>
+      )}
+
+      <Box
+        direction="row"
+        gap="3px"
+        pad="3px"
+        align="end"
+        justify="around"
+        style={{ height: '125px', position: 'absolute', left: 0, bottom: 0, right: 0, top: 'unset' }}
       >
-        <Box gridArea="playbook-display" fill align="center" justify="center">
-          {!selectedPlaybook && showIntro && (
-            <>
-              <HeadingWS crustReady={crustReady} level={2}>
-                Choose your playbook
-              </HeadingWS>
-              <ParagraphWS>
-                You should probably wait for your MC and the rest of your crew, tho. No headstarts for nobody in Apocalypse
-                World.
-              </ParagraphWS>
-            </>
-          )}
-          {!!selectedPlaybook && (
-            <Grid
-              fill
-              rows={['100%', '0%']}
-              columns={['40%', '60%']}
-              areas={[
-                { name: 'image', start: [0, 0], end: [0, 0] },
-                { name: 'text', start: [1, 0], end: [1, 0] },
-              ]}
-            >
-              <Box gridArea="image" animation="fadeIn" justify="center">
+        {sortedPlaybooks.length > 0
+          ? sortedPlaybooks.map((playbook) => (
+              <Box
+                data-testid={`${playbook.playbookType.toLowerCase()}-button`}
+                key={playbook.playbookImageUrl}
+                onClick={() => handlePlaybookClick(playbook)}
+                hoverIndicator={{ color: 'brand', opacity: 0.4 }}
+                height="95%"
+                justify="center"
+                align="center"
+              >
                 <img
-                  src={selectedPlaybook.playbookImageUrl}
-                  alt={decapitalize(selectedPlaybook.playbookType)}
-                  style={{ objectFit: 'contain', maxHeight: '50vh' }}
+                  src={playbook.playbookImageUrl}
+                  alt={decapitalize(playbook.playbookType)}
+                  style={{ objectFit: 'contain', maxHeight: '98%', maxWidth: '96%' }}
                 />
               </Box>
-              <Box gridArea="text" pad="12px" animation="fadeIn" justify="around" align="center">
-                <HeadingWS crustReady={crustReady} level={2} alignSelf="center" margin="0px">
-                  {decapitalize(selectedPlaybook.playbookType)}
-                </HeadingWS>
-                <Box overflow="auto" style={{ maxWidth: '600px' }}>
-                  <StyledMarkdown>{selectedPlaybook.intro}</StyledMarkdown>
-                  <em>
-                    <StyledMarkdown>{selectedPlaybook.introComment}</StyledMarkdown>
-                  </em>
-                </Box>
-
-                {[PlayBooks.angel, PlayBooks.battlebabe, PlayBooks.brainer].includes(selectedPlaybook.playbookType) && (
-                  <ButtonWS
-                    label={
-                      settingPlaybook || creatingCharacter ? (
-                        <Spinner fillColor="#FFF" width="200px" height="36px" />
-                      ) : (
-                        `SELECT ${decapitalize(selectedPlaybook.playbookType)}`
-                      )
-                    }
-                    primary
-                    size="large"
-                    onClick={() => {
-                      setStartFadeOut(true);
-                      checkPlaybookReset(selectedPlaybook.playbookType);
-                    }}
-                    margin="12px"
-                  />
-                )}
-              </Box>
-            </Grid>
-          )}
-        </Box>
-        <Box gridArea="playbook-previews" direction="row" justify="around" pad="3px">
-          {sortedPlaybooks.length > 0
-            ? sortedPlaybooks.map((playbook) => (
-                <Box
-                  data-testid={`${playbook.playbookType.toLowerCase()}-button`}
-                  key={playbook.playbookImageUrl}
-                  onClick={() => handlePlaybookClick(playbook)}
-                  hoverIndicator={{ color: 'brand', opacity: 0.4 }}
-                  height="95%"
-                  justify="center"
-                  align="center"
-                >
-                  <img
-                    src={playbook.playbookImageUrl}
-                    alt={decapitalize(playbook.playbookType)}
-                    style={{ objectFit: 'contain', maxHeight: '98%', maxWidth: '96%' }}
-                  />
-                </Box>
-              ))
-            : null}
-        </Box>
-      </Grid>
+            ))
+          : null}
+      </Box>
     </Box>
   );
 };

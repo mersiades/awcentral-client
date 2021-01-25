@@ -6,19 +6,42 @@ import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet
 
 import MovesPanel from '../components/MovesPanel';
 import PlaybookPanel from '../components/playbookPanel/PlaybookPanel';
+import MessagesPanel from '../components/messagesPanel/MessagesPanel';
+import HelpOrInterfereDialog from '../components/dialogs/HelpOrInterfereDialog';
+import BarterDialog from '../components/dialogs/BarterDialog';
+import MakeWantKnownDialog from '../components/dialogs/MakeWantKnownDialog';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES from '../queries/allMoves';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
 import SET_CHARACTER_HARM, { SetCharacterHarmData, SetCharacterHarmVars } from '../mutations/setCharacterHarm';
 import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
-import { Stats } from '../@types/enums';
+import { MoveActionType, RollType, StatType } from '../@types/enums';
 import { HarmInput } from '../@types';
-import { Move } from '../@types/staticDataInterfaces';
+import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import HarmDialog from '../components/dialogs/HarmDialog';
+import InflictHarmDialog from '../components/dialogs/InflictHarmDialog';
+import HealHarmDialog from '../components/dialogs/HealHarmDialog';
+import AngelSpecialDialog from '../components/dialogs/AngelSpecialDialog';
+import {
+  ANGEL_SPECIAL_NAME,
+  HEAL_HARM_NAME,
+  HELP_OR_INTERFERE_NAME,
+  INFLICT_HARM_NAME,
+  MAKE_WANT_KNOWN_NAME,
+  REVIVE_SOMEONE_NAME,
+  SPEED_RECOVERY_NAME,
+  STABILIZE_AND_HEAL_NAME,
+  TREAT_NPC_NAME,
+} from '../config/constants';
+import StabilizeDialog from '../components/dialogs/StabilizeDialog';
+import SpeedRecoveryDialog from '../components/dialogs/SpeedRecoveryDialog';
+import ReviveDialog from '../components/dialogs/ReviveDialog';
+import TreatNpcDialog from '../components/dialogs/TreatNpcDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -28,7 +51,7 @@ export const background = {
   color: 'black',
   dark: true,
   size: 'contain',
-  image: 'url(/images/background-image-8.jpg)',
+  image: 'url(/images/background-image-9.jpg)',
   position: 'bottom center',
 };
 
@@ -45,6 +68,7 @@ const PlayerPage: FC = () => {
    */
   const [sidePanel, setSidePanel] = useState<number>(2);
   const [character, setCharacter] = useState<Character | undefined>();
+  const [dialog, setDialog] = useState<Move | CharacterMove | undefined>();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
@@ -106,7 +130,7 @@ const PlayerPage: FC = () => {
     }
   };
 
-  const handleToggleHighlight = async (stat: Stats) => {
+  const handleToggleHighlight = async (stat: StatType) => {
     if (!!userGameRole && !!character) {
       try {
         await toggleStatHighlight({ variables: { gameRoleId: userGameRole.id, characterId: character.id, stat } });
@@ -163,6 +187,31 @@ const PlayerPage: FC = () => {
         style={{ borderBottom: `1px solid ${accentColors[0]}` }}
         height="4vh"
       >
+        {dialog?.moveAction?.rollType === RollType.harm && (
+          <HarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.moveAction?.actionType === MoveActionType.barter && (
+          <BarterDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.name === HELP_OR_INTERFERE_NAME && (
+          <HelpOrInterfereDialog move={dialog} buttonTitle="ROLL" handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.name === MAKE_WANT_KNOWN_NAME && (
+          <MakeWantKnownDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.name === INFLICT_HARM_NAME && <InflictHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+        {dialog?.name === HEAL_HARM_NAME && <HealHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+        {dialog?.name === ANGEL_SPECIAL_NAME && (
+          <AngelSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.name === STABILIZE_AND_HEAL_NAME && (
+          <StabilizeDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.name === SPEED_RECOVERY_NAME && (
+          <SpeedRecoveryDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.name === REVIVE_SOMEONE_NAME && <ReviveDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+        {dialog?.name === TREAT_NPC_NAME && <TreatNpcDialog move={dialog} handleClose={() => setDialog(undefined)} />}
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
             style={{ backgroundColor: 'transparent' }}
@@ -193,9 +242,10 @@ const PlayerPage: FC = () => {
                 handleSetHarm={handleSetHarm}
                 handleToggleHighlight={handleToggleHighlight}
                 navigateToCharacterCreation={navigateToCharacterCreation}
+                openDialog={setDialog}
               />
             )}
-            {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} />}
+            {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} openDialog={setDialog} />}
           </SidePanel>
         </Collapsible>
         <MainContainer
@@ -206,7 +256,7 @@ const PlayerPage: FC = () => {
           maxPanels={MAX_SIDE_PANEL}
           shinkWidth={SIDE_PANEL_WIDTH}
         >
-          Main container
+          <MessagesPanel />
         </MainContainer>
       </div>
       <Footer direction="row" justify="between" align="center" height="10vh">

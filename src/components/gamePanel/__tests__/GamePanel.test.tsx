@@ -8,7 +8,7 @@ import { mockCharacter2, mockGame7, mockPlaybookAngel } from '../../../tests/moc
 import { mockPlaybook } from '../../../tests/mockQueries';
 import { decapitalize } from '../../../helpers/decapitalize';
 import GamePanel from '../GamePanel';
-import { MoveKinds } from '../../../@types/enums';
+import { MoveType } from '../../../@types/enums';
 
 describe('Rendering GamePanel', () => {
   test('should render GameBox with complete comms info', () => {

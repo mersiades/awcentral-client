@@ -26,6 +26,16 @@ jest.mock('@react-keycloak/web', () => {
 });
 
 describe('Rendering PreGamePage', () => {
+  const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
+  const mockScrollIntoView = jest.fn();
+  beforeEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = mockScrollIntoView;
+  });
+
+  afterEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
+
   test('should render for MC with two incomplete Characters', async () => {
     renderWithRouter(<App />, `/pre-game/${mockGame5.id}`, {
       isAuthenticated: true,
@@ -71,57 +81,3 @@ describe('Rendering PreGamePage', () => {
     await screen.findByTestId('mc-page');
   });
 });
-
-/**
- * Name "PRE-GAME":
-      <h2
-        class="StyledHeading-sc-1rdh4aw-0 fJuNWZ sc-gsTCUz fndJmk"
-      />
-
-      Name "Mock Character 1 -- Battlebabe":
-      <h3
-        class="StyledHeading-sc-1rdh4aw-0 gwqNst sc-gsTCUz fndJmk"
-      />
-
-      Name "Name -- Playbook":
-      <h3
-        class="StyledHeading-sc-1rdh4aw-0 gwqNst sc-gsTCUz fndJmk"
-      />
-
-      --------------------------------------------------
-      button:
-
-      Name "START GAME":
-      <button
-        class="StyledButtonKind-sc-1vhfpnt-0 cmBmdm"
-        disabled=""
-        kind="primary"
-        type="button"
-      />
-
-      --------------------------------------------------
-      list:
-
-      Name "":
-      <ul />
-
-      --------------------------------------------------
-      listitem:
-
-      Name "":
-      <li />
-
-      Name "":
-      <li />
-
-      Name "":
-      <li />
-
-      Name "":
-      <li />
-
-      Name "":
-      <li />
-
-      --------------------------------------------------
- */

@@ -1,36 +1,130 @@
 import React, { FC, useState } from 'react';
-import { Box, Button } from 'grommet';
+import { useMutation } from '@apollo/client';
+import { useParams } from 'react-router-dom';
+import { Box } from 'grommet';
 import { FormUp, FormDown, Edit } from 'grommet-icons';
 
 import { StyledMarkdown } from '../styledComponents';
-import { useGame } from '../../contexts/gameContext';
-import { Roles } from '../../@types/enums';
+import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
+import PERFORM_STAT_ROLL_MOVE, {
+  PerformStatRollMoveData,
+  PerformStatRollMoveVars,
+} from '../../mutations/performStatRollMove';
+import { MoveActionType, RoleType, RollType } from '../../@types/enums';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
-import { decapitalize } from '../../helpers/decapitalize';
-import { HeadingWS } from '../../config/grommetConfig';
+import { useGame } from '../../contexts/gameContext';
 import { useFonts } from '../../contexts/fontContext';
+import { brandColor, HeadingWS } from '../../config/grommetConfig';
+import { decapitalize } from '../../helpers/decapitalize';
 
 interface MovesBoxProps {
   moves: Array<CharacterMove | Move>;
   moveCategory: string;
   open?: boolean;
   navigateToCharacterCreation?: (step: string) => void;
+  openDialog?: (move: Move | CharacterMove) => void;
 }
 
-const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToCharacterCreation }) => {
+const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToCharacterCreation, openDialog }) => {
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [showMoves, setShowMoves] = useState(open);
   const [showMoveDetails, setShowMoveDetails] = useState<string[]>([]);
 
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const { gameId } = useParams<{ gameId: string }>();
+
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { userGameRole } = useGame();
   const { crustReady } = useFonts();
 
+  // ------------------------------------------------------ graphQL -------------------------------------------------------- //
+
+  const [performPrintMove, { loading: performingPrintMove }] = useMutation<PerformPrintMoveData, PerformPrintMoveVars>(
+    PERFORM_PRINT_MOVE
+  );
+
+  const [performStatRollMove, { loading: performingStatRollMove }] = useMutation<
+    PerformStatRollMoveData,
+    PerformStatRollMoveVars
+  >(PERFORM_STAT_ROLL_MOVE);
+
+  // ------------------------------------------------- Component functions -------------------------------------------------- //
   const toggleShowMoves = () => setShowMoves(!showMoves);
+
+  const clickableStyle = {
+    cursor: 'pointer',
+    '&:hover': {
+      color: brandColor,
+    },
+  };
+
+  const unClickableStyle = {
+    cursor: 'default',
+  };
 
   const toggleShowMoveDetails = (moveId: string) => {
     if (showMoveDetails.includes(moveId)) {
       setShowMoveDetails(showMoveDetails.filter((m) => m !== moveId));
     } else {
       setShowMoveDetails([...showMoveDetails, moveId]);
+    }
+  };
+
+  const handlePrintMove = (move: Move | CharacterMove) => {
+    if (!!userGameRole && userGameRole.characters.length === 1 && !performingPrintMove) {
+      try {
+        performPrintMove({
+          variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole.characters[0].id, moveId: move.id },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleStatRollMove = (move: Move | CharacterMove) => {
+    if (!!userGameRole && userGameRole.characters.length === 1 && !performingStatRollMove) {
+      try {
+        performStatRollMove({
+          variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole.characters[0].id, moveId: move.id },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleRollClick = (move: Move | CharacterMove) => {
+    switch (move.moveAction?.rollType) {
+      case RollType.stat:
+        handleStatRollMove(move);
+        break;
+      case RollType.barter:
+      // deliberately falls through
+      case RollType.harm:
+      // deliberately falls through
+      case RollType.hx:
+        !!openDialog && openDialog(move);
+        break;
+      default:
+    }
+  };
+
+  const handleMoveClick = (move: Move | CharacterMove) => {
+    console.log('move.moveAction?.actionType', move.moveAction?.actionType);
+    switch (move.moveAction?.actionType) {
+      case MoveActionType.roll:
+        handleRollClick(move);
+        break;
+      case MoveActionType.adjustHx:
+      // Deliberately falls through
+      case MoveActionType.barter:
+        !!openDialog && openDialog(move);
+        break;
+      case MoveActionType.print:
+      // Deliberately falls through
+      default:
+        handlePrintMove(move);
     }
   };
 
@@ -67,6 +161,7 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
       </Box>
       {showMoves &&
         moves.map((move) => {
+          const canPerformMove = !!move.moveAction && userGameRole?.role !== RoleType.mc;
           return (
             <Box key={move.id} fill="horizontal" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
               <Box fill="horizontal" direction="row" justify="between" align="center">
@@ -88,13 +183,18 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
                     crustReady={crustReady}
                     level="3"
                     margin={{ top: '3px', bottom: '3px' }}
-                    onClick={() => toggleShowMoveDetails(move.id)}
-                    style={{ cursor: 'pointer' }}
+                    onClick={() => canPerformMove && handleMoveClick(move)}
+                    onMouseOver={(e: React.MouseEvent<HTMLHeadingElement>) =>
+                      // @ts-ignore
+                      (e.target.style.color = canPerformMove ? '#CD3F3E' : '#FFF')
+                    }
+                    // @ts-ignore
+                    onMouseOut={(e: React.MouseEvent<HTMLHeadingElement>) => (e.target.style.color = '#FFF')}
+                    style={canPerformMove ? clickableStyle : unClickableStyle}
                   >
                     {decapitalize(move.name)}
                   </HeadingWS>
                 </Box>
-                {!!move.stat && userGameRole?.role !== Roles.mc && <Button secondary label="ROLL" />}
               </Box>
 
               {showMoveDetails.includes(move.id) && (

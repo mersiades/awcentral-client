@@ -513,20 +513,6 @@ export const CustomUL = styled.ul`
   }
 `;
 
-// export const FooterTabs = styled(Tabs as FC<TabsProps & JSX.IntrinsicElements['div']>)(() => {
-//   return css``;
-// });
-
-// export const FooterTab = styled(Tab as React.ComponentClass<TabProps & Omit<JSX.IntrinsicElements['button'], 'title'>>)(
-//   () => {
-//     return css`
-//       font-size: 36px;
-//       font-family: 'crust_clean', sans-serif;
-//       line-height: normal;
-//     `;
-//   }
-// );
-
 // Renders Grommet Heading with black text shadow
 export const HeadingWS = styled(
   Heading as React.FC<
@@ -641,10 +627,72 @@ export const RedBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>)
   `;
 });
 
-export const WarningDialogBackground = {
+const backgroundBase = {
   color: 'black',
   dark: true,
   position: 'center bottom',
   size: 'cover',
+};
+
+export const warningDialogBackground = {
+  ...backgroundBase,
   image: 'url(/images/background-image-6.jpg)',
+};
+
+export const helpOrInterfereBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-10.jpg)',
+};
+
+export const barterBackground = {
+  ...backgroundBase,
+  position: 'left bottom',
+  image: 'url(/images/background-image-11.jpg)',
+};
+
+export const makeWantKnownBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-13.jpg)',
+};
+
+export const sufferHarmBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-12.jpg)',
+};
+
+export const inflictHarmBackground = {
+  ...backgroundBase,
+  size: 'contain',
+  image: 'url(/images/background-image-14.jpg)',
+};
+
+export const healHarmBackground = {
+  ...backgroundBase,
+  size: 'contain',
+  image: 'url(/images/background-image-15.jpg)',
+};
+
+export const angelSpecialBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-16.jpg)',
+};
+
+export const stabilizeBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-17.jpg)',
+};
+
+export const speedRecoveryBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-18.jpg)',
+};
+
+export const reviveBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-19.jpg)',
+};
+
+export const treatNpcBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-20.jpg)',
 };

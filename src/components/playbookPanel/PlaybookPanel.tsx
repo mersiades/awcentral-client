@@ -2,11 +2,6 @@ import React, { FC } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from 'grommet';
 
-import PLAYBOOK, { PlaybookData, PlaybookVars } from '../../queries/playbook';
-import { HarmInput } from '../../@types';
-import { Character } from '../../@types/dataInterfaces';
-import { decapitalize } from '../../helpers/decapitalize';
-import { MoveKinds, Stats } from '../../@types/enums';
 import StatsBox from './StatsBox';
 import MovesBox from './MovesBox';
 import NameAndLooksBox from './NameAndLooksBox';
@@ -14,6 +9,13 @@ import BarterBox from './BarterBox';
 import GearBox from './GearBox';
 import HxBox from './HxBox';
 import HarmBox from './HarmBox';
+import PLAYBOOK, { PlaybookData, PlaybookVars } from '../../queries/playbook';
+import { MoveType, StatType } from '../../@types/enums';
+import { HarmInput } from '../../@types';
+import { Character } from '../../@types/dataInterfaces';
+import { decapitalize } from '../../helpers/decapitalize';
+import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
+import AngelKitBox from './AngelKitBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -24,8 +26,9 @@ interface PlaybookPanelProps {
   handleSetBarter: (amount: number) => void;
   handleAdjustHx: (hxId: string, value: number) => void;
   handleSetHarm: (harm: HarmInput) => void;
-  handleToggleHighlight: (stat: Stats) => void;
+  handleToggleHighlight: (stat: StatType) => void;
   navigateToCharacterCreation: (step: string) => void;
+  openDialog: (move: Move | CharacterMove) => void;
 }
 
 const PlaybookPanel: FC<PlaybookPanelProps> = ({
@@ -39,6 +42,7 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
   handleSetHarm,
   handleToggleHighlight,
   navigateToCharacterCreation,
+  openDialog,
 }) => {
   const { data } = useQuery<PlaybookData, PlaybookVars>(PLAYBOOK, { variables: { playbookType: character.playbook } });
 
@@ -65,8 +69,9 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
         <MovesBox
           moves={character.characterMoves}
           open
-          moveCategory={MoveKinds.character}
+          moveCategory={MoveType.character}
           navigateToCharacterCreation={navigateToCharacterCreation}
+          openDialog={openDialog}
         />
       )}
 
@@ -83,12 +88,19 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
 
       <GearBox gear={character.gear} navigateToCharacterCreation={navigateToCharacterCreation} />
 
-      {!!character.barter && data?.playbook.barterInstructions && (
+      {data?.playbook.barterInstructions && (
         <BarterBox
-          barter={character.barter}
+          barter={character.barter || 0}
           instructions={data?.playbook.barterInstructions}
           settingBarter={settingBarter}
           handleSetBarter={handleSetBarter}
+        />
+      )}
+      {!!character.playbookUnique?.angelKit && (
+        <AngelKitBox
+          angelKit={character.playbookUnique.angelKit}
+          navigateToCharacterCreation={navigateToCharacterCreation}
+          openDialog={openDialog}
         />
       )}
     </Box>

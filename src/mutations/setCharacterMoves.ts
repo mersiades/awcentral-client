@@ -36,7 +36,7 @@ const SET_CHARACTER_MOVES = gql`
         stat
         rollModifier {
           id
-          movesToModify {
+          moveToModify {
             id
           }
           statToRollWith

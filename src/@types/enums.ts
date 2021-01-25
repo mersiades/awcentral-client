@@ -1,9 +1,21 @@
-export enum Roles {
+export enum CharacterCreationSteps {
+  intro = 0,
+  selectPlaybook = 1,
+  selectName = 2,
+  selectLooks = 3,
+  selectStats = 4,
+  selectGear = 5,
+  setUnique = 6,
+  selectMoves = 7,
+  setHx = 8,
+}
+
+export enum RoleType {
   mc = 'MC',
   player = 'PLAYER',
 }
 
-export enum Stats {
+export enum StatType {
   cool = 'COOL',
   hard = 'HARD',
   hot = 'HOT',
@@ -12,7 +24,7 @@ export enum Stats {
   hx = 'HX',
 }
 
-export enum MoveKinds {
+export enum MoveType {
   character = 'CHARACTER',
   default = 'DEFAULT_CHARACTER',
   basic = 'BASIC',
@@ -21,7 +33,7 @@ export enum MoveKinds {
   roadWar = 'ROAD_WAR',
 }
 
-export enum PlayBooks {
+export enum PlaybookType {
   angel = 'ANGEL',
   battlebabe = 'BATTLEBABE',
   brainer = 'BRAINER',
@@ -35,19 +47,7 @@ export enum PlayBooks {
   skinner = 'SKINNER',
 }
 
-export enum CharacterCreationSteps {
-  intro = 0,
-  selectPlaybook = 1,
-  selectName = 2,
-  selectLooks = 3,
-  selectStats = 4,
-  selectGear = 5,
-  setUnique = 6,
-  selectMoves = 7,
-  setHx = 8,
-}
-
-export enum LookCategories {
+export enum LookType {
   gender = 'GENDER',
   clothes = 'CLOTHES',
   face = 'FACE',
@@ -77,4 +77,34 @@ export enum Threats {
   'LANDSCAPE',
   'TERRAIN',
   'VEHICLE',
+}
+
+export enum MoveActionType {
+  roll = 'ROLL',
+  print = 'PRINT',
+  barter = 'BARTER',
+  adjustHx = 'ADJUST_HX',
+  stock = 'STOCK',
+}
+
+export enum RollType {
+  stat = 'STAT',
+  hx = 'HX',
+  harm = 'HARM',
+  barter = 'BARTER',
+  speed = 'SPEED',
+  handling = 'HANDLING',
+  stock = 'STOCK',
+}
+
+export enum MessageType {
+  printMove = 'PRINT_MOVE',
+  rollStatMove = 'ROLL_STAT_MOVE',
+  rollHxMove = 'ROLL_HX_MOVE',
+  barterMove = 'BARTER_MOVE',
+  rollBarterMove = 'ROLL_BARTER_MOVE',
+  sufferHarmMove = 'SUFFER_HARM_MOVE',
+  adjustHxMove = 'ADJUST_HX_MOVE',
+  rollStockMove = 'ROLL_STOCK_MOVE',
+  stockMove = 'STOCK_MOVE',
 }

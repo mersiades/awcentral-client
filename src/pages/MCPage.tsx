@@ -7,20 +7,21 @@ import { useMutation, useQuery } from '@apollo/client';
 import GamePanel from '../components/gamePanel/GamePanel';
 import MovesPanel from '../components/MovesPanel';
 import InvitationForm from '../components/InvitationForm';
+import GameForm from '../components/GameForm';
+import WarningDialog from '../components/dialogs/WarningDialog';
+import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 import { Footer, LeftMainContainer, MainContainer, RightMainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
 import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
-import { Roles } from '../@types/enums';
+import { RoleType } from '../@types/enums';
 import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
+import { useFonts } from '../contexts/fontContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles, HeadingWS } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
-import { useFonts } from '../contexts/fontContext';
-import GameForm from '../components/GameForm';
-import WarningDialog from '../components/WarningDialog';
 
 export const background = {
   color: 'black',
@@ -131,11 +132,7 @@ const MCPage: FC = () => {
       case 'MESSAGES':
       //deliberately falls through
       default:
-        return (
-          <HeadingWS vtksReady={vtksReady} level={1}>
-            Messages
-          </HeadingWS>
-        );
+        return <MessagesPanel />;
     }
   };
 
@@ -170,7 +167,7 @@ const MCPage: FC = () => {
               ]}
             />
             {game?.gameRoles
-              .filter((gameRole: GameRole) => gameRole.role === Roles.player)
+              .filter((gameRole: GameRole) => gameRole.role === RoleType.player)
               .map((gameRole: GameRole) =>
                 gameRole.characters?.map((character: any) => (
                   <Button
@@ -205,8 +202,8 @@ const MCPage: FC = () => {
               {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
             </SidePanel>
           </Collapsible>
-          <MainContainer sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
-            <LeftMainContainer rightPanel={rightPanel}>
+          <MainContainer fill sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
+            <LeftMainContainer fill rightPanel={rightPanel}>
               <Box fill align="center" justify="center" pad="12px">
                 {renderLeftPanel()}
               </Box>

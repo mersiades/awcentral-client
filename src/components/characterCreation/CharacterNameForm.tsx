@@ -4,14 +4,14 @@ import { Box, TextInput, Text, Form, FormField } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
-import { PlayBooks } from '../../@types/enums';
+import { PlaybookType } from '../../@types/enums';
 import { PlaybookCreator } from '../../@types/staticDataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
 
 interface CharacterNameFormProps {
-  playbookType: PlayBooks;
+  playbookType: PlaybookType;
   settingName: boolean;
   handleSubmitName: (name: string) => void;
   existingName?: string;
@@ -29,6 +29,8 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, settingNa
       variables: { playbookType },
     }
   );
+
+  console.log('pbCreatorData', pbCreatorData);
 
   useEffect(() => {
     !!pbCreatorData && setPbCreator(pbCreatorData.playbookCreator);

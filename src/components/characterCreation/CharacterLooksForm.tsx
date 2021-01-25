@@ -5,16 +5,16 @@ import { Box, Form, FormField, TextInput, Text } from 'grommet';
 import ActionButtons from '../ActionButtons';
 import Spinner from '../Spinner';
 import { HeadingWS } from '../../config/grommetConfig';
-import { LookCategories, PlayBooks } from '../../@types/enums';
+import { LookType, PlaybookType } from '../../@types/enums';
 import { Look, PlaybookCreator } from '../../@types/staticDataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
 
 interface CharacterLooksFormProps {
-  playbookType: PlayBooks;
+  playbookType: PlaybookType;
   characterName: string;
   settingLooks: boolean;
-  handleSubmitLook: (look: string, category: LookCategories) => void;
+  handleSubmitLook: (look: string, category: LookType) => void;
   existingLooks: {
     gender: string;
     clothes: string;
@@ -31,7 +31,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
   handleSubmitLook,
   existingLooks,
 }) => {
-  const [steps] = useState(Object.values(LookCategories));
+  const [steps] = useState(Object.values(LookType));
   const [selectedStep, setSelectedStep] = useState(0);
   const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
   const [genderValue, setGenderValue] = useState({ gender: existingLooks.gender });
@@ -61,7 +61,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
     );
   }
 
-  const handleSetClick = (look: string, category: LookCategories) => {
+  const handleSetClick = (look: string, category: LookType) => {
     setSelectedStep((prevStep) => {
       if (prevStep < 4) {
         return prevStep + 1;
@@ -122,7 +122,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           value={genderValue}
           onChange={(nextValue: any) => setGenderValue(nextValue)}
           onReset={() => setGenderValue({ gender: '' })}
-          onSubmit={({ value }: any) => handleSetClick(value.gender, LookCategories.gender)}
+          onSubmit={({ value }: any) => handleSetClick(value.gender, LookType.gender)}
         >
           <Box
             width="50vw"
@@ -136,7 +136,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
             </FormField>
             <Box direction="row" margin={{ top: '3px' }} wrap>
               {pbCreator.looks
-                .filter((look) => look.category === LookCategories.gender)
+                .filter((look) => look.category === LookType.gender)
                 .map((look) => renderPill(look, setGenderValue, 'gender'))}
             </Box>
           </Box>
@@ -148,7 +148,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           value={clothesValue}
           onChange={(nextValue: any) => setClothesValue(nextValue)}
           onReset={() => setClothesValue({ clothes: '' })}
-          onSubmit={({ value }: any) => handleSetClick(value.clothes, LookCategories.clothes)}
+          onSubmit={({ value }: any) => handleSetClick(value.clothes, LookType.clothes)}
         >
           <Box
             width="50vw"
@@ -162,7 +162,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
             </FormField>
             <Box direction="row" margin={{ top: '3px' }} wrap>
               {pbCreator.looks
-                .filter((look) => look.category === LookCategories.clothes)
+                .filter((look) => look.category === LookType.clothes)
                 .map((look) => renderPill(look, setClothesValue, 'clothes'))}
             </Box>
           </Box>
@@ -174,7 +174,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           value={faceValue}
           onChange={(nextValue: any) => setFaceValue(nextValue)}
           onReset={() => setFaceValue({ face: '' })}
-          onSubmit={({ value }: any) => handleSetClick(value.face, LookCategories.face)}
+          onSubmit={({ value }: any) => handleSetClick(value.face, LookType.face)}
         >
           <Box
             width="50vw"
@@ -188,7 +188,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
             </FormField>
             <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
               {pbCreator.looks
-                .filter((look) => look.category === LookCategories.face)
+                .filter((look) => look.category === LookType.face)
                 .map((look) => renderPill(look, setFaceValue, 'face'))}
             </Box>
           </Box>
@@ -200,7 +200,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           value={eyesValue}
           onChange={(nextValue: any) => setEyesValue(nextValue)}
           onReset={() => setEyesValue({ eyes: '' })}
-          onSubmit={({ value }: any) => handleSetClick(value.eyes, LookCategories.eyes)}
+          onSubmit={({ value }: any) => handleSetClick(value.eyes, LookType.eyes)}
         >
           <Box
             width="50vw"
@@ -214,7 +214,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
             </FormField>
             <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
               {pbCreator.looks
-                .filter((look) => look.category === LookCategories.eyes)
+                .filter((look) => look.category === LookType.eyes)
                 .map((look) => renderPill(look, setEyesValue, 'eyes'))}
             </Box>
           </Box>
@@ -226,7 +226,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           value={bodyValue}
           onChange={(nextValue: any) => setBodyValue(nextValue)}
           onReset={() => setBodyValue({ body: '' })}
-          onSubmit={({ value }: any) => !settingLooks && handleSetClick(value.body, LookCategories.body)}
+          onSubmit={({ value }: any) => !settingLooks && handleSetClick(value.body, LookType.body)}
         >
           <Box
             width="50vw"
@@ -240,7 +240,7 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
             </FormField>
             <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
               {pbCreator.looks
-                .filter((look) => look.category === LookCategories.body)
+                .filter((look) => look.category === LookType.body)
                 .map((look) => renderPill(look, setBodyValue, 'body'))}
             </Box>
           </Box>

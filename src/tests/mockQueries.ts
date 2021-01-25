@@ -1,5 +1,5 @@
 import { MockedResponse } from '@apollo/client/testing';
-import { PlayBooks, Roles, Stats } from '../@types/enums';
+import { PlaybookType, RoleType, StatType } from '../@types/enums';
 import ADD_COMMS_APP from '../mutations/addCommsApp';
 import ADD_COMMS_URL from '../mutations/addCommsUrl';
 import ADD_INVITEE from '../mutations/addInvitee';
@@ -429,7 +429,7 @@ export const mockAddUserToGame: MockedResponse = {
             ...mockGame4.gameRoles,
             {
               id: 'mock-gamerole-id-8',
-              role: Roles.player,
+              role: RoleType.player,
               userId: 'mock-keycloak-id-1',
             },
           ],
@@ -498,7 +498,7 @@ export const mockCreateCharacter: MockedResponse = {
 export const mockSetCharacterPlaybook: MockedResponse = {
   request: {
     query: SET_CHARACTER_PLAYBOOK,
-    variables: { gameRoleId: mockGame5.gameRoles[2].id, characterId: mockCharacter2.id, playbookType: PlayBooks.angel },
+    variables: { gameRoleId: mockGame5.gameRoles[2].id, characterId: mockCharacter2.id, playbookType: PlaybookType.angel },
   },
   result: () => {
     // console.log('mockSetCharacterPlaybook');
@@ -586,7 +586,7 @@ export const mockGameForCharacterCreation2: MockedResponse = {
 export const mockPlaybookCreator: MockedResponse = {
   request: {
     query: PLAYBOOK_CREATOR,
-    variables: { playbookType: PlayBooks.angel },
+    variables: { playbookType: PlaybookType.angel },
   },
   result: () => {
     // console.log('mockPlaybookCreator');
@@ -1651,7 +1651,7 @@ export const mockToggleStatHighlight: MockedResponse = {
     variables: {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
-      stat: Stats.cool,
+      stat: StatType.cool,
     },
   },
   result: () => {
@@ -1949,6 +1949,7 @@ export const mockGameForPreGame1: MockedResponse = {
           mc: mockGame5.mc,
           players: mockGame5.players,
           gameRoles: mockGame5.gameRoles,
+          gameMessages: mockGame5.gameMessages,
         },
       },
     };

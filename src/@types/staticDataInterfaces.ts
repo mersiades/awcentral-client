@@ -1,5 +1,5 @@
 import { ItemCharacteristic, TaggedItem } from '.';
-import { LookCategories, MoveKinds, PlayBooks, Stats, UniqueTypes } from './enums';
+import { LookType, MoveActionType, MoveType, PlaybookType, RollType, StatType, UniqueTypes } from './enums';
 
 /**
  * This file contains interfaces that represent static data models.
@@ -10,7 +10,7 @@ import { LookCategories, MoveKinds, PlayBooks, Stats, UniqueTypes } from './enum
 
 export interface Playbook {
   id: string;
-  playbookType: PlayBooks;
+  playbookType: PlaybookType;
   barterInstructions: string;
   intro: string;
   introComment: string;
@@ -19,7 +19,7 @@ export interface Playbook {
 
 export interface PlaybookCreator {
   id: string;
-  playbookType: PlayBooks;
+  playbookType: PlaybookType;
   gearInstructions: GearInstructions;
   improvementInstructions: string;
   movesInstructions: string;
@@ -42,7 +42,7 @@ export interface Name {
 export interface Look {
   id: string;
   look: string;
-  category: LookCategories;
+  category: LookType;
 }
 
 export interface GearInstructions {
@@ -67,15 +67,41 @@ export interface StatsOption {
 }
 
 // -------------------------------------------------- Move interfaces -------------------------------------------------- //
+
+export interface HoldConditions {
+  id: string;
+  onTenPlus: number;
+  onSevenToNine: number;
+  onMiss: number;
+}
+
+export interface PlusOneForwardConditions {
+  id: string;
+  isManualGrant: boolean;
+  onTenPlus: boolean;
+  onSevenToNine: boolean;
+  onMiss: boolean;
+}
+
+export interface MoveAction {
+  id: string;
+  actionType: MoveActionType;
+  rollType?: RollType;
+  statToRollWith?: StatType;
+  holdConditions?: HoldConditions;
+  plusOneForwardConditions?: PlusOneForwardConditions;
+}
+
 export interface Move {
   id: string;
   name: string;
   description: string;
-  kind: MoveKinds;
-  playbook?: PlayBooks;
-  stat?: Stats;
+  kind: MoveType;
+  playbook?: PlaybookType;
+  stat?: StatType;
   statModifier?: StatModifier;
   rollModifier?: RollModifier;
+  moveAction?: MoveAction;
 }
 
 export interface CharacterMove extends Move {
@@ -84,13 +110,13 @@ export interface CharacterMove extends Move {
 
 export interface RollModifier {
   id: string;
-  movesToModify: Move[];
-  statToRollWith: Stats;
+  moveToModify: Move;
+  statToRollWith: StatType;
 }
 
 export interface StatModifier {
   id: string;
-  statToModify: Stats;
+  statToModify: StatType;
   modification: number;
 }
 

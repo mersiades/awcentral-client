@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Box, Heading } from 'grommet';
 
-import { Stats } from '../../@types/enums';
+import { StatType } from '../../@types/enums';
 import { CharacterStat } from '../../@types/dataInterfaces';
 import { accentColors, RedBox } from '../../config/grommetConfig';
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
@@ -9,7 +9,7 @@ import CollapsiblePanelBox from '../CollapsiblePanelBox';
 interface StatsBoxProps {
   stats: CharacterStat[];
   togglingHighlight: boolean;
-  handleToggleHighlight: (stat: Stats) => void;
+  handleToggleHighlight: (stat: StatType) => void;
   navigateToCharacterCreation?: (step: string) => void;
 }
 

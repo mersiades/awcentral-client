@@ -18,6 +18,26 @@ const GAME = gql`
       commsApp
       commsUrl
       hasFinishedPreGame
+      gameMessages {
+        id
+        gameId
+        gameroleId
+        messageType
+        title
+        content
+        sentOn
+        roll1
+        roll2
+        rollModifier
+        rollResult
+        modifierStatName
+        barterSpent
+        currentBarter
+        harmSuffered
+        currentHarm
+        stockSpent
+        currentStock
+      }
       mc {
         id
         displayName
@@ -80,11 +100,10 @@ const GAME = gql`
             description
             playbook
             stat
-            rollModifier {
+            moveAction {
               id
-              movesToModify {
-                id
-              }
+              actionType
+              rollType
               statToRollWith
             }
           }
@@ -101,6 +120,17 @@ const GAME = gql`
               stock
               angelKitMoves {
                 id
+                name
+                kind
+                description
+                playbook
+                stat
+                moveAction {
+                  id
+                  actionType
+                  rollType
+                  statToRollWith
+                }
               }
               hasSupplier
               supplierText

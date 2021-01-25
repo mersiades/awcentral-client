@@ -18,6 +18,16 @@ jest.mock('@react-keycloak/web', () => {
 });
 
 describe('Rendering PlayerPage', () => {
+  const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
+  const mockScrollIntoView = jest.fn();
+  beforeEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = mockScrollIntoView;
+  });
+
+  afterEach(() => {
+    window.HTMLElement.prototype.scrollIntoView = originalScrollIntoView;
+  });
+
   test('should render PlayerPage with PlaybookPanel and MovesPanel', async () => {
     customRenderForComponent(<PlayerPage />, {
       isAuthenticated: true,

@@ -3,7 +3,7 @@ import { Box } from 'grommet';
 import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Game } from '../@types/dataInterfaces';
-import { Roles } from '../@types/enums';
+import { RoleType } from '../@types/enums';
 import { brandColor, ButtonWS, TextWS } from '../config/grommetConfig';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import ADD_USER_TO_GAME, { AddUserToGameData, AddUserToGameVars } from '../mutations/addUserToGame';
@@ -21,7 +21,7 @@ const InvitationsList: FC<InvitationsListProps> = ({ games }) => {
   const handleJoinGame = async (gameId: string) => {
     // @ts-ignore
     await addUserToGame({ variables: { userId, displayName, email, gameId }, skip: !userId });
-    history.push(`/character-creation/${gameId}`, { role: Roles.player });
+    history.push(`/character-creation/${gameId}`, { role: RoleType.player });
   };
 
   const getPlayersString = (game: Game) => {

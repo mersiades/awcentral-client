@@ -1,17 +1,17 @@
 import { gql } from '@apollo/client';
 import { PlaybookCreator } from '../@types/staticDataInterfaces';
-import { PlayBooks } from '../@types/enums';
+import { PlaybookType } from '../@types/enums';
 
 export interface PlaybookCreatorData {
   playbookCreator: PlaybookCreator;
 }
 
 export interface PlaybookCreatorVars {
-  playbookType: PlayBooks;
+  playbookType: PlaybookType;
 }
 
 const PLAYBOOK_CREATOR = gql`
-  query PlaybookCreator($playbookType: PlayBooks!) {
+  query PlaybookCreator($playbookType: PlaybookType!) {
     playbookCreator(playbookType: $playbookType) {
       id
       playbookType
@@ -60,11 +60,10 @@ const PLAYBOOK_CREATOR = gql`
           statToModify
           modification
         }
-        rollModifier {
+        moveAction {
           id
-          movesToModify {
-            id
-          }
+          actionType
+          rollType
           statToRollWith
         }
       }
@@ -82,9 +81,15 @@ const PLAYBOOK_CREATOR = gql`
         }
         rollModifier {
           id
-          movesToModify {
+          moveToModify {
             id
           }
+          statToRollWith
+        }
+        moveAction {
+          id
+          actionType
+          rollType
           statToRollWith
         }
       }

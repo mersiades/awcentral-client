@@ -11,21 +11,34 @@ import {
   PlaybookUnique,
   StatsBlock,
 } from '../@types/dataInterfaces';
-import { LookCategories, MoveKinds, PlayBooks, Roles, Stats, UniqueTypes } from '../@types/enums';
+import {
+  LookType,
+  MoveActionType,
+  MoveType,
+  PlaybookType,
+  RoleType,
+  RollType,
+  StatType,
+  UniqueTypes,
+} from '../@types/enums';
 import {
   AngelKitCreator,
   CharacterMove,
   GearInstructions,
+  HoldConditions,
   Look,
   Move,
+  MoveAction,
   Name,
   Playbook,
   PlaybookCreator,
   PlaybookUniqueCreator,
+  PlusOneForwardConditions,
   RollModifier,
   StatModifier,
   StatsOption,
 } from '../@types/staticDataInterfaces';
+import { ANGEL_SPECIAL_NAME, UNDER_FIRE_NAME } from '../config/constants';
 
 // Same as Character, but with no nullable fields
 interface MockCharacter {
@@ -36,7 +49,7 @@ interface MockCharacter {
   looks: Look[]; // Does graphql return an empty array or undefined? // May need an id-less version of Look "EmbeddedLook"
   name: string;
   barter: number;
-  playbook: PlayBooks;
+  playbook: PlaybookType;
   harm: CharacterHarm;
   hasCompletedCharacterCreation: boolean;
   playbookUnique: PlaybookUnique;
@@ -44,6 +57,30 @@ interface MockCharacter {
 }
 
 export const mockNewGameName = 'My new mock game';
+
+export const dummyHoldConditions: HoldConditions = {
+  id: 'dummy',
+  onTenPlus: 3,
+  onSevenToNine: 1,
+  onMiss: 0,
+};
+
+export const dummyPlusOneForwardConditions: PlusOneForwardConditions = {
+  id: 'dummy',
+  isManualGrant: false,
+  onTenPlus: false,
+  onSevenToNine: false,
+  onMiss: false,
+};
+
+export const dummyMoveAction: MoveAction = {
+  id: 'dummy',
+  actionType: MoveActionType.roll,
+  rollType: RollType.stat,
+  statToRollWith: StatType.hard,
+  holdConditions: dummyHoldConditions,
+  plusOneForwardConditions: dummyPlusOneForwardConditions,
+};
 
 export const mockKeycloakUserInfo1: KeycloakUserInfo = {
   email: 'mockUser1@email.com',
@@ -89,31 +126,31 @@ export const mockStatsBlock1: StatsBlock = {
   stats: [
     {
       id: 'mock-statsblock-stat-id-1',
-      stat: Stats.cool,
+      stat: StatType.cool,
       value: 1,
       isHighlighted: false,
     },
     {
       id: 'mock-statsblock-stat-id-2',
-      stat: Stats.hard,
+      stat: StatType.hard,
       value: 1,
       isHighlighted: false,
     },
     {
       id: 'mock-statsblock-stat-id-3',
-      stat: Stats.hot,
+      stat: StatType.hot,
       value: 1,
       isHighlighted: false,
     },
     {
       id: 'mock-statsblock-stat-id-4',
-      stat: Stats.sharp,
+      stat: StatType.sharp,
       value: 1,
       isHighlighted: false,
     },
     {
       id: 'mock-statsblock-stat-id-5',
-      stat: Stats.weird,
+      stat: StatType.weird,
       value: 1,
       isHighlighted: false,
     },
@@ -126,31 +163,31 @@ export const mockStatsBlockWithHighlight: StatsBlock = {
   stats: [
     {
       id: 'mock-statsblock-stat-id-1',
-      stat: Stats.cool,
+      stat: StatType.cool,
       value: 1,
       isHighlighted: true,
     },
     {
       id: 'mock-statsblock-stat-id-2',
-      stat: Stats.hard,
+      stat: StatType.hard,
       value: 1,
       isHighlighted: false,
     },
     {
       id: 'mock-statsblock-stat-id-3',
-      stat: Stats.hot,
+      stat: StatType.hot,
       value: 1,
       isHighlighted: false,
     },
     {
       id: 'mock-statsblock-stat-id-4',
-      stat: Stats.sharp,
+      stat: StatType.sharp,
       value: 1,
       isHighlighted: false,
     },
     {
       id: 'mock-statsblock-stat-id-5',
-      stat: Stats.weird,
+      stat: StatType.weird,
       value: 1,
       isHighlighted: false,
     },
@@ -159,45 +196,45 @@ export const mockStatsBlockWithHighlight: StatsBlock = {
 
 export const dummyRollModifier: RollModifier = {
   id: 'dummy',
-  movesToModify: [
-    {
-      id: 'dummy',
-      name: 'dummy',
-      description: 'dummy',
-      kind: MoveKinds.basic,
-      playbook: PlayBooks.angel,
-    },
-  ],
-  statToRollWith: Stats.sharp,
+  moveToModify: {
+    id: 'dummy',
+    name: 'dummy',
+    description: 'dummy',
+    kind: MoveType.basic,
+    playbook: PlaybookType.angel,
+  },
+  statToRollWith: StatType.sharp,
 };
 
 export const dummyStatModifier: StatModifier = {
   id: 'dummy',
-  statToModify: Stats.sharp,
+  statToModify: StatType.sharp,
   modification: 0,
 };
 
 export const mockCharacterMoveAngel1: CharacterMove = {
   id: 'angel-move-id-1',
-  name: 'ANGEL SPECIAL',
+  name: ANGEL_SPECIAL_NAME,
   description: 'If you and another character have sex,',
-  kind: MoveKinds.default,
-  playbook: PlayBooks.angel,
-  stat: Stats.hx,
+  kind: MoveType.default,
+  playbook: PlaybookType.angel,
+  stat: StatType.hx,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  moveAction: dummyMoveAction,
   isSelected: true,
 };
 
 export const mockCharacterMoveAngel2: CharacterMove = {
   id: 'angel-move-id-2',
   name: 'SIXTH SENSE',
-  kind: MoveKinds.character,
+  kind: MoveType.character,
   description: 'when you open your brain to the world’s psychic maelstrom...',
-  playbook: PlayBooks.angel,
-  stat: Stats.sharp,
+  playbook: PlaybookType.angel,
+  stat: StatType.sharp,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  moveAction: dummyMoveAction,
   isSelected: false,
 };
 
@@ -205,11 +242,12 @@ export const mockCharacterMoveAngel3: CharacterMove = {
   id: 'angel-move-id-3',
   name: 'INFIRMARY',
   description: 'you get an infirmary, a workspace with life support...',
-  kind: MoveKinds.character,
-  playbook: PlayBooks.angel,
-  stat: Stats.sharp,
+  kind: MoveType.character,
+  playbook: PlaybookType.angel,
+  stat: StatType.sharp,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  moveAction: dummyMoveAction,
   isSelected: false,
 };
 
@@ -217,11 +255,12 @@ export const mockCharacterMoveAngel4: CharacterMove = {
   id: 'angel-move-id-4',
   name: 'PROFESSIONAL COMPASSION',
   description: 'you can roll+sharp instead of roll+Hx when you help someone who’s rolling.',
-  kind: MoveKinds.character,
-  playbook: PlayBooks.angel,
-  stat: Stats.hx,
+  kind: MoveType.character,
+  playbook: PlaybookType.angel,
+  stat: StatType.hx,
   rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  moveAction: dummyMoveAction,
   isSelected: false,
 };
 
@@ -238,73 +277,73 @@ export const mockNameAngel2: Name = {
 export const mockLookAngel1: Look = {
   id: 'mock-angel-look-id-1',
   look: 'man',
-  category: LookCategories.gender,
+  category: LookType.gender,
 };
 
 export const mockLookAngel2: Look = {
   id: 'mock-angel-look-id-2',
   look: 'woman',
-  category: LookCategories.gender,
+  category: LookType.gender,
 };
 
 export const mockLookAngel3: Look = {
   id: 'mock-angel-look-id-3',
   look: 'utility wear',
-  category: LookCategories.clothes,
+  category: LookType.clothes,
 };
 
 export const mockLookAngel4: Look = {
   id: 'mock-angel-look-id-4',
   look: 'casual wear plus utility',
-  category: LookCategories.clothes,
+  category: LookType.clothes,
 };
 
 export const mockLookAngel5: Look = {
   id: 'mock-angel-look-id-5',
   look: 'kind face',
-  category: LookCategories.face,
+  category: LookType.face,
 };
 
 export const mockLookAngel6: Look = {
   id: 'mock-angel-look-id-6',
   look: 'strong face',
-  category: LookCategories.face,
+  category: LookType.face,
 };
 
 export const mockLookAngel7: Look = {
   id: 'mock-angel-look-id-7',
   look: 'hard eyes',
-  category: LookCategories.eyes,
+  category: LookType.eyes,
 };
 
 export const mockLookAngel8: Look = {
   id: 'mock-angel-look-id-8',
   look: 'quick eyes',
-  category: LookCategories.eyes,
+  category: LookType.eyes,
 };
 
 export const mockLookAngel9: Look = {
   id: 'mock-angel-look-id-9',
   look: 'compact body',
-  category: LookCategories.body,
+  category: LookType.body,
 };
 
 export const mockLookAngel10: Look = {
   id: 'mock-angel-look-id-10',
   look: 'stout body',
-  category: LookCategories.body,
+  category: LookType.body,
 };
 
 export const mockLookBettleBabe1: Look = {
   id: 'mock-battlebabe-look-id-1',
   look: 'woman',
-  category: LookCategories.gender,
+  category: LookType.gender,
 };
 
 export const mockLookBattlebabe2: Look = {
   id: 'mock-battlebabe-look-id-2',
   look: 'formal wear',
-  category: LookCategories.clothes,
+  category: LookType.clothes,
 };
 
 export const mockStatsOptionsAngel1: StatsOption = {
@@ -353,11 +392,12 @@ export const dummyAngelKitMove: Move = {
   id: 'dummy',
   name: 'dummy',
   description: 'dummy',
-  kind: MoveKinds.character,
-  playbook: PlayBooks.angel,
-  stat: Stats.cool,
+  kind: MoveType.character,
+  playbook: PlaybookType.angel,
+  stat: StatType.cool,
   statModifier: dummyStatModifier,
   rollModifier: dummyRollModifier,
+  moveAction: dummyMoveAction,
 };
 
 export const dummyAngelKit: AngelKit = {
@@ -407,7 +447,7 @@ export const mockCharacterHarm: CharacterHarm = {
 export const mockCharacter1: MockCharacter = {
   id: 'mock-character-id-1',
   name: 'Mock Character 1',
-  playbook: PlayBooks.battlebabe,
+  playbook: PlaybookType.battlebabe,
   hasCompletedCharacterCreation: false,
   gear: ['leather jacket', 'Timberland boots'],
   statsBlock: mockStatsBlock1,
@@ -426,7 +466,7 @@ export const mockCharacter1: MockCharacter = {
 export const mockCharacter2: MockCharacter = {
   id: 'mock-character-id-2',
   name: 'Mock Character 2',
-  playbook: PlayBooks.angel,
+  playbook: PlaybookType.angel,
   hasCompletedCharacterCreation: false,
   gear: ['Grimey green raincoat', '9mm (2-harm close loud)'],
   statsBlock: mockStatsBlock1,
@@ -459,7 +499,7 @@ export const mockGame1: Game = {
   gameRoles: [
     {
       id: 'mock-gamerole-id-1',
-      role: Roles.mc,
+      role: RoleType.mc,
       userId: 'mock-keycloak-id-1',
       characters: [],
       npcs: [],
@@ -467,7 +507,7 @@ export const mockGame1: Game = {
     },
     {
       id: 'mock-gamerole-id-3',
-      role: Roles.player,
+      role: RoleType.player,
       userId: 'mock-keycloak-id-2',
       characters: [],
       npcs: [],
@@ -475,6 +515,7 @@ export const mockGame1: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 export const mockGame2: Game = {
@@ -488,7 +529,7 @@ export const mockGame2: Game = {
   gameRoles: [
     {
       id: 'mock-gamerole-id-2',
-      role: Roles.player,
+      role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       characters: [],
       npcs: [],
@@ -496,7 +537,7 @@ export const mockGame2: Game = {
     },
     {
       id: 'mock-gamerole-id-4',
-      role: Roles.mc,
+      role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       characters: [],
       npcs: [],
@@ -504,6 +545,7 @@ export const mockGame2: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 export const mockGame3: Game = {
@@ -517,7 +559,7 @@ export const mockGame3: Game = {
   gameRoles: [
     {
       id: 'mock-gamerole-id-5',
-      role: Roles.mc,
+      role: RoleType.mc,
       userId: 'mock-keycloak-id-1',
       characters: [],
       npcs: [],
@@ -525,6 +567,7 @@ export const mockGame3: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 // mockgame4 is used to test joining a game
@@ -539,7 +582,7 @@ export const mockGame4: Game = {
   gameRoles: [
     {
       id: 'mock-gamerole-id-6',
-      role: Roles.mc,
+      role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       characters: [],
       npcs: [],
@@ -547,7 +590,7 @@ export const mockGame4: Game = {
     },
     {
       id: 'mock-gamerole-id-7',
-      role: Roles.player,
+      role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       characters: [],
       npcs: [],
@@ -555,6 +598,7 @@ export const mockGame4: Game = {
     },
   ],
   invitees: ['mockUser1@email.com'],
+  gameMessages: [],
 };
 
 // mockGame5 is a continuation of mockGame4, and is used for testing character creation
@@ -572,7 +616,7 @@ export const mockGame5: Game = {
   gameRoles: [
     {
       id: 'mock-gamerole-id-6',
-      role: Roles.mc,
+      role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
       threats: [],
@@ -580,7 +624,7 @@ export const mockGame5: Game = {
     },
     {
       id: 'mock-gamerole-id-7',
-      role: Roles.player,
+      role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       npcs: [],
       threats: [],
@@ -588,7 +632,7 @@ export const mockGame5: Game = {
     },
     {
       id: 'mock-gamerole-id-8',
-      role: Roles.player,
+      role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       npcs: [],
       threats: [],
@@ -596,6 +640,7 @@ export const mockGame5: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 // Used for testing starting a game from the PreGamePage
@@ -613,7 +658,7 @@ export const mockGame6: Game = {
   gameRoles: [
     {
       id: 'mock-gamerole-id-6',
-      role: Roles.mc,
+      role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
       threats: [],
@@ -621,7 +666,7 @@ export const mockGame6: Game = {
     },
     {
       id: 'mock-gamerole-id-7',
-      role: Roles.player,
+      role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       npcs: [],
       threats: [],
@@ -629,7 +674,7 @@ export const mockGame6: Game = {
     },
     {
       id: 'mock-gamerole-id-8',
-      role: Roles.player,
+      role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       npcs: [],
       threats: [],
@@ -637,15 +682,18 @@ export const mockGame6: Game = {
     },
   ],
   invitees: [],
+  gameMessages: [],
 };
 
 // Used for testing PlayerPage, GamePanel
 export const mockGame7: Game = {
   id: 'mock-game-id-7',
   name: 'Mock Game 7',
+  invitees: [],
   commsApp: 'Discord',
   commsUrl: 'https://discord.com/urltodiscordchannel',
   hasFinishedPreGame: false,
+  gameMessages: [],
   mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2' },
   players: [
     { id: 'mock-keycloak-id-3', displayName: 'mock-user-3' },
@@ -654,7 +702,7 @@ export const mockGame7: Game = {
   gameRoles: [
     {
       id: 'mock-gamerole-id-6',
-      role: Roles.mc,
+      role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
       threats: [],
@@ -662,7 +710,7 @@ export const mockGame7: Game = {
     },
     {
       id: 'mock-gamerole-id-7',
-      role: Roles.player,
+      role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       npcs: [],
       threats: [],
@@ -670,19 +718,18 @@ export const mockGame7: Game = {
     },
     {
       id: 'mock-gamerole-id-8',
-      role: Roles.player,
+      role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       npcs: [],
       threats: [],
       characters: [{ ...mockCharacter2, hasCompletedCharacterCreation: true }],
     },
   ],
-  invitees: [],
 };
 
 export const mockGameRole1: GameRole = {
   id: 'mock-gamerole-id-1',
-  role: Roles.mc,
+  role: RoleType.mc,
   userId: 'mock-keycloak-id-1',
   game: mockGame1,
   characters: [],
@@ -692,7 +739,7 @@ export const mockGameRole1: GameRole = {
 
 export const mockGameRole2: GameRole = {
   id: 'mock-gamerole-id-2',
-  role: Roles.player,
+  role: RoleType.player,
   userId: 'mock-keycloak-id-1',
   game: mockGame2,
   characters: [],
@@ -702,7 +749,7 @@ export const mockGameRole2: GameRole = {
 
 export const mockGameRole3: GameRole = {
   id: 'mock-gamerole-id-3',
-  role: Roles.player,
+  role: RoleType.player,
   userId: 'mock-keycloak-id-2',
   game: mockGame1,
   characters: [],
@@ -712,7 +759,7 @@ export const mockGameRole3: GameRole = {
 
 export const mockGameRole4: GameRole = {
   id: 'mock-gamerole-id-4',
-  role: Roles.mc,
+  role: RoleType.mc,
   userId: 'mock-keycloak-id-2',
   game: mockGame2,
   characters: [],
@@ -752,7 +799,7 @@ export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
 
 export const mockPlaybookCreatorAngel: PlaybookCreator = {
   id: 'angel-playbook-creator-id',
-  playbookType: PlayBooks.angel,
+  playbookType: PlaybookType.angel,
   gearInstructions: mockgearInstructionsAngel,
   improvementInstructions: 'Whenever you roll a highlighted stat...',
   movesInstructions: 'You get all the basic moves. Choose 2 angel moves.',
@@ -780,7 +827,7 @@ export const mockPlaybookCreatorAngel: PlaybookCreator = {
 
 export const mockPlaybookAngel: Playbook = {
   id: 'mock-playbook-angel-id',
-  playbookType: PlayBooks.angel,
+  playbookType: PlaybookType.angel,
   barterInstructions: 'At the beginning of the session, spend 1- or 2-barter for your lifestyle.',
   intro: 'When you’re lying in the dust of Apocalypse World guts aspilled...',
   introComment: 'Angels are medics. If you want everybody to love you...',
@@ -799,13 +846,21 @@ export const mockHxInput: HxInput = {
 
 export const doSomethingUnderFire: Move = {
   id: 'mock-move-id-1',
-  name: 'DO SOMETHING UNDER FIRE',
+  name: UNDER_FIRE_NAME,
   description: 'When you _**do something under fire**_, or dig in to endure fire, roll+cool.',
-  kind: MoveKinds.basic,
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
-  stat: Stats.cool,
+  kind: MoveType.basic,
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
+  stat: StatType.cool,
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: {
+    id: 'under-fire-id',
+    actionType: MoveActionType.roll,
+    rollType: RollType.stat,
+    statToRollWith: StatType.cool,
+    holdConditions: dummyHoldConditions,
+    plusOneForwardConditions: dummyPlusOneForwardConditions,
+  },
 };
 
 export const goAggro: Move = {
@@ -813,33 +868,43 @@ export const goAggro: Move = {
   name: 'GO AGGRO ON SOMEONE',
   description:
     'When you _**go aggro on someone**_, make it clear what you want them to do and what you’ll do to them. Roll+hard.',
-  kind: MoveKinds.basic,
-  stat: Stats.hard,
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.basic,
+  stat: StatType.hard,
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: {
+    id: 'aggro-id',
+    actionType: MoveActionType.roll,
+    rollType: RollType.stat,
+    statToRollWith: StatType.hard,
+    holdConditions: dummyHoldConditions,
+    plusOneForwardConditions: dummyPlusOneForwardConditions,
+  },
 };
 
 export const sucker: Move = {
   id: 'mock-move-id-3',
   name: 'SUCKER SOMEONE',
   description: 'When you _**attack someone unsuspecting or helpless**_, ask the MC if you could miss.',
-  kind: MoveKinds.basic,
-  stat: Stats.cool, // Apollo MockProvider won't allow undefined here
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.basic,
+  stat: StatType.cool, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const sufferHarm: Move = {
   id: 'mock-move-id-4',
   name: 'SUFFER HARM',
   description: 'When you _**suffer harm**_, roll+harm suffered (after armor, if you’re wearing any).',
-  kind: MoveKinds.peripheral,
-  stat: Stats.cool, // Apollo MockProvider won't allow undefined here
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.peripheral,
+  stat: StatType.cool, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const goToMarket: Move = {
@@ -847,54 +912,59 @@ export const goToMarket: Move = {
   name: 'GO TO THE MARKET',
   description:
     'When you _**go into a holding’s bustling market**_, looking for some particular thing to buy, and it’s not obvious whether you should be able to just go buy one like that, roll+sharp.',
-  kind: MoveKinds.peripheral,
-  stat: Stats.sharp,
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.peripheral,
+  stat: StatType.sharp,
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const augury: Move = {
   id: 'mock-move-id-6',
   name: 'AUGURY',
   description: 'When you are able to use something for _**augury**_, roll+weird.',
-  kind: MoveKinds.peripheral,
-  stat: Stats.weird,
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.peripheral,
+  stat: StatType.weird,
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const exchangeHarm: Move = {
   id: 'mock-move-id-7',
   name: 'EXCHANGE HARM',
   description: 'When you _**exchange harm**_, both sides simultaneously inflict and suffer harm as established:',
-  kind: MoveKinds.battle,
-  stat: Stats.cool, // Apollo MockProvider won't allow undefined here
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.battle,
+  stat: StatType.cool, // Apollo MockProvider won't allow undefined here
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const seizeByForce: Move = {
   id: 'mock-move-id-8',
   name: 'SEIZE BY FORCE',
   description: 'To _**seize something by force**_, exchange harm, but first roll+hard.',
-  kind: MoveKinds.battle,
-  stat: Stats.hard,
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.battle,
+  stat: StatType.hard,
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 export const standOverwatch: Move = {
   id: 'mock-move-id-9',
   name: 'STAND OVERWATCH',
   description: 'When you _**stand overwatch**_ for an ally, roll+cool. ',
-  kind: MoveKinds.battle,
-  stat: Stats.cool,
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.battle,
+  stat: StatType.cool,
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const boardAMovingVehicle: Move = {
@@ -902,33 +972,36 @@ export const boardAMovingVehicle: Move = {
   name: 'BOARD A MOVING VEHICLE',
   description:
     'To _**board a moving vehicle**_, roll+cool, minus its speed. To board one moving vehicle from another, roll+cool, minus the difference between their speeds.',
-  kind: MoveKinds.roadWar,
-  stat: Stats.cool,
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.roadWar,
+  stat: StatType.cool,
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const dealWithBadTerrain: Move = {
   id: 'mock-move-id-11',
   name: 'DEAL WITH BAD TERRAIN',
   description: 'When you have to _**deal with bad terrain**_, roll+cool, plus your vehicle’s handling.',
-  kind: MoveKinds.roadWar,
-  stat: Stats.cool,
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.roadWar,
+  stat: StatType.cool,
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 export const shoulderAnotherVehicle: Move = {
   id: 'mock-move-id-12',
   name: 'SHOULDER ANOTHER VEHICLE',
   description:
     'To _**shoulder another vehicle**_, roll+cool. On a hit, you shoulder it aside, inflicting v-harm as established.',
-  kind: MoveKinds.roadWar,
-  stat: Stats.cool,
-  playbook: PlayBooks.angel, // Apollo MockProvider won't allow undefined here
+  kind: MoveType.roadWar,
+  stat: StatType.cool,
+  playbook: PlaybookType.angel, // Apollo MockProvider won't allow undefined here
   statModifier: undefined,
   rollModifier: undefined,
+  moveAction: dummyMoveAction,
 };
 
 export const mockAllMovesArray = [
