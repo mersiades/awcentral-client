@@ -397,6 +397,7 @@ export const dummyAngelKitMove: Move = {
   stat: StatType.cool,
   statModifier: dummyStatModifier,
   rollModifier: dummyRollModifier,
+  moveAction: dummyMoveAction,
 };
 
 export const dummyAngelKit: AngelKit = {

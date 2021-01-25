@@ -106,4 +106,5 @@ export enum MessageType {
   sufferHarmMove = 'SUFFER_HARM_MOVE',
   adjustHxMove = 'ADJUST_HX_MOVE',
   rollStockMove = 'ROLL_STOCK_MOVE',
+  stockMove = 'STOCK_MOVE',
 }

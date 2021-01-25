@@ -681,3 +681,8 @@ export const stabilizeBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-17.jpg)',
 };
+
+export const speedRecoveryBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-18.jpg)',
+};

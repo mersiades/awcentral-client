@@ -33,9 +33,11 @@ import {
   HELP_OR_INTERFERE_NAME,
   INFLICT_HARM_NAME,
   MAKE_WANT_KNOWN_NAME,
+  SPEED_RECOVERY_NAME,
   STABILIZE_AND_HEAL_NAME,
 } from '../config/constants';
 import StabilizeDialog from '../components/dialogs/StabilizeDialog';
+import SpeedRecoveryDialog from '../components/dialogs/SpeedRecoveryDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -200,6 +202,9 @@ const PlayerPage: FC = () => {
         )}
         {dialog?.name === STABILIZE_AND_HEAL_NAME && (
           <StabilizeDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
+        {dialog?.name === SPEED_RECOVERY_NAME && (
+          <SpeedRecoveryDialog move={dialog} handleClose={() => setDialog(undefined)} />
         )}
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu

@@ -71,10 +71,10 @@ const AngelKitBox: FC<AngelKitBoxProps> = ({ angelKit, navigateToCharacterCreati
   const handleMoveClick = (move: Move) => {
     switch (move.name) {
       case STABILIZE_AND_HEAL_NAME:
+      // Deliberately falls through
+      case SPEED_RECOVERY_NAME:
         !!openDialog && openDialog(move);
         break;
-      case SPEED_RECOVERY_NAME:
-      // Deliberately falls through
       case REVIVE_SOMEONE_NAME:
       // Deliberately falls through
       case TREAT_NPC_NAME:
