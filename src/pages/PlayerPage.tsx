@@ -33,11 +33,15 @@ import {
   HELP_OR_INTERFERE_NAME,
   INFLICT_HARM_NAME,
   MAKE_WANT_KNOWN_NAME,
+  REVIVE_SOMEONE_NAME,
   SPEED_RECOVERY_NAME,
   STABILIZE_AND_HEAL_NAME,
+  TREAT_NPC_NAME,
 } from '../config/constants';
 import StabilizeDialog from '../components/dialogs/StabilizeDialog';
 import SpeedRecoveryDialog from '../components/dialogs/SpeedRecoveryDialog';
+import ReviveDialog from '../components/dialogs/ReviveDialog';
+import TreatNpcDialog from '../components/dialogs/TreatNpcDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -62,7 +66,7 @@ const PlayerPage: FC = () => {
    * 1 - MovesPanel
    * 2 - None, side panel is closed
    */
-  const [sidePanel, setSidePanel] = useState<number>(0);
+  const [sidePanel, setSidePanel] = useState<number>(2);
   const [character, setCharacter] = useState<Character | undefined>();
   const [dialog, setDialog] = useState<Move | CharacterMove | undefined>();
 
@@ -206,6 +210,8 @@ const PlayerPage: FC = () => {
         {dialog?.name === SPEED_RECOVERY_NAME && (
           <SpeedRecoveryDialog move={dialog} handleClose={() => setDialog(undefined)} />
         )}
+        {dialog?.name === REVIVE_SOMEONE_NAME && <ReviveDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+        {dialog?.name === TREAT_NPC_NAME && <TreatNpcDialog move={dialog} handleClose={() => setDialog(undefined)} />}
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
             style={{ backgroundColor: 'transparent' }}

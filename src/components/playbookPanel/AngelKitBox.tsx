@@ -8,11 +8,10 @@ import { RedBox, HeadingWS, brandColor } from '../../config/grommetConfig';
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../../mutations/setAngelKit';
 import { RoleType } from '../../@types/enums';
 import { AngelKit } from '../../@types/dataInterfaces';
+import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
-import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
-import { REVIVE_SOMEONE_NAME, SPEED_RECOVERY_NAME, STABILIZE_AND_HEAL_NAME, TREAT_NPC_NAME } from '../../config/constants';
 
 interface AngelKitBoxProps {
   angelKit: AngelKit;
@@ -65,21 +64,6 @@ const AngelKitBox: FC<AngelKitBoxProps> = ({ angelKit, navigateToCharacterCreati
       } catch (error) {
         console.error(error);
       }
-    }
-  };
-
-  const handleMoveClick = (move: Move) => {
-    switch (move.name) {
-      case STABILIZE_AND_HEAL_NAME:
-      // Deliberately falls through
-      case SPEED_RECOVERY_NAME:
-        !!openDialog && openDialog(move);
-        break;
-      case REVIVE_SOMEONE_NAME:
-      // Deliberately falls through
-      case TREAT_NPC_NAME:
-      // Deliberately falls through
-      default:
     }
   };
 
@@ -158,7 +142,7 @@ const AngelKitBox: FC<AngelKitBoxProps> = ({ angelKit, navigateToCharacterCreati
                   crustReady={crustReady}
                   level="3"
                   margin={{ top: '3px', bottom: '3px' }}
-                  onClick={() => canPerformMove && handleMoveClick(move)}
+                  onClick={() => canPerformMove && !!openDialog && openDialog(move)}
                   onMouseOver={(e: React.MouseEvent<HTMLHeadingElement>) =>
                     // @ts-ignore
                     (e.target.style.color = canPerformMove ? '#CD3F3E' : '#FFF')

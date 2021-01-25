@@ -686,3 +686,13 @@ export const speedRecoveryBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-18.jpg)',
 };
+
+export const reviveBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-19.jpg)',
+};
+
+export const treatNpcBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-20.jpg)',
+};

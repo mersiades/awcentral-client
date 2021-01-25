@@ -1,24 +1,22 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { Box, RadioButtonGroup } from 'grommet';
+import { Box } from 'grommet';
 
 import DialogWrapper from '../DialogWrapper';
-import { HeadingWS, ParagraphWS, ButtonWS, speedRecoveryBackground } from '../../config/grommetConfig';
+import { HeadingWS, ParagraphWS, ButtonWS, treatNpcBackground } from '../../config/grommetConfig';
 import PERFORM_STOCK_MOVE, { PerformStockMoveData, PerformStockMoveVars } from '../../mutations/performStockMove';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { StyledMarkdown } from '../styledComponents';
 
-interface SpeedRecoveryDialogProps {
+interface TreatNpcDialogProps {
   move: Move | CharacterMove;
   handleClose: () => void;
 }
 
-const SpeedRecoveryDialog: FC<SpeedRecoveryDialogProps> = ({ move, handleClose }) => {
-  // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [option, setOption] = useState<'Yes' | 'No'>('Yes');
+const TreatNpcDialog: FC<TreatNpcDialogProps> = ({ move, handleClose }) => {
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const { gameId } = useParams<{ gameId: string }>();
 
@@ -35,7 +33,7 @@ const SpeedRecoveryDialog: FC<SpeedRecoveryDialogProps> = ({ move, handleClose }
   const currentStock = userGameRole?.characters[0].playbookUnique?.angelKit?.stock || 0;
 
   const handleStockMove = () => {
-    const stockSpent = option === 'Yes' ? 1 : 0;
+    const stockSpent = 1;
     if (currentStock - stockSpent < 0) {
       console.warn("You don't have enough stock");
       return;
@@ -61,24 +59,13 @@ const SpeedRecoveryDialog: FC<SpeedRecoveryDialogProps> = ({ move, handleClose }
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <DialogWrapper background={speedRecoveryBackground} handleClose={handleClose}>
+    <DialogWrapper background={treatNpcBackground} handleClose={handleClose}>
       <Box gap="12px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}
         </HeadingWS>
         <StyledMarkdown>{move.description}</StyledMarkdown>
-        <Box direction="column" align="center" justify="start" gap="12px" margin={{ bottom: '12px' }}>
-          <Box align="start">
-            <ParagraphWS>Do they want you to use any stock?</ParagraphWS>
-            <RadioButtonGroup
-              name="use-stock"
-              options={['Yes', 'No']}
-              value={option}
-              onChange={(e: any) => setOption(e.target.value)}
-              alignSelf="start"
-            />
-          </Box>
-        </Box>
+        <ParagraphWS alignSelf="start">{`This will cost 1-stock. You currently have ${currentStock} stock.`}</ParagraphWS>
         <Box fill="horizontal" direction="row" justify="end" gap="small">
           <ButtonWS
             label="CANCEL"
@@ -89,10 +76,10 @@ const SpeedRecoveryDialog: FC<SpeedRecoveryDialogProps> = ({ move, handleClose }
             onClick={handleClose}
           />
           <ButtonWS
-            label="SPEED RECOVERY"
+            label="TREAT"
             primary
             onClick={() => !performingStockMove && handleStockMove()}
-            disabled={performingStockMove}
+            disabled={performingStockMove || currentStock < 1}
           />
         </Box>
       </Box>
@@ -100,4 +87,4 @@ const SpeedRecoveryDialog: FC<SpeedRecoveryDialogProps> = ({ move, handleClose }
   );
 };
 
-export default SpeedRecoveryDialog;
+export default TreatNpcDialog;
