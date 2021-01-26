@@ -17,9 +17,8 @@ const PLAYBOOK_CREATOR = gql`
       playbookType
       gearInstructions {
         id
-        youGet
+        gearIntro
         youGetItems
-        inAddition
         introduceChoice
         numberCanChoose
         chooseableGear

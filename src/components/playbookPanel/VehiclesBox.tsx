@@ -15,7 +15,15 @@ const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreati
   const { crustReady } = useFonts();
   const renderVehicle = (vehicle: Vehicle) => {
     return (
-      <Box fill="horizontal" direction="row" align="center" justify="between" margin={{ bottom: '12px' }} wrap>
+      <Box
+        key={vehicle.id}
+        fill="horizontal"
+        direction="row"
+        align="center"
+        justify="between"
+        margin={{ bottom: '12px' }}
+        wrap
+      >
         <Box style={{ minWidth: '225px', maxWidth: '250px' }} pad="12px">
           <TextWS>Frame: {vehicle.vehicleFrame.frameType.toLowerCase()}</TextWS>
           <TextWS>{vehicle.vehicleFrame.examples}</TextWS>

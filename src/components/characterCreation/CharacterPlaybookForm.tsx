@@ -102,7 +102,9 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
               </em>
             </Box>
 
-            {[PlaybookType.angel, PlaybookType.battlebabe, PlaybookType.brainer].includes(selectedPlaybook.playbookType) && (
+            {[PlaybookType.angel, PlaybookType.battlebabe, PlaybookType.brainer, PlaybookType.driver].includes(
+              selectedPlaybook.playbookType
+            ) && (
               <ButtonWS
                 label={
                   settingPlaybook || creatingCharacter ? (

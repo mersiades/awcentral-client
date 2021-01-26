@@ -56,7 +56,7 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
         navigateToCharacterCreation={navigateToCharacterCreation}
       />
 
-      {character.statsBlock.stats.length > 0 && (
+      {!!character.statsBlock && character.statsBlock.stats.length > 0 && (
         <StatsBox
           stats={character.statsBlock.stats}
           togglingHighlight={togglingHighlight}

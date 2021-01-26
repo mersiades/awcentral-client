@@ -805,9 +805,8 @@ export const mockGameRole4: GameRole = {
 
 export const mockgearInstructionsAngel: GearInstructions = {
   id: 'angel-gear-instructions-id',
-  youGet: 'You get:',
+  gearIntro: 'You get:',
   youGetItems: ['fashion suitable to your look, including at your option a piece worth 1-armor (you detail)'],
-  inAddition: 'dummy',
   introduceChoice: 'Small practical weapons',
   numberCanChoose: 1,
   chooseableGear: [

@@ -90,15 +90,9 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
-  const renderInAddition = () => {
-    if (!!pbCreator?.gearInstructions.inAddition) {
-      return <TextWS>{pbCreator.gearInstructions.inAddition}</TextWS>;
-    }
-  };
-
-  const renderYouGet = () => {
-    if (!!pbCreator?.gearInstructions.youGet) {
-      return <TextWS>{pbCreator.gearInstructions.youGet}</TextWS>;
+  const renderGearIntro = () => {
+    if (!!pbCreator?.gearInstructions.gearIntro) {
+      return <TextWS>{pbCreator.gearInstructions.gearIntro}</TextWS>;
     }
   };
 
@@ -198,9 +192,8 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
             <HeadingWS level={4} alignSelf="center">
               Options
             </HeadingWS>
-            {renderYouGet()}
+            {renderGearIntro()}
             {renderYouGetItem()}
-            {renderInAddition()}
             <br />
             {renderIntroduceChoice()}
             {renderChooseableGear()}

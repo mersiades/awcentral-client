@@ -47,9 +47,8 @@ export interface Look {
 
 export interface GearInstructions {
   id: string;
-  youGet: string;
+  gearIntro: string;
   youGetItems: string[];
-  inAddition?: string;
   introduceChoice: string;
   numberCanChoose: number;
   chooseableGear: string[];
