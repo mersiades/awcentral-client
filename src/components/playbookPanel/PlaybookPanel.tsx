@@ -16,6 +16,7 @@ import { Character } from '../../@types/dataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import AngelKitBox from './AngelKitBox';
+import VehiclesBox from './VehiclesBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -45,7 +46,6 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
   openDialog,
 }) => {
   const { data } = useQuery<PlaybookData, PlaybookVars>(PLAYBOOK, { variables: { playbookType: character.playbook } });
-
   return (
     <Box data-testid="character-sheet" direction="row" wrap pad="12px" overflow="auto">
       <NameAndLooksBox
@@ -101,6 +101,13 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
           angelKit={character.playbookUnique.angelKit}
           navigateToCharacterCreation={navigateToCharacterCreation}
           openDialog={openDialog}
+        />
+      )}
+      {!!character.playbookUnique && character.playbookUnique.vehicles.length > 0 && (
+        <VehiclesBox
+          vehicles={character.playbookUnique.vehicles}
+          navigateToCharacterCreation={navigateToCharacterCreation}
+          // openDialog={openDialog}
         />
       )}
     </Box>

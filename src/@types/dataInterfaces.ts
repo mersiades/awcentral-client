@@ -1,4 +1,13 @@
-import { MessageType, PlaybookType, RoleType, StatType, Threats, UniqueTypes } from './enums';
+import {
+  BattleOptionType,
+  MessageType,
+  PlaybookType,
+  RoleType,
+  StatType,
+  Threats,
+  UniqueTypes,
+  VehicleFrameType,
+} from './enums';
 import { CharacterMove, Look, Move } from './staticDataInterfaces';
 
 /**
@@ -90,6 +99,7 @@ export interface PlaybookUnique {
   brainerGear?: BrainerGear;
   angelKit?: AngelKit;
   customWeapons?: CustomWeapons;
+  vehicles: Vehicle[];
 }
 
 export interface BrainerGear {
@@ -109,6 +119,31 @@ export interface AngelKit {
 export interface CustomWeapons {
   id: string;
   weapons: string[];
+}
+
+export interface Vehicle {
+  id: string;
+  vehicleFrame: VehicleFrame;
+  speed: number;
+  handling: number;
+  armor: number;
+  massive: number;
+  tags: string[];
+  battleOptions: VehicleBattleOption[];
+}
+
+export interface VehicleFrame {
+  id: string;
+  frameType: VehicleFrameType;
+  massive: number;
+  examples: string;
+  battleOptionCount: number;
+}
+
+export interface VehicleBattleOption {
+  id: string;
+  battleOptionType: BattleOptionType;
+  name: string;
 }
 
 // --------------------------------------------------- MC interfaces --------------------------------------------------- //

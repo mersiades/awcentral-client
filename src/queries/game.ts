@@ -139,6 +139,26 @@ const GAME = gql`
               id
               weapons
             }
+            vehicles {
+              id
+              vehicleFrame {
+                id
+                frameType
+                massive
+                examples
+                battleOptionCount
+              }
+              speed
+              handling
+              armor
+              massive
+              tags
+              battleOptions {
+                id
+                battleOptionType
+                name
+              }
+            }
           }
         }
       }

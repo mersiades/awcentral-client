@@ -108,3 +108,17 @@ export enum MessageType {
   rollStockMove = 'ROLL_STOCK_MOVE',
   stockMove = 'STOCK_MOVE',
 }
+
+export enum VehicleFrameType {
+  bike = 'BIKE',
+  small = 'SMALL',
+  medium = 'MEDIUM',
+  large = 'LARGE',
+}
+
+export enum BattleOptionType {
+  speed = 'SPEED',
+  handling = 'HANDLING',
+  massive = 'MASSIVE',
+  armor = 'ARMOR',
+}

@@ -10,8 +10,11 @@ import {
   HxStat,
   PlaybookUnique,
   StatsBlock,
+  Vehicle,
+  VehicleBattleOption,
 } from '../@types/dataInterfaces';
 import {
+  BattleOptionType,
   LookType,
   MoveActionType,
   MoveType,
@@ -20,6 +23,7 @@ import {
   RollType,
   StatType,
   UniqueTypes,
+  VehicleFrameType,
 } from '../@types/enums';
 import {
   AngelKitCreator,
@@ -409,12 +413,43 @@ export const dummyAngelKit: AngelKit = {
   angelKitMoves: [dummyAngelKitMove],
 };
 
+export const mockVehicle1: Vehicle = {
+  id: 'mock-vehicle-id-1',
+  vehicleFrame: {
+    id: 'mock-vehicle-frame-id-1',
+    frameType: VehicleFrameType.large,
+    massive: 3,
+    examples: 'Garbage truck, bus',
+    battleOptionCount: 2,
+  },
+  speed: 0,
+  handling: 1,
+  massive: 3,
+  armor: 1,
+  battleOptions: [
+    {
+      id: 'mock-battle-option-id-1',
+      battleOptionType: BattleOptionType.armor,
+      name: '+1armor',
+    },
+    {
+      id: 'mock-battle-option-id-1',
+      battleOptionType: BattleOptionType.armor,
+      name: '+1handling',
+    },
+  ],
+  tags: ['fast', 'muscular', 'guzzler'],
+};
+
+export const mockVehicles: Vehicle[] = [mockVehicle1];
+
 export const mockPlaybookUniqueBattlebabe: PlaybookUnique = {
   id: 'mock-battlebabe-unique-id',
   type: UniqueTypes.customWeapons,
   customWeapons: mockCustomWeapons,
   brainerGear: dummyBrainerGear,
   angelKit: dummyAngelKit,
+  vehicles: mockVehicles,
 };
 
 export const mockAngelKit: AngelKit = {
@@ -432,6 +467,7 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   customWeapons: dummyCustomWeapons,
   brainerGear: dummyBrainerGear,
   angelKit: mockAngelKit,
+  vehicles: mockVehicles,
 };
 
 export const mockCharacterHarm: CharacterHarm = {
