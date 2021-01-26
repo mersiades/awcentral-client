@@ -141,6 +141,7 @@ const GAME = gql`
             }
             vehicles {
               id
+              name
               vehicleFrame {
                 id
                 frameType

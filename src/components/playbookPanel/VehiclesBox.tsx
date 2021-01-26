@@ -24,12 +24,15 @@ const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreati
         margin={{ bottom: '12px' }}
         wrap
       >
-        <Box style={{ minWidth: '225px', maxWidth: '250px' }} pad="12px">
+        <Box style={{ minWidth: '250px', maxWidth: 'calc(100% - 350px)' }} pad="12px">
+          <HeadingWS level={5} margin={{ vertical: '3px' }}>
+            {vehicle.name}
+          </HeadingWS>
           <TextWS>Frame: {vehicle.vehicleFrame.frameType.toLowerCase()}</TextWS>
           <TextWS>{vehicle.vehicleFrame.examples}</TextWS>
           <TextWS>Tags: {vehicle.tags.join(', ')}</TextWS>
         </Box>
-        <Box direction="row" align="center" justify="around" gap="12px" pad="12px" width="380px">
+        <Box direction="row" align="center" justify="around" gap="6px" pad="12px" width="350px">
           <Box align="center" justify="between" width="80px" height="90px">
             <RedBox align="center" width="50px">
               <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>

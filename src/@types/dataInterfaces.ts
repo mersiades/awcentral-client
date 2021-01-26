@@ -123,6 +123,7 @@ export interface CustomWeapons {
 
 export interface Vehicle {
   id: string;
+  name: string;
   vehicleFrame: VehicleFrame;
   speed: number;
   handling: number;

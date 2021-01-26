@@ -415,6 +415,7 @@ export const dummyAngelKit: AngelKit = {
 
 export const mockVehicle1: Vehicle = {
   id: 'mock-vehicle-id-1',
+  name: 'Mock Vehicle 1',
   vehicleFrame: {
     id: 'mock-vehicle-frame-id-1',
     frameType: VehicleFrameType.large,
