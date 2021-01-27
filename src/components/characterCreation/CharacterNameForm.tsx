@@ -30,8 +30,6 @@ const CharacterNameForm: FC<CharacterNameFormProps> = ({ playbookType, settingNa
     }
   );
 
-  console.log('pbCreatorData', pbCreatorData);
-
   useEffect(() => {
     !!pbCreatorData && setPbCreator(pbCreatorData.playbookCreator);
   }, [pbCreatorData]);

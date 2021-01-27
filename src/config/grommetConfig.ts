@@ -387,6 +387,7 @@ export const theme = (vtksReady: boolean, crustReady: boolean) => {
         & input {
           text-shadow: 0 0 1px #000, 0 0 3px #000;
           font-size: 26px;
+          margin-top: 4px;
         }
         
         `,

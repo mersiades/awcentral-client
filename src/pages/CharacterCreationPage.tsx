@@ -515,6 +515,7 @@ const CharacterCreationPage: FC = () => {
             existingAngelKit={character.playbookUnique?.angelKit}
             existingCustomWeapons={character.playbookUnique?.customWeapons}
             existingBrainerGear={character.playbookUnique?.brainerGear}
+            existingVehicles={character.playbookUnique?.vehicles}
             handleSubmitBrainerGear={handleSubmitBrainerGear}
             handleSubmitAngelKit={handleSubmitAngelKit}
             handleSubmitCustomWeapons={handleSubmitCustomWeapons}

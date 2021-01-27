@@ -1,5 +1,15 @@
 import { ItemCharacteristic, TaggedItem } from '.';
-import { LookType, MoveActionType, MoveType, PlaybookType, RollType, StatType, UniqueTypes } from './enums';
+import {
+  BattleOptionType,
+  LookType,
+  MoveActionType,
+  MoveType,
+  PlaybookType,
+  RollType,
+  StatType,
+  UniqueTypes,
+  VehicleFrameType,
+} from './enums';
 
 /**
  * This file contains interfaces that represent static data models.
@@ -127,6 +137,8 @@ export interface PlaybookUniqueCreator {
   angelKitCreator?: AngelKitCreator;
   customWeaponsCreator?: CustomWeaponsCreator;
   brainerGearCreator?: BrainerGearCreator;
+  carCreator?: CarCreator;
+  bikeCreator?: BikeCreator;
 }
 
 export interface AngelKitCreator {
@@ -151,4 +163,38 @@ export interface CustomWeaponsCreator {
 export interface BrainerGearCreator {
   id: string;
   gear: string[];
+}
+
+export interface CarCreator {
+  id: string;
+  introInstructions: string;
+  frames: VehicleFrame[];
+  strengths: string[];
+  looks: string[];
+  weaknesses: string[];
+  battleOptions: VehicleBattleOption[];
+}
+
+export interface BikeCreator {
+  id: string;
+  introInstructions: string;
+  frame: VehicleFrame;
+  strengths: string[];
+  looks: string[];
+  weaknesses: string[];
+  battleOptions: VehicleBattleOption[];
+}
+
+export interface VehicleFrame {
+  id: string;
+  frameType: VehicleFrameType;
+  massive: number;
+  examples: string;
+  battleOptionCount: number;
+}
+
+export interface VehicleBattleOption {
+  id: string;
+  battleOptionType: BattleOptionType;
+  name: string;
 }

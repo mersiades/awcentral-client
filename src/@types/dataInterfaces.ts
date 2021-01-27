@@ -8,7 +8,7 @@ import {
   UniqueTypes,
   VehicleFrameType,
 } from './enums';
-import { CharacterMove, Look, Move } from './staticDataInterfaces';
+import { CharacterMove, Look, Move, VehicleBattleOption, VehicleFrame } from './staticDataInterfaces';
 
 /**
  * This file contains interfaces that represent data models that are dynamic,
@@ -59,6 +59,7 @@ export interface Character {
   looks: Look[];
   characterMoves: CharacterMove[];
   harm: CharacterHarm;
+  vehicleCount: number;
   name?: string;
   barter?: number;
   playbookUnique?: PlaybookUnique;
@@ -129,22 +130,10 @@ export interface Vehicle {
   handling: number;
   armor: number;
   massive: number;
-  tags: string[];
+  strengths: string[];
+  weaknesses: string[];
+  looks: string[];
   battleOptions: VehicleBattleOption[];
-}
-
-export interface VehicleFrame {
-  id: string;
-  frameType: VehicleFrameType;
-  massive: number;
-  examples: string;
-  battleOptionCount: number;
-}
-
-export interface VehicleBattleOption {
-  id: string;
-  battleOptionType: BattleOptionType;
-  name: string;
 }
 
 // --------------------------------------------------- MC interfaces --------------------------------------------------- //

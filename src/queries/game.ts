@@ -72,6 +72,7 @@ const GAME = gql`
             hasChangedPlaybook
             hasDied
           }
+          vehicleCount
           statsBlock {
             id
             statsOptionId
@@ -153,7 +154,9 @@ const GAME = gql`
               handling
               armor
               massive
-              tags
+              strengths
+              weaknesses
+              looks
               battleOptions {
                 id
                 battleOptionType

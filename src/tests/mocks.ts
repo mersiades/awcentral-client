@@ -11,7 +11,6 @@ import {
   PlaybookUnique,
   StatsBlock,
   Vehicle,
-  VehicleBattleOption,
 } from '../@types/dataInterfaces';
 import {
   BattleOptionType,
@@ -41,6 +40,7 @@ import {
   RollModifier,
   StatModifier,
   StatsOption,
+  VehicleBattleOption,
 } from '../@types/staticDataInterfaces';
 import { ANGEL_SPECIAL_NAME, UNDER_FIRE_NAME } from '../config/constants';
 
@@ -55,6 +55,7 @@ interface MockCharacter {
   barter: number;
   playbook: PlaybookType;
   harm: CharacterHarm;
+  vehicleCount: 0;
   hasCompletedCharacterCreation: boolean;
   playbookUnique: PlaybookUnique;
   characterMoves: CharacterMove[];
@@ -439,7 +440,9 @@ export const mockVehicle1: Vehicle = {
       name: '+1handling',
     },
   ],
-  tags: ['fast', 'muscular', 'guzzler'],
+  strengths: ['fast'],
+  weaknesses: ['guzzler'],
+  looks: ['muscular'],
 };
 
 export const mockVehicles: Vehicle[] = [mockVehicle1];
@@ -498,6 +501,7 @@ export const mockCharacter1: MockCharacter = {
     { ...mockCharacterMoveAngel3, isSelected: true },
   ], // TODO: change to battlebabe moves
   playbookUnique: mockPlaybookUniqueBattlebabe,
+  vehicleCount: 0,
 };
 
 export const mockCharacter2: MockCharacter = {
@@ -523,6 +527,7 @@ export const mockCharacter2: MockCharacter = {
     { ...mockCharacterMoveAngel3, isSelected: true },
   ],
   playbookUnique: mockPlaybookUniqueAngel,
+  vehicleCount: 0,
 };
 
 export const mockGame1: Game = {

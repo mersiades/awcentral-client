@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { createContext, FC, useContext, useEffect, useState } from 'react';
-import { Game, GameRole } from '../@types/dataInterfaces';
+import { Character, Game, GameRole } from '../@types/dataInterfaces';
 import { RoleType } from '../@types/enums';
 import GAME, { GameData, GameVars } from '../queries/game';
 
@@ -20,6 +20,7 @@ interface IGameContext {
   mcGameRole?: GameRole;
   allPlayerGameRoles?: GameRole[];
   otherPlayerGameRoles?: GameRole[];
+  character?: Character;
   setGameContext?: (gameId: string, userId: string) => void;
   clearGameContext?: () => void;
 }
@@ -44,6 +45,7 @@ export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, in
   const [mcGameRole, setMcGameRole] = useState<GameRole | undefined>(undefined);
   const [allPlayerGameRoles, setAllPlayerGameRoles] = useState<GameRole[] | undefined>(undefined);
   const [otherPlayerGameRoles, setOtherPlayerGameRoles] = useState<GameRole[] | undefined>(undefined);
+  const [character, setCharacter] = useState<Character | undefined>(undefined);
 
   const {
     data,
@@ -65,6 +67,7 @@ export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, in
     setMcGameRole(undefined);
     setAllPlayerGameRoles(undefined);
     setOtherPlayerGameRoles(undefined);
+    setCharacter(undefined);
   };
 
   useEffect(() => {
@@ -75,6 +78,11 @@ export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, in
       const otherPlayerGameRoles = game.gameRoles.filter(
         (gameRole) => gameRole.role === RoleType.player && gameRole.userId !== userId
       );
+      if (!!userGameRole && userGameRole?.characters.length === 1) {
+        setCharacter(userGameRole.characters[0]);
+      } else if (!!userGameRole && userGameRole?.characters.length > 1) {
+        // TODO: get PlayerPage to prompt user to select a character
+      }
       setUserGameRole(userGameRole);
       setMcGameRole(mcGameRole);
       setAllPlayerGameRoles(allPlayerGameRoles);
@@ -94,6 +102,7 @@ export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, in
         mcGameRole,
         allPlayerGameRoles,
         otherPlayerGameRoles,
+        character,
         setGameContext,
         clearGameContext,
       }}

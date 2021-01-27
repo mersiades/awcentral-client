@@ -30,7 +30,7 @@ const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreati
           </HeadingWS>
           <TextWS>Frame: {vehicle.vehicleFrame.frameType.toLowerCase()}</TextWS>
           <TextWS>{vehicle.vehicleFrame.examples}</TextWS>
-          <TextWS>Tags: {vehicle.tags.join(', ')}</TextWS>
+          <TextWS>Tags: {vehicle.strengths.concat(vehicle.weaknesses).concat(vehicle.looks).join(', ')}</TextWS>
         </Box>
         <Box direction="row" align="center" justify="around" gap="6px" pad="12px" width="350px">
           <Box align="center" justify="between" width="80px" height="90px">

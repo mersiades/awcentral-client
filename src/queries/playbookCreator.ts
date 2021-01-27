@@ -133,6 +133,44 @@ const PLAYBOOK_CREATOR = gql`
           id
           gear
         }
+        carCreator {
+          id
+          introInstructions
+          frames {
+            id
+            frameType
+            massive
+            examples
+            battleOptionCount
+          }
+          strengths
+          looks
+          weaknesses
+          battleOptions {
+            id
+            battleOptionType
+            name
+          }
+        }
+        bikeCreator {
+          id
+          introInstructions
+          frame {
+            id
+            frameType
+            massive
+            examples
+            battleOptionCount
+          }
+          strengths
+          looks
+          weaknesses
+          battleOptions {
+            id
+            battleOptionType
+            name
+          }
+        }
       }
     }
   }
