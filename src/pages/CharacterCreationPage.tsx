@@ -371,7 +371,10 @@ const CharacterCreationPage: FC = () => {
   // If page is loading but character is already partially created,
   // set creationStep to appropriate step
   useEffect(() => {
-    if (character && creationStep === CharacterCreationSteps.intro) {
+    if (
+      character &&
+      (creationStep === CharacterCreationSteps.intro || creationStep === CharacterCreationSteps.selectPlaybook)
+    ) {
       if (!!character.playbook && !character.name) {
         setCreationStep(2);
       } else if (!!character.name && (!character.looks || character.looks.length < 5)) {

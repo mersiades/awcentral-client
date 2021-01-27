@@ -1,3 +1,5 @@
+import { VehicleFrame, VehicleBattleOption } from './staticDataInterfaces';
+
 export interface KeycloakUser {
   id?: string;
   username?: string;
@@ -40,4 +42,18 @@ export interface HarmInput {
   hasComeBackWeird: boolean;
   hasChangedPlaybook: boolean;
   hasDied: boolean;
+}
+
+export interface VehicleInput {
+  id?: string;
+  name: string;
+  vehicleFrame: VehicleFrame;
+  speed: number;
+  handling: number;
+  armor: number;
+  massive: number;
+  strengths: string[];
+  weaknesses: string[];
+  looks: string[];
+  battleOptions: VehicleBattleOption[];
 }

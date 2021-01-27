@@ -60,7 +60,7 @@ export enum UniqueTypes {
   customWeapons = 'CUSTOM_WEAPONS',
   brainerGear = 'BRAINER_GEAR',
   gang = 'GANG',
-  car = 'CAR',
+  vehicle = 'VEHICLE',
   weapons = 'WEAPONS',
   holding = 'HOLDING',
   followers = 'FOLLOWERS',

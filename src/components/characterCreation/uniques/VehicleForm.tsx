@@ -1,12 +1,15 @@
-import { useQuery } from '@apollo/client';
-import { Box, Select, TextInput, Text, Tip } from 'grommet';
+import { useMutation, useQuery } from '@apollo/client';
+import { Box, TextInput, Text, Tip } from 'grommet';
+import { omit } from 'lodash';
 import React, { FC, useEffect, useReducer } from 'react';
+import { VehicleInput } from '../../../@types';
 import { Vehicle } from '../../../@types/dataInterfaces';
 import { BattleOptionType, PlaybookType, VehicleFrameType } from '../../../@types/enums';
 import { VehicleBattleOption, VehicleFrame } from '../../../@types/staticDataInterfaces';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
+import SET_VEHICLE, { SetVehicleData, SetVehicleVars } from '../../../mutations/setVehicle';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
 import Spinner from '../../Spinner';
 
@@ -101,7 +104,7 @@ const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
     case 'ADD_BATTLE_OPTION':
       return {
         ...state,
-        battleOptions: [...state.battleOptions, action.payload],
+        battleOptions: [...state.battleOptions, omit(action.payload, ['__typename'])] as VehicleBattleOption[],
       };
     case 'REMOVE_BATTLE_OPTION':
       return {
@@ -156,7 +159,9 @@ const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
 const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
   const initialState: VehicleFormState = {
     name: !!vehicle ? vehicle.name : 'Unnamed vehicle',
-    frame: !!vehicle ? vehicle.vehicleFrame : undefined,
+    // @ts-ignore
+    frame: !!vehicle ? omit(vehicle.vehicleFrame, ['__typename']) : undefined,
+    // frame: !!vehicle ? vehicle.vehicleFrame : undefined,
     strengths: !!vehicle ? vehicle.strengths : [],
     weaknesses: !!vehicle ? vehicle.weaknesses : [],
     looks: !!vehicle ? vehicle.looks : [],
@@ -174,7 +179,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
   ] = useReducer(vehicleFormReducer, initialState);
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { character } = useGame();
+  const { character, userGameRole } = useGame();
   const { crustReady } = useFonts();
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData, loading } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
@@ -182,9 +187,10 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
     variables: { playbookType: character?.playbook },
     skip: !character,
   });
-
   const carCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator.carCreator;
   const bikeCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator.bikeCreator;
+  const [setVehicle, { loading: settingVehicle }] = useMutation<SetVehicleData, SetVehicleVars>(SET_VEHICLE);
+
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const redBoxLabelStyling = {
     fontWeight: 600,
@@ -274,15 +280,47 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
     }
   };
 
+  const handleSetVehicle = async () => {
+    if (!!userGameRole && !!character) {
+      const vehicleInput: VehicleInput = {
+        id: !!vehicle ? vehicle.id : undefined,
+        name,
+        // @ts-ignore
+        vehicleFrame: omit(frame, ['__typename']),
+        speed,
+        handling,
+        armor,
+        massive,
+        strengths,
+        weaknesses,
+        looks,
+        battleOptions,
+      };
+
+      try {
+        await setVehicle({
+          variables: {
+            gameRoleId: userGameRole.id,
+            characterId: character.id,
+            // @ts-ignore
+            vehicleInput: omit(vehicleInput, ['__typename']),
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   // ------------------------------------------------------- Effects -------------------------------------------------------- //
 
   // Set initial frame if none set already
   useEffect(() => {
     if (!!character && !!bikeCreator && !!carCreator && !vehicle) {
       if (character.playbook === PlaybookType.chopper) {
-        dispatch({ type: 'SET_FRAME', payload: bikeCreator.frame });
+        dispatch({ type: 'SET_FRAME', payload: omit(bikeCreator.frame, ['__typename']) });
       } else {
-        dispatch({ type: 'SET_FRAME', payload: carCreator.frames[2] });
+        dispatch({ type: 'SET_FRAME', payload: omit(carCreator.frames[2], ['__typename']) });
       }
     }
   }, [character, vehicle, bikeCreator, carCreator]);
@@ -332,6 +370,28 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
     );
   };
 
+  const renderFramePill = (frameArg: VehicleFrame) => {
+    const isSelected = frame.id === frameArg.id;
+    return (
+      <Tip key={frameArg.id} content={`Battle options: ${frameArg.battleOptionCount}, massive: ${frameArg.massive}`}>
+        <Box
+          height="fit-content"
+          background={isSelected ? { color: accentColors[0], dark: true } : neutralColors[0]}
+          round="medium"
+          pad={{ top: '3px', bottom: '1px', horizontal: '12px' }}
+          margin={{ vertical: '3px', horizontal: '3px' }}
+          justify="center"
+          onClick={() => dispatch({ type: 'SET_FRAME', payload: omit(frameArg, ['__typename']) })}
+          hoverIndicator={{ color: '#698D70', dark: true }}
+        >
+          <Text weight="bold" size="medium">
+            {frameArg.frameType.toLowerCase()}
+          </Text>
+        </Box>
+      </Tip>
+    );
+  };
+
   if (loading || !character || !carCreator || !frame) {
     return <Spinner />;
   }
@@ -341,8 +401,8 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
       <HeadingWS crustReady={crustReady} level={2} alignSelf="center" margin={{ vertical: '6px' }}>
         {titleText}
       </HeadingWS>
-      <Box border direction="row" fill="horizontal" justify="end">
-        <Box border pad="12px" fill="vertical" justify="between">
+      <Box direction="row" fill="horizontal" justify="end">
+        <Box pad="12px" fill="vertical" justify="between">
           <TextWS>{introText}</TextWS>
           <Box>
             <TextWS>Give your vehicle a name (make/model, nickname, whatever):</TextWS>
@@ -350,12 +410,9 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
           </Box>
           <Box>
             <TextWS>Choose its frame (resets other settings):</TextWS>
-            <Select
-              options={carCreator.frames}
-              labelKey="frameType"
-              value={frame}
-              onChange={(event) => dispatch({ type: 'SET_FRAME', payload: event.value })}
-            />
+            <Box direction="row" margin={{ top: '3px' }} wrap>
+              {carCreator.frames.map((frame) => renderFramePill(frame))}
+            </Box>
           </Box>
           <Box>
             <TextWS>Strengths (choose 1 or 2)</TextWS>
@@ -391,16 +448,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
             </Box>
           </Box>
         </Box>
-        <Box
-          border
-          direction="row"
-          justify="between"
-          align="start"
-          wrap
-          width="200px"
-          pad="12px"
-          style={{ minWidth: '200px' }}
-        >
+        <Box direction="row" justify="between" align="start" wrap width="200px" pad="12px" style={{ minWidth: '200px' }}>
           <Box fill="horizontal" align="center" justify="center">
             <HeadingWS level={3} crustReady={crustReady} margin={{ vertical: '3px' }}>
               {name}
@@ -454,7 +502,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
             <TextWS style={redBoxLabelStyling}>Tags</TextWS>
           </Box>
 
-          <ButtonWS primary fill="horizontal" label="SET" />
+          <ButtonWS primary fill="horizontal" label="SET" onClick={() => !settingVehicle && handleSetVehicle()} />
         </Box>
       </Box>
     </Box>

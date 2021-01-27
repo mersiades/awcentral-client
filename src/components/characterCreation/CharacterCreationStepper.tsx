@@ -235,7 +235,19 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
             );
           }
           return null;
-
+        case UniqueTypes.vehicle:
+          if (!!character.playbookUnique.vehicles) {
+            return (
+              <CustomUL>
+                {character.playbookUnique.vehicles.map((vehicle) => (
+                  <li key={vehicle.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {vehicle.name}
+                  </li>
+                ))}
+              </CustomUL>
+            );
+          }
+          return null;
         default:
           return null;
       }
