@@ -324,7 +324,7 @@ export const theme = (vtksReady: boolean, crustReady: boolean) => {
     },
     tab: {
       active: {
-        color: 'neutral-1',
+        color: { dark: 'white', light: 'black' },
         // background: undefined,
       },
       border: {
@@ -349,6 +349,12 @@ export const theme = (vtksReady: boolean, crustReady: boolean) => {
       pad: {
         bottom: 'xsmall',
       },
+      extend: `
+      font-size: 36px;
+      font-family: 'crust_clean', sans-serif;
+      line-height: normal;
+      text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000;
+    `,
     },
     tip: {
       content: {

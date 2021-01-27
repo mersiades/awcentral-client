@@ -8,22 +8,9 @@ import { Tab, Tabs } from 'grommet';
 import { PlaybookType } from '../../../@types/enums';
 import { COLLECTOR } from '../../../config/constants';
 
-interface VehiclesFormContainerProps {
-  // settingVehicle: boolean;
-  playbookUniqueCreator: PlaybookUniqueCreator;
-  // handleSubmitCustomWeapons: (weapons: string[]) => void;
-}
-
-const VehiclesFormContainer: FC<VehiclesFormContainerProps> = ({
-  // settingVehicle,
-  playbookUniqueCreator,
-  // handleSubmitCustomWeapons,
-}) => {
+const VehiclesFormContainer: FC = () => {
   const [numberVehiclesNeeded, setNumberVehiclesNeeded] = useState(0);
   const { character } = useGame();
-
-  console.log('character', character);
-  console.log('numberVehiclesNeeded', numberVehiclesNeeded);
 
   useEffect(() => {
     if (!!character && !!character.playbook) {
@@ -53,16 +40,22 @@ const VehiclesFormContainer: FC<VehiclesFormContainerProps> = ({
     return <div />;
   } else if (numberVehiclesNeeded === 1) {
     // Render a single VehicleForm
-    return <VehicleForm vehicle={character.playbookUnique?.vehicles[0]} />;
+    return (
+      <Tabs>
+        <Tab key={character.playbookUnique?.vehicles[0].id} title="Vehicle 1">
+          <VehicleForm vehicle={character.playbookUnique?.vehicles[0]} />
+        </Tab>
+      </Tabs>
+    );
   } else {
     // tab form
     return (
       <Tabs>
         {/*
-        // @ts-ignore */}
+          // @ts-ignore */}
         {[...Array(numberVehiclesNeeded).keys()].map((number) => (
-          <Tab key={number}>
-            <VehicleForm vehicle={character.playbookUnique?.vehicles[number - 1]} />
+          <Tab key={number} title={`Vehicle ${number + 1}`}>
+            <VehicleForm vehicle={character.playbookUnique?.vehicles[number]} />
           </Tab>
         ))}
       </Tabs>

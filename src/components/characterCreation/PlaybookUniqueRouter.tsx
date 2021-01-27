@@ -97,13 +97,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
           />
         );
       case PlaybookType.driver:
-        return (
-          <VehiclesFormContainer
-            // settingBrainerGear={settingBrainerGear}
-            playbookUniqueCreator={playbookUniqueCreator}
-            // handleSubmitBrainerGear={handleSubmitBrainerGear}
-          />
-        );
+        return <VehiclesFormContainer />;
       default:
         return null;
     }

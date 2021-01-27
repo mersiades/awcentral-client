@@ -32,6 +32,7 @@ interface VehicleFormState {
 
 interface Action {
   type:
+    | 'REPLACE_VEHICLE'
     | 'SET_FRAME'
     | 'SET_NAME'
     | 'ADD_STRENGTH'
@@ -55,6 +56,8 @@ interface Action {
 
 const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
   switch (action.type) {
+    case 'REPLACE_VEHICLE':
+      return action.payload;
     case 'SET_FRAME':
       return {
         ...state,
@@ -169,7 +172,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
     handling: !!vehicle ? vehicle.handling : 0,
     massive: !!vehicle ? vehicle.massive : 0,
     armor: !!vehicle ? vehicle.armor : 0,
-    battleOptions: !!vehicle ? vehicle.battleOptions : [],
+    battleOptions: !!vehicle ? (vehicle.battleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[]) : [],
   };
 
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -325,6 +328,34 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
     }
   }, [character, vehicle, bikeCreator, carCreator]);
 
+  // Change component state if vehicle changes (ie, when user click on a tab for another vehicle)
+  useEffect(() => {
+    if (!!character && !!bikeCreator && !!carCreator) {
+      const defaultFrame =
+        character.playbook === PlaybookType.chopper
+          ? omit(bikeCreator.frame, ['__typename'])
+          : omit(carCreator.frames[2], ['__typename']);
+      const payload: VehicleFormState = {
+        name: !!vehicle ? vehicle.name : 'Unnamed vehicle',
+        // @ts-ignore
+        frame: !!vehicle ? omit(vehicle.vehicleFrame, ['__typename']) : defaultFrame,
+        strengths: !!vehicle ? vehicle.strengths : [],
+        weaknesses: !!vehicle ? vehicle.weaknesses : [],
+        looks: !!vehicle ? vehicle.looks : [],
+        speed: !!vehicle ? vehicle.speed : 0,
+        handling: !!vehicle ? vehicle.handling : 0,
+        massive: !!vehicle ? vehicle.massive : (defaultFrame.massive as number),
+        armor: !!vehicle ? vehicle.armor : 0,
+        battleOptions: !!vehicle
+          ? (vehicle.battleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[])
+          : [],
+      };
+      dispatch({ type: 'REPLACE_VEHICLE', payload });
+    }
+  }, [vehicle, character, bikeCreator, carCreator]);
+
+  console.log('battleOptions', battleOptions);
+
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   const renderPill = (item: string, isSelected: boolean, callback: (item: string) => void) => {
@@ -398,14 +429,13 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
 
   return (
     <Box width="80vw" direction="column" align="start" justify="start" overflow="auto" flex="grow">
-      <HeadingWS crustReady={crustReady} level={2} alignSelf="center" margin={{ vertical: '6px' }}>
-        {titleText}
-      </HeadingWS>
-      <Box direction="row" fill="horizontal" justify="end">
-        <Box pad="12px" fill="vertical" justify="between">
+      <Box direction="row" fill justify="end">
+        <Box pad="12px" justify="between">
           <TextWS>{introText}</TextWS>
           <Box>
-            <TextWS>Give your vehicle a name (make/model, nickname, whatever):</TextWS>
+            <TextWS>
+              <strong>Give your vehicle a name</strong> (make/model, nickname, whatever):
+            </TextWS>
             <TextInput name="name" value={name} onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })} />
           </Box>
           <Box>
@@ -415,7 +445,9 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
             </Box>
           </Box>
           <Box>
-            <TextWS>Strengths (choose 1 or 2)</TextWS>
+            <TextWS>
+              <strong>Strengths</strong> (choose 1 or 2):
+            </TextWS>
             <Box direction="row" margin={{ top: '3px' }} wrap>
               {strengthOptions?.map((strength) => {
                 const isSelected = strengths.includes(strength);
@@ -424,7 +456,9 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
             </Box>
           </Box>
           <Box>
-            <TextWS>Looks (choose 1 or 2)</TextWS>
+            <TextWS>
+              <strong>Looks</strong> (choose 1 or 2):
+            </TextWS>
             <Box direction="row" margin={{ top: '3px' }} wrap>
               {lookOptions?.map((look) => {
                 const isSelected = looks.includes(look);
@@ -433,7 +467,9 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
             </Box>
           </Box>
           <Box>
-            <TextWS>Weaknesses (choose 1 or 2)</TextWS>
+            <TextWS>
+              <strong>Weaknesses</strong> (choose 1 or 2):
+            </TextWS>
             <Box direction="row" margin={{ top: '3px' }} wrap>
               {weaknessOptions?.map((weakness) => {
                 const isSelected = weaknesses.includes(weakness);
@@ -442,7 +478,9 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
             </Box>
           </Box>
           <Box>
-            <TextWS>Battle options (choose {frame.battleOptionCount})</TextWS>
+            <TextWS>
+              <strong>Battle options</strong> (choose {frame.battleOptionCount})
+            </TextWS>
             <Box direction="row" margin={{ top: '3px' }} wrap>
               {battleOptionOptions?.map((battleOption) => renderBattleOptionPill(battleOption))}
             </Box>
