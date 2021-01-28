@@ -98,7 +98,7 @@ const CharacterCreationPage: FC = () => {
   const [setBrainerGear, { loading: settingBrainerGear }] = useMutation<SetBrainerGearData, SetBrainerGearVars>(
     SET_BRAINER_GEAR
   );
-  const [setAngelKit, { loading: settingAngelKit }] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
+
   const [setCustomWeapons, { loading: settingCustomWeapons }] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(
     SET_CUSTOM_WEAPONS
   );
@@ -242,21 +242,6 @@ const CharacterCreationPage: FC = () => {
       try {
         await setBrainerGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, brainerGear },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        setCreationStep((prevState) => prevState + 1);
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  const handleSubmitAngelKit = async (stock: number, hasSupplier: boolean) => {
-    if (!!userGameRole && !!character) {
-      try {
-        await setAngelKit({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, stock, hasSupplier },
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -512,16 +497,14 @@ const CharacterCreationPage: FC = () => {
           <PlaybookUniqueRouter
             playbookType={character.playbook}
             characterName={character.name}
-            settingAngelKit={settingAngelKit}
             settingBrainerGear={settingBrainerGear}
             settingCustomWeapons={settingCustomWeapons}
             existingAngelKit={character.playbookUnique?.angelKit}
             existingCustomWeapons={character.playbookUnique?.customWeapons}
             existingBrainerGear={character.playbookUnique?.brainerGear}
-            existingVehicles={character.playbookUnique?.vehicles}
             handleSubmitBrainerGear={handleSubmitBrainerGear}
-            handleSubmitAngelKit={handleSubmitAngelKit}
             handleSubmitCustomWeapons={handleSubmitCustomWeapons}
+            setCreationStep={setCreationStep}
           />
         )}
         {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (

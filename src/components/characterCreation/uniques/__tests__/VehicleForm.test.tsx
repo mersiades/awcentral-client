@@ -3,12 +3,12 @@ import React from 'react';
 import { cleanup, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
-import { mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../tests/mocks';
-import { renderWithRouter } from '../../../tests/test-utils';
-import VehicleForm from './VehicleForm';
-import { PlaybookType } from '../../../@types/enums';
-import { mockPlayBookCreatorQueryDriver } from '../../../tests/mockQueries';
+import { mockKeycloakStub } from '../../../../../__mocks__/@react-keycloak/web';
+import { mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../../tests/mocks';
+import { renderWithRouter } from '../../../../tests/test-utils';
+import VehicleForm from '../VehicleForm';
+import { PlaybookType } from '../../../../@types/enums';
+import { mockPlayBookCreatorQueryDriver } from '../../../../tests/mockQueries';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
@@ -48,7 +48,7 @@ describe('Testing VehicleForm', () => {
       ],
     };
 
-    renderWithRouter(<VehicleForm vehicle={undefined} />, `/character-creation/${mockGame5.id}`, {
+    renderWithRouter(<VehicleForm existingVehicle={undefined} />, `/character-creation/${mockGame5.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockPlayBookCreatorQueryDriver],
       injectedGame: gameForCreatingVehicle,

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { Dispatch, FC, SetStateAction } from 'react';
 import { useQuery } from '@apollo/client';
 import { Box } from 'grommet';
 
@@ -14,16 +14,14 @@ import VehiclesFormContainer from './uniques/VehiclesFormContainer';
 interface PlaybookUniqueRouterProps {
   playbookType: PlaybookType;
   characterName: string;
-  settingAngelKit: boolean;
   settingCustomWeapons: boolean;
   settingBrainerGear: boolean;
   handleSubmitBrainerGear: (brainerGear: string[]) => void;
-  handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
   handleSubmitCustomWeapons: (weapons: string[]) => void;
   existingCustomWeapons?: CustomWeapons;
   existingAngelKit?: AngelKit;
   existingBrainerGear?: BrainerGear;
-  existingVehicles?: Vehicle[];
+  setCreationStep: Dispatch<SetStateAction<number>>;
 }
 
 /**
@@ -39,16 +37,14 @@ interface PlaybookUniqueRouterProps {
 const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
   playbookType,
   characterName,
-  settingAngelKit,
   settingCustomWeapons,
   settingBrainerGear,
-  handleSubmitAngelKit,
   handleSubmitBrainerGear,
   handleSubmitCustomWeapons,
   existingCustomWeapons,
   existingAngelKit,
   existingBrainerGear,
-  existingVehicles,
+  setCreationStep,
 }) => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType },
@@ -67,15 +63,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
   const renderForm = () => {
     switch (playbookType) {
       case PlaybookType.angel:
-        return (
-          <AngelKitForm
-            characterName={characterName}
-            settingAngelKit={settingAngelKit}
-            playbookUniqueCreator={playbookUniqueCreator}
-            handleSubmitAngelKit={handleSubmitAngelKit}
-            existingAngelKit={existingAngelKit}
-          />
-        );
+        return <AngelKitForm existingAngelKit={existingAngelKit} setCreationStep={setCreationStep} />;
       case PlaybookType.battlebabe:
         return (
           <CustomWeaponsForm

@@ -42,7 +42,7 @@ const VehiclesFormContainer: FC = () => {
     return (
       <Tabs>
         <Tab key={character.playbookUnique?.vehicles[0].id} title="Vehicle 1">
-          <VehicleForm vehicle={character.playbookUnique?.vehicles[0]} />
+          <VehicleForm existingVehicle={character.playbookUnique?.vehicles[0]} />
         </Tab>
       </Tabs>
     );
@@ -54,7 +54,7 @@ const VehiclesFormContainer: FC = () => {
           // @ts-ignore */}
         {[...Array(numberVehiclesNeeded).keys()].map((number) => (
           <Tab key={number} title={`Vehicle ${number + 1}`}>
-            <VehicleForm vehicle={character.playbookUnique?.vehicles[number]} />
+            <VehicleForm existingVehicle={character.playbookUnique?.vehicles[number]} />
           </Tab>
         ))}
       </Tabs>

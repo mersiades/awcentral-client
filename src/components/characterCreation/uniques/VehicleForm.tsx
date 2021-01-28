@@ -14,7 +14,7 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../.
 import Spinner from '../../Spinner';
 
 interface VehicleFormProps {
-  vehicle?: Vehicle;
+  existingVehicle?: Vehicle;
 }
 
 interface VehicleFormState {
@@ -159,20 +159,21 @@ const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
   }
 };
 
-const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
+const VehicleForm: FC<VehicleFormProps> = ({ existingVehicle }) => {
   const initialState: VehicleFormState = {
-    name: !!vehicle ? vehicle.name : 'Unnamed vehicle',
+    name: !!existingVehicle ? existingVehicle.name : 'Unnamed vehicle',
     // @ts-ignore
-    frame: !!vehicle ? omit(vehicle.vehicleFrame, ['__typename']) : undefined,
-    // frame: !!vehicle ? vehicle.vehicleFrame : undefined,
-    strengths: !!vehicle ? vehicle.strengths : [],
-    weaknesses: !!vehicle ? vehicle.weaknesses : [],
-    looks: !!vehicle ? vehicle.looks : [],
-    speed: !!vehicle ? vehicle.speed : 0,
-    handling: !!vehicle ? vehicle.handling : 0,
-    massive: !!vehicle ? vehicle.massive : 0,
-    armor: !!vehicle ? vehicle.armor : 0,
-    battleOptions: !!vehicle ? (vehicle.battleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[]) : [],
+    frame: !!existingVehicle ? omit(existingVehicle.vehicleFrame, ['__typename']) : undefined,
+    strengths: !!existingVehicle ? existingVehicle.strengths : [],
+    weaknesses: !!existingVehicle ? existingVehicle.weaknesses : [],
+    looks: !!existingVehicle ? existingVehicle.looks : [],
+    speed: !!existingVehicle ? existingVehicle.speed : 0,
+    handling: !!existingVehicle ? existingVehicle.handling : 0,
+    massive: !!existingVehicle ? existingVehicle.massive : 0,
+    armor: !!existingVehicle ? existingVehicle.armor : 0,
+    battleOptions: !!existingVehicle
+      ? (existingVehicle.battleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[])
+      : [],
   };
 
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -282,7 +283,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
   const handleSetVehicle = async () => {
     if (!!userGameRole && !!character) {
       const vehicleInput: VehicleInput = {
-        id: !!vehicle ? vehicle.id : undefined,
+        id: !!existingVehicle ? existingVehicle.id : undefined,
         name,
         // @ts-ignore
         vehicleFrame: omit(frame, ['__typename']),
@@ -315,14 +316,14 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
 
   // Set initial frame if none set already
   useEffect(() => {
-    if (!!character && !!bikeCreator && !!carCreator && !vehicle) {
+    if (!!character && !!bikeCreator && !!carCreator && !existingVehicle) {
       if (character.playbook === PlaybookType.chopper) {
         dispatch({ type: 'SET_FRAME', payload: omit(bikeCreator.frame, ['__typename']) });
       } else {
         dispatch({ type: 'SET_FRAME', payload: omit(carCreator.frames[2], ['__typename']) });
       }
     }
-  }, [character, vehicle, bikeCreator, carCreator]);
+  }, [character, existingVehicle, bikeCreator, carCreator]);
 
   // Change component state if vehicle changes (ie, when user click on a tab for another vehicle)
   useEffect(() => {
@@ -332,23 +333,23 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
           ? omit(bikeCreator.frame, ['__typename'])
           : omit(carCreator.frames[2], ['__typename']);
       const payload: VehicleFormState = {
-        name: !!vehicle ? vehicle.name : 'Unnamed vehicle',
+        name: !!existingVehicle ? existingVehicle.name : 'Unnamed vehicle',
         // @ts-ignore
-        frame: !!vehicle ? omit(vehicle.vehicleFrame, ['__typename']) : defaultFrame,
-        strengths: !!vehicle ? vehicle.strengths : [],
-        weaknesses: !!vehicle ? vehicle.weaknesses : [],
-        looks: !!vehicle ? vehicle.looks : [],
-        speed: !!vehicle ? vehicle.speed : 0,
-        handling: !!vehicle ? vehicle.handling : 0,
-        massive: !!vehicle ? vehicle.massive : (defaultFrame.massive as number),
-        armor: !!vehicle ? vehicle.armor : 0,
-        battleOptions: !!vehicle
-          ? (vehicle.battleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[])
+        frame: !!existingVehicle ? omit(existingVehicle.vehicleFrame, ['__typename']) : defaultFrame,
+        strengths: !!existingVehicle ? existingVehicle.strengths : [],
+        weaknesses: !!existingVehicle ? existingVehicle.weaknesses : [],
+        looks: !!existingVehicle ? existingVehicle.looks : [],
+        speed: !!existingVehicle ? existingVehicle.speed : 0,
+        handling: !!existingVehicle ? existingVehicle.handling : 0,
+        massive: !!existingVehicle ? existingVehicle.massive : (defaultFrame.massive as number),
+        armor: !!existingVehicle ? existingVehicle.armor : 0,
+        battleOptions: !!existingVehicle
+          ? (existingVehicle.battleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[])
           : [],
       };
       dispatch({ type: 'REPLACE_VEHICLE', payload });
     }
-  }, [vehicle, character, bikeCreator, carCreator]);
+  }, [existingVehicle, character, bikeCreator, carCreator]);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
