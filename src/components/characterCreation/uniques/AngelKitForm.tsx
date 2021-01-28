@@ -12,11 +12,11 @@ import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 
 interface AngelKitFormProps {
-  existingAngelKit?: AngelKit;
   setCreationStep: Dispatch<SetStateAction<number>>;
+  existingAngelKit?: AngelKit;
 }
 
-const AngelKitForm: FC<AngelKitFormProps> = ({ existingAngelKit, setCreationStep }) => {
+const AngelKitForm: FC<AngelKitFormProps> = ({ setCreationStep, existingAngelKit }) => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { character, userGameRole } = useGame();
   const { crustReady } = useFonts();

@@ -6,7 +6,7 @@ import Spinner from '../Spinner';
 import AngelKitForm from './uniques/AngelKitForm';
 import CustomWeaponsForm from './uniques/CustomWeaponsForm';
 import BrainerGearForm from './uniques/BrainerGearForm';
-import { AngelKit, BrainerGear, CustomWeapons, Vehicle } from '../../@types/dataInterfaces';
+import { AngelKit, BrainerGear, CustomWeapons } from '../../@types/dataInterfaces';
 import { PlaybookType } from '../../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import VehiclesFormContainer from './uniques/VehiclesFormContainer';
@@ -15,8 +15,6 @@ interface PlaybookUniqueRouterProps {
   playbookType: PlaybookType;
   characterName: string;
   settingCustomWeapons: boolean;
-  settingBrainerGear: boolean;
-  handleSubmitBrainerGear: (brainerGear: string[]) => void;
   handleSubmitCustomWeapons: (weapons: string[]) => void;
   existingCustomWeapons?: CustomWeapons;
   existingAngelKit?: AngelKit;
@@ -38,8 +36,6 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
   playbookType,
   characterName,
   settingCustomWeapons,
-  settingBrainerGear,
-  handleSubmitBrainerGear,
   handleSubmitCustomWeapons,
   existingCustomWeapons,
   existingAngelKit,
@@ -75,15 +71,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
           />
         );
       case PlaybookType.brainer:
-        return (
-          <BrainerGearForm
-            characterName={characterName}
-            settingBrainerGear={settingBrainerGear}
-            playbookUniqueCreator={playbookUniqueCreator}
-            handleSubmitBrainerGear={handleSubmitBrainerGear}
-            existingBrainerGear={existingBrainerGear}
-          />
-        );
+        return <BrainerGearForm existingBrainerGear={existingBrainerGear} setCreationStep={setCreationStep} />;
       case PlaybookType.driver:
         return <VehiclesFormContainer />;
       default:

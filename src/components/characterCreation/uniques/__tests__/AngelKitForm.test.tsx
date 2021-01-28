@@ -64,8 +64,8 @@ describe('Rendering AngelKitForm', () => {
 
     screen.getByRole('heading', { name: `${mockCharacter2.name.toUpperCase()}'S ANGEL KIT` });
     screen.getByRole('heading', { name: 'Stock' });
-    // @ts-ignore
-    // expect(screen.getByRole('spinbutton')).toEqual(mockAngelKitCreator.startingStock.toString() + 'asdf');
+    // FAILING: the mock query isn't being hit.
+    // expect(screen.getByRole('spinbutton')).toEqual(mockAngelKitCreator.startingStock.toString());
   });
 });
 

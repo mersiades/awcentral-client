@@ -1261,6 +1261,26 @@ export const mockPlaybookCreatorDriver: PlaybookCreator = {
 
 export const mockPlaybooks: Playbook[] = [mockPlaybookAngel];
 
+export const mockBrainerGearCreator: BrainerGearCreator = {
+  id: 'mock-brainer-gear-creator-id',
+  gear: [
+    'implant syringe (tag hi-tech)_After you’ve tagged someone,...',
+    'brain relay (area close hi-tech)_For purposes of brainer moves...',
+  ],
+};
+
+export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
+  id: 'brainer-playbook-unique-creator-id',
+  type: UniqueTypes.vehicle,
+  angelKitCreator: dummyAngelKitCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  brainerGearCreator: mockBrainerGearCreator,
+  carCreator: dummyCarCreator,
+  bikeCreator: dummyBikeCreator,
+};
+
+// ---------------------------------------------- Mock user-generated data --------------------------------------------- //
+
 export const mockVehicleInput: VehicleInput = {
   name: 'New Vehicle',
   vehicleFrame: mockVehicleFrame3,

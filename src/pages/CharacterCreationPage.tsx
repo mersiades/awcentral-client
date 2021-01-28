@@ -27,8 +27,7 @@ import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
-import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../mutations/setBrainerGear';
-import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../mutations/setAngelKit';
+
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
@@ -94,9 +93,6 @@ const CharacterCreationPage: FC = () => {
 
   const [setCharacterBarter, { loading: settingBarter }] = useMutation<SetCharacterBarterData, SetCharacterBarterVars>(
     SET_CHARACTER_BARTER
-  );
-  const [setBrainerGear, { loading: settingBrainerGear }] = useMutation<SetBrainerGearData, SetBrainerGearVars>(
-    SET_BRAINER_GEAR
   );
 
   const [setCustomWeapons, { loading: settingCustomWeapons }] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(
@@ -227,21 +223,6 @@ const CharacterCreationPage: FC = () => {
         });
         await setCharacterBarter({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        setCreationStep((prevState) => prevState + 1);
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  const handleSubmitBrainerGear = async (brainerGear: string[]) => {
-    if (!!userGameRole && !!character) {
-      try {
-        await setBrainerGear({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, brainerGear },
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         setCreationStep((prevState) => prevState + 1);
@@ -497,12 +478,10 @@ const CharacterCreationPage: FC = () => {
           <PlaybookUniqueRouter
             playbookType={character.playbook}
             characterName={character.name}
-            settingBrainerGear={settingBrainerGear}
             settingCustomWeapons={settingCustomWeapons}
             existingAngelKit={character.playbookUnique?.angelKit}
             existingCustomWeapons={character.playbookUnique?.customWeapons}
             existingBrainerGear={character.playbookUnique?.brainerGear}
-            handleSubmitBrainerGear={handleSubmitBrainerGear}
             handleSubmitCustomWeapons={handleSubmitCustomWeapons}
             setCreationStep={setCreationStep}
           />
