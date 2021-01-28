@@ -200,10 +200,6 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
     marginTop: '3px',
     marginBottom: '6px',
   };
-  const titleText =
-    frame?.frameType === VehicleFrameType.bike
-      ? `WHAT DOES ${character?.name?.toUpperCase()} RIDE?`
-      : `WHAT DOES ${character?.name?.toUpperCase()} DRIVE?`;
 
   const introText =
     frame?.frameType === VehicleFrameType.bike ? bikeCreator?.introInstructions : carCreator?.introInstructions;
@@ -354,13 +350,12 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
     }
   }, [vehicle, character, bikeCreator, carCreator]);
 
-  console.log('battleOptions', battleOptions);
-
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   const renderPill = (item: string, isSelected: boolean, callback: (item: string) => void) => {
     return (
       <Box
+        data-testid={`${item}-option-pill`}
         key={item}
         height="fit-content"
         background={isSelected ? { color: accentColors[0], dark: true } : neutralColors[0]}
@@ -379,10 +374,11 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
   };
 
   const renderBattleOptionPill = (battleOption: VehicleBattleOption) => {
-    const isSelected = battleOptions.includes(battleOption);
+    const isSelected = !!battleOptions.find((bo: VehicleBattleOption) => bo.id === battleOption.id);
     return (
       <Tip key={battleOption.id} content={battleOption.name}>
         <Box
+          data-testid={`${battleOption.name}-pill`}
           key={battleOption.id}
           height="fit-content"
           background={isSelected ? { color: accentColors[0], dark: true } : neutralColors[0]}
@@ -406,6 +402,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
     return (
       <Tip key={frameArg.id} content={`Battle options: ${frameArg.battleOptionCount}, massive: ${frameArg.massive}`}>
         <Box
+          data-testid={`${frameArg.frameType.toLowerCase()}-bo-pill`}
           height="fit-content"
           background={isSelected ? { color: accentColors[0], dark: true } : neutralColors[0]}
           round="medium"
@@ -428,7 +425,15 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
   }
 
   return (
-    <Box width="80vw" direction="column" align="start" justify="start" overflow="auto" flex="grow">
+    <Box
+      data-testid="vehicle-form"
+      width="80vw"
+      direction="column"
+      align="start"
+      justify="start"
+      overflow="auto"
+      flex="grow"
+    >
       <Box direction="row" fill justify="end">
         <Box pad="12px" justify="between">
           <TextWS>{introText}</TextWS>
@@ -436,7 +441,12 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
             <TextWS>
               <strong>Give your vehicle a name</strong> (make/model, nickname, whatever):
             </TextWS>
-            <TextInput name="name" value={name} onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })} />
+            <TextInput
+              aria-label="name-input"
+              name="name"
+              value={name}
+              onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
+            />
           </Box>
           <Box>
             <TextWS>Choose its frame (resets other settings):</TextWS>
@@ -488,13 +498,13 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
         </Box>
         <Box direction="row" justify="between" align="start" wrap width="200px" pad="12px" style={{ minWidth: '200px' }}>
           <Box fill="horizontal" align="center" justify="center">
-            <HeadingWS level={3} crustReady={crustReady} margin={{ vertical: '3px' }}>
+            <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ vertical: '3px' }}>
               {name}
             </HeadingWS>
           </Box>
           <Box fill="horizontal" justify="start" align="center">
             <RedBox align="center" justify="center" pad="12px" width="200px">
-              <HeadingWS level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
+              <HeadingWS aria-label="frame-type" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
                 {frame?.frameType}
               </HeadingWS>
             </RedBox>
@@ -502,7 +512,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
           </Box>
           <Box justify="start" align="center">
             <RedBox align="center" justify="center" pad="12px" width="80px">
-              <HeadingWS level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
+              <HeadingWS aria-label="speed" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
                 {speed}
               </HeadingWS>
             </RedBox>
@@ -510,7 +520,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
           </Box>
           <Box justify="start" align="center">
             <RedBox align="center" justify="center" pad="12px" width="80px">
-              <HeadingWS level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
+              <HeadingWS aria-label="handling" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
                 {handling}
               </HeadingWS>
             </RedBox>
@@ -518,7 +528,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
           </Box>
           <Box justify="start" align="center">
             <RedBox align="center" justify="center" pad="12px" width="80px">
-              <HeadingWS level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
+              <HeadingWS aria-label="massive" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
                 {massive}
               </HeadingWS>
             </RedBox>
@@ -526,7 +536,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
           </Box>
           <Box justify="start" align="center">
             <RedBox align="center" justify="center" pad="12px" width="80px">
-              <HeadingWS level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
+              <HeadingWS aria-label="armor" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
                 {armor}
               </HeadingWS>
             </RedBox>
@@ -534,7 +544,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ vehicle }) => {
           </Box>
 
           <Box fill="horizontal" justify="start" align="center">
-            <RedBox align="center" justify="center" pad="12px" width="200px" height="132px">
+            <RedBox data-testid="vehicle-tags-box" align="center" justify="center" pad="12px" width="200px" height="132px">
               <TextWS>{strengths.concat(looks).concat(weaknesses).join(', ')}</TextWS>
             </RedBox>
             <TextWS style={redBoxLabelStyling}>Tags</TextWS>

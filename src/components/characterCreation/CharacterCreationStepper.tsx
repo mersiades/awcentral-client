@@ -238,7 +238,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
         case UniqueTypes.vehicle:
           if (!!character.playbookUnique.vehicles) {
             return (
-              <CustomUL>
+              <CustomUL data-testid="vehicles-box">
                 {character.playbookUnique.vehicles.map((vehicle) => (
                   <li key={vehicle.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {vehicle.name}
@@ -339,9 +339,9 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
         <CustomUL>
           {character.hxBlock.map((hxStat) => {
             return (
-              <li key={hxStat.characterId}>{`${hxStat.characterName} ${'--'.repeat(10 - hxStat.characterName.length)} ${
-                hxStat.hxValue
-              }`}</li>
+              <li key={hxStat.characterId}>{`${hxStat.characterName} ${'--'.repeat(
+                hxStat.characterName.length > 9 ? 1 : 10 - hxStat.characterName.length
+              )} ${hxStat.hxValue}`}</li>
             );
           })}
         </CustomUL>

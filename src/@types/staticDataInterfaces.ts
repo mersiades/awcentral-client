@@ -148,6 +148,7 @@ export interface AngelKitCreator {
 }
 
 export interface CustomWeaponsCreator {
+  id?: string;
   firearmsTitle: string;
   firearmsBaseInstructions: string;
   firearmsBaseOptions: TaggedItem[];

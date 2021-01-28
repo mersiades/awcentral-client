@@ -19,6 +19,8 @@ const SET_VEHICLE = gql`
       name
       playbook
       playbookUnique {
+        id
+        type
         vehicles {
           id
           name

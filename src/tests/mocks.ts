@@ -1,4 +1,4 @@
-import { HxInput, KeycloakUser, KeycloakUserInfo } from '../@types';
+import { HxInput, ItemCharacteristic, KeycloakUser, KeycloakUserInfo, TaggedItem, VehicleInput } from '../@types';
 import {
   AngelKit,
   BrainerGear,
@@ -26,7 +26,11 @@ import {
 } from '../@types/enums';
 import {
   AngelKitCreator,
+  BikeCreator,
+  BrainerGearCreator,
+  CarCreator,
   CharacterMove,
+  CustomWeaponsCreator,
   GearInstructions,
   HoldConditions,
   Look,
@@ -41,6 +45,7 @@ import {
   StatModifier,
   StatsOption,
   VehicleBattleOption,
+  VehicleFrame,
 } from '../@types/staticDataInterfaces';
 import { ANGEL_SPECIAL_NAME, UNDER_FIRE_NAME } from '../config/constants';
 
@@ -349,33 +354,6 @@ export const mockLookBattlebabe2: Look = {
   id: 'mock-battlebabe-look-id-2',
   look: 'formal wear',
   category: LookType.clothes,
-};
-
-export const mockStatsOptionsAngel1: StatsOption = {
-  id: 'angel-stats-options-1',
-  COOL: 1,
-  HARD: 0,
-  HOT: 1,
-  SHARP: 2,
-  WEIRD: -1,
-};
-
-export const mockStatsOptionsAngel2: StatsOption = {
-  id: 'angel-stats-options-2',
-  COOL: 1,
-  HARD: 1,
-  HOT: 0,
-  SHARP: 2,
-  WEIRD: -1,
-};
-
-export const mockStatsOptionsAngel3: StatsOption = {
-  id: 'angel-stats-options-3',
-  COOL: -1,
-  HARD: 1,
-  HOT: 0,
-  SHARP: 2,
-  WEIRD: 1,
 };
 
 export const mockCustomWeapons: CustomWeapons = {
@@ -809,74 +787,6 @@ export const mockGameRole4: GameRole = {
   threats: [],
 };
 
-export const mockgearInstructionsAngel: GearInstructions = {
-  id: 'angel-gear-instructions-id',
-  gearIntro: 'You get:',
-  youGetItems: ['fashion suitable to your look, including at your option a piece worth 1-armor (you detail)'],
-  introduceChoice: 'Small practical weapons',
-  numberCanChoose: 1,
-  chooseableGear: [
-    '.38 revolver (2-harm close reload loud)',
-    '9mm (2-harm close loud)',
-    'big knife (2-harm hand)',
-    'sawed-off (3-harm close reload messy)',
-    'stun gun (s-harm hand reload)',
-  ],
-  withMC: 'If you’d like to start play with a vehicle or a prosthetic, get with the MC.',
-  startingBarter: 2,
-};
-
-export const mockAngelKitCreator: AngelKitCreator = {
-  id: 'angel-kit-creator-id',
-  angelKitInstructions: 'Your angel kit has all kinds of crap in it...',
-  startingStock: 6,
-};
-
-export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
-  id: 'angel-playbook-unique-creator-id',
-  type: UniqueTypes.angelKit,
-  angelKitCreator: mockAngelKitCreator,
-};
-
-export const mockPlaybookCreatorAngel: PlaybookCreator = {
-  id: 'angel-playbook-creator-id',
-  playbookType: PlaybookType.angel,
-  gearInstructions: mockgearInstructionsAngel,
-  improvementInstructions: 'Whenever you roll a highlighted stat...',
-  movesInstructions: 'You get all the basic moves. Choose 2 angel moves.',
-  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
-  names: [mockNameAngel1, mockNameAngel2],
-  looks: [
-    mockLookAngel1,
-    mockLookAngel2,
-    mockLookAngel3,
-    mockLookAngel4,
-    mockLookAngel5,
-    mockLookAngel6,
-    mockLookAngel7,
-    mockLookAngel8,
-    mockLookAngel9,
-    mockLookAngel10,
-  ],
-  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
-  playbookUniqueCreator: mockUniqueCreatorAngel,
-  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
-  defaultMoves: [mockCharacterMoveAngel1],
-  defaultMoveCount: 1,
-  moveChoiceCount: 2,
-};
-
-export const mockPlaybookAngel: Playbook = {
-  id: 'mock-playbook-angel-id',
-  playbookType: PlaybookType.angel,
-  barterInstructions: 'At the beginning of the session, spend 1- or 2-barter for your lifestyle.',
-  intro: 'When you’re lying in the dust of Apocalypse World guts aspilled...',
-  introComment: 'Angels are medics. If you want everybody to love you...',
-  playbookImageUrl: 'https://awc-images.s3-ap-southeast-2.amazonaws.com/angel-white-transparent.png',
-};
-
-export const mockPlaybooks: Playbook[] = [mockPlaybookAngel];
-
 export const mockHxInput: HxInput = {
   characterId: mockCharacter1.id,
   characterName: mockCharacter1.name as string,
@@ -1059,3 +969,276 @@ export const mockAllMovesArray = [
   dealWithBadTerrain,
   shoulderAnotherVehicle,
 ];
+
+// ------------------------------------------------------- Mock Angel playbook --------------------------------------------------- //
+export const mockStatsOptionsAngel1: StatsOption = {
+  id: 'angel-stats-options-1',
+  COOL: 1,
+  HARD: 0,
+  HOT: 1,
+  SHARP: 2,
+  WEIRD: -1,
+};
+
+export const mockStatsOptionsAngel2: StatsOption = {
+  id: 'angel-stats-options-2',
+  COOL: 1,
+  HARD: 1,
+  HOT: 0,
+  SHARP: 2,
+  WEIRD: -1,
+};
+
+export const mockStatsOptionsAngel3: StatsOption = {
+  id: 'angel-stats-options-3',
+  COOL: -1,
+  HARD: 1,
+  HOT: 0,
+  SHARP: 2,
+  WEIRD: 1,
+};
+
+export const mockgearInstructionsAngel: GearInstructions = {
+  id: 'angel-gear-instructions-id',
+  gearIntro: 'You get:',
+  youGetItems: ['fashion suitable to your look, including at your option a piece worth 1-armor (you detail)'],
+  introduceChoice: 'Small practical weapons',
+  numberCanChoose: 1,
+  chooseableGear: [
+    '.38 revolver (2-harm close reload loud)',
+    '9mm (2-harm close loud)',
+    'big knife (2-harm hand)',
+    'sawed-off (3-harm close reload messy)',
+    'stun gun (s-harm hand reload)',
+  ],
+  withMC: 'If you’d like to start play with a vehicle or a prosthetic, get with the MC.',
+  startingBarter: 2,
+};
+
+export const mockAngelKitCreator: AngelKitCreator = {
+  id: 'angel-kit-creator-id',
+  angelKitInstructions: 'Your angel kit has all kinds of crap in it...',
+  startingStock: 6,
+};
+
+export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
+  id: 'angel-playbook-unique-creator-id',
+  type: UniqueTypes.angelKit,
+  angelKitCreator: mockAngelKitCreator,
+};
+
+export const mockPlaybookCreatorAngel: PlaybookCreator = {
+  id: 'angel-playbook-creator-id',
+  playbookType: PlaybookType.angel,
+  gearInstructions: mockgearInstructionsAngel,
+  improvementInstructions: 'Whenever you roll a highlighted stat...',
+  movesInstructions: 'You get all the basic moves. Choose 2 angel moves.',
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  names: [mockNameAngel1, mockNameAngel2],
+  looks: [
+    mockLookAngel1,
+    mockLookAngel2,
+    mockLookAngel3,
+    mockLookAngel4,
+    mockLookAngel5,
+    mockLookAngel6,
+    mockLookAngel7,
+    mockLookAngel8,
+    mockLookAngel9,
+    mockLookAngel10,
+  ],
+  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+  playbookUniqueCreator: mockUniqueCreatorAngel,
+  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  defaultMoves: [mockCharacterMoveAngel1],
+  defaultMoveCount: 1,
+  moveChoiceCount: 2,
+};
+
+export const mockPlaybookAngel: Playbook = {
+  id: 'mock-playbook-angel-id',
+  playbookType: PlaybookType.angel,
+  barterInstructions: 'At the beginning of the session, spend 1- or 2-barter for your lifestyle.',
+  intro: 'When you’re lying in the dust of Apocalypse World guts aspilled...',
+  introComment: 'Angels are medics. If you want everybody to love you...',
+  playbookImageUrl: 'https://awc-images.s3-ap-southeast-2.amazonaws.com/angel-white-transparent.png',
+};
+
+// ------------------------------------------------------- Mock Driver playbook --------------------------------------------------- //
+
+export const mockVehicleFrame1: VehicleFrame = {
+  id: 'vehicle-frame-id-1',
+  frameType: VehicleFrameType.bike,
+  massive: 0,
+  examples: 'Ducati, trail bike...',
+  battleOptionCount: 1,
+};
+
+export const mockVehicleFrame2: VehicleFrame = {
+  id: 'vehicle-frame-id-2',
+  frameType: VehicleFrameType.small,
+  massive: 1,
+  examples: 'Compact, mini...',
+  battleOptionCount: 2,
+};
+
+export const mockVehicleFrame3: VehicleFrame = {
+  id: 'vehicle-frame-id-3',
+  frameType: VehicleFrameType.medium,
+  massive: 2,
+  examples: 'Sedan, station wagon...',
+  battleOptionCount: 2,
+};
+
+export const mockVehicleFrame4: VehicleFrame = {
+  id: 'vehicle-frame-id-4',
+  frameType: VehicleFrameType.large,
+  massive: 3,
+  examples: 'Bus, semi...',
+  battleOptionCount: 2,
+};
+
+export const mockBattleOption1: VehicleBattleOption = {
+  id: 'mock-battle-option-id-1',
+  battleOptionType: BattleOptionType.speed,
+  name: '+1speed',
+};
+
+export const mockBattleOption2: VehicleBattleOption = {
+  id: 'mock-battle-option-id-2',
+  battleOptionType: BattleOptionType.handling,
+  name: '+1handling',
+};
+
+export const mockBattleOption3: VehicleBattleOption = {
+  id: 'mock-battle-option-id-3',
+  battleOptionType: BattleOptionType.massive,
+  name: '+1massive',
+};
+
+export const mockBattleOption4: VehicleBattleOption = {
+  id: 'mock-battle-option-id-4',
+  battleOptionType: BattleOptionType.armor,
+  name: '+1armor',
+};
+
+export const mockCarCreator: CarCreator = {
+  id: 'car-creator-id',
+  introInstructions: 'By default, your vehicle...',
+  frames: [mockVehicleFrame1, mockVehicleFrame2, mockVehicleFrame3, mockVehicleFrame4],
+  strengths: ['fast', 'reliable'],
+  looks: ['sleek', 'antique'],
+  weaknesses: ['guzzler', 'unreliable'],
+  battleOptions: [mockBattleOption1, mockBattleOption2, mockBattleOption3, mockBattleOption4],
+};
+
+export const mockBikeCreator: BikeCreator = {
+  id: 'car-creator-id',
+  introInstructions: 'By default, your vehicle...',
+  frame: mockVehicleFrame1,
+  strengths: ['fast', 'reliable'],
+  looks: ['sleek', 'antique'],
+  weaknesses: ['guzzler'],
+  battleOptions: [mockBattleOption1, mockBattleOption2],
+};
+
+export const dummyAngelKitCreator: AngelKitCreator = {
+  id: 'dummy',
+  angelKitInstructions: 'dummy',
+  startingStock: 0,
+};
+
+export const dummyTaggedItem: TaggedItem = {
+  id: 'dummy',
+  description: 'dummy',
+  tags: ['dummy'],
+};
+
+export const dummyItemCharacteristic: ItemCharacteristic = {
+  id: 'dummy',
+  description: 'dummy',
+  tag: 'dummy',
+};
+
+export const dummyCustomWeaponsCreator: CustomWeaponsCreator = {
+  id: 'dummy',
+  firearmsTitle: 'dummy',
+  firearmsBaseInstructions: 'dummy',
+  firearmsBaseOptions: [dummyTaggedItem],
+  firearmsOptionsInstructions: 'dummy',
+  firearmsOptionsOptions: [dummyItemCharacteristic],
+  handTitle: 'dummy',
+  handBaseInstructions: 'dummy',
+  handBaseOptions: [dummyTaggedItem],
+  handOptionsInstructions: 'dummy',
+  handOptionsOptions: [dummyItemCharacteristic],
+};
+
+export const dummyBrainerGearCreator: BrainerGearCreator = {
+  id: 'dummy',
+  gear: ['dummy'],
+};
+
+export const mockUniqueCreatorDriver: PlaybookUniqueCreator = {
+  id: 'driver-playbook-unique-creator-id',
+  type: UniqueTypes.vehicle,
+  angelKitCreator: dummyAngelKitCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  brainerGearCreator: dummyBrainerGearCreator,
+  carCreator: mockCarCreator,
+  bikeCreator: mockBikeCreator,
+};
+
+export const mockPlaybookCreatorDriver: PlaybookCreator = {
+  id: 'driver-playbook-creator-id',
+  playbookType: PlaybookType.driver,
+  gearInstructions: mockgearInstructionsAngel,
+  improvementInstructions: 'Whenever you roll a highlighted stat...',
+  movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  names: [mockNameAngel1, mockNameAngel2],
+  looks: [
+    mockLookAngel1,
+    mockLookAngel2,
+    mockLookAngel3,
+    mockLookAngel4,
+    mockLookAngel5,
+    mockLookAngel6,
+    mockLookAngel7,
+    mockLookAngel8,
+    mockLookAngel9,
+    mockLookAngel10,
+  ],
+  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+  playbookUniqueCreator: mockUniqueCreatorDriver,
+  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  defaultMoves: [mockCharacterMoveAngel1],
+  defaultMoveCount: 1,
+  moveChoiceCount: 2,
+};
+
+export const mockPlaybooks: Playbook[] = [mockPlaybookAngel];
+
+export const mockVehicleInput: VehicleInput = {
+  name: 'New Vehicle',
+  vehicleFrame: mockVehicleFrame3,
+  speed: 0,
+  handling: 1,
+  armor: 1,
+  massive: 2,
+  strengths: ['fast'],
+  weaknesses: ['unreliable'],
+  looks: ['sleek'],
+  battleOptions: [mockBattleOption2, mockBattleOption4],
+};
+
+export const mockVehicle2: Vehicle = {
+  ...mockVehicleInput,
+  id: 'mock-vehicle-id-2',
+};
+
+export const mockPlaybookUniqueDriver: PlaybookUnique = {
+  id: 'mock-playbook-unique-driver-id',
+  type: UniqueTypes.vehicle,
+  vehicles: [mockVehicle2],
+};

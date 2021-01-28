@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 
 import Spinner from '../../Spinner';
-import { PlaybookUniqueCreator } from '../../../@types/staticDataInterfaces';
 import { useGame } from '../../../contexts/gameContext';
 import VehicleForm from './VehicleForm';
 import { Tab, Tabs } from 'grommet';
