@@ -68,6 +68,63 @@ interface MockCharacter {
 
 export const mockNewGameName = 'My new mock game';
 
+// ---------------------------------------------------- Dummy objects ---------------------------------------------------- //
+
+export const dummyRollModifier: RollModifier = {
+  id: 'dummy',
+  moveToModify: {
+    id: 'dummy',
+    name: 'dummy',
+    description: 'dummy',
+    kind: MoveType.basic,
+    playbook: PlaybookType.angel,
+  },
+  statToRollWith: StatType.sharp,
+};
+
+export const dummyStatModifier: StatModifier = {
+  id: 'dummy',
+  statToModify: StatType.sharp,
+  modification: 0,
+};
+
+export const dummyAngelKitCreator: AngelKitCreator = {
+  id: 'dummy',
+  angelKitInstructions: 'dummy',
+  startingStock: 0,
+};
+
+export const dummyTaggedItem: TaggedItem = {
+  id: 'dummy',
+  description: 'dummy',
+  tags: ['dummy'],
+};
+
+export const dummyItemCharacteristic: ItemCharacteristic = {
+  id: 'dummy',
+  description: 'dummy',
+  tag: 'dummy',
+};
+
+export const dummyCustomWeaponsCreator: CustomWeaponsCreator = {
+  id: 'dummy',
+  firearmsTitle: 'dummy',
+  firearmsBaseInstructions: 'dummy',
+  firearmsBaseOptions: [dummyTaggedItem],
+  firearmsOptionsInstructions: 'dummy',
+  firearmsOptionsOptions: [dummyItemCharacteristic],
+  handTitle: 'dummy',
+  handBaseInstructions: 'dummy',
+  handBaseOptions: [dummyTaggedItem],
+  handOptionsInstructions: 'dummy',
+  handOptionsOptions: [dummyItemCharacteristic],
+};
+
+export const dummyBrainerGearCreator: BrainerGearCreator = {
+  id: 'dummy',
+  gear: ['dummy'],
+};
+
 export const dummyHoldConditions: HoldConditions = {
   id: 'dummy',
   onTenPlus: 3,
@@ -91,6 +148,73 @@ export const dummyMoveAction: MoveAction = {
   holdConditions: dummyHoldConditions,
   plusOneForwardConditions: dummyPlusOneForwardConditions,
 };
+
+export const dummyCustomWeapons: CustomWeapons = {
+  id: 'dummy',
+  weapons: ['dummy'],
+};
+
+export const dummyBrainerGear: BrainerGear = {
+  id: 'dummy',
+  brainerGear: ['dummy'],
+};
+
+export const dummyAngelKitMove: Move = {
+  id: 'dummy',
+  name: 'dummy',
+  description: 'dummy',
+  kind: MoveType.character,
+  playbook: PlaybookType.angel,
+  stat: StatType.cool,
+  statModifier: dummyStatModifier,
+  rollModifier: dummyRollModifier,
+  moveAction: dummyMoveAction,
+};
+
+export const dummyAngelKit: AngelKit = {
+  id: 'dummy',
+  description: 'dummy',
+  stock: 0,
+  hasSupplier: false,
+  supplierText: 'dummy',
+  angelKitMoves: [dummyAngelKitMove],
+};
+
+export const dummyVehicleFrame: VehicleFrame = {
+  id: 'dummy',
+  frameType: VehicleFrameType.large,
+  massive: 0,
+  examples: 'dummy',
+  battleOptionCount: 0,
+};
+
+export const dummyBattleOption: VehicleBattleOption = {
+  id: 'dummy',
+  battleOptionType: BattleOptionType.speed,
+  name: '+1speed',
+};
+
+export const dummyCarCreator: CarCreator = {
+  id: 'dummy',
+  introInstructions: 'dummy',
+  frames: [dummyVehicleFrame],
+  strengths: [],
+  looks: [],
+  weaknesses: [],
+  battleOptions: [dummyBattleOption],
+};
+
+export const dummyBikeCreator: BikeCreator = {
+  id: 'dummy',
+  introInstructions: 'dummy',
+  frame: dummyVehicleFrame,
+  strengths: [],
+  looks: [],
+  weaknesses: [],
+  battleOptions: [dummyBattleOption],
+};
+
+// ---------------------------------------------------- Mock Users ---------------------------------------------------- //
 
 export const mockKeycloakUserInfo1: KeycloakUserInfo = {
   email: 'mockUser1@email.com',
@@ -202,24 +326,6 @@ export const mockStatsBlockWithHighlight: StatsBlock = {
       isHighlighted: false,
     },
   ],
-};
-
-export const dummyRollModifier: RollModifier = {
-  id: 'dummy',
-  moveToModify: {
-    id: 'dummy',
-    name: 'dummy',
-    description: 'dummy',
-    kind: MoveType.basic,
-    playbook: PlaybookType.angel,
-  },
-  statToRollWith: StatType.sharp,
-};
-
-export const dummyStatModifier: StatModifier = {
-  id: 'dummy',
-  statToModify: StatType.sharp,
-  modification: 0,
 };
 
 export const mockCharacterMoveAngel1: CharacterMove = {
@@ -359,37 +465,6 @@ export const mockLookBattlebabe2: Look = {
 export const mockCustomWeapons: CustomWeapons = {
   id: 'mock-custom-weapons-id',
   weapons: ['custom weapon 1', 'custom weapons 2'],
-};
-
-export const dummyCustomWeapons: CustomWeapons = {
-  id: 'dummy',
-  weapons: ['dummy'],
-};
-
-export const dummyBrainerGear: BrainerGear = {
-  id: 'dummy',
-  brainerGear: ['dummy'],
-};
-
-export const dummyAngelKitMove: Move = {
-  id: 'dummy',
-  name: 'dummy',
-  description: 'dummy',
-  kind: MoveType.character,
-  playbook: PlaybookType.angel,
-  stat: StatType.cool,
-  statModifier: dummyStatModifier,
-  rollModifier: dummyRollModifier,
-  moveAction: dummyMoveAction,
-};
-
-export const dummyAngelKit: AngelKit = {
-  id: 'dummy',
-  description: 'dummy',
-  stock: 0,
-  hasSupplier: false,
-  supplierText: 'dummy',
-  angelKitMoves: [dummyAngelKitMove],
 };
 
 export const mockVehicle1: Vehicle = {
@@ -1025,6 +1100,10 @@ export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
   id: 'angel-playbook-unique-creator-id',
   type: UniqueTypes.angelKit,
   angelKitCreator: mockAngelKitCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  brainerGearCreator: dummyBrainerGearCreator,
+  carCreator: dummyCarCreator,
+  bikeCreator: dummyBikeCreator,
 };
 
 export const mockPlaybookCreatorAngel: PlaybookCreator = {
@@ -1140,43 +1219,6 @@ export const mockBikeCreator: BikeCreator = {
   looks: ['sleek', 'antique'],
   weaknesses: ['guzzler'],
   battleOptions: [mockBattleOption1, mockBattleOption2],
-};
-
-export const dummyAngelKitCreator: AngelKitCreator = {
-  id: 'dummy',
-  angelKitInstructions: 'dummy',
-  startingStock: 0,
-};
-
-export const dummyTaggedItem: TaggedItem = {
-  id: 'dummy',
-  description: 'dummy',
-  tags: ['dummy'],
-};
-
-export const dummyItemCharacteristic: ItemCharacteristic = {
-  id: 'dummy',
-  description: 'dummy',
-  tag: 'dummy',
-};
-
-export const dummyCustomWeaponsCreator: CustomWeaponsCreator = {
-  id: 'dummy',
-  firearmsTitle: 'dummy',
-  firearmsBaseInstructions: 'dummy',
-  firearmsBaseOptions: [dummyTaggedItem],
-  firearmsOptionsInstructions: 'dummy',
-  firearmsOptionsOptions: [dummyItemCharacteristic],
-  handTitle: 'dummy',
-  handBaseInstructions: 'dummy',
-  handBaseOptions: [dummyTaggedItem],
-  handOptionsInstructions: 'dummy',
-  handOptionsOptions: [dummyItemCharacteristic],
-};
-
-export const dummyBrainerGearCreator: BrainerGearCreator = {
-  id: 'dummy',
-  gear: ['dummy'],
 };
 
 export const mockUniqueCreatorDriver: PlaybookUniqueCreator = {

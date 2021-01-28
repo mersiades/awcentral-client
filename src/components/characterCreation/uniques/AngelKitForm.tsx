@@ -20,7 +20,6 @@ const AngelKitForm: FC<AngelKitFormProps> = ({ existingAngelKit, setCreationStep
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { character, userGameRole } = useGame();
   const { crustReady } = useFonts();
-
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData, loading } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     // @ts-ignore
@@ -32,6 +31,8 @@ const AngelKitForm: FC<AngelKitFormProps> = ({ existingAngelKit, setCreationStep
 
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [stock, setStock] = useState(!!existingAngelKit ? existingAngelKit.stock : startingStock);
+
+  console.log('pbCreatorData', pbCreatorData);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const handleSubmitAngelKit = async (stock: number, hasSupplier: boolean) => {
@@ -56,7 +57,15 @@ const AngelKitForm: FC<AngelKitFormProps> = ({ existingAngelKit, setCreationStep
   }
 
   return (
-    <Box width="60vw" direction="column" align="start" justify="between" overflow="auto" flex="grow">
+    <Box
+      data-testid="angel-kit-form"
+      width="60vw"
+      direction="column"
+      align="start"
+      justify="between"
+      overflow="auto"
+      flex="grow"
+    >
       <HeadingWS
         crustReady={crustReady}
         level={2}

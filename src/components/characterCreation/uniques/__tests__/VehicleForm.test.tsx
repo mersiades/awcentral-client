@@ -1,12 +1,10 @@
 import React from 'react';
-// import wait from 'waait';
-import { cleanup, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 
+import VehicleForm from '../VehicleForm';
 import { mockKeycloakStub } from '../../../../../__mocks__/@react-keycloak/web';
 import { mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../../tests/mocks';
 import { renderWithRouter } from '../../../../tests/test-utils';
-import VehicleForm from '../VehicleForm';
 import { PlaybookType } from '../../../../@types/enums';
 import { mockPlayBookCreatorQueryDriver } from '../../../../tests/mockQueries';
 
@@ -18,9 +16,9 @@ jest.mock('@react-keycloak/web', () => {
   };
 });
 
-describe('Testing VehicleForm', () => {
+describe('Rendering VehicleForm', () => {
   test('should load an empty vehicle into the form', async () => {
-    const gameForCreatingVehicle = {
+    const game = {
       ...mockGame5,
       gameRoles: [
         mockGame5.gameRoles[0],
@@ -51,7 +49,7 @@ describe('Testing VehicleForm', () => {
     renderWithRouter(<VehicleForm existingVehicle={undefined} />, `/character-creation/${mockGame5.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockPlayBookCreatorQueryDriver],
-      injectedGame: gameForCreatingVehicle,
+      injectedGame: game,
       injectedUserId: mockKeycloakUserInfo1.sub,
     });
 
