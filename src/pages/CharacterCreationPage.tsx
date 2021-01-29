@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { Box } from 'grommet';
 
-import PlaybooksSelector from '../components/characterCreation/CharacterPlaybookForm';
+import CharacterPlaybookForm from '../components/characterCreation/CharacterPlaybookForm';
 import CharacterNameForm from '../components/characterCreation/CharacterNameForm';
 import CharacterLooksForm from '../components/characterCreation/CharacterLooksForm';
 import CharacterStatsForm from '../components/characterCreation/CharacterStatsForm';
@@ -16,12 +16,6 @@ import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
-import PLAYBOOKS, { PlaybooksData } from '../queries/playbooks';
-import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../mutations/createCharacter';
-import SET_CHARACTER_PLAYBOOK, {
-  SetCharacterPlaybookData,
-  SetCharacterPlaybookVars,
-} from '../mutations/setCharacterPlaybook';
 import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '../mutations/setCharacterName';
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
@@ -29,7 +23,7 @@ import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
-import { PlaybookType, CharacterCreationSteps, LookType, StatType } from '../@types/enums';
+import { CharacterCreationSteps, LookType, StatType } from '../@types/enums';
 import { HxInput } from '../@types';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
@@ -39,7 +33,6 @@ import FINISH_CHARACTER_CREATION, {
 } from '../mutations/finishCharacterCreation';
 import { useGame } from '../contexts/gameContext';
 import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
-import WarningDialog from '../components/dialogs/WarningDialog';
 
 export const background = {
   color: 'black',
@@ -52,15 +45,14 @@ export const background = {
 const CharacterCreationPage: FC = () => {
   const query = new URLSearchParams(useLocation().search);
   const step = query.get('step');
+  const creationStep = !!step ? parseInt(step) : undefined;
+  console.log('step', step);
   // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [creationStep, setCreationStep] = useState<number>(step ? parseInt(step) : 0);
   const [character, setCharacter] = useState<Character | undefined>();
-  const [showResetWarning, setShowResetWarning] = useState<PlaybookType | undefined>();
   const [showScrollable, setShowScrollable] = useState(false);
 
   // ------------------------------------------------------- Refs -------------------------------------------------------- //
   const containerRef = useRef<HTMLDivElement>(null);
-
   // -------------------------------------------------- Context hooks ---------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
   const { gameId } = useParams<{ gameId: string }>();
@@ -68,14 +60,6 @@ const CharacterCreationPage: FC = () => {
   const { game, userGameRole, setGameContext } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const { data: playbooksData } = useQuery<PlaybooksData>(PLAYBOOKS);
-  const [createCharacter, { loading: creatingCharacter }] = useMutation<CreateCharacterData, CreateCharacterVars>(
-    CREATE_CHARACTER
-  );
-  const [setCharacterPlaybook, { loading: settingPlaybook }] = useMutation<
-    SetCharacterPlaybookData,
-    SetCharacterPlaybookVars
-  >(SET_CHARACTER_PLAYBOOK);
   const [setCharacterName, { loading: settingName }] = useMutation<SetCharacterNameData, SetCharacterNameVars>(
     SET_CHARACTER_NAME
   );
@@ -106,60 +90,9 @@ const CharacterCreationPage: FC = () => {
     FinishCharacterCreationVars
   >(FINISH_CHARACTER_CREATION);
 
-  const playbooks = playbooksData?.playbooks;
-
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
-
-  const checkPlaybookReset = (playbookType: PlaybookType) => {
-    if (
-      !!userGameRole &&
-      !!userGameRole.characters &&
-      userGameRole.characters.length > 0 &&
-      !!userGameRole.characters[0].playbook &&
-      userGameRole.characters[0].playbook !== playbookType
-    ) {
-      setShowResetWarning(playbookType);
-    } else {
-      handlePlaybookSelect(playbookType);
-    }
-  };
-
-  const handlePlaybookSelect = async (playbookType: PlaybookType) => {
-    if (!!userGameRole) {
-      if (userGameRole.characters?.length === 0) {
-        let characterId;
-        try {
-          const { data: characterData } = await createCharacter({ variables: { gameRoleId: userGameRole?.id } });
-          characterId = characterData?.createCharacter.id;
-        } catch (error) {
-          console.error(error);
-        }
-        if (!characterId) {
-          console.warn('No character id, playbook not set');
-          return;
-        }
-        try {
-          await setCharacterPlaybook({
-            variables: { gameRoleId: userGameRole.id, characterId, playbookType },
-            // refetchQueries: [{ query: GAME, variables: { gameId } }],
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      } else if (userGameRole.characters?.length === 1) {
-        try {
-          await setCharacterPlaybook({
-            variables: { gameRoleId: userGameRole.id, characterId: userGameRole.characters[0].id, playbookType },
-            // refetchQueries: [{ query: GAME, variables: { gameId } }],
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      }
-      setShowResetWarning(undefined);
-      setCreationStep((prevState) => prevState + 1);
-      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    }
+  const changeStep = (nextStep: number) => {
+    !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
   };
 
   const handleSubmitName = async (name: string) => {
@@ -169,7 +102,7 @@ const CharacterCreationPage: FC = () => {
           variables: { gameRoleId: userGameRole.id, characterId: character.id, name },
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
-        setCreationStep((prevStep) => prevStep + 1);
+        changeStep(CharacterCreationSteps.selectLooks);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
@@ -186,7 +119,7 @@ const CharacterCreationPage: FC = () => {
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         if (data.data?.setCharacterLook.looks?.length === 5) {
-          setCreationStep((prevState) => prevState + 1);
+          changeStep(CharacterCreationSteps.selectStats);
         }
       } catch (error) {
         console.error(error);
@@ -201,7 +134,7 @@ const CharacterCreationPage: FC = () => {
           variables: { gameRoleId: userGameRole.id, characterId: character.id, statsOptionId },
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
-        setCreationStep((prevState) => prevState + 1);
+        changeStep(CharacterCreationSteps.selectGear);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
@@ -220,7 +153,7 @@ const CharacterCreationPage: FC = () => {
           variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
-        setCreationStep((prevState) => prevState + 1);
+        changeStep(CharacterCreationSteps.setUnique);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
@@ -236,7 +169,7 @@ const CharacterCreationPage: FC = () => {
           variables: { gameRoleId: userGameRole.id, characterId: character.id, moveIds },
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
-        setCreationStep((prevState) => prevState + 1);
+        changeStep(CharacterCreationSteps.setHx);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
@@ -284,7 +217,7 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  const closeNewGameIntro = () => setCreationStep((prevState) => prevState + 1);
+  const closeNewGameIntro = () => changeStep(CharacterCreationSteps.selectPlaybook);
 
   const handleScroll = (e: any) => {
     if (!e.currentTarget) {
@@ -314,33 +247,28 @@ const CharacterCreationPage: FC = () => {
     }
   }, [userGameRole, userId]);
 
-  // If page is loading but character is already partially created,
-  // set creationStep to appropriate step
   useEffect(() => {
-    console.log('creationStep in useeffect', creationStep);
-    if (
-      character &&
-      (creationStep === CharacterCreationSteps.intro || creationStep === CharacterCreationSteps.selectPlaybook)
-    ) {
-      if (!!character.playbook && !character.name) {
-        setCreationStep(2);
-      } else if (!!character.name && (!character.looks || character.looks.length < 5)) {
-        setCreationStep(3);
-      } else if (!!character.looks && character.looks.length >= 5 && character.statsBlock?.stats.length < 5) {
-        setCreationStep(4);
-      } else if (!!character.statsBlock && character.statsBlock?.stats.length === 5 && character.gear.length === 0) {
-        setCreationStep(5);
-      } else if (!!character.gear && character.gear.length > 0 && !character.playbookUnique) {
-        setCreationStep(6);
-      } else if (!!character.playbookUnique && character.characterMoves?.length === 0) {
-        setCreationStep(7);
-      } else if (!!character.characterMoves && character.characterMoves?.length > 0 /* TODO: case where no Hx */) {
-        setCreationStep(8);
+    console.log('character', character);
+    if (!step) {
+      if (!!character) {
+        history.push(`/character-creation/${gameId}?step=${1}`);
+      } else {
+        history.push(`/character-creation/${gameId}?step=${0}`);
       }
     }
-  }, [character, creationStep]);
 
-  console.log('creationStep', creationStep);
+    if (step === '0' && !!character) {
+      history.push(`/character-creation/${gameId}?step=${1}`);
+    }
+  }, [step, character, history]);
+
+  // On page refresh, or whenever the step param is 0,
+  // navigate to step 1 if the user already has a character
+  // useEffect(() => {
+  //   if (character && creationStep === CharacterCreationSteps.intro) {
+  //     history.push(`/character-creation/${gameId}?step=${2}`);
+  //   }
+  // }, [character, creationStep]);
 
   useEffect(() => {
     if (!!game && !!userId) {
@@ -361,7 +289,7 @@ const CharacterCreationPage: FC = () => {
       }
       containerRef.current.scrollTop = 0;
     }
-  }, [containerRef, creationStep]);
+  }, [containerRef, step]);
 
   // Set the GameContext
   useEffect(() => {
@@ -369,6 +297,10 @@ const CharacterCreationPage: FC = () => {
       setGameContext(gameId, userId);
     }
   }, [gameId, userId, setGameContext]);
+
+  if (!creationStep) {
+    return <Spinner />;
+  }
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
@@ -380,36 +312,18 @@ const CharacterCreationPage: FC = () => {
       background={background}
       overflow={{ vertical: 'auto' }}
     >
-      {!playbooks ||
-        (!game && (
-          <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
-            <Spinner />
-          </div>
-        ))}
+      {!game && (
+        <div style={{ position: 'absolute', top: 'calc(50vh - 12px)', left: 'calc(50vw - 12px)' }}>
+          <Spinner />
+        </div>
+      )}
       <ScrollableIndicator show={showScrollable} />
       <CloseButton handleClose={() => history.goBack()} />
-      {!!showResetWarning && (
-        <WarningDialog
-          title="Switch playbook?"
-          buttonTitle="SWITCH"
-          text="Changing the playbook will reset the character."
-          handleClose={() => setShowResetWarning(undefined)}
-          handleConfirm={() => handlePlaybookSelect(showResetWarning)}
-        />
-      )}
 
-      <CharacterCreationStepper currentStep={creationStep} setCreationStep={setCreationStep} />
+      <CharacterCreationStepper />
       <Box flex="grow">
-        {creationStep === 0 && !!game && <NewGameIntro game={game} closeNewGameIntro={closeNewGameIntro} />}
-        {creationStep === CharacterCreationSteps.selectPlaybook && (
-          <PlaybooksSelector
-            playbooks={playbooks}
-            playbook={character?.playbook}
-            checkPlaybookReset={checkPlaybookReset}
-            settingPlaybook={settingPlaybook}
-            creatingCharacter={creatingCharacter}
-          />
-        )}
+        {creationStep === 0 && !!game && <NewGameIntro closeNewGameIntro={closeNewGameIntro} />}
+        {creationStep === CharacterCreationSteps.selectPlaybook && <CharacterPlaybookForm />}
         {creationStep === CharacterCreationSteps.selectName && character && character.playbook && (
           <CharacterNameForm
             playbookType={character?.playbook}
@@ -459,7 +373,6 @@ const CharacterCreationPage: FC = () => {
             existingAngelKit={character.playbookUnique?.angelKit}
             existingCustomWeapons={character.playbookUnique?.customWeapons}
             existingBrainerGear={character.playbookUnique?.brainerGear}
-            setCreationStep={setCreationStep}
           />
         )}
         {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (

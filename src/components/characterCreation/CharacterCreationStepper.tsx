@@ -1,18 +1,19 @@
 import React, { FC } from 'react';
-import { Box, Text } from 'grommet';
-
-import { CharacterCreationSteps, UniqueTypes } from '../../@types/enums';
-import { decapitalize } from '../../helpers/decapitalize';
-import { CustomUL } from '../../config/grommetConfig';
-import { IconProps, Next, Previous } from 'grommet-icons';
-import { useQuery } from '@apollo/client';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import styled, { css } from 'styled-components';
+import { useQuery } from '@apollo/client';
+import { Box, Text } from 'grommet';
+import { IconProps, Next, Previous } from 'grommet-icons';
+
+import { CustomUL } from '../../config/grommetConfig';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
+import { CharacterCreationSteps, UniqueTypes } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
+import { decapitalize } from '../../helpers/decapitalize';
+import { useHistory, useLocation } from 'react-router-dom';
+import Spinner from '../Spinner';
 
 interface CharacterCreationStepperProps {
-  currentStep: number;
-  setCreationStep: (step: number) => void;
+  // currentStep: number;
 }
 
 const NextWithHover = styled(Next as React.FC<IconProps & JSX.IntrinsicElements['svg']>)(() => {
@@ -31,22 +32,36 @@ const PreviousWithHover = styled(Previous as React.FC<IconProps & JSX.IntrinsicE
   `;
 });
 
-const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentStep, setCreationStep }) => {
+const CharacterCreationStepper: FC<CharacterCreationStepperProps> = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { character } = useGame();
+  const { character, game } = useGame();
+
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const history = useHistory();
+  const query = new URLSearchParams(useLocation().search);
+  const step = query.get('step');
+  const currentStep = !!step ? parseInt(step) : undefined;
+  console.log('step in CharacterCreationStepper', step);
+
+  // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     // @ts-ignore
     variables: { playbookType: character?.playbook },
     skip: !character?.playbook,
   });
-
   const pbCreator = pbCreatorData?.playbookCreator;
 
+  // ------------------------------------------------- Component functions -------------------------------------------------- //
   let reversedLooks: string[] = [];
   if (!!character && !!character.looks) {
     reversedLooks = character.looks.map((look) => look.look).reverse();
   }
 
+  const changeStep = (nextStep: number) => {
+    !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
+  };
+
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
   const box0Step1 = (
     <Box margin={{ left: 'xsmall', right: 'xsmall' }} justify="between" width="11em" height="10rem" gap="small">
       <Box
@@ -59,7 +74,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
         background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectPlaybook === currentStep ? 1 : 0.5 }}
         onClick={(e: any) => {
           e.currentTarget.blur();
-          setCreationStep(CharacterCreationSteps.selectPlaybook);
+          changeStep(CharacterCreationSteps.selectPlaybook);
         }}
       >
         <Text color="white" weight="bold">
@@ -77,7 +92,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
         background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectName === currentStep ? 1 : 0.5 }}
         onClick={(e: any) => {
           e.currentTarget.blur();
-          !!character?.playbook && setCreationStep(CharacterCreationSteps.selectName);
+          !!character?.playbook && changeStep(CharacterCreationSteps.selectName);
         }}
       >
         <Text color="white" weight="bold">
@@ -102,7 +117,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectLooks === currentStep ? 1 : 0.5 }}
       onClick={(e: any) => {
         e.currentTarget.blur();
-        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.selectLooks);
+        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.selectLooks);
       }}
     >
       <Text color="white" weight="bold">
@@ -136,7 +151,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectStats === currentStep ? 1 : 0.5 }}
       onClick={(e: any) => {
         e.currentTarget.blur();
-        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.selectStats);
+        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.selectStats);
       }}
     >
       <Text color="white" weight="bold">
@@ -168,7 +183,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectGear === currentStep ? 1 : 0.5 }}
       onClick={(e: any) => {
         e.currentTarget.blur();
-        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.selectGear);
+        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.selectGear);
       }}
     >
       <Text color="white" weight="bold">
@@ -262,7 +277,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       background={{ color: 'neutral-1', opacity: CharacterCreationSteps.setUnique === currentStep ? 1 : 0.5 }}
       onClick={(e: any) => {
         e.currentTarget.blur();
-        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.setUnique);
+        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.setUnique);
       }}
     >
       <Text color="white" weight="bold" alignSelf="center">
@@ -286,7 +301,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       background={{ color: 'neutral-1', opacity: CharacterCreationSteps.selectMoves === currentStep ? 1 : 0.5 }}
       onClick={(e: any) => {
         e.currentTarget.blur();
-        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.selectMoves);
+        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.selectMoves);
       }}
     >
       <Text color="white" weight="bold" alignSelf="center">
@@ -324,7 +339,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       background={{ color: 'neutral-1', opacity: CharacterCreationSteps.setHx === currentStep ? 1 : 0.5 }}
       onClick={(e: any) => {
         e.currentTarget.blur();
-        !!character?.name && !!character?.playbook && setCreationStep(CharacterCreationSteps.setHx);
+        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.setHx);
       }}
     >
       <Text color="white" weight="bold" alignSelf="center">
@@ -349,93 +364,101 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
   const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8];
 
   const renderBoxesSmall = () => {
-    switch (currentStep) {
-      case 0:
-      // Intentionally falls through
-      case 1:
-      // Intentionally falls through
-      case 2:
-        return (
-          <>
-            {boxesArray[0]}
-            {boxesArray[1]}
-            {boxesArray[2]}
-          </>
-        );
-      case 8:
-        return (
-          <>
-            {boxesArray[4]}
-            {boxesArray[5]}
-            {boxesArray[6]}
-          </>
-        );
-      default:
-        return (
-          <>
-            {boxesArray[currentStep - 3]}
-            {boxesArray[currentStep - 2]}
-            {boxesArray[currentStep - 1]}
-          </>
-        );
+    if (!!currentStep) {
+      switch (currentStep) {
+        case 0:
+        // Intentionally falls through
+        case 1:
+        // Intentionally falls through
+        case 2:
+          return (
+            <>
+              {boxesArray[0]}
+              {boxesArray[1]}
+              {boxesArray[2]}
+            </>
+          );
+        case 8:
+          return (
+            <>
+              {boxesArray[4]}
+              {boxesArray[5]}
+              {boxesArray[6]}
+            </>
+          );
+        default:
+          return (
+            <>
+              {boxesArray[currentStep - 3]}
+              {boxesArray[currentStep - 2]}
+              {boxesArray[currentStep - 1]}
+            </>
+          );
+      }
     }
   };
 
   const renderBoxes = () => {
-    switch (currentStep) {
-      case 0:
-      // Intentionally falls through
-      case 1:
-      // Intentionally falls through
-      case 2:
-        return (
-          <>
-            {boxesArray[0]}
-            {boxesArray[1]}
-            {boxesArray[2]}
-            {boxesArray[3]}
-          </>
-        );
-      case 3:
-        return (
-          <>
-            {boxesArray[0]}
-            {boxesArray[1]}
-            {boxesArray[2]}
-            {boxesArray[3]}
-          </>
-        );
-      case 4:
-        return (
-          <>
-            {boxesArray[0]}
-            {boxesArray[1]}
-            {boxesArray[2]}
-            {boxesArray[3]}
-          </>
-        );
+    if (!!currentStep) {
+      switch (currentStep) {
+        case 0:
+        // Intentionally falls through
+        case 1:
+        // Intentionally falls through
+        case 2:
+          return (
+            <>
+              {boxesArray[0]}
+              {boxesArray[1]}
+              {boxesArray[2]}
+              {boxesArray[3]}
+            </>
+          );
+        case 3:
+          return (
+            <>
+              {boxesArray[0]}
+              {boxesArray[1]}
+              {boxesArray[2]}
+              {boxesArray[3]}
+            </>
+          );
+        case 4:
+          return (
+            <>
+              {boxesArray[0]}
+              {boxesArray[1]}
+              {boxesArray[2]}
+              {boxesArray[3]}
+            </>
+          );
 
-      case 8:
-        return (
-          <>
-            {boxesArray[3]}
-            {boxesArray[4]}
-            {boxesArray[5]}
-            {boxesArray[6]}
-          </>
-        );
+        case 8:
+          return (
+            <>
+              {boxesArray[3]}
+              {boxesArray[4]}
+              {boxesArray[5]}
+              {boxesArray[6]}
+            </>
+          );
 
-      default:
-        return (
-          <>
-            {boxesArray[currentStep - 4]}
-            {boxesArray[currentStep - 3]}
-            {boxesArray[currentStep - 2]}
-            {boxesArray[currentStep - 1]}
-          </>
-        );
+        default:
+          return (
+            <>
+              {boxesArray[currentStep - 4]}
+              {boxesArray[currentStep - 3]}
+              {boxesArray[currentStep - 2]}
+              {boxesArray[currentStep - 1]}
+            </>
+          );
+      }
     }
   };
+
+  if (!currentStep || !game) {
+    return <Spinner />;
+  }
 
   return (
     <Box
@@ -451,7 +474,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       {currentStep > 1 ? (
         <PreviousWithHover
           cursor="pointer"
-          onClick={() => !!character?.name && !!character?.playbook && setCreationStep(currentStep - 1)}
+          onClick={() => !!character?.name && !!character?.playbook && changeStep(currentStep - 1)}
           size="large"
           color="accent-1"
         />
@@ -462,7 +485,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentSt
       {currentStep < 8 && currentStep > 1 && !!character?.name ? (
         <NextWithHover
           cursor="pointer"
-          onClick={() => !!character?.name && !!character?.playbook && setCreationStep(currentStep + 1)}
+          onClick={() => !!character?.name && !!character?.playbook && changeStep(currentStep + 1)}
           size="large"
           color="accent-1"
         />

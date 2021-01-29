@@ -1,41 +1,106 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 import { Box } from 'grommet';
 
 import Spinner from '../Spinner';
+import WarningDialog from '../dialogs/WarningDialog';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
 import { StyledMarkdown } from '../styledComponents';
-import { PlaybookType } from '../../@types/enums';
+import PLAYBOOKS, { PlaybooksData } from '../../queries/playbooks';
+import CREATE_CHARACTER, { CreateCharacterData, CreateCharacterVars } from '../../mutations/createCharacter';
+import SET_CHARACTER_PLAYBOOK, {
+  SetCharacterPlaybookData,
+  SetCharacterPlaybookVars,
+} from '../../mutations/setCharacterPlaybook';
+import { CharacterCreationSteps, PlaybookType } from '../../@types/enums';
 import { Playbook } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
 import '../../assets/styles/transitions.css';
+import { useHistory } from 'react-router-dom';
 
-interface CharacterPlaybookProps {
-  creatingCharacter: boolean;
-  settingPlaybook: boolean;
-  checkPlaybookReset: (playbookType: PlaybookType) => void;
-  playbooks?: Playbook[];
-  playbook?: PlaybookType;
-}
-
-const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
-  settingPlaybook,
-  creatingCharacter,
-  checkPlaybookReset,
-  playbooks,
-  playbook,
-}) => {
+const CharacterPlaybookForm: FC = () => {
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [selectedPlaybook, setSelectedPlaybook] = useState<Playbook | undefined>();
   const [showIntro, setShowIntro] = useState(true);
   const [startFadeOut, setStartFadeOut] = useState(false);
   const [sortedPlaybooks, setSortedPlaybooks] = useState<Playbook[]>([]);
+  const [showResetWarning, setShowResetWarning] = useState<PlaybookType | undefined>();
 
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
 
+  // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
+  const history = useHistory();
+
+  // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
+  const { data: playbooksData } = useQuery<PlaybooksData>(PLAYBOOKS);
+  const playbooks = playbooksData?.playbooks;
+  const [createCharacter, { loading: creatingCharacter }] = useMutation<CreateCharacterData, CreateCharacterVars>(
+    CREATE_CHARACTER
+  );
+  const [setCharacterPlaybook, { loading: settingPlaybook }] = useMutation<
+    SetCharacterPlaybookData,
+    SetCharacterPlaybookVars
+  >(SET_CHARACTER_PLAYBOOK);
+
+  // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const handlePlaybookClick = (playbook: Playbook) => {
     setShowIntro(false);
     setSelectedPlaybook(undefined);
     setTimeout(() => setSelectedPlaybook(playbook), 0);
+  };
+
+  const checkPlaybookReset = (playbookType: PlaybookType) => {
+    if (
+      !!userGameRole &&
+      !!userGameRole.characters &&
+      userGameRole.characters.length > 0 &&
+      !!userGameRole.characters[0].playbook &&
+      userGameRole.characters[0].playbook !== playbookType
+    ) {
+      setShowResetWarning(playbookType);
+    } else {
+      handlePlaybookSelect(playbookType);
+    }
+  };
+
+  const handlePlaybookSelect = async (playbookType: PlaybookType) => {
+    if (!!userGameRole && !!game) {
+      if (userGameRole.characters?.length === 0) {
+        let characterId;
+        try {
+          const { data: characterData } = await createCharacter({ variables: { gameRoleId: userGameRole?.id } });
+          characterId = characterData?.createCharacter.id;
+        } catch (error) {
+          console.error(error);
+        }
+        if (!characterId) {
+          console.warn('No character id, playbook not set');
+          return;
+        }
+        try {
+          await setCharacterPlaybook({
+            variables: { gameRoleId: userGameRole.id, characterId, playbookType },
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      } else if (userGameRole.characters?.length === 1) {
+        try {
+          await setCharacterPlaybook({
+            variables: { gameRoleId: userGameRole.id, characterId: userGameRole.characters[0].id, playbookType },
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      setShowResetWarning(undefined);
+      history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectName}`);
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
@@ -55,11 +120,11 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
 
   // If the playbook has already been set, show that playbook to the User
   useEffect(() => {
-    if (!!playbook && playbooks) {
-      const setPlaybook = playbooks.filter((pb) => pb.playbookType === playbook)[0];
+    if (!!character && !!character.playbook && playbooks) {
+      const setPlaybook = playbooks.filter((pb) => pb.playbookType === character.playbook)[0];
       setSelectedPlaybook(setPlaybook);
     }
-  }, [playbook, playbooks]);
+  }, [character, playbooks]);
 
   return (
     <Box
@@ -71,6 +136,15 @@ const CharacterPlaybookForm: FC<CharacterPlaybookProps> = ({
       className={startFadeOut ? 'fadeOut' : ''}
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
+      {!!showResetWarning && (
+        <WarningDialog
+          title="Switch playbook?"
+          buttonTitle="SWITCH"
+          text="Changing the playbook will reset the character."
+          handleClose={() => setShowResetWarning(undefined)}
+          handleConfirm={() => handlePlaybookSelect(showResetWarning)}
+        />
+      )}
       {!selectedPlaybook && showIntro && (
         <Box>
           <HeadingWS crustReady={crustReady} level={2}>

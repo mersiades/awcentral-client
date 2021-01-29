@@ -12,9 +12,10 @@ import { useGame } from '../../../contexts/gameContext';
 import { useMutation, useQuery } from '@apollo/client';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../../../mutations/setCustomWeapons';
+import { useHistory } from 'react-router-dom';
+import { CharacterCreationSteps } from '../../../@types/enums';
 
 interface CustomWeaponsFormProps {
-  setCreationStep: Dispatch<SetStateAction<number>>;
   existingCustomWeapons?: CustomWeapons;
 }
 
@@ -27,7 +28,7 @@ const WeaponsUL = styled.ul`
   cursor: default;
 `;
 
-const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({ existingCustomWeapons, setCreationStep }) => {
+const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({ existingCustomWeapons }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [baseValue, setBaseValue] = useState<TaggedItem | undefined>();
   const [characteristics, setCharacteristics] = useState<ItemCharacteristic[]>([]);
@@ -35,8 +36,11 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({ existingCustomWeapons, 
   const [weapons, setWeapons] = useState<string[]>(!!existingCustomWeapons ? [...existingCustomWeapons.weapons] : []);
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { character, userGameRole } = useGame();
+  const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
+
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const history = useHistory();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
@@ -197,13 +201,13 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({ existingCustomWeapons, 
   };
 
   const handleSubmitCustomWeapons = async (weapons: string[]) => {
-    if (!!userGameRole && !!character) {
+    if (!!userGameRole && !!character && !!game) {
       try {
         await setCustomWeapons({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, weapons },
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
-        setCreationStep((prevState) => prevState + 1);
+        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);

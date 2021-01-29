@@ -17,7 +17,6 @@ interface PlaybookUniqueRouterProps {
   existingCustomWeapons?: CustomWeapons;
   existingAngelKit?: AngelKit;
   existingBrainerGear?: BrainerGear;
-  setCreationStep: Dispatch<SetStateAction<number>>;
 }
 
 /**
@@ -36,7 +35,6 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
   existingCustomWeapons,
   existingAngelKit,
   existingBrainerGear,
-  setCreationStep,
 }) => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType },
@@ -55,11 +53,11 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
   const renderForm = () => {
     switch (playbookType) {
       case PlaybookType.angel:
-        return <AngelKitForm setCreationStep={setCreationStep} existingAngelKit={existingAngelKit} />;
+        return <AngelKitForm existingAngelKit={existingAngelKit} />;
       case PlaybookType.battlebabe:
-        return <CustomWeaponsForm setCreationStep={setCreationStep} existingCustomWeapons={existingCustomWeapons} />;
+        return <CustomWeaponsForm existingCustomWeapons={existingCustomWeapons} />;
       case PlaybookType.brainer:
-        return <BrainerGearForm setCreationStep={setCreationStep} existingBrainerGear={existingBrainerGear} />;
+        return <BrainerGearForm existingBrainerGear={existingBrainerGear} />;
       case PlaybookType.driver:
         return <VehiclesFormContainer />;
       default:

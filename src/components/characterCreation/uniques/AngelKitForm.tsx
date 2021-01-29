@@ -10,16 +10,21 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../.
 import { AngelKit } from '../../../@types/dataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
+import { useHistory } from 'react-router-dom';
+import { CharacterCreationSteps } from '../../../@types/enums';
 
 interface AngelKitFormProps {
-  setCreationStep: Dispatch<SetStateAction<number>>;
   existingAngelKit?: AngelKit;
 }
 
-const AngelKitForm: FC<AngelKitFormProps> = ({ setCreationStep, existingAngelKit }) => {
+const AngelKitForm: FC<AngelKitFormProps> = ({ existingAngelKit }) => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { character, userGameRole } = useGame();
+  const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
+
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const history = useHistory();
+
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData, loading } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     // @ts-ignore
@@ -32,17 +37,15 @@ const AngelKitForm: FC<AngelKitFormProps> = ({ setCreationStep, existingAngelKit
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [stock, setStock] = useState(!!existingAngelKit ? existingAngelKit.stock : startingStock);
 
-  console.log('pbCreatorData', pbCreatorData);
-
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const handleSubmitAngelKit = async (stock: number, hasSupplier: boolean) => {
-    if (!!userGameRole && !!character) {
+    if (!!userGameRole && !!character && !!game) {
       try {
         await setAngelKit({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, stock, hasSupplier },
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
-        setCreationStep((prevState) => prevState + 1);
+        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);

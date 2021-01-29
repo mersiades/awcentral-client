@@ -10,19 +10,23 @@ import { useGame } from '../../../contexts/gameContext';
 import { useMutation, useQuery } from '@apollo/client';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../../../mutations/setBrainerGear';
+import { useHistory } from 'react-router-dom';
+import { CharacterCreationSteps } from '../../../@types/enums';
 
 interface BrainerGearFormProps {
-  setCreationStep: Dispatch<SetStateAction<number>>;
   existingBrainerGear?: BrainerGear;
 }
 
-const BrainerGearForm: FC<BrainerGearFormProps> = ({ setCreationStep, existingBrainerGear }) => {
+const BrainerGearForm: FC<BrainerGearFormProps> = ({ existingBrainerGear }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [selectedGear, setSelectedGear] = useState(!!existingBrainerGear ? existingBrainerGear.brainerGear : []);
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { character, userGameRole } = useGame();
+  const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
+
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const history = useHistory();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
@@ -45,13 +49,13 @@ const BrainerGearForm: FC<BrainerGearFormProps> = ({ setCreationStep, existingBr
   };
 
   const handleSubmitBrainerGear = async (brainerGear: string[]) => {
-    if (!!userGameRole && !!character) {
+    if (!!userGameRole && !!character && !!game) {
       try {
         await setBrainerGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, brainerGear },
           // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
-        setCreationStep((prevState) => prevState + 1);
+        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
