@@ -80,7 +80,7 @@ const CharacterMovesForm: FC = () => {
       justify="start"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box width="70vw" flex="grow">
+      <Box width="70vw" flex="grow" margin={{ bottom: '48px' }}>
         <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT ARE ${
           !!character?.name ? character.name.toUpperCase() : '...'
         }'S MOVES?`}</HeadingWS>

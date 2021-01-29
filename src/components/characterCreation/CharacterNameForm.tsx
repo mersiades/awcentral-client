@@ -20,7 +20,6 @@ const CharacterNameForm: FC = () => {
   // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
   const history = useHistory();
 
-  // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [value, setValue] = useState(!!character?.name ? { characterName: character.name } : { characterName: '' });
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
@@ -34,7 +33,7 @@ const CharacterNameForm: FC = () => {
     SET_CHARACTER_NAME
   );
 
-  // ------------------------------------------ Component functions and variables ------------------------------------------ //
+  // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const handleSubmitName = async (name: string) => {
     if (!!userGameRole && !!character && !!game) {
       try {
@@ -87,6 +86,7 @@ const CharacterNameForm: FC = () => {
               type="submit"
               primary
               label={settingName ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+              disabled={value.characterName === ''}
             />
           </Box>
           <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">

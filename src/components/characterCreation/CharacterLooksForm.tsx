@@ -144,6 +144,7 @@ const CharacterLooksForm: FC = () => {
                 type="submit"
                 primary
                 label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+                disabled={genderValue.gender === ''}
               />
             </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap>
@@ -178,6 +179,7 @@ const CharacterLooksForm: FC = () => {
                 type="submit"
                 primary
                 label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+                disabled={clothesValue.clothes === ''}
               />
             </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap>
@@ -212,6 +214,7 @@ const CharacterLooksForm: FC = () => {
                 type="submit"
                 primary
                 label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+                disabled={faceValue.face === ''}
               />
             </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
@@ -246,6 +249,7 @@ const CharacterLooksForm: FC = () => {
                 type="submit"
                 primary
                 label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+                disabled={eyesValue.eyes === ''}
               />
             </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
@@ -280,6 +284,7 @@ const CharacterLooksForm: FC = () => {
                 type="submit"
                 primary
                 label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+                disabled={bodyValue.body === ''}
               />
             </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">

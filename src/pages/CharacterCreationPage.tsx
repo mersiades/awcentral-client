@@ -16,7 +16,6 @@ import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
 import { CharacterCreationSteps } from '../@types/enums';
-import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 
@@ -32,26 +31,23 @@ const CharacterCreationPage: FC = () => {
   const query = new URLSearchParams(useLocation().search);
   const step = query.get('step');
   const creationStep = !!step ? parseInt(step) : undefined;
+
   // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [character, setCharacter] = useState<Character | undefined>();
   const [showScrollable, setShowScrollable] = useState(false);
 
   // ------------------------------------------------------- Refs -------------------------------------------------------- //
   const containerRef = useRef<HTMLDivElement>(null);
-  // -------------------------------------------------- Context hooks ---------------------------------------------------- //
+
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
+  const { game, userGameRole, setGameContext, character } = useGame();
+
+  // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
-  const { game, userGameRole, setGameContext } = useGame();
-
-  // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
-  const changeStep = (nextStep: number) => {
-    !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
-  };
-
-  const closeNewGameIntro = () => changeStep(CharacterCreationSteps.selectPlaybook);
+  const closeNewGameIntro = () => !!game && history.push(`/character-creation/${game.id}?step=${1}`);
 
   const handleScroll = (e: any) => {
     if (!e.currentTarget) {
@@ -74,18 +70,13 @@ const CharacterCreationPage: FC = () => {
   };
 
   // --------------------------------------------------- Effects ----------------------------------------------------- //
-  // Put the User's Character into component state
-  useEffect(() => {
-    if (!!userGameRole?.characters && userGameRole.characters.length === 1) {
-      setCharacter(userGameRole.characters[0]);
-    }
-  }, [userGameRole, userId]);
-
+  // Navigate to correct character creation step
   useEffect(() => {
     if (!step) {
       if (!!character) {
         history.push(`/character-creation/${gameId}?step=${1}`);
       } else {
+        console.log('pushing?');
         history.push(`/character-creation/${gameId}?step=${0}`);
       }
     }
@@ -95,6 +86,7 @@ const CharacterCreationPage: FC = () => {
     }
   }, [step, character, gameId, history]);
 
+  // Navigate user to menu page if they are not a member of the game
   useEffect(() => {
     if (!!game && !!userId) {
       const memberIds = game?.players.map((player) => player.id);
@@ -104,6 +96,7 @@ const CharacterCreationPage: FC = () => {
     }
   }, [game, userId, history]);
 
+  // Set a scroll event listener for ScrollableIndicator
   useEffect(() => {
     if (!!containerRef.current) {
       containerRef.current.addEventListener('scroll', (e) => handleScroll(e));
@@ -123,12 +116,15 @@ const CharacterCreationPage: FC = () => {
     }
   }, [gameId, userId, setGameContext]);
 
-  if (!creationStep) {
-    return <Spinner />;
+  if (creationStep === undefined) {
+    return (
+      <Box fill background={background} align="center" justify="center">
+        <Spinner />
+      </Box>
+    );
   }
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
-
   return (
     <Box
       data-testid="character-creation-page"

@@ -65,9 +65,18 @@ const CharacterStatsForm: FC = () => {
         <HeadingWS level={2} crustReady={crustReady} textAlign="center">{`WHAT ARE ${
           !!character?.name ? character.name.toUpperCase() : '...'
         }'S STRENGTHS AND WEAKNESSES?`}</HeadingWS>
-        <HeadingWS level={4} textAlign="start">
-          Choose a set:
-        </HeadingWS>
+        <Box direction="row" align="center" justify="between" fill="horizontal" margin={{ vertical: '6px' }}>
+          <HeadingWS level={4} textAlign="start">
+            Choose a set:
+          </HeadingWS>
+          <ButtonWS
+            primary
+            label={settingStats ? <Spinner fillColor="#FFF" /> : 'SET'}
+            onClick={() => !!selectedStatsOption && handleSubmitStats(selectedStatsOption.id)}
+            disabled={!selectedStatsOption}
+            style={{ minHeight: '52px' }}
+          />
+        </Box>
         <Box fill margin={{ bottom: '48px' }}>
           {!!statsOptions &&
             statsOptions.map((opt) => (
@@ -116,15 +125,6 @@ const CharacterStatsForm: FC = () => {
                 </Box>
               </Box>
             ))}
-          <Box direction="row" justify="end" width="50vw" margin={{ top: '12px' }}>
-            <ButtonWS
-              primary
-              label={settingStats ? <Spinner fillColor="#FFF" /> : 'SET'}
-              onClick={() => !!selectedStatsOption && handleSubmitStats(selectedStatsOption.id)}
-              disabled={!selectedStatsOption}
-              style={{ minHeight: '52px' }}
-            />
-          </Box>
         </Box>
       </Box>
     </Box>

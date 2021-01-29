@@ -267,7 +267,7 @@ const CustomWeaponsForm: FC = () => {
   return (
     <Box
       data-testid="custom-weapons-form"
-      width="60vw"
+      width="70vw"
       direction="column"
       align="start"
       justify="between"

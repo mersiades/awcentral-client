@@ -359,7 +359,7 @@ const CharacterCreationStepper: FC = () => {
   const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8];
 
   const renderBoxesSmall = () => {
-    if (!!currentStep) {
+    if (currentStep !== undefined) {
       switch (currentStep) {
         case 0:
         // Intentionally falls through
@@ -394,7 +394,7 @@ const CharacterCreationStepper: FC = () => {
   };
 
   const renderBoxes = () => {
-    if (!!currentStep) {
+    if (currentStep !== undefined) {
       switch (currentStep) {
         case 0:
         // Intentionally falls through
@@ -451,7 +451,7 @@ const CharacterCreationStepper: FC = () => {
     }
   };
 
-  if (!currentStep || !game) {
+  if (currentStep === undefined || !game) {
     return <Spinner />;
   }
 
@@ -466,7 +466,7 @@ const CharacterCreationStepper: FC = () => {
       flex="grow"
       style={{ maxHeight: '180px' }}
     >
-      {currentStep > 1 ? (
+      {!!currentStep && currentStep > 1 ? (
         <PreviousWithHover
           cursor="pointer"
           onClick={() => !!character?.name && !!character?.playbook && changeStep(currentStep - 1)}
@@ -477,7 +477,7 @@ const CharacterCreationStepper: FC = () => {
         <div style={{ height: 48, width: 48, background: 'transparent' }} />
       )}
       {window.innerWidth < 800 ? renderBoxesSmall() : renderBoxes()}
-      {currentStep < 8 && currentStep > 1 && !!character?.name ? (
+      {!!currentStep && currentStep < 8 && currentStep > 1 && !!character?.name ? (
         <NextWithHover
           cursor="pointer"
           onClick={() => !!character?.name && !!character?.playbook && changeStep(currentStep + 1)}
