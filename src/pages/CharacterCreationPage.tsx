@@ -40,7 +40,7 @@ const CharacterCreationPage: FC = () => {
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
-  const { game, userGameRole, setGameContext, character } = useGame();
+  const { game, setGameContext, character } = useGame();
 
   // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
   const { gameId } = useParams<{ gameId: string }>();
@@ -76,7 +76,6 @@ const CharacterCreationPage: FC = () => {
       if (!!character) {
         history.push(`/character-creation/${gameId}?step=${1}`);
       } else {
-        console.log('pushing?');
         history.push(`/character-creation/${gameId}?step=${0}`);
       }
     }

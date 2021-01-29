@@ -10,7 +10,7 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../.
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 import { useHistory } from 'react-router-dom';
-import { CharacterCreationSteps } from '../../../@types/enums';
+import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
 
 const AngelKitForm: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
@@ -22,9 +22,7 @@ const AngelKitForm: FC = () => {
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
-    // @ts-ignore
-    variables: { playbookType: character?.playbook },
-    skip: !character,
+    variables: { playbookType: PlaybookType.angel },
   });
   const { angelKitInstructions, startingStock } = pbCreatorData?.playbookCreator.playbookUniqueCreator.angelKitCreator || {};
   const [setAngelKit, { loading: settingAngelKit }] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
@@ -66,7 +64,7 @@ const AngelKitForm: FC = () => {
             <HeadingWS crustReady={crustReady} level={3} margin="6px">
               Stock
             </HeadingWS>
-            <HeadingWS crustReady={crustReady} level={2} margin={{ vertical: '3px' }}>
+            <HeadingWS aria-label="stock-value" crustReady={crustReady} level={2} margin={{ vertical: '3px' }}>
               {startingStock}
             </HeadingWS>
           </RedBox>

@@ -86,9 +86,9 @@ describe('Rendering CharacterCreationPage', () => {
 
     const tags = ['fast', 'sleek', 'unreliable'];
 
-    renderWithRouter(<CharacterCreationPage />, `/character-creation/${mockGame5.id}`, {
+    renderWithRouter(<CharacterCreationPage />, `/character-creation/${mockGame5.id}?step=6`, {
       isAuthenticated: true,
-      apolloMocks: [mockPlaybooksQuery, mockPlayBookCreatorQueryDriver, mockSetVehicle],
+      apolloMocks: [mockPlayBookCreatorQueryDriver, mockSetVehicle],
       injectedGame: gameForCreatingVehicle,
       injectedUserId: mockKeycloakUserInfo1.sub,
     });

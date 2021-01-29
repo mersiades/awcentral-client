@@ -495,7 +495,7 @@ export const mockPlaybooksQuery: MockedResponse = {
     query: PLAYBOOKS,
   },
   result: () => {
-    console.log('mockPlaybooksQuery');
+    // console.log('mockPlaybooksQuery');
     return {
       data: {
         playbooks: mockPlaybooks,
@@ -2308,7 +2308,7 @@ export const mockPlayBookCreatorQueryAngel: MockedResponse = {
     variables: { playbookType: PlaybookType.angel },
   },
   result: () => {
-    console.log('mockPlayBookCreatorQueryAngel');
+    // console.log('mockPlayBookCreatorQueryAngel');
     return {
       data: {
         playbookCreator: {

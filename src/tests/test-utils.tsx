@@ -68,7 +68,6 @@ const AppProviders = ({
   injectedGame,
   injectedUserId,
 }: any) => {
-  console.log('apolloMocks', apolloMocks);
   return (
     <BrowserRouter>
       <MockedProvider mocks={apolloMocks} addTypename={false}>
