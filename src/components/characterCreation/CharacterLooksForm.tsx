@@ -17,6 +17,7 @@ const CharacterLooksForm: FC = () => {
   const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
 
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   const existingLooks = {
     gender: character?.looks?.filter((look) => look.category === LookType.gender)[0]?.look || '',
     clothes: character?.looks?.filter((look) => look.category === LookType.clothes)[0]?.look || '',
@@ -24,8 +25,6 @@ const CharacterLooksForm: FC = () => {
     eyes: character?.looks?.filter((look) => look.category === LookType.eyes)[0]?.look || '',
     body: character?.looks?.filter((look) => look.category === LookType.body)[0]?.look || '',
   };
-
-  // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [steps] = useState(Object.values(LookType));
   const [selectedStep, setSelectedStep] = useState(0);
   const [genderValue, setGenderValue] = useState({ gender: existingLooks.gender });
@@ -48,6 +47,7 @@ const CharacterLooksForm: FC = () => {
     SET_CHARACTER_LOOK
   );
 
+  // ------------------------------------------ Component functions and variables ------------------------------------------ //
   const handleSubmitLook = async (look: string, category: LookType) => {
     if (!!userGameRole && !!character && !!game) {
       try {

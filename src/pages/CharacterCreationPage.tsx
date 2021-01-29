@@ -16,8 +16,6 @@ import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
-import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
-import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
 import { CharacterCreationSteps, StatType } from '../@types/enums';
@@ -56,13 +54,6 @@ const CharacterCreationPage: FC = () => {
   const { game, userGameRole, setGameContext } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const [setCharacterGear, { loading: settingGear }] = useMutation<SetCharacterGearData, SetCharacterGearVars>(
-    SET_CHARACTER_GEAR
-  );
-
-  const [setCharacterBarter, { loading: settingBarter }] = useMutation<SetCharacterBarterData, SetCharacterBarterVars>(
-    SET_CHARACTER_BARTER
-  );
 
   const [setCharacterMoves, { loading: settingMoves }] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(
     SET_CHARACTER_MOVES
@@ -80,25 +71,6 @@ const CharacterCreationPage: FC = () => {
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const changeStep = (nextStep: number) => {
     !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
-  };
-
-  const handleSubmitGear = async (gear: string[], amount: number) => {
-    if (!!userGameRole && !!character) {
-      try {
-        await setCharacterGear({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, gear },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        await setCharacterBarter({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        changeStep(CharacterCreationSteps.setUnique);
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      } catch (error) {
-        console.error(error);
-      }
-    }
   };
 
   const handleSubmitCharacterMoves = async (moveIds: string[]) => {
@@ -263,14 +235,7 @@ const CharacterCreationPage: FC = () => {
           <CharacterStatsForm />
         )}
         {creationStep === CharacterCreationSteps.selectGear && character && character.name && character.playbook && (
-          <CharacterGearForm
-            existingGear={character.gear}
-            characterName={character.name}
-            settingGear={settingGear}
-            settingBarter={settingBarter}
-            playbookType={character?.playbook}
-            handleSubmitGear={handleSubmitGear}
-          />
+          <CharacterGearForm />
         )}
         {creationStep === CharacterCreationSteps.setUnique && character && character.name && character.playbook && (
           <PlaybookUniqueRouter />

@@ -34,7 +34,7 @@ const CharacterNameForm: FC = () => {
     SET_CHARACTER_NAME
   );
 
-  // ---------------------------------------- Component functions and variables ------------------------------------------ //
+  // ------------------------------------------ Component functions and variables ------------------------------------------ //
   const handleSubmitName = async (name: string) => {
     if (!!userGameRole && !!character && !!game) {
       try {

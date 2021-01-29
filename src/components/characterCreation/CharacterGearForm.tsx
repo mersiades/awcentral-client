@@ -1,23 +1,17 @@
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Box, TextArea } from 'grommet';
 
 import Spinner from '../Spinner';
 import { accentColors, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../../config/grommetConfig';
-import { PlaybookType } from '../../@types/enums';
-import { PlaybookCreator } from '../../@types/staticDataInterfaces';
+import { CharacterCreationSteps } from '../../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
-
-interface CharacterGearFormProps {
-  existingGear: string[];
-  settingGear: boolean;
-  settingBarter: boolean;
-  playbookType: PlaybookType;
-  characterName: string;
-  handleSubmitGear: (gear: string[], amount: number) => void;
-}
+import { useGame } from '../../contexts/gameContext';
+import { useHistory } from 'react-router-dom';
+import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../../mutations/setCharacterBarter';
+import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../../mutations/setCharacterGear';
 
 const GearUL = styled.ul`
   margin: unset;
@@ -26,29 +20,38 @@ const GearUL = styled.ul`
   cursor: default;
 `;
 
-const CharacterGearForm: FC<CharacterGearFormProps> = ({
-  existingGear = [],
-  settingGear,
-  settingBarter,
-  playbookType,
-  characterName,
-  handleSubmitGear,
-}) => {
-  const [gear, setGear] = useState<string[]>(existingGear);
-  const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
+const CharacterGearForm: FC = () => {
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game, character, userGameRole } = useGame();
+  const { crustReady } = useFonts();
+
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
+  const existingGear = character?.gear;
+  const [gear, setGear] = useState<string[]>(existingGear || []);
   const [value, setValue] = useState('');
   const [showScrollDown, setShowScrollDown] = useState(false);
 
+  // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
+  const history = useHistory();
+
   const instructionsBoxRef = useRef<HTMLDivElement>(null);
 
-  const { crustReady } = useFonts();
-
-  const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
+  // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
+  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
-    {
-      variables: { playbookType },
-    }
+    // @ts-ignore
+    { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
   );
+  const pbCreator = pbCreatorData?.playbookCreator;
+  const [setCharacterGear, { loading: settingGear }] = useMutation<SetCharacterGearData, SetCharacterGearVars>(
+    SET_CHARACTER_GEAR
+  );
+
+  const [setCharacterBarter, { loading: settingBarter }] = useMutation<SetCharacterBarterData, SetCharacterBarterVars>(
+    SET_CHARACTER_BARTER
+  );
+
+  // ------------------------------------------ Component functions and variables ------------------------------------------ //
 
   const handleScroll = (e: any) => {
     if (!e.currentTarget) {
@@ -70,11 +73,24 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
     }
   };
 
-  // ---------------------------------------------------- UseEffects  -------------------------------------------------------- //
+  const handleSubmitGear = async (gear: string[], amount: number) => {
+    if (!!userGameRole && !!character && !!game) {
+      try {
+        await setCharacterGear({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, gear },
+        });
+        await setCharacterBarter({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
+        });
+        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setUnique}`);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
-  useEffect(() => {
-    !!pbCreatorData && setPbCreator(pbCreatorData.playbookCreator);
-  }, [pbCreatorData]);
+  // ------------------------------------------------------ Effects  --------------------------------------------------------- //
 
   useEffect(() => {
     if (instructionsBoxRef.current) {
@@ -154,14 +170,6 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
     }
   };
 
-  if (loadingPbCreator || !pbCreatorData || !pbCreator) {
-    return (
-      <Box fill background="transparent" justify="center" align="center">
-        <Spinner />
-      </Box>
-    );
-  }
-
   return (
     <Box
       fill
@@ -172,13 +180,25 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
       justify="start"
     >
       <Box width="70vw" flex="grow" overflow="auto">
-        <HeadingWS
-          level={2}
-          crustReady={crustReady}
-          textAlign="center"
-          style={{ maxWidth: 'unset' }}
-        >{`WHAT IS ${characterName.toUpperCase()}'S GEAR?`}</HeadingWS>
-        <TextWS textAlign="center">Select an item to add, edit or delete it, or just type your own.</TextWS>
+        <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT IS ${
+          !!character?.name ? character.name.toUpperCase() : '...'
+        }'S GEAR?`}</HeadingWS>
+        <Box direction="row" align="center" fill="horizontal" justify="between">
+          <TextWS textAlign="center">Select an item to add, edit or delete it, or just type your own.</TextWS>
+          <Box direction="row" pad="6px" justify="end" align="center" style={{ minHeight: 52 }}>
+            <ButtonWS
+              primary
+              label={settingGear || settingBarter ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+              onClick={() =>
+                !settingBarter &&
+                !settingGear &&
+                !!pbCreator &&
+                handleSubmitGear(gear, pbCreator.gearInstructions.startingBarter)
+              }
+              disabled={gear.length < 1 || JSON.stringify(gear) === JSON.stringify(existingGear)}
+            />
+          </Box>
+        </Box>
         <Box direction="row">
           <Box
             ref={instructionsBoxRef}
@@ -198,7 +218,9 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
             {renderIntroduceChoice()}
             {renderChooseableGear()}
             {renderWithMC()}
-            <ParagraphWS textAlign="end">{`... and you get oddments worth ${pbCreator.gearInstructions.startingBarter}-barter`}</ParagraphWS>
+            <ParagraphWS textAlign="end">{`... and you get oddments worth ${
+              !!pbCreator ? pbCreator.gearInstructions.startingBarter : 'x'
+            }-barter`}</ParagraphWS>
           </Box>
           <Box fill gridArea="gear-box" pad="6px">
             <Box fill="horizontal">
@@ -257,16 +279,6 @@ const CharacterGearForm: FC<CharacterGearFormProps> = ({
               />
             </Box>
           </Box>
-        </Box>
-        <Box direction="row" pad="6px" justify="end" align="center" style={{ minHeight: 52 }}>
-          <ButtonWS
-            primary
-            label={settingGear || settingBarter ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-            onClick={() =>
-              !settingBarter && !settingGear && handleSubmitGear(gear, pbCreator.gearInstructions.startingBarter)
-            }
-            disabled={gear.length < 1 || JSON.stringify(gear) === JSON.stringify(existingGear)}
-          />
         </Box>
       </Box>
     </Box>
