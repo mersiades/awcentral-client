@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
 import { Box } from 'grommet';
 
 import CharacterPlaybookForm from '../components/characterCreation/CharacterPlaybookForm';
@@ -16,17 +15,10 @@ import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
-import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
-import { CharacterCreationSteps, StatType } from '../@types/enums';
-import { HxInput } from '../@types';
+import { CharacterCreationSteps } from '../@types/enums';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
-import FINISH_CHARACTER_CREATION, {
-  FinishCharacterCreationData,
-  FinishCharacterCreationVars,
-} from '../mutations/finishCharacterCreation';
 import { useGame } from '../contexts/gameContext';
-import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
 
 export const background = {
   color: 'black',
@@ -53,59 +45,10 @@ const CharacterCreationPage: FC = () => {
   const { game, userGameRole, setGameContext } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const [toggleStatHighlight, { loading: togglingHighlight }] = useMutation<
-    ToggleStatHighlightData,
-    ToggleStatHighlightVars
-  >(TOGGLE_STAT_HIGHLIGHT);
-  const [setCharacterHx, { loading: settingHx }] = useMutation<SetCharacterHxData, SetCharacterHxVars>(SET_CHARACTER_HX);
-  const [finishCharacterCreation, { loading: finishingCreation }] = useMutation<
-    FinishCharacterCreationData,
-    FinishCharacterCreationVars
-  >(FINISH_CHARACTER_CREATION);
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const changeStep = (nextStep: number) => {
     !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
-  };
-
-  const handleToggleHighlight = async (stat: StatType) => {
-    if (!!userGameRole && !!character) {
-      try {
-        await toggleStatHighlight({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, stat },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  const handleSubmitCharacterHx = async (hxInputs: HxInput[]) => {
-    if (!!userGameRole && !!character) {
-      try {
-        await setCharacterHx({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, hxStats: hxInputs },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
-  const handleFinishCreation = async () => {
-    if (!!userGameRole && !!character) {
-      try {
-        await finishCharacterCreation({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        history.push(`/pre-game/${gameId}`);
-      } catch (error) {
-        console.error(error);
-      }
-    }
   };
 
   const closeNewGameIntro = () => changeStep(CharacterCreationSteps.selectPlaybook);
@@ -200,7 +143,15 @@ const CharacterCreationPage: FC = () => {
         </div>
       )}
       <ScrollableIndicator show={showScrollable} />
-      <CloseButton handleClose={() => history.goBack()} />
+      <CloseButton
+        handleClose={() => {
+          if (!!character?.playbook) {
+            !!game && history.push(`/player-game/${game.id}`);
+          } else {
+            history.push('/menu');
+          }
+        }}
+      />
 
       <CharacterCreationStepper />
       <Box flex="grow">
@@ -222,18 +173,7 @@ const CharacterCreationPage: FC = () => {
         {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (
           <CharacterMovesForm />
         )}
-        {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && (
-          <CharacterHxForm
-            playbookType={character.playbook}
-            character={character}
-            settingHx={settingHx}
-            togglingHighlight={togglingHighlight}
-            handleToggleHighlight={handleToggleHighlight}
-            finishingCreation={finishingCreation}
-            handleSubmitCharacterHx={handleSubmitCharacterHx}
-            handleFinishCreation={handleFinishCreation}
-          />
-        )}
+        {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && <CharacterHxForm />}
       </Box>
     </Box>
   );
