@@ -16,7 +16,6 @@ import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
-import SET_CHARACTER_NAME, { SetCharacterNameData, SetCharacterNameVars } from '../mutations/setCharacterName';
 import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
@@ -59,9 +58,6 @@ const CharacterCreationPage: FC = () => {
   const { game, userGameRole, setGameContext } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const [setCharacterName, { loading: settingName }] = useMutation<SetCharacterNameData, SetCharacterNameVars>(
-    SET_CHARACTER_NAME
-  );
   const [setCharacterLook, { loading: settingLooks }] = useMutation<SetCharacterLookData, SetCharacterLookVars>(
     SET_CHARACTER_LOOK
   );
@@ -92,21 +88,6 @@ const CharacterCreationPage: FC = () => {
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const changeStep = (nextStep: number) => {
     !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
-  };
-
-  const handleSubmitName = async (name: string) => {
-    if (!!userGameRole && !!character) {
-      try {
-        await setCharacterName({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, name },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        changeStep(CharacterCreationSteps.selectLooks);
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      } catch (error) {
-        console.error(error);
-      }
-    }
   };
 
   const handleSubmitLook = async (look: string, category: LookType) => {
@@ -314,14 +295,7 @@ const CharacterCreationPage: FC = () => {
       <Box flex="grow">
         {creationStep === 0 && !!game && <NewGameIntro closeNewGameIntro={closeNewGameIntro} />}
         {creationStep === CharacterCreationSteps.selectPlaybook && <CharacterPlaybookForm />}
-        {creationStep === CharacterCreationSteps.selectName && character && character.playbook && (
-          <CharacterNameForm
-            playbookType={character?.playbook}
-            settingName={settingName}
-            handleSubmitName={handleSubmitName}
-            existingName={character.name}
-          />
-        )}
+        {creationStep === CharacterCreationSteps.selectName && character && character.playbook && <CharacterNameForm />}
         {creationStep === CharacterCreationSteps.selectLooks && character && character.name && character.playbook && (
           <CharacterLooksForm
             playbookType={character?.playbook}

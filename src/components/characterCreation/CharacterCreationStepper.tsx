@@ -12,10 +12,6 @@ import { decapitalize } from '../../helpers/decapitalize';
 import { useHistory, useLocation } from 'react-router-dom';
 import Spinner from '../Spinner';
 
-interface CharacterCreationStepperProps {
-  // currentStep: number;
-}
-
 const NextWithHover = styled(Next as React.FC<IconProps & JSX.IntrinsicElements['svg']>)(() => {
   return css`
     &:hover {
@@ -32,7 +28,7 @@ const PreviousWithHover = styled(Previous as React.FC<IconProps & JSX.IntrinsicE
   `;
 });
 
-const CharacterCreationStepper: FC<CharacterCreationStepperProps> = () => {
+const CharacterCreationStepper: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { character, game } = useGame();
 

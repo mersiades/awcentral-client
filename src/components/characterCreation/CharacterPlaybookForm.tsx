@@ -35,7 +35,7 @@ const CharacterPlaybookForm: FC = () => {
   // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
   const history = useHistory();
 
-  // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
+  // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: playbooksData } = useQuery<PlaybooksData>(PLAYBOOKS);
   const playbooks = playbooksData?.playbooks;
   const [createCharacter, { loading: creatingCharacter }] = useMutation<CreateCharacterData, CreateCharacterVars>(
