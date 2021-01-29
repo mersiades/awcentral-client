@@ -1,16 +1,16 @@
 import React, { FC, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 import { Box, Form, FormField, TextInput, Text } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
+import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../../mutations/setCharacterLook';
 import { CharacterCreationSteps, LookType } from '../../@types/enums';
 import { Look } from '../../@types/staticDataInterfaces';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
-import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../../mutations/setCharacterLook';
-import { useHistory } from 'react-router-dom';
 
 const CharacterLooksForm: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //

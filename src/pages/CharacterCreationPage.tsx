@@ -16,7 +16,6 @@ import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
-import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
@@ -57,10 +56,6 @@ const CharacterCreationPage: FC = () => {
   const { game, userGameRole, setGameContext } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-
-  const [setCharacterStats, { loading: settingStats }] = useMutation<SetCharacterStatsData, SetCharacterStatsVars>(
-    SET_CHARACTER_STATS
-  );
   const [setCharacterGear, { loading: settingGear }] = useMutation<SetCharacterGearData, SetCharacterGearVars>(
     SET_CHARACTER_GEAR
   );
@@ -85,21 +80,6 @@ const CharacterCreationPage: FC = () => {
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const changeStep = (nextStep: number) => {
     !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
-  };
-
-  const handleSubmitStats = async (statsOptionId: string) => {
-    if (!!userGameRole && !!character) {
-      try {
-        await setCharacterStats({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, statsOptionId },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        changeStep(CharacterCreationSteps.selectGear);
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      } catch (error) {
-        console.error(error);
-      }
-    }
   };
 
   const handleSubmitGear = async (gear: string[], amount: number) => {
@@ -280,13 +260,7 @@ const CharacterCreationPage: FC = () => {
           <CharacterLooksForm />
         )}
         {creationStep === CharacterCreationSteps.selectStats && character && character.name && character.playbook && (
-          <CharacterStatsForm
-            characterName={character.name}
-            settingStats={settingStats}
-            existingStatOption={character.statsBlock?.statsOptionId}
-            playbookType={character?.playbook}
-            handleSubmitStats={handleSubmitStats}
-          />
+          <CharacterStatsForm />
         )}
         {creationStep === CharacterCreationSteps.selectGear && character && character.name && character.playbook && (
           <CharacterGearForm
