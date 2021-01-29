@@ -1,7 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, FormField, TextInput } from 'grommet';
+import { Box } from 'grommet';
 
 import Spinner from '../../Spinner';
 import { ButtonWS, HeadingWS, RedBox } from '../../../config/grommetConfig';
@@ -21,7 +21,7 @@ const AngelKitForm: FC = () => {
   const history = useHistory();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
-  const { data: pbCreatorData, loading } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
+  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     // @ts-ignore
     variables: { playbookType: character?.playbook },
     skip: !character,
@@ -29,18 +29,12 @@ const AngelKitForm: FC = () => {
   const { angelKitInstructions, startingStock } = pbCreatorData?.playbookCreator.playbookUniqueCreator.angelKitCreator || {};
   const [setAngelKit, { loading: settingAngelKit }] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
 
-  // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [stock, setStock] = useState(
-    !!character?.playbookUnique?.angelKit ? character.playbookUnique.angelKit.stock : startingStock
-  );
-
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const handleSubmitAngelKit = async (stock: number, hasSupplier: boolean) => {
     if (!!userGameRole && !!character && !!game) {
       try {
         await setAngelKit({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, stock, hasSupplier },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
         });
         history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -52,10 +46,6 @@ const AngelKitForm: FC = () => {
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
-  if (loading || !character) {
-    return <Spinner />;
-  }
-
   return (
     <Box
       data-testid="angel-kit-form"
@@ -66,41 +56,28 @@ const AngelKitForm: FC = () => {
       overflow="auto"
       flex="grow"
     >
-      <HeadingWS
-        crustReady={crustReady}
-        level={2}
-        alignSelf="center"
-      >{`${character.name?.toUpperCase()}'S ANGEL KIT`}</HeadingWS>
+      <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
+        !!character?.name ? character.name?.toUpperCase() : '...'
+      }'S ANGEL KIT`}</HeadingWS>
       <Box flex="grow" direction="row" align="start">
         <Box fill="horizontal">{!!angelKitInstructions && <ReactMarkdown>{angelKitInstructions}</ReactMarkdown>}</Box>
-        <RedBox
-          width="150px"
-          align="center"
-          justify="between"
-          pad="24px"
-          margin={{ left: '24px', right: '5px', top: '18px' }}
-        >
-          <HeadingWS crustReady={crustReady} level={3}>
-            Stock
-          </HeadingWS>
-          <FormField>
-            <TextInput
-              type="number"
-              value={stock}
-              size="xlarge"
-              textAlign="center"
-              onChange={(e) => !!character.playbookUnique?.angelKit && setStock(parseInt(e.target.value))}
+        <Box gap="12px" width="150px" margin={{ left: '24px', right: '5px', top: '18px' }} align="center">
+          <RedBox align="center" justify="between" pad="24px" fill="horizontal">
+            <HeadingWS crustReady={crustReady} level={3} margin="6px">
+              Stock
+            </HeadingWS>
+            <HeadingWS crustReady={crustReady} level={2} margin={{ vertical: '3px' }}>
+              {startingStock}
+            </HeadingWS>
+          </RedBox>
+          <Box fill style={{ minHeight: 52 }}>
+            <ButtonWS
+              label={settingAngelKit ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+              primary
+              onClick={() => !settingAngelKit && !!startingStock && handleSubmitAngelKit(startingStock, false)}
             />
-          </FormField>
-        </RedBox>
-      </Box>
-      <Box fill direction="row" justify="end" align="center" style={{ minHeight: 52 }}>
-        <ButtonWS
-          label={settingAngelKit ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-          primary
-          onClick={() => !settingAngelKit && !!startingStock && handleSubmitAngelKit(startingStock, false)}
-          margin={{ right: '5px' }}
-        />
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
