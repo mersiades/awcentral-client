@@ -16,13 +16,12 @@ import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
-import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../mutations/setCharacterLook';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
-import { CharacterCreationSteps, LookType, StatType } from '../@types/enums';
+import { CharacterCreationSteps, StatType } from '../@types/enums';
 import { HxInput } from '../@types';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
@@ -58,9 +57,7 @@ const CharacterCreationPage: FC = () => {
   const { game, userGameRole, setGameContext } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const [setCharacterLook, { loading: settingLooks }] = useMutation<SetCharacterLookData, SetCharacterLookVars>(
-    SET_CHARACTER_LOOK
-  );
+
   const [setCharacterStats, { loading: settingStats }] = useMutation<SetCharacterStatsData, SetCharacterStatsVars>(
     SET_CHARACTER_STATS
   );
@@ -88,23 +85,6 @@ const CharacterCreationPage: FC = () => {
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const changeStep = (nextStep: number) => {
     !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
-  };
-
-  const handleSubmitLook = async (look: string, category: LookType) => {
-    // console.log('handleSubmitLook');
-    if (!!userGameRole && !!character) {
-      try {
-        const data = await setCharacterLook({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, look, category },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        if (data.data?.setCharacterLook.looks?.length === 5) {
-          changeStep(CharacterCreationSteps.selectStats);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
   };
 
   const handleSubmitStats = async (statsOptionId: string) => {
@@ -293,23 +273,11 @@ const CharacterCreationPage: FC = () => {
 
       <CharacterCreationStepper />
       <Box flex="grow">
-        {creationStep === 0 && !!game && <NewGameIntro closeNewGameIntro={closeNewGameIntro} />}
+        {creationStep === CharacterCreationSteps.intro && !!game && <NewGameIntro closeNewGameIntro={closeNewGameIntro} />}
         {creationStep === CharacterCreationSteps.selectPlaybook && <CharacterPlaybookForm />}
         {creationStep === CharacterCreationSteps.selectName && character && character.playbook && <CharacterNameForm />}
         {creationStep === CharacterCreationSteps.selectLooks && character && character.name && character.playbook && (
-          <CharacterLooksForm
-            playbookType={character?.playbook}
-            characterName={character.name}
-            settingLooks={settingLooks}
-            handleSubmitLook={handleSubmitLook}
-            existingLooks={{
-              gender: character.looks?.filter((look) => look.category === LookType.gender)[0]?.look || '',
-              clothes: character.looks?.filter((look) => look.category === LookType.clothes)[0]?.look || '',
-              face: character.looks?.filter((look) => look.category === LookType.face)[0]?.look || '',
-              eyes: character.looks?.filter((look) => look.category === LookType.eyes)[0]?.look || '',
-              body: character.looks?.filter((look) => look.category === LookType.body)[0]?.look || '',
-            }}
-          />
+          <CharacterLooksForm />
         )}
         {creationStep === CharacterCreationSteps.selectStats && character && character.name && character.playbook && (
           <CharacterStatsForm

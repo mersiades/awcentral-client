@@ -1,65 +1,67 @@
-import React, { FC, useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import React, { FC, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 import { Box, Form, FormField, TextInput, Text } from 'grommet';
 
-import ActionButtons from '../ActionButtons';
 import Spinner from '../Spinner';
-import { HeadingWS } from '../../config/grommetConfig';
-import { LookType, PlaybookType } from '../../@types/enums';
-import { Look, PlaybookCreator } from '../../@types/staticDataInterfaces';
+import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
+import { CharacterCreationSteps, LookType } from '../../@types/enums';
+import { Look } from '../../@types/staticDataInterfaces';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
+import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '../../mutations/setCharacterLook';
+import { useHistory } from 'react-router-dom';
 
-interface CharacterLooksFormProps {
-  playbookType: PlaybookType;
-  characterName: string;
-  settingLooks: boolean;
-  handleSubmitLook: (look: string, category: LookType) => void;
-  existingLooks: {
-    gender: string;
-    clothes: string;
-    face: string;
-    eyes: string;
-    body: string;
+const CharacterLooksForm: FC = () => {
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game, character, userGameRole } = useGame();
+  const { crustReady } = useFonts();
+
+  const existingLooks = {
+    gender: character?.looks?.filter((look) => look.category === LookType.gender)[0]?.look || '',
+    clothes: character?.looks?.filter((look) => look.category === LookType.clothes)[0]?.look || '',
+    face: character?.looks?.filter((look) => look.category === LookType.face)[0]?.look || '',
+    eyes: character?.looks?.filter((look) => look.category === LookType.eyes)[0]?.look || '',
+    body: character?.looks?.filter((look) => look.category === LookType.body)[0]?.look || '',
   };
-}
 
-const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
-  playbookType,
-  characterName,
-  settingLooks,
-  handleSubmitLook,
-  existingLooks,
-}) => {
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [steps] = useState(Object.values(LookType));
   const [selectedStep, setSelectedStep] = useState(0);
-  const [pbCreator, setPbCreator] = useState<PlaybookCreator | undefined>();
   const [genderValue, setGenderValue] = useState({ gender: existingLooks.gender });
   const [clothesValue, setClothesValue] = useState({ clothes: existingLooks.clothes });
   const [faceValue, setFaceValue] = useState({ face: existingLooks.face });
   const [eyesValue, setEyesValue] = useState({ eyes: existingLooks.eyes });
   const [bodyValue, setBodyValue] = useState({ body: existingLooks.body });
 
-  const { crustReady } = useFonts();
+  // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
+  const history = useHistory();
 
-  const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
+  // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
+  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
-    {
-      variables: { playbookType },
-    }
+    // @ts-ignore
+    { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
+  );
+  const looks = pbCreatorData?.playbookCreator.looks;
+  const [setCharacterLook, { loading: settingLooks }] = useMutation<SetCharacterLookData, SetCharacterLookVars>(
+    SET_CHARACTER_LOOK
   );
 
-  useEffect(() => {
-    !!pbCreatorData && setPbCreator(pbCreatorData.playbookCreator);
-  }, [pbCreatorData]);
-
-  if (loadingPbCreator || !pbCreatorData || !pbCreator) {
-    return (
-      <Box fill background="transparent" justify="center" align="center">
-        <Spinner />
-      </Box>
-    );
-  }
+  const handleSubmitLook = async (look: string, category: LookType) => {
+    if (!!userGameRole && !!character && !!game) {
+      try {
+        const data = await setCharacterLook({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, look, category },
+        });
+        if (data.data?.setCharacterLook.looks?.length === 5) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectStats}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const handleSetClick = (look: string, category: LookType) => {
     setSelectedStep((prevStep) => {
@@ -100,7 +102,9 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
       justify="start"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <HeadingWS crustReady={crustReady} level={2}>{`WHAT DOES ${characterName.toUpperCase()} LOOK LIKE?`}</HeadingWS>
+      <HeadingWS crustReady={crustReady} level={2}>{`WHAT DOES ${
+        !!character?.name ? character.name.toUpperCase() : '...'
+      } LOOK LIKE?`}</HeadingWS>
       <Box direction="row" justify="between" gap="24px" style={{ minHeight: '70px' }}>
         {steps.map((step, index) => {
           const isSelected = index === selectedStep;
@@ -125,22 +129,30 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           onSubmit={({ value }: any) => handleSetClick(value.gender, LookType.gender)}
         >
           <Box
-            width="50vw"
+            width="60vw"
             flex="grow"
             margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >
-            <FormField name="gender" width="100%">
-              <TextInput placeholder="Type or select" name="gender" size="xxlarge" />
-            </FormField>
+            <Box direction="row" align="center" gap="12px">
+              <FormField name="gender" width="100%">
+                <TextInput placeholder="Type or select" name="gender" size="xxlarge" />
+              </FormField>
+              <ButtonWS type="reset" label="CLEAR" />
+              <ButtonWS
+                type="submit"
+                primary
+                label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+              />
+            </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap>
-              {pbCreator.looks
-                .filter((look) => look.category === LookType.gender)
-                .map((look) => renderPill(look, setGenderValue, 'gender'))}
+              {!!looks &&
+                looks
+                  .filter((look) => look.category === LookType.gender)
+                  .map((look) => renderPill(look, setGenderValue, 'gender'))}
             </Box>
           </Box>
-          <ActionButtons value={genderValue.gender} primaryLabel="SET" />
         </Form>
       )}
       {selectedStep === 1 && (
@@ -151,22 +163,30 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           onSubmit={({ value }: any) => handleSetClick(value.clothes, LookType.clothes)}
         >
           <Box
-            width="50vw"
+            width="60vw"
             flex="grow"
             margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >
-            <FormField name="clothes" width="100%">
-              <TextInput placeholder="Type or select" name="clothes" size="xxlarge" />
-            </FormField>
+            <Box direction="row" align="center" gap="12px">
+              <FormField name="clothes" width="100%">
+                <TextInput placeholder="Type or select" name="clothes" size="xxlarge" />
+              </FormField>
+              <ButtonWS type="reset" label="CLEAR" />
+              <ButtonWS
+                type="submit"
+                primary
+                label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+              />
+            </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap>
-              {pbCreator.looks
-                .filter((look) => look.category === LookType.clothes)
-                .map((look) => renderPill(look, setClothesValue, 'clothes'))}
+              {!!looks &&
+                looks
+                  .filter((look) => look.category === LookType.clothes)
+                  .map((look) => renderPill(look, setClothesValue, 'clothes'))}
             </Box>
           </Box>
-          <ActionButtons value={clothesValue.clothes} primaryLabel="SET" />
         </Form>
       )}
       {selectedStep === 2 && (
@@ -177,22 +197,30 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           onSubmit={({ value }: any) => handleSetClick(value.face, LookType.face)}
         >
           <Box
-            width="50vw"
+            width="60vw"
             flex="grow"
             margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >
-            <FormField name="face" width="100%">
-              <TextInput placeholder="Type or select" name="face" size="xxlarge" />
-            </FormField>
+            <Box direction="row" align="center" gap="12px">
+              <FormField name="face" width="100%">
+                <TextInput placeholder="Type or select" name="face" size="xxlarge" />
+              </FormField>
+              <ButtonWS type="reset" label="CLEAR" />
+              <ButtonWS
+                type="submit"
+                primary
+                label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+              />
+            </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
-              {pbCreator.looks
-                .filter((look) => look.category === LookType.face)
-                .map((look) => renderPill(look, setFaceValue, 'face'))}
+              {!!looks &&
+                looks
+                  .filter((look) => look.category === LookType.face)
+                  .map((look) => renderPill(look, setFaceValue, 'face'))}
             </Box>
           </Box>
-          <ActionButtons value={faceValue.face} primaryLabel="SET" />
         </Form>
       )}
       {selectedStep === 3 && (
@@ -203,22 +231,30 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           onSubmit={({ value }: any) => handleSetClick(value.eyes, LookType.eyes)}
         >
           <Box
-            width="50vw"
+            width="60vw"
             flex="grow"
             margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >
-            <FormField name="eyes" width="100%">
-              <TextInput placeholder="Type or select" name="eyes" size="xxlarge" />
-            </FormField>
+            <Box direction="row" align="center" gap="12px">
+              <FormField name="eyes" width="100%">
+                <TextInput placeholder="Type or select" name="eyes" size="xxlarge" />
+              </FormField>
+              <ButtonWS type="reset" label="CLEAR" />
+              <ButtonWS
+                type="submit"
+                primary
+                label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+              />
+            </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
-              {pbCreator.looks
-                .filter((look) => look.category === LookType.eyes)
-                .map((look) => renderPill(look, setEyesValue, 'eyes'))}
+              {!!looks &&
+                looks
+                  .filter((look) => look.category === LookType.eyes)
+                  .map((look) => renderPill(look, setEyesValue, 'eyes'))}
             </Box>
           </Box>
-          <ActionButtons value={eyesValue.eyes} primaryLabel="SET" />
         </Form>
       )}
       {selectedStep === 4 && (
@@ -229,22 +265,30 @@ const CharacterLooksForm: FC<CharacterLooksFormProps> = ({
           onSubmit={({ value }: any) => !settingLooks && handleSetClick(value.body, LookType.body)}
         >
           <Box
-            width="50vw"
+            width="60vw"
             flex="grow"
             margin={{ bottom: '12px' }}
             align="center"
             animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
           >
-            <FormField name="body" width="100%">
-              <TextInput placeholder="Type or select" name="body" size="xxlarge" />
-            </FormField>
+            <Box direction="row" align="center" gap="12px">
+              <FormField name="body" width="100%">
+                <TextInput placeholder="Type or select" name="body" size="xxlarge" />
+              </FormField>
+              <ButtonWS type="reset" label="CLEAR" />
+              <ButtonWS
+                type="submit"
+                primary
+                label={settingLooks ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+              />
+            </Box>
             <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
-              {pbCreator.looks
-                .filter((look) => look.category === LookType.body)
-                .map((look) => renderPill(look, setBodyValue, 'body'))}
+              {!!looks &&
+                looks
+                  .filter((look) => look.category === LookType.body)
+                  .map((look) => renderPill(look, setBodyValue, 'body'))}
             </Box>
           </Box>
-          <ActionButtons value={bodyValue.body} primaryLabel={settingLooks ? <Spinner fillColor="#FFF" /> : 'SET'} />
         </Form>
       )}
     </Box>
