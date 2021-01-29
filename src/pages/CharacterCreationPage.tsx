@@ -16,7 +16,6 @@ import CharacterHxForm from '../components/characterCreation/CharacterHxForm';
 import ScrollableIndicator from '../components/ScrollableIndicator';
 import Spinner from '../components/Spinner';
 import CloseButton from '../components/CloseButton';
-import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
 import { CharacterCreationSteps, StatType } from '../@types/enums';
 import { HxInput } from '../@types';
@@ -54,10 +53,6 @@ const CharacterCreationPage: FC = () => {
   const { game, userGameRole, setGameContext } = useGame();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-
-  const [setCharacterMoves, { loading: settingMoves }] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(
-    SET_CHARACTER_MOVES
-  );
   const [toggleStatHighlight, { loading: togglingHighlight }] = useMutation<
     ToggleStatHighlightData,
     ToggleStatHighlightVars
@@ -71,22 +66,6 @@ const CharacterCreationPage: FC = () => {
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
   const changeStep = (nextStep: number) => {
     !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
-  };
-
-  const handleSubmitCharacterMoves = async (moveIds: string[]) => {
-    console.log('moveIds', moveIds);
-    if (!!userGameRole && !!character) {
-      try {
-        await setCharacterMoves({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, moveIds },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        changeStep(CharacterCreationSteps.setHx);
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      } catch (error) {
-        console.error(error);
-      }
-    }
   };
 
   const handleToggleHighlight = async (stat: StatType) => {
@@ -241,13 +220,7 @@ const CharacterCreationPage: FC = () => {
           <PlaybookUniqueRouter />
         )}
         {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (
-          <CharacterMovesForm
-            playbookType={character.playbook}
-            characterName={character.name}
-            settingMoves={settingMoves}
-            handleSubmitCharacterMoves={handleSubmitCharacterMoves}
-            existingMoves={character.characterMoves}
-          />
+          <CharacterMovesForm />
         )}
         {creationStep === CharacterCreationSteps.setHx && !!character && !!character.playbook && (
           <CharacterHxForm

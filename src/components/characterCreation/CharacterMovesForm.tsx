@@ -1,15 +1,17 @@
 import React, { FC, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
+import { useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import { Box, CheckBox, Text } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
-import { PlaybookType } from '../../@types/enums';
-import { CharacterMove } from '../../@types/staticDataInterfaces';
+import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../../mutations/setCharacterMoves';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
+import { CharacterCreationSteps } from '../../@types/enums';
 import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -18,37 +20,32 @@ const StyledMarkdown = styled(ReactMarkdown)`
   }
 `;
 
-interface CharacterMovesFormProps {
-  playbookType: PlaybookType;
-  characterName: string;
-  settingMoves: boolean;
-  handleSubmitCharacterMoves: (moveIds: string[]) => void;
-  existingMoves?: CharacterMove[];
-}
-
-const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
-  playbookType,
-  characterName,
-  settingMoves,
-  handleSubmitCharacterMoves,
-}) => {
+const CharacterMovesForm: FC = () => {
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
+  const [selectedMoveIds, setSelectedMoveIds] = useState<string[]>([]);
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
 
-  const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
-    PLAYBOOK_CREATOR,
-    {
-      variables: { playbookType },
-    }
-  );
+  // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
+  const history = useHistory();
 
+  // --------------------------------------------------- Graphql hooks ----------------------------------------------------- //
+  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
+    PLAYBOOK_CREATOR,
+    // @ts-ignore
+    { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
+  );
   const playbookMoves = pbCreatorData?.playbookCreator.optionalMoves;
   const defaultMoves = pbCreatorData?.playbookCreator.defaultMoves;
-  const defaultMoveCount = pbCreatorData?.playbookCreator.defaultMoveCount;
+  // const defaultMoveCount = pbCreatorData?.playbookCreator.defaultMoveCount;
   const moveChoiceCount = pbCreatorData?.playbookCreator.moveChoiceCount;
-  const defaultMoveIds = defaultMoves?.map((move) => move.id);
+  const defaultMoveIds = defaultMoves?.map((move) => move.id) as string[]; // This will never be undefined; playbooks have at least one default move
+  const [setCharacterMoves, { loading: settingMoves }] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(
+    SET_CHARACTER_MOVES
+  );
 
-  const [selectedMoveIds, setSelectedMoveIds] = useState<string[]>([]);
-
+  // ------------------------------------------ Component functions and variables ------------------------------------------ //
   const handleSelectMove = (moveId: string) => {
     if (selectedMoveIds.includes(moveId)) {
       setSelectedMoveIds(selectedMoveIds.filter((id) => id !== moveId));
@@ -59,22 +56,21 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
     }
   };
 
-  if (
-    loadingPbCreator ||
-    !pbCreatorData ||
-    !playbookMoves ||
-    !defaultMoves ||
-    !defaultMoveCount ||
-    !moveChoiceCount ||
-    !defaultMoveIds
-  ) {
-    return (
-      <Box fill background="transparent" justify="center" align="center">
-        <Spinner />
-      </Box>
-    );
-  }
+  const handleSubmitCharacterMoves = async (moveIds: string[]) => {
+    if (!!userGameRole && !!character && !!game) {
+      try {
+        await setCharacterMoves({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, moveIds },
+        });
+        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setHx}`);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
+  // -------------------------------------------------- Render component  ---------------------------------------------------- //
   return (
     <Box
       fill
@@ -85,54 +81,67 @@ const CharacterMovesForm: FC<CharacterMovesFormProps> = ({
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
       <Box width="70vw" flex="grow">
-        <HeadingWS
-          level={2}
-          crustReady={crustReady}
-          textAlign="center"
-          style={{ maxWidth: 'unset' }}
-        >{`WHAT ARE ${characterName.toUpperCase()}'S MOVES?`}</HeadingWS>
-        {defaultMoves.map((move) => {
-          return (
-            <CheckBox
-              key={move.id}
-              checked
-              label={
-                <div>
-                  <Text weight="bold">{move.name}</Text>
-                  <StyledMarkdown>{move.description}</StyledMarkdown>
-                </div>
-              }
-            />
-          );
-        })}
+        <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT ARE ${
+          !!character?.name ? character.name.toUpperCase() : '...'
+        }'S MOVES?`}</HeadingWS>
+        {!!defaultMoves &&
+          defaultMoves.map((move, index) => {
+            if (index === 0) {
+              return (
+                <Box key={move.id} direction="row" align="center" justify="between">
+                  <CheckBox
+                    checked
+                    label={
+                      <div>
+                        <Text weight="bold">{move.name}</Text>
+                        <StyledMarkdown>{move.description}</StyledMarkdown>
+                      </div>
+                    }
+                  />
+                  <ButtonWS
+                    primary
+                    label={settingMoves ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+                    style={{ minHeight: '52px' }}
+                    disabled={selectedMoveIds.length !== moveChoiceCount}
+                    onClick={() => !settingMoves && handleSubmitCharacterMoves([...selectedMoveIds, ...defaultMoveIds])}
+                  />
+                </Box>
+              );
+            } else {
+              return (
+                <CheckBox
+                  key={move.id}
+                  checked
+                  label={
+                    <div>
+                      <Text weight="bold">{move.name}</Text>
+                      <StyledMarkdown>{move.description}</StyledMarkdown>
+                    </div>
+                  }
+                />
+              );
+            }
+          })}
         <Text size="large" weight="bold" margin={{ vertical: '12px' }}>
           Select {moveChoiceCount}
         </Text>
         <Box align="start" gap="12px">
-          {playbookMoves.map((move) => {
-            return (
-              <CheckBox
-                key={move.id}
-                label={
-                  <div>
-                    <Text weight="bold">{move.name}</Text>
-                    <StyledMarkdown>{move.description}</StyledMarkdown>
-                  </div>
-                }
-                checked={selectedMoveIds.includes(move.id)}
-                onChange={() => handleSelectMove(move.id)}
-              />
-            );
-          })}
-        </Box>
-        <Box direction="row" justify="end" gap="24px" margin={{ vertical: '12px' }}>
-          <ButtonWS
-            primary
-            label={settingMoves ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-            style={{ minHeight: '52px' }}
-            disabled={selectedMoveIds.length !== moveChoiceCount}
-            onClick={() => !settingMoves && handleSubmitCharacterMoves([...selectedMoveIds, ...defaultMoveIds])}
-          />
+          {!!playbookMoves &&
+            playbookMoves.map((move) => {
+              return (
+                <CheckBox
+                  key={move.id}
+                  label={
+                    <div>
+                      <Text weight="bold">{move.name}</Text>
+                      <StyledMarkdown>{move.description}</StyledMarkdown>
+                    </div>
+                  }
+                  checked={selectedMoveIds.includes(move.id)}
+                  onChange={() => handleSelectMove(move.id)}
+                />
+              );
+            })}
         </Box>
       </Box>
     </Box>
