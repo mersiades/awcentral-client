@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useState } from 'react';
+import React, { FC, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, FormField, TextInput } from 'grommet';
@@ -7,17 +7,12 @@ import Spinner from '../../Spinner';
 import { ButtonWS, HeadingWS, RedBox } from '../../../config/grommetConfig';
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../../../mutations/setAngelKit';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import { AngelKit } from '../../../@types/dataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 import { useHistory } from 'react-router-dom';
 import { CharacterCreationSteps } from '../../../@types/enums';
 
-interface AngelKitFormProps {
-  existingAngelKit?: AngelKit;
-}
-
-const AngelKitForm: FC<AngelKitFormProps> = ({ existingAngelKit }) => {
+const AngelKitForm: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
@@ -35,7 +30,9 @@ const AngelKitForm: FC<AngelKitFormProps> = ({ existingAngelKit }) => {
   const [setAngelKit, { loading: settingAngelKit }] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
 
   // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [stock, setStock] = useState(!!existingAngelKit ? existingAngelKit.stock : startingStock);
+  const [stock, setStock] = useState(
+    !!character?.playbookUnique?.angelKit ? character.playbookUnique.angelKit.stock : startingStock
+  );
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const handleSubmitAngelKit = async (stock: number, hasSupplier: boolean) => {
@@ -92,7 +89,7 @@ const AngelKitForm: FC<AngelKitFormProps> = ({ existingAngelKit }) => {
               value={stock}
               size="xlarge"
               textAlign="center"
-              onChange={(e) => !!existingAngelKit && setStock(parseInt(e.target.value))}
+              onChange={(e) => !!character.playbookUnique?.angelKit && setStock(parseInt(e.target.value))}
             />
           </FormField>
         </RedBox>

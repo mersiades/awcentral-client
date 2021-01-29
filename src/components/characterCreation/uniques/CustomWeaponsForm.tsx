@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { startsWith } from 'lodash';
 import styled from 'styled-components';
 import { Box, Text, TextArea, Tip } from 'grommet';
@@ -6,7 +6,6 @@ import { Box, Text, TextArea, Tip } from 'grommet';
 import Spinner from '../../Spinner';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
 import { ItemCharacteristic, TaggedItem } from '../../../@types';
-import { CustomWeapons } from '../../../@types/dataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 import { useMutation, useQuery } from '@apollo/client';
@@ -14,10 +13,6 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../.
 import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../../../mutations/setCustomWeapons';
 import { useHistory } from 'react-router-dom';
 import { CharacterCreationSteps } from '../../../@types/enums';
-
-interface CustomWeaponsFormProps {
-  existingCustomWeapons?: CustomWeapons;
-}
 
 const WeaponsUL = styled.ul`
   margin: 0;
@@ -28,16 +23,18 @@ const WeaponsUL = styled.ul`
   cursor: default;
 `;
 
-const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({ existingCustomWeapons }) => {
+const CustomWeaponsForm: FC = () => {
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game, character, userGameRole } = useGame();
+  const { crustReady } = useFonts();
+
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [baseValue, setBaseValue] = useState<TaggedItem | undefined>();
   const [characteristics, setCharacteristics] = useState<ItemCharacteristic[]>([]);
   const [value, setValue] = useState('');
-  const [weapons, setWeapons] = useState<string[]>(!!existingCustomWeapons ? [...existingCustomWeapons.weapons] : []);
-
-  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { game, character, userGameRole } = useGame();
-  const { crustReady } = useFonts();
+  const [weapons, setWeapons] = useState<string[]>(
+    !!character?.playbookUnique?.customWeapons ? [...character.playbookUnique.customWeapons.weapons] : []
+  );
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
@@ -62,10 +59,6 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({ existingCustomWeapons }
   } = pbCreatorData?.playbookCreator.playbookUniqueCreator.customWeaponsCreator || {};
   const [setCustomWeapons, { loading: settingCustomWeapons }] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(
     SET_CUSTOM_WEAPONS
-  );
-  console.log(
-    'pbCreatorData?.playbookCreator.playbookUniqueCreator.customWeaponsCreator',
-    pbCreatorData?.playbookCreator.playbookUniqueCreator.customWeaponsCreator
   );
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //

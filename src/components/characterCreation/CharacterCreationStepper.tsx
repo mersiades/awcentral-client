@@ -41,7 +41,6 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = () => {
   const query = new URLSearchParams(useLocation().search);
   const step = query.get('step');
   const currentStep = !!step ? parseInt(step) : undefined;
-  console.log('step in CharacterCreationStepper', step);
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {

@@ -46,7 +46,6 @@ const CharacterCreationPage: FC = () => {
   const query = new URLSearchParams(useLocation().search);
   const step = query.get('step');
   const creationStep = !!step ? parseInt(step) : undefined;
-  console.log('step', step);
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [character, setCharacter] = useState<Character | undefined>();
   const [showScrollable, setShowScrollable] = useState(false);
@@ -248,7 +247,6 @@ const CharacterCreationPage: FC = () => {
   }, [userGameRole, userId]);
 
   useEffect(() => {
-    console.log('character', character);
     if (!step) {
       if (!!character) {
         history.push(`/character-creation/${gameId}?step=${1}`);
@@ -260,15 +258,7 @@ const CharacterCreationPage: FC = () => {
     if (step === '0' && !!character) {
       history.push(`/character-creation/${gameId}?step=${1}`);
     }
-  }, [step, character, history]);
-
-  // On page refresh, or whenever the step param is 0,
-  // navigate to step 1 if the user already has a character
-  // useEffect(() => {
-  //   if (character && creationStep === CharacterCreationSteps.intro) {
-  //     history.push(`/character-creation/${gameId}?step=${2}`);
-  //   }
-  // }, [character, creationStep]);
+  }, [step, character, gameId, history]);
 
   useEffect(() => {
     if (!!game && !!userId) {
@@ -367,13 +357,7 @@ const CharacterCreationPage: FC = () => {
           />
         )}
         {creationStep === CharacterCreationSteps.setUnique && character && character.name && character.playbook && (
-          <PlaybookUniqueRouter
-            playbookType={character.playbook}
-            characterName={character.name}
-            existingAngelKit={character.playbookUnique?.angelKit}
-            existingCustomWeapons={character.playbookUnique?.customWeapons}
-            existingBrainerGear={character.playbookUnique?.brainerGear}
-          />
+          <PlaybookUniqueRouter />
         )}
         {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (
           <CharacterMovesForm

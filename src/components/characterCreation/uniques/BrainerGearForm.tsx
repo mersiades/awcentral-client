@@ -1,10 +1,9 @@
-import React, { Dispatch, FC, SetStateAction, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Box, CheckBox, Text } from 'grommet';
 
 import Spinner from '../../Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../../config/grommetConfig';
 import { StyledMarkdown } from '../../styledComponents';
-import { BrainerGear } from '../../../@types/dataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 import { useMutation, useQuery } from '@apollo/client';
@@ -13,17 +12,15 @@ import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../../
 import { useHistory } from 'react-router-dom';
 import { CharacterCreationSteps } from '../../../@types/enums';
 
-interface BrainerGearFormProps {
-  existingBrainerGear?: BrainerGear;
-}
-
-const BrainerGearForm: FC<BrainerGearFormProps> = ({ existingBrainerGear }) => {
-  // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [selectedGear, setSelectedGear] = useState(!!existingBrainerGear ? existingBrainerGear.brainerGear : []);
-
+const BrainerGearForm: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
+
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
+  const [selectedGear, setSelectedGear] = useState(
+    !!character?.playbookUnique?.brainerGear ? character.playbookUnique.brainerGear.brainerGear : []
+  );
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();

@@ -1,23 +1,13 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
-import { useQuery } from '@apollo/client';
+import React, { FC } from 'react';
 import { Box } from 'grommet';
 
 import Spinner from '../Spinner';
 import AngelKitForm from './uniques/AngelKitForm';
 import CustomWeaponsForm from './uniques/CustomWeaponsForm';
 import BrainerGearForm from './uniques/BrainerGearForm';
-import { AngelKit, BrainerGear, CustomWeapons } from '../../@types/dataInterfaces';
 import { PlaybookType } from '../../@types/enums';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import VehiclesFormContainer from './uniques/VehiclesFormContainer';
-
-interface PlaybookUniqueRouterProps {
-  playbookType: PlaybookType;
-  characterName: string;
-  existingCustomWeapons?: CustomWeapons;
-  existingAngelKit?: AngelKit;
-  existingBrainerGear?: BrainerGear;
-}
+import { useGame } from '../../contexts/gameContext';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -29,35 +19,19 @@ interface PlaybookUniqueRouterProps {
  * For example, only the BATTLEBABE has a Custom Weapons property,
  * so only the BATTLEBABE needs a CustomWeaponsForm.
  */
-const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
-  playbookType,
-  characterName,
-  existingCustomWeapons,
-  existingAngelKit,
-  existingBrainerGear,
-}) => {
-  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
-    variables: { playbookType },
-  });
+const PlaybookUniqueRouter: FC = () => {
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { character } = useGame();
 
-  const playbookUniqueCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator;
-
-  if (!playbookUniqueCreator) {
-    return (
-      <Box fill background="transparent" justify="center" align="center">
-        <Spinner />
-      </Box>
-    );
-  }
-
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
   const renderForm = () => {
-    switch (playbookType) {
+    switch (character?.playbook) {
       case PlaybookType.angel:
-        return <AngelKitForm existingAngelKit={existingAngelKit} />;
+        return <AngelKitForm />;
       case PlaybookType.battlebabe:
-        return <CustomWeaponsForm existingCustomWeapons={existingCustomWeapons} />;
+        return <CustomWeaponsForm />;
       case PlaybookType.brainer:
-        return <BrainerGearForm existingBrainerGear={existingBrainerGear} />;
+        return <BrainerGearForm />;
       case PlaybookType.driver:
         return <VehiclesFormContainer />;
       default:
@@ -74,7 +48,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
       align="center"
       justify="start"
     >
-      {renderForm()}
+      {!!character ? renderForm() : <Spinner />}
     </Box>
   );
 };
