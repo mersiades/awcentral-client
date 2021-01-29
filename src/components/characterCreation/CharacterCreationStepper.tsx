@@ -1,20 +1,18 @@
 import React, { FC } from 'react';
 import { Box, Text } from 'grommet';
 
-import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../@types/enums';
-import { Character } from '../../@types/dataInterfaces';
+import { CharacterCreationSteps, UniqueTypes } from '../../@types/enums';
 import { decapitalize } from '../../helpers/decapitalize';
 import { CustomUL } from '../../config/grommetConfig';
 import { IconProps, Next, Previous } from 'grommet-icons';
 import { useQuery } from '@apollo/client';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import styled, { css } from 'styled-components';
+import { useGame } from '../../contexts/gameContext';
 
 interface CharacterCreationStepperProps {
   currentStep: number;
   setCreationStep: (step: number) => void;
-  character?: Character;
-  playbookType?: PlaybookType;
 }
 
 const NextWithHover = styled(Next as React.FC<IconProps & JSX.IntrinsicElements['svg']>)(() => {
@@ -33,16 +31,13 @@ const PreviousWithHover = styled(Previous as React.FC<IconProps & JSX.IntrinsicE
   `;
 });
 
-const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
-  currentStep,
-  setCreationStep,
-  character,
-  playbookType,
-}) => {
+const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({ currentStep, setCreationStep }) => {
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { character } = useGame();
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     // @ts-ignore
-    variables: { playbookType },
-    skip: !playbookType,
+    variables: { playbookType: character?.playbook },
+    skip: !character?.playbook,
   });
 
   const pbCreator = pbCreatorData?.playbookCreator;

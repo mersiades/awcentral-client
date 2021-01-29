@@ -398,12 +398,7 @@ const CharacterCreationPage: FC = () => {
         />
       )}
 
-      <CharacterCreationStepper
-        character={character}
-        playbookType={character?.playbook}
-        currentStep={creationStep}
-        setCreationStep={setCreationStep}
-      />
+      <CharacterCreationStepper currentStep={creationStep} setCreationStep={setCreationStep} />
       <Box flex="grow">
         {creationStep === 0 && !!game && <NewGameIntro game={game} closeNewGameIntro={closeNewGameIntro} />}
         {creationStep === CharacterCreationSteps.selectPlaybook && (
