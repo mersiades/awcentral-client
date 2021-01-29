@@ -12,8 +12,8 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../.
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../../../mutations/setBrainerGear';
 
 interface BrainerGearFormProps {
-  existingBrainerGear?: BrainerGear;
   setCreationStep: Dispatch<SetStateAction<number>>;
+  existingBrainerGear?: BrainerGear;
 }
 
 const BrainerGearForm: FC<BrainerGearFormProps> = ({ setCreationStep, existingBrainerGear }) => {

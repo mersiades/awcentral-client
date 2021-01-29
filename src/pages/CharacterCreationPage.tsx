@@ -27,9 +27,7 @@ import SET_CHARACTER_LOOK, { SetCharacterLookData, SetCharacterLookVars } from '
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../mutations/setCharacterStats';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../mutations/setCharacterGear';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
-
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../mutations/setCharacterMoves';
-import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../mutations/setCustomWeapons';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../mutations/setCharacterHx';
 import { PlaybookType, CharacterCreationSteps, LookType, StatType } from '../@types/enums';
 import { HxInput } from '../@types';
@@ -95,9 +93,6 @@ const CharacterCreationPage: FC = () => {
     SET_CHARACTER_BARTER
   );
 
-  const [setCustomWeapons, { loading: settingCustomWeapons }] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(
-    SET_CUSTOM_WEAPONS
-  );
   const [setCharacterMoves, { loading: settingMoves }] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(
     SET_CHARACTER_MOVES
   );
@@ -233,21 +228,6 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  const handleSubmitCustomWeapons = async (weapons: string[]) => {
-    if (!!userGameRole && !!character) {
-      try {
-        await setCustomWeapons({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, weapons },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
-        });
-        setCreationStep((prevState) => prevState + 1);
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
-
   const handleSubmitCharacterMoves = async (moveIds: string[]) => {
     console.log('moveIds', moveIds);
     if (!!userGameRole && !!character) {
@@ -326,7 +306,7 @@ const CharacterCreationPage: FC = () => {
     }
   };
 
-  // -------------------------------------------------- UseEffects ---------------------------------------------------- //
+  // --------------------------------------------------- Effects ----------------------------------------------------- //
   // Put the User's Character into component state
   useEffect(() => {
     if (!!userGameRole?.characters && userGameRole.characters.length === 1) {
@@ -337,6 +317,7 @@ const CharacterCreationPage: FC = () => {
   // If page is loading but character is already partially created,
   // set creationStep to appropriate step
   useEffect(() => {
+    console.log('creationStep in useeffect', creationStep);
     if (
       character &&
       (creationStep === CharacterCreationSteps.intro || creationStep === CharacterCreationSteps.selectPlaybook)
@@ -358,6 +339,8 @@ const CharacterCreationPage: FC = () => {
       }
     }
   }, [character, creationStep]);
+
+  console.log('creationStep', creationStep);
 
   useEffect(() => {
     if (!!game && !!userId) {
@@ -478,11 +461,9 @@ const CharacterCreationPage: FC = () => {
           <PlaybookUniqueRouter
             playbookType={character.playbook}
             characterName={character.name}
-            settingCustomWeapons={settingCustomWeapons}
             existingAngelKit={character.playbookUnique?.angelKit}
             existingCustomWeapons={character.playbookUnique?.customWeapons}
             existingBrainerGear={character.playbookUnique?.brainerGear}
-            handleSubmitCustomWeapons={handleSubmitCustomWeapons}
             setCreationStep={setCreationStep}
           />
         )}

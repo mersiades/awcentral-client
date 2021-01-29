@@ -444,6 +444,7 @@ const CharacterCreationStepper: FC<CharacterCreationStepperProps> = ({
 
   return (
     <Box
+      data-testid="character-creation-stepper"
       direction="row"
       fill="horizontal"
       justify="center"

@@ -14,8 +14,6 @@ import VehiclesFormContainer from './uniques/VehiclesFormContainer';
 interface PlaybookUniqueRouterProps {
   playbookType: PlaybookType;
   characterName: string;
-  settingCustomWeapons: boolean;
-  handleSubmitCustomWeapons: (weapons: string[]) => void;
   existingCustomWeapons?: CustomWeapons;
   existingAngelKit?: AngelKit;
   existingBrainerGear?: BrainerGear;
@@ -35,8 +33,6 @@ interface PlaybookUniqueRouterProps {
 const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
   playbookType,
   characterName,
-  settingCustomWeapons,
-  handleSubmitCustomWeapons,
   existingCustomWeapons,
   existingAngelKit,
   existingBrainerGear,
@@ -59,19 +55,11 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
   const renderForm = () => {
     switch (playbookType) {
       case PlaybookType.angel:
-        return <AngelKitForm existingAngelKit={existingAngelKit} setCreationStep={setCreationStep} />;
+        return <AngelKitForm setCreationStep={setCreationStep} existingAngelKit={existingAngelKit} />;
       case PlaybookType.battlebabe:
-        return (
-          <CustomWeaponsForm
-            characterName={characterName}
-            settingCustomWeapons={settingCustomWeapons}
-            playbookUniqueCreator={playbookUniqueCreator}
-            handleSubmitCustomWeapons={handleSubmitCustomWeapons}
-            existingCustomWeapons={existingCustomWeapons}
-          />
-        );
+        return <CustomWeaponsForm setCreationStep={setCreationStep} existingCustomWeapons={existingCustomWeapons} />;
       case PlaybookType.brainer:
-        return <BrainerGearForm existingBrainerGear={existingBrainerGear} setCreationStep={setCreationStep} />;
+        return <BrainerGearForm setCreationStep={setCreationStep} existingBrainerGear={existingBrainerGear} />;
       case PlaybookType.driver:
         return <VehiclesFormContainer />;
       default:

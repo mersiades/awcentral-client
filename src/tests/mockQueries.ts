@@ -495,7 +495,7 @@ export const mockPlaybooksQuery: MockedResponse = {
     query: PLAYBOOKS,
   },
   result: () => {
-    // console.log('mockPlaybooksQuery');
+    console.log('mockPlaybooksQuery');
     return {
       data: {
         playbooks: mockPlaybooks,
@@ -2359,7 +2359,6 @@ export const mockPlayBookCreatorQueryBrainer: MockedResponse = {
           improvementInstructions: 'Whenever you roll a highlighted stat...',
           movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
           hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
-          names: [mockNameAngel1, mockNameAngel2],
           looks: [
             mockLookAngel1,
             mockLookAngel2,
@@ -2372,11 +2371,12 @@ export const mockPlayBookCreatorQueryBrainer: MockedResponse = {
             mockLookAngel9,
             mockLookAngel10,
           ],
+          names: [mockNameAngel1, mockNameAngel2],
           statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
-          optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel1, mockCharacterMoveAngel4],
-          defaultMoves: [mockCharacterMoveAngel1],
           defaultMoveCount: 1,
           moveChoiceCount: 2,
+          optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel1, mockCharacterMoveAngel4],
+          defaultMoves: [mockCharacterMoveAngel1],
           playbookUniqueCreator: mockUniqueCreatorBrainer,
         },
       },

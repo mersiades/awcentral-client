@@ -1221,11 +1221,49 @@ export const mockBikeCreator: BikeCreator = {
   battleOptions: [mockBattleOption1, mockBattleOption2],
 };
 
+export const mockFirearmBaseOption: TaggedItem = {
+  id: 'mock-firearm-base-option-id',
+  description: 'handgun',
+  tags: ['2-harm', 'close', 'reload', 'loud'],
+};
+
+export const mockFirearmOption: ItemCharacteristic = {
+  id: 'mock-firearm-option-id',
+  description: 'antique',
+  tag: '+valuable',
+};
+
+export const mockHandBaseOption: TaggedItem = {
+  id: 'mock-hand-base-option-id',
+  description: 'staff',
+  tags: ['1-harm', 'hand', 'area'],
+};
+
+export const mockHandOption: ItemCharacteristic = {
+  id: 'mock-hand-option-id',
+  description: 'ornate',
+  tag: '+valuable',
+};
+
+export const mockCustomWeaponsCreator: CustomWeaponsCreator = {
+  id: 'mock-custom-weapons-creator-id',
+  firearmsTitle: 'CUSTOM FIREARMS',
+  firearmsBaseInstructions: 'Base (choose 1):',
+  firearmsBaseOptions: [mockFirearmBaseOption],
+  firearmsOptionsInstructions: 'Options (choose 2):',
+  firearmsOptionsOptions: [mockFirearmOption],
+  handTitle: 'CUSTOM HAND WEAPONS',
+  handBaseInstructions: 'Base (choose 1):',
+  handBaseOptions: [mockHandBaseOption],
+  handOptionsInstructions: 'Options (choose 2, * counts as 2 options):',
+  handOptionsOptions: [mockHandOption],
+};
+
 export const mockUniqueCreatorDriver: PlaybookUniqueCreator = {
   id: 'driver-playbook-unique-creator-id',
   type: UniqueTypes.vehicle,
   angelKitCreator: dummyAngelKitCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
+  customWeaponsCreator: mockCustomWeaponsCreator,
   brainerGearCreator: dummyBrainerGearCreator,
   carCreator: mockCarCreator,
   bikeCreator: mockBikeCreator,

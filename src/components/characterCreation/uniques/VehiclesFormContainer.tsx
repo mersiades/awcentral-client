@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
-
-import Spinner from '../../Spinner';
-import { useGame } from '../../../contexts/gameContext';
-import VehicleForm from './VehicleForm';
 import { Tab, Tabs } from 'grommet';
+
+import VehicleForm from './VehicleForm';
+import Spinner from '../../Spinner';
 import { PlaybookType } from '../../../@types/enums';
+import { useGame } from '../../../contexts/gameContext';
 import { COLLECTOR } from '../../../config/constants';
 
 const VehiclesFormContainer: FC = () => {
