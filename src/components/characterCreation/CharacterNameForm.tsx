@@ -76,9 +76,18 @@ const CharacterNameForm: FC = () => {
           <HeadingWS crustReady={crustReady} level={2}>{`WHAT IS THE ${
             !!character?.playbook ? decapitalize(character?.playbook).toUpperCase() : '...'
           } CALLED?`}</HeadingWS>
-          <FormField name="characterName" width="100%">
-            <TextInput placeholder="Type or select name" name="characterName" size="xxlarge" />
-          </FormField>
+          <Box direction="row" align="center" gap="12px">
+            <FormField name="characterName" width="100%">
+              <TextInput placeholder="Type or select name" name="characterName" size="xxlarge" />
+            </FormField>
+
+            <ButtonWS type="reset" label="CLEAR" />
+            <ButtonWS
+              type="submit"
+              primary
+              label={settingName ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+            />
+          </Box>
           <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
             {!!names &&
               names.map((name) => (
@@ -99,14 +108,6 @@ const CharacterNameForm: FC = () => {
                 </Box>
               ))}
           </Box>
-        </Box>
-        <Box direction="row" justify="end" gap="12px" margin={{ top: '12px' }}>
-          <ButtonWS type="reset" label="CLEAR" />
-          <ButtonWS
-            type="submit"
-            primary
-            label={settingName ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-          />
         </Box>
       </Form>
     </Box>
