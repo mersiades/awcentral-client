@@ -29,6 +29,7 @@ interface GameProviderProps {
   children: JSX.Element;
   injectedGame?: Game; // Only used for mocking context in tests
   injectedUserId?: string; // Only used for mocking context in tests
+  injectedCharacter?: Character;
 }
 
 const GameContext = createContext<IGameContext>({});
@@ -37,7 +38,7 @@ export const useGame = () => useContext(GameContext);
 
 export const GameConsumer = GameContext.Consumer;
 
-export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, injectedUserId }) => {
+export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, injectedUserId, injectedCharacter }) => {
   const [gameId, setGameId] = useState<string | undefined>('');
   const [userId, setUserId] = useState<string | undefined>(injectedUserId);
   const [game, setGame] = useState<Game | undefined>(injectedGame);
@@ -45,7 +46,7 @@ export const GameProvider: FC<GameProviderProps> = ({ children, injectedGame, in
   const [mcGameRole, setMcGameRole] = useState<GameRole | undefined>(undefined);
   const [allPlayerGameRoles, setAllPlayerGameRoles] = useState<GameRole[] | undefined>(undefined);
   const [otherPlayerGameRoles, setOtherPlayerGameRoles] = useState<GameRole[] | undefined>(undefined);
-  const [character, setCharacter] = useState<Character | undefined>(undefined);
+  const [character, setCharacter] = useState<Character | undefined>(injectedCharacter);
 
   const {
     data,

@@ -73,6 +73,7 @@ const CharacterMovesForm: FC = () => {
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
   return (
     <Box
+      data-testid="moves-form"
       fill
       direction="column"
       background="transparent"

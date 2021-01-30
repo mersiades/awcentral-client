@@ -19,7 +19,7 @@ jest.mock('@react-keycloak/web', () => {
 });
 
 describe('Rendering AngelKitForm', () => {
-  test('should load AngelKitForm with default values', async () => {
+  test('should load AngelKitForm with default values and submit', async () => {
     const startCharacter = {
       id: mockCharacter2.id,
       hasCompletedCharacterCreation: mockCharacter2.hasCompletedCharacterCreation,
