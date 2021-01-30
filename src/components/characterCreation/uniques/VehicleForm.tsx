@@ -2,15 +2,22 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Box, TextInput, Text, Tip } from 'grommet';
 import { omit } from 'lodash';
 import React, { FC, useEffect, useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
 import { VehicleInput } from '../../../@types';
 import { Vehicle } from '../../../@types/dataInterfaces';
-import { BattleOptionType, PlaybookType, VehicleFrameType } from '../../../@types/enums';
+import {
+  BattleOptionType,
+  CharacterCreationSteps,
+  PlaybookType,
+  VehicleFrameType,
+  VehicleType,
+} from '../../../@types/enums';
 import { VehicleBattleOption, VehicleFrame } from '../../../@types/staticDataInterfaces';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 import SET_VEHICLE, { SetVehicleData, SetVehicleVars } from '../../../mutations/setVehicle';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
+import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../../queries/vehicleCreator';
 import Spinner from '../../Spinner';
 
 interface VehicleFormProps {
@@ -19,6 +26,7 @@ interface VehicleFormProps {
 
 interface VehicleFormState {
   name: string;
+  vehicleType: VehicleType;
   frame?: VehicleFrame;
   strengths: string[];
   looks: string[];
@@ -62,6 +70,7 @@ const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
       return {
         ...state,
         frame: action.payload,
+        vehicleType: action.payload === VehicleFrameType.bike ? VehicleType.bike : VehicleType.car,
         strengths: [] as string[],
         weaknesses: [] as string[],
         looks: [] as string[],
@@ -181,18 +190,17 @@ const VehicleForm: FC<VehicleFormProps> = ({ existingVehicle }) => {
     { frame, name, strengths, weaknesses, looks, speed, handling, massive, armor, battleOptions },
     dispatch,
   ] = useReducer(vehicleFormReducer, initialState);
-  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { character, userGameRole } = useGame();
+  const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
+
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const history = useHistory();
+
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
-  const { data: pbCreatorData, loading } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
-    // @ts-ignore
-    variables: { playbookType: character?.playbook },
-    skip: !character,
-  });
-  const carCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator.carCreator;
-  const bikeCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator.bikeCreator;
+  const { data: vehicleCreatorData, loading } = useQuery<VehicleCreatorData, VehicleCreatorVars>(VEHICLE_CREATOR);
+  const carCreator = vehicleCreatorData?.vehicleCreator.carCreator;
+  const bikeCreator = vehicleCreatorData?.vehicleCreator.bikeCreator;
   const [setVehicle, { loading: settingVehicle }] = useMutation<SetVehicleData, SetVehicleVars>(SET_VEHICLE);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
@@ -306,6 +314,10 @@ const VehicleForm: FC<VehicleFormProps> = ({ existingVehicle }) => {
             vehicleInput: omit(vehicleInput, ['__typename']),
           },
         });
+        if (!character.hasCompletedCharacterCreation && !!game) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        }
       } catch (error) {
         console.error(error);
       }
@@ -551,7 +563,13 @@ const VehicleForm: FC<VehicleFormProps> = ({ existingVehicle }) => {
             <TextWS style={redBoxLabelStyling}>Tags</TextWS>
           </Box>
 
-          <ButtonWS primary fill="horizontal" label="SET" onClick={() => !settingVehicle && handleSetVehicle()} />
+          <ButtonWS
+            primary
+            fill="horizontal"
+            label={settingVehicle ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+            onClick={() => !settingVehicle && handleSetVehicle()}
+            disabled={settingVehicle || battleOptions.length < frame.battleOptionCount}
+          />
         </Box>
       </Box>
     </Box>

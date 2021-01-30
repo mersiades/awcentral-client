@@ -56,7 +56,7 @@ const CustomWeaponsForm: FC = () => {
     handBaseOptions,
     handOptionsInstructions,
     handOptionsOptions,
-  } = pbCreatorData?.playbookCreator.playbookUniqueCreator.customWeaponsCreator || {};
+  } = pbCreatorData?.playbookCreator.playbookUniqueCreator?.customWeaponsCreator || {};
   const [setCustomWeapons, { loading: settingCustomWeapons }] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(
     SET_CUSTOM_WEAPONS
   );

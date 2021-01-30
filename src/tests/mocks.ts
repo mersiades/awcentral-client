@@ -23,6 +23,7 @@ import {
   StatType,
   UniqueTypes,
   VehicleFrameType,
+  VehicleType,
 } from '../@types/enums';
 import {
   AngelKitCreator,
@@ -64,6 +65,7 @@ interface MockCharacter {
   hasCompletedCharacterCreation: boolean;
   playbookUnique: PlaybookUnique;
   characterMoves: CharacterMove[];
+  vehicles: Vehicle[];
 }
 
 export const mockNewGameName = 'My new mock game';
@@ -194,25 +196,25 @@ export const dummyBattleOption: VehicleBattleOption = {
   name: '+1speed',
 };
 
-export const dummyCarCreator: CarCreator = {
-  id: 'dummy',
-  introInstructions: 'dummy',
-  frames: [dummyVehicleFrame],
-  strengths: [],
-  looks: [],
-  weaknesses: [],
-  battleOptions: [dummyBattleOption],
-};
+// export const dummyCarCreator: CarCreator = {
+//   id: 'dummy',
+//   introInstructions: 'dummy',
+//   frames: [dummyVehicleFrame],
+//   strengths: [],
+//   looks: [],
+//   weaknesses: [],
+//   battleOptions: [dummyBattleOption],
+// };
 
-export const dummyBikeCreator: BikeCreator = {
-  id: 'dummy',
-  introInstructions: 'dummy',
-  frame: dummyVehicleFrame,
-  strengths: [],
-  looks: [],
-  weaknesses: [],
-  battleOptions: [dummyBattleOption],
-};
+// export const dummyBikeCreator: BikeCreator = {
+//   id: 'dummy',
+//   introInstructions: 'dummy',
+//   frame: dummyVehicleFrame,
+//   strengths: [],
+//   looks: [],
+//   weaknesses: [],
+//   battleOptions: [dummyBattleOption],
+// };
 
 // ---------------------------------------------------- Mock Users ---------------------------------------------------- //
 
@@ -506,7 +508,7 @@ export const mockPlaybookUniqueBattlebabe: PlaybookUnique = {
   customWeapons: mockCustomWeapons,
   brainerGear: dummyBrainerGear,
   angelKit: dummyAngelKit,
-  vehicles: mockVehicles,
+  // vehicles: mockVehicles,
 };
 
 export const mockAngelKit: AngelKit = {
@@ -524,7 +526,7 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   customWeapons: dummyCustomWeapons,
   brainerGear: dummyBrainerGear,
   angelKit: mockAngelKit,
-  vehicles: mockVehicles,
+  // vehicles: mockVehicles,
 };
 
 export const mockCharacterHarm: CharacterHarm = {
@@ -555,6 +557,7 @@ export const mockCharacter1: MockCharacter = {
   ], // TODO: change to battlebabe moves
   playbookUnique: mockPlaybookUniqueBattlebabe,
   vehicleCount: 0,
+  vehicles: [],
 };
 
 export const mockCharacter2: MockCharacter = {
@@ -581,6 +584,7 @@ export const mockCharacter2: MockCharacter = {
   ],
   playbookUnique: mockPlaybookUniqueAngel,
   vehicleCount: 0,
+  vehicles: [],
 };
 
 export const mockGame1: Game = {
@@ -1102,8 +1106,6 @@ export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
   angelKitCreator: mockAngelKitCreator,
   customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: dummyBrainerGearCreator,
-  carCreator: dummyCarCreator,
-  bikeCreator: dummyBikeCreator,
 };
 
 export const mockPlaybookCreatorAngel: PlaybookCreator = {
@@ -1132,6 +1134,7 @@ export const mockPlaybookCreatorAngel: PlaybookCreator = {
   defaultMoves: [mockCharacterMoveAngel1],
   defaultMoveCount: 1,
   moveChoiceCount: 2,
+  defaultVehicleCount: 0,
 };
 
 export const mockPlaybookAngel: Playbook = {
@@ -1203,6 +1206,7 @@ export const mockBattleOption4: VehicleBattleOption = {
 
 export const mockCarCreator: CarCreator = {
   id: 'car-creator-id',
+  vehicleType: VehicleType.car,
   introInstructions: 'By default, your vehicle...',
   frames: [mockVehicleFrame1, mockVehicleFrame2, mockVehicleFrame3, mockVehicleFrame4],
   strengths: ['fast', 'reliable'],
@@ -1213,6 +1217,7 @@ export const mockCarCreator: CarCreator = {
 
 export const mockBikeCreator: BikeCreator = {
   id: 'car-creator-id',
+  vehicleType: VehicleType.bike,
   introInstructions: 'By default, your vehicle...',
   frame: mockVehicleFrame1,
   strengths: ['fast', 'reliable'],
@@ -1259,16 +1264,6 @@ export const mockCustomWeaponsCreator: CustomWeaponsCreator = {
   handOptionsOptions: [mockHandOption],
 };
 
-export const mockUniqueCreatorDriver: PlaybookUniqueCreator = {
-  id: 'driver-playbook-unique-creator-id',
-  type: UniqueTypes.vehicle,
-  angelKitCreator: dummyAngelKitCreator,
-  customWeaponsCreator: mockCustomWeaponsCreator,
-  brainerGearCreator: dummyBrainerGearCreator,
-  carCreator: mockCarCreator,
-  bikeCreator: mockBikeCreator,
-};
-
 export const mockPlaybookCreatorDriver: PlaybookCreator = {
   id: 'driver-playbook-creator-id',
   playbookType: PlaybookType.driver,
@@ -1290,11 +1285,11 @@ export const mockPlaybookCreatorDriver: PlaybookCreator = {
     mockLookAngel10,
   ],
   statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
-  playbookUniqueCreator: mockUniqueCreatorDriver,
   optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
   defaultMoves: [mockCharacterMoveAngel1],
   defaultMoveCount: 1,
   moveChoiceCount: 2,
+  defaultVehicleCount: 1,
 };
 
 export const mockPlaybooks: Playbook[] = [mockPlaybookAngel];
@@ -1309,18 +1304,17 @@ export const mockBrainerGearCreator: BrainerGearCreator = {
 
 export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
   id: 'brainer-playbook-unique-creator-id',
-  type: UniqueTypes.vehicle,
+  type: UniqueTypes.brainerGear,
   angelKitCreator: dummyAngelKitCreator,
   customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: mockBrainerGearCreator,
-  carCreator: dummyCarCreator,
-  bikeCreator: dummyBikeCreator,
 };
 
 // ---------------------------------------------- Mock user-generated data --------------------------------------------- //
 
 export const mockVehicleInput: VehicleInput = {
   name: 'New Vehicle',
+  vehicleType: VehicleType.car,
   vehicleFrame: mockVehicleFrame3,
   speed: 0,
   handling: 1,
@@ -1335,10 +1329,4 @@ export const mockVehicleInput: VehicleInput = {
 export const mockVehicle2: Vehicle = {
   ...mockVehicleInput,
   id: 'mock-vehicle-id-2',
-};
-
-export const mockPlaybookUniqueDriver: PlaybookUnique = {
-  id: 'mock-playbook-unique-driver-id',
-  type: UniqueTypes.vehicle,
-  vehicles: [mockVehicle2],
 };

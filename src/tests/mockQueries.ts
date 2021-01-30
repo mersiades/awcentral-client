@@ -68,11 +68,9 @@ import {
   mockPlaybooks,
   mockPlaybookCreatorDriver,
   mockgearInstructionsAngel,
-  mockUniqueCreatorDriver,
   mockStatsOptionsAngel1,
   mockStatsOptionsAngel2,
   mockStatsOptionsAngel3,
-  mockPlaybookUniqueDriver,
   mockUniqueCreatorAngel,
   mockUniqueCreatorBrainer,
 } from './mocks';
@@ -632,9 +630,9 @@ export const mockPlaybookCreator: MockedResponse = {
           moveChoiceCount: mockPlaybookCreatorAngel.moveChoiceCount,
           playbookMoves: mockPlaybookCreatorAngel.optionalMoves,
           playbookUniqueCreator: {
-            id: mockPlaybookCreatorAngel.playbookUniqueCreator.id,
-            type: mockPlaybookCreatorAngel.playbookUniqueCreator.type,
-            angelKitCreator: mockPlaybookCreatorAngel.playbookUniqueCreator.angelKitCreator,
+            id: mockPlaybookCreatorAngel.playbookUniqueCreator?.id,
+            type: mockPlaybookCreatorAngel.playbookUniqueCreator?.type,
+            angelKitCreator: mockPlaybookCreatorAngel.playbookUniqueCreator?.angelKitCreator,
             customWeaponsCreator: {
               id: 'dummy',
               firearmsTitle: 'dummy',
@@ -1524,7 +1522,7 @@ export const mockSetAngelKit: MockedResponse = {
     variables: {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
-      stock: mockPlaybookCreatorAngel.playbookUniqueCreator.angelKitCreator?.startingStock,
+      stock: mockPlaybookCreatorAngel.playbookUniqueCreator?.angelKitCreator?.startingStock,
       hasSupplier: false,
     },
   },
@@ -2238,47 +2236,6 @@ export const mockAddInvitee3: MockedResponse = {
         invitees: ['new@email.com'],
       },
     },
-  },
-};
-
-export const mockPlayBookCreatorQueryDriver: MockedResponse = {
-  request: {
-    query: PLAYBOOK_CREATOR,
-    variables: { playbookType: PlaybookType.driver },
-  },
-  result: () => {
-    // console.log('mockPlayBookCreatorQueryDriver');
-    return {
-      data: {
-        playbookCreator: {
-          id: 'driver-playbook-creator-id',
-          playbookType: PlaybookType.driver,
-          gearInstructions: mockgearInstructionsAngel,
-          improvementInstructions: 'Whenever you roll a highlighted stat...',
-          movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
-          hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
-          names: [mockNameAngel1, mockNameAngel2],
-          looks: [
-            mockLookAngel1,
-            mockLookAngel2,
-            mockLookAngel3,
-            mockLookAngel4,
-            mockLookAngel5,
-            mockLookAngel6,
-            mockLookAngel7,
-            mockLookAngel8,
-            mockLookAngel9,
-            mockLookAngel10,
-          ],
-          statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
-          optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel1, mockCharacterMoveAngel4],
-          defaultMoves: [mockCharacterMoveAngel1],
-          defaultMoveCount: 1,
-          moveChoiceCount: 2,
-          playbookUniqueCreator: mockUniqueCreatorDriver,
-        },
-      },
-    };
   },
 };
 

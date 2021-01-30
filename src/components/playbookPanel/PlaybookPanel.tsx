@@ -103,12 +103,8 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
           openDialog={openDialog}
         />
       )}
-      {!!character.playbookUnique && character.playbookUnique.vehicles.length > 0 && (
-        <VehiclesBox
-          vehicles={character.playbookUnique.vehicles}
-          navigateToCharacterCreation={navigateToCharacterCreation}
-          // openDialog={openDialog}
-        />
+      {character.vehicles.length > 0 && (
+        <VehiclesBox vehicles={character.vehicles} navigateToCharacterCreation={navigateToCharacterCreation} />
       )}
     </Box>
   );

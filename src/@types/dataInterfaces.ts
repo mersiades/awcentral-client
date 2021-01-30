@@ -63,6 +63,7 @@ export interface Character {
   name?: string;
   barter?: number;
   playbookUnique?: PlaybookUnique;
+  vehicles: Vehicle[];
 }
 
 export interface CharacterHarm {
@@ -100,7 +101,6 @@ export interface PlaybookUnique {
   brainerGear?: BrainerGear;
   angelKit?: AngelKit;
   customWeapons?: CustomWeapons;
-  vehicles: Vehicle[];
 }
 
 export interface BrainerGear {

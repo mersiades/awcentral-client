@@ -24,7 +24,8 @@ const AngelKitForm: FC = () => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType: PlaybookType.angel },
   });
-  const { angelKitInstructions, startingStock } = pbCreatorData?.playbookCreator.playbookUniqueCreator.angelKitCreator || {};
+  const { angelKitInstructions, startingStock } =
+    pbCreatorData?.playbookCreator.playbookUniqueCreator?.angelKitCreator || {};
   const [setAngelKit, { loading: settingAngelKit }] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
@@ -34,8 +35,11 @@ const AngelKitForm: FC = () => {
         await setAngelKit({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, stock, hasSupplier },
         });
-        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        }
       } catch (error) {
         console.error(error);
       }

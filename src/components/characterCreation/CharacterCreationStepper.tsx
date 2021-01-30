@@ -6,7 +6,7 @@ import { IconProps, Next, Previous } from 'grommet-icons';
 
 import { CustomUL } from '../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
-import { CharacterCreationSteps, UniqueTypes } from '../../@types/enums';
+import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -54,6 +54,28 @@ const CharacterCreationStepper: FC = () => {
 
   const changeStep = (nextStep: number) => {
     !!game && history.push(`/character-creation/${game.id}?step=${nextStep}`);
+  };
+
+  const handlePrevious = () => {
+    if (!!character?.name && !!character?.playbook && !!currentStep) {
+      // Skip over playbookUnique page for Driver
+      if (currentStep === CharacterCreationSteps.setVehicle && character.playbook === PlaybookType.driver) {
+        changeStep(currentStep - 2);
+      } else {
+        changeStep(currentStep - 1);
+      }
+    }
+  };
+
+  const handleNext = () => {
+    if (!!character?.name && !!character?.playbook && !!currentStep) {
+      // Skip over playbookUnique page for Driver
+      if (currentStep === CharacterCreationSteps.selectGear && character.playbook === PlaybookType.driver) {
+        changeStep(currentStep + 2);
+      } else {
+        changeStep(currentStep + 1);
+      }
+    }
   };
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
@@ -240,19 +262,6 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
-        case UniqueTypes.vehicle:
-          if (!!character.playbookUnique.vehicles) {
-            return (
-              <CustomUL data-testid="vehicles-box">
-                {character.playbookUnique.vehicles.map((vehicle) => (
-                  <li key={vehicle.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {vehicle.name}
-                  </li>
-                ))}
-              </CustomUL>
-            );
-          }
-          return null;
         default:
           return null;
       }
@@ -276,13 +285,49 @@ const CharacterCreationStepper: FC = () => {
       }}
     >
       <Text color="white" weight="bold" alignSelf="center">
-        {!!pbCreator ? decapitalize(pbCreator.playbookUniqueCreator.type) : '...'}
+        {!!pbCreator && pbCreator.playbookUniqueCreator ? decapitalize(pbCreator.playbookUniqueCreator.type) : '...'}
       </Text>
       {!!character && !!character.playbookUnique ? renderUnique() : <Text>...</Text>}
     </Box>
   );
 
   const box5Step7 = (
+    <Box
+      data-testid="vehicles-box"
+      margin={{ left: 'xsmall', right: 'xsmall' }}
+      justify="start"
+      width="11rem"
+      height="10rem"
+      gap="small"
+      align="center"
+      pad="small"
+      border
+      background={{ color: 'neutral-1', opacity: CharacterCreationSteps.setVehicle === currentStep ? 1 : 0.5 }}
+      onClick={(e: any) => {
+        e.currentTarget.blur();
+        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.setVehicle);
+      }}
+    >
+      <Text color="white" weight="bold" alignSelf="center">
+        Vehicles
+      </Text>
+      {!!character && !!character.vehicles && character.vehicles.length > 0 ? (
+        <CustomUL>
+          {character.vehicles.map((vehicle) => {
+            return (
+              <li key={vehicle.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {vehicle.name}
+              </li>
+            );
+          })}
+        </CustomUL>
+      ) : (
+        <Text>...</Text>
+      )}
+    </Box>
+  );
+
+  const box6Step8 = (
     <Box
       data-testid="moves-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
@@ -321,7 +366,7 @@ const CharacterCreationStepper: FC = () => {
     </Box>
   );
 
-  const box6Step8 = (
+  const box7Step9 = (
     <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
@@ -356,7 +401,10 @@ const CharacterCreationStepper: FC = () => {
     </Box>
   );
 
-  const boxesArray = [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8];
+  // Omit box for PlayBookUniques for Driver
+  const boxesArray = !!character?.playbookUnique
+    ? [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8, box7Step9]
+    : [box0Step1, box1Step3, box2Step4, box3Step5, box5Step7, box6Step8, box7Step9];
 
   const renderBoxesSmall = () => {
     if (currentStep !== undefined) {
@@ -467,23 +515,13 @@ const CharacterCreationStepper: FC = () => {
       style={{ maxHeight: '180px' }}
     >
       {!!currentStep && currentStep > 1 ? (
-        <PreviousWithHover
-          cursor="pointer"
-          onClick={() => !!character?.name && !!character?.playbook && changeStep(currentStep - 1)}
-          size="large"
-          color="accent-1"
-        />
+        <PreviousWithHover cursor="pointer" onClick={() => handlePrevious()} size="large" color="accent-1" />
       ) : (
         <div style={{ height: 48, width: 48, background: 'transparent' }} />
       )}
       {window.innerWidth < 800 ? renderBoxesSmall() : renderBoxes()}
       {!!currentStep && currentStep < 8 && currentStep > 1 && !!character?.name ? (
-        <NextWithHover
-          cursor="pointer"
-          onClick={() => !!character?.name && !!character?.playbook && changeStep(currentStep + 1)}
-          size="large"
-          color="accent-1"
-        />
+        <NextWithHover cursor="pointer" onClick={() => handleNext()} size="large" color="accent-1" />
       ) : (
         <div style={{ height: 48, width: 48, background: 'transparent' }} />
       )}

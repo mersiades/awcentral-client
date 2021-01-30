@@ -5,7 +5,7 @@ import { Box, TextArea } from 'grommet';
 
 import Spinner from '../Spinner';
 import { accentColors, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../../config/grommetConfig';
-import { CharacterCreationSteps } from '../../@types/enums';
+import { CharacterCreationSteps, PlaybookType } from '../../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
@@ -82,7 +82,10 @@ const CharacterGearForm: FC = () => {
         await setCharacterBarter({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
         });
-        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setUnique}`);
+        // Skip playbookUnique form if Driver
+        const nextStep =
+          character.playbook === PlaybookType.driver ? CharacterCreationSteps.setVehicle : CharacterCreationSteps.setUnique;
+        history.push(`/character-creation/${game.id}?step=${nextStep}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);

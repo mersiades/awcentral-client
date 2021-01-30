@@ -15,6 +15,12 @@ const PLAYBOOK_CREATOR = gql`
     playbookCreator(playbookType: $playbookType) {
       id
       playbookType
+      improvementInstructions
+      movesInstructions
+      hxInstructions
+      defaultMoveCount
+      moveChoiceCount
+      defaultVehicleCount
       gearInstructions {
         id
         gearIntro
@@ -25,9 +31,6 @@ const PLAYBOOK_CREATOR = gql`
         withMC
         startingBarter
       }
-      improvementInstructions
-      movesInstructions
-      hxInstructions
       looks {
         id
         look
@@ -45,8 +48,6 @@ const PLAYBOOK_CREATOR = gql`
         SHARP
         WEIRD
       }
-      defaultMoveCount
-      moveChoiceCount
       optionalMoves {
         id
         name
@@ -132,44 +133,6 @@ const PLAYBOOK_CREATOR = gql`
         brainerGearCreator {
           id
           gear
-        }
-        carCreator {
-          id
-          introInstructions
-          frames {
-            id
-            frameType
-            massive
-            examples
-            battleOptionCount
-          }
-          strengths
-          looks
-          weaknesses
-          battleOptions {
-            id
-            battleOptionType
-            name
-          }
-        }
-        bikeCreator {
-          id
-          introInstructions
-          frame {
-            id
-            frameType
-            massive
-            examples
-            battleOptionCount
-          }
-          strengths
-          looks
-          weaknesses
-          battleOptions {
-            id
-            battleOptionType
-            name
-          }
         }
       }
     }

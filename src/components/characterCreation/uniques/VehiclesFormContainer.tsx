@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Tab, Tabs } from 'grommet';
+import { Box, Tab, Tabs } from 'grommet';
 
 import VehicleForm from './VehicleForm';
 import Spinner from '../../Spinner';
@@ -13,7 +13,7 @@ const VehiclesFormContainer: FC = () => {
 
   useEffect(() => {
     if (!!character && !!character.playbook) {
-      const vehicles = character.playbookUnique?.vehicles;
+      const vehicles = character.vehicles;
       if (character.playbook === PlaybookType.chopper) {
         !!vehicles && vehicles.length > 1 ? setNumberVehiclesNeeded(vehicles.length) : setNumberVehiclesNeeded(1);
       } else if (character.playbook === PlaybookType.driver) {
@@ -40,24 +40,42 @@ const VehiclesFormContainer: FC = () => {
   } else if (numberVehiclesNeeded === 1) {
     // Render a single VehicleForm
     return (
-      <Tabs>
-        <Tab key={character.playbookUnique?.vehicles[0].id} title="Vehicle 1">
-          <VehicleForm existingVehicle={character.playbookUnique?.vehicles[0]} />
-        </Tab>
-      </Tabs>
+      <Box
+        fill
+        direction="column"
+        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+        pad="12px"
+        align="center"
+        justify="start"
+      >
+        <Tabs>
+          <Tab title="Vehicle 1">
+            <VehicleForm existingVehicle={character.vehicles[0]} />
+          </Tab>
+        </Tabs>
+      </Box>
     );
   } else {
     // tab form
     return (
-      <Tabs>
-        {/*
+      <Box
+        fill
+        direction="column"
+        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
+        pad="12px"
+        align="center"
+        justify="start"
+      >
+        <Tabs>
+          {/*
           // @ts-ignore */}
-        {[...Array(numberVehiclesNeeded).keys()].map((number) => (
-          <Tab key={number} title={`Vehicle ${number + 1}`}>
-            <VehicleForm existingVehicle={character.playbookUnique?.vehicles[number]} />
-          </Tab>
-        ))}
-      </Tabs>
+          {[...Array(numberVehiclesNeeded).keys()].map((number) => (
+            <Tab key={number} title={`Vehicle ${number + 1}`}>
+              <VehicleForm existingVehicle={character.vehicles[number]} />
+            </Tab>
+          ))}
+        </Tabs>
+      </Box>
     );
   }
 };

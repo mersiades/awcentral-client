@@ -1,13 +1,13 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Box } from 'grommet';
 
 import Spinner from '../Spinner';
 import AngelKitForm from './uniques/AngelKitForm';
 import CustomWeaponsForm from './uniques/CustomWeaponsForm';
 import BrainerGearForm from './uniques/BrainerGearForm';
-import { PlaybookType } from '../../@types/enums';
-import VehiclesFormContainer from './uniques/VehiclesFormContainer';
+import { CharacterCreationSteps, PlaybookType } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
+import { useHistory } from 'react-router-dom';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -21,7 +21,10 @@ import { useGame } from '../../contexts/gameContext';
  */
 const PlaybookUniqueRouter: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { character } = useGame();
+  const { game, character } = useGame();
+
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const history = useHistory();
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
   const renderForm = () => {
@@ -33,11 +36,17 @@ const PlaybookUniqueRouter: FC = () => {
       case PlaybookType.brainer:
         return <BrainerGearForm />;
       case PlaybookType.driver:
-        return <VehiclesFormContainer />;
+        break;
       default:
         return null;
     }
   };
+
+  useEffect(() => {
+    if (character?.playbook === PlaybookType.driver) {
+      !!game && history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setVehicle}`);
+    }
+  }, [game, character, history]);
 
   return (
     <Box

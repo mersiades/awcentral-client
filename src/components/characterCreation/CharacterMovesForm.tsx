@@ -62,7 +62,7 @@ const CharacterMovesForm: FC = () => {
         await setCharacterMoves({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, moveIds },
         });
-        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setHx}`);
+        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setVehicle}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
