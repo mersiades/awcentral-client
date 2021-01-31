@@ -24,6 +24,7 @@ const AngelKitForm: FC = () => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType: PlaybookType.angel },
   });
+
   const { angelKitInstructions, startingStock } =
     pbCreatorData?.playbookCreator.playbookUniqueCreator?.angelKitCreator || {};
   const [setAngelKit, { loading: settingAngelKit }] = useMutation<SetAngelKitData, SetAngelKitVars>(SET_ANGEL_KIT);

@@ -46,6 +46,7 @@ import {
   StatModifier,
   StatsOption,
   VehicleBattleOption,
+  VehicleCreator,
   VehicleFrame,
 } from '../@types/staticDataInterfaces';
 import { ANGEL_SPECIAL_NAME, UNDER_FIRE_NAME } from '../config/constants';
@@ -1224,6 +1225,12 @@ export const mockBikeCreator: BikeCreator = {
   looks: ['sleek', 'antique'],
   weaknesses: ['guzzler'],
   battleOptions: [mockBattleOption1, mockBattleOption2],
+};
+
+export const mockVehicleCreator: VehicleCreator = {
+  id: 'mock-vehicle=creator-id',
+  carCreator: mockCarCreator,
+  bikeCreator: mockBikeCreator,
 };
 
 export const mockFirearmBaseOption: TaggedItem = {

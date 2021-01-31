@@ -2,16 +2,16 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Box, TextInput, Text, Tip } from 'grommet';
 import { omit } from 'lodash';
 import React, { FC, useEffect, useReducer } from 'react';
-import { VehicleInput } from '../../../@types';
-import { Vehicle } from '../../../@types/dataInterfaces';
-import { BattleOptionType, PlaybookType, VehicleFrameType, VehicleType } from '../../../@types/enums';
-import { VehicleBattleOption, VehicleFrame } from '../../../@types/staticDataInterfaces';
-import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
-import { useFonts } from '../../../contexts/fontContext';
-import { useGame } from '../../../contexts/gameContext';
-import SET_VEHICLE, { SetVehicleData, SetVehicleVars } from '../../../mutations/setVehicle';
-import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../../queries/vehicleCreator';
-import Spinner from '../../Spinner';
+import { VehicleInput } from '../../@types';
+import { Vehicle } from '../../@types/dataInterfaces';
+import { BattleOptionType, PlaybookType, VehicleFrameType, VehicleType } from '../../@types/enums';
+import { VehicleBattleOption, VehicleFrame } from '../../@types/staticDataInterfaces';
+import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../config/grommetConfig';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
+import SET_VEHICLE, { SetVehicleData, SetVehicleVars } from '../../mutations/setVehicle';
+import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../queries/vehicleCreator';
+import Spinner from '../Spinner';
 
 interface VehicleFormProps {
   navigateOnSet: (numVehicles: number) => void;

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { Box, Tab, Tabs } from 'grommet';
 
-import VehicleForm from './VehicleForm';
+import VehicleForm from '../VehicleForm';
 import Spinner from '../../Spinner';
 import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
 import { useGame } from '../../../contexts/gameContext';

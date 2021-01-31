@@ -44,6 +44,7 @@ const CharacterCreationStepper: FC = () => {
     variables: { playbookType: character?.playbook },
     skip: !character?.playbook,
   });
+
   const pbCreator = pbCreatorData?.playbookCreator;
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //

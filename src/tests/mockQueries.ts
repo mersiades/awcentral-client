@@ -29,6 +29,7 @@ import GAMES_FOR_INVITEE from '../queries/gamesForInvitee';
 import PLAYBOOK from '../queries/playbook';
 import PLAYBOOK_CREATOR from '../queries/playbookCreator';
 import PLAYBOOKS from '../queries/playbooks';
+import VEHICLE_CREATOR from '../queries/vehicleCreator';
 import {
   dummyAngelKitMove,
   mockAllMovesArray,
@@ -73,6 +74,7 @@ import {
   mockStatsOptionsAngel3,
   mockUniqueCreatorAngel,
   mockUniqueCreatorBrainer,
+  mockVehicleCreator,
 } from './mocks';
 
 export const mockGameRolesByUserId: MockedResponse = {
@@ -1527,7 +1529,7 @@ export const mockSetAngelKit: MockedResponse = {
     },
   },
   result: () => {
-    // console.log('mockSetAngelKit');
+    console.log('mockSetAngelKit');
     return {
       data: {
         setAngelKit: {
@@ -2336,6 +2338,20 @@ export const mockPlayBookCreatorQueryBrainer: MockedResponse = {
           defaultMoves: [mockCharacterMoveAngel1],
           playbookUniqueCreator: mockUniqueCreatorBrainer,
         },
+      },
+    };
+  },
+};
+
+export const mockVehicleCreatorQuery: MockedResponse = {
+  request: {
+    query: VEHICLE_CREATOR,
+  },
+  result: () => {
+    // console.log('mockVehicleCreator');
+    return {
+      data: {
+        vehicleCreator: mockVehicleCreator,
       },
     };
   },
