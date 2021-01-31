@@ -7,7 +7,8 @@ export enum CharacterCreationSteps {
   selectGear = 5,
   setUnique = 6,
   selectMoves = 7,
-  setHx = 8,
+  setVehicle = 8,
+  setHx = 9,
 }
 
 export enum RoleType {
@@ -60,7 +61,6 @@ export enum UniqueTypes {
   customWeapons = 'CUSTOM_WEAPONS',
   brainerGear = 'BRAINER_GEAR',
   gang = 'GANG',
-  vehicle = 'VEHICLE',
   weapons = 'WEAPONS',
   holding = 'HOLDING',
   followers = 'FOLLOWERS',
@@ -121,4 +121,10 @@ export enum BattleOptionType {
   handling = 'HANDLING',
   massive = 'MASSIVE',
   armor = 'ARMOR',
+}
+
+export enum VehicleType {
+  bike = 'BIKE',
+  car = 'CAR',
+  combat = 'COMBAT',
 }

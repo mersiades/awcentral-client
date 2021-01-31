@@ -81,57 +81,5 @@ const HxBox: FC<HxBoxProps> = ({ hxStats, adjustingHx, handleAdjustHx, navigateT
       </Box>
     </CollapsiblePanelBox>
   );
-
-  // return (
-  //   <Box width="23vw" align="start" justify="start" pad={{ vertical: '12px', right: '12px' }}>
-  //     <HeadingWS crustReady={crustReady} level="3" margin="0px">
-  //       Hx
-  //     </HeadingWS>
-  //     {hxStats.map((stat) => (
-  //       <Box fill="horizontal" key={stat.characterId}>
-  //         <Box fill="horizontal" direction="row" justify="between" align="center">
-  //           <HeadingWS crustReady={crustReady} level="4" margin={{ vertical: '6px', left: '12px' }}>
-  //             {stat.characterName}
-  //           </HeadingWS>
-  //           <Box direction="row" align="center" gap="12px">
-  //             <RedBox width="50px" align="center" margin={{ left: '12px' }}>
-  //               <HeadingWS
-  //                 crustReady={crustReady}
-  //                 level="2"
-  //                 margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}
-  //               >
-  //                 {stat.hxValue}
-  //               </HeadingWS>
-  //             </RedBox>
-  //             <Box align="center" justify="around">
-  //               {adjustingHx ? (
-  //                 <Box width="48px" height="80px" />
-  //               ) : (
-  //                 <Box
-  //                   align="center"
-  //                   justify="around"
-  //                   animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
-  //                 >
-  //                   <CaretUpFill
-  //                     size="large"
-  //                     color="brand"
-  //                     onClick={() => increaseHx(stat.characterId, stat.hxValue)}
-  //                     style={{ height: '40px' }}
-  //                   />
-  //                   <CaretDownFill
-  //                     size="large"
-  //                     color="brand"
-  //                     onClick={() => decreaseHx(stat.characterId, stat.hxValue)}
-  //                     style={{ height: '40px' }}
-  //                   />
-  //                 </Box>
-  //               )}
-  //             </Box>
-  //           </Box>
-  //         </Box>
-  //       </Box>
-  //     ))}
-  //   </Box>
-  // );
 };
 export default HxBox;

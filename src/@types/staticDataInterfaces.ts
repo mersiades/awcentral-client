@@ -9,6 +9,7 @@ import {
   StatType,
   UniqueTypes,
   VehicleFrameType,
+  VehicleType,
 } from './enums';
 
 /**
@@ -37,11 +38,12 @@ export interface PlaybookCreator {
   names: Name[];
   looks: Look[];
   statsOptions: StatsOption[];
-  playbookUniqueCreator: PlaybookUniqueCreator;
+  playbookUniqueCreator?: PlaybookUniqueCreator; // Driver does not have a PlaybookUnique
   optionalMoves: Move[];
   defaultMoves: Move[];
   defaultMoveCount: number;
   moveChoiceCount: number;
+  defaultVehicleCount: number;
 }
 
 export interface Name {
@@ -137,8 +139,6 @@ export interface PlaybookUniqueCreator {
   angelKitCreator?: AngelKitCreator;
   customWeaponsCreator?: CustomWeaponsCreator;
   brainerGearCreator?: BrainerGearCreator;
-  carCreator?: CarCreator;
-  bikeCreator?: BikeCreator;
 }
 
 export interface AngelKitCreator {
@@ -148,6 +148,7 @@ export interface AngelKitCreator {
 }
 
 export interface CustomWeaponsCreator {
+  id?: string;
   firearmsTitle: string;
   firearmsBaseInstructions: string;
   firearmsBaseOptions: TaggedItem[];
@@ -165,8 +166,15 @@ export interface BrainerGearCreator {
   gear: string[];
 }
 
+export interface VehicleCreator {
+  id: string;
+  carCreator: CarCreator;
+  bikeCreator: BikeCreator;
+}
+
 export interface CarCreator {
   id: string;
+  vehicleType: VehicleType;
   introInstructions: string;
   frames: VehicleFrame[];
   strengths: string[];
@@ -177,6 +185,7 @@ export interface CarCreator {
 
 export interface BikeCreator {
   id: string;
+  vehicleType: VehicleType;
   introInstructions: string;
   frame: VehicleFrame;
   strengths: string[];

@@ -6,17 +6,13 @@ import { Box, Text, TextArea, Tip } from 'grommet';
 import Spinner from '../../Spinner';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
 import { ItemCharacteristic, TaggedItem } from '../../../@types';
-import { CustomWeapons } from '../../../@types/dataInterfaces';
-import { PlaybookUniqueCreator } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
-
-interface CustomWeaponsFormProps {
-  characterName: string;
-  settingCustomWeapons: boolean;
-  playbookUniqueCreator: PlaybookUniqueCreator;
-  handleSubmitCustomWeapons: (weapons: string[]) => void;
-  existingCustomWeapons?: CustomWeapons;
-}
+import { useGame } from '../../../contexts/gameContext';
+import { useMutation, useQuery } from '@apollo/client';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
+import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../../../mutations/setCustomWeapons';
+import { useHistory } from 'react-router-dom';
+import { CharacterCreationSteps } from '../../../@types/enums';
 
 const WeaponsUL = styled.ul`
   margin: 0;
@@ -27,20 +23,28 @@ const WeaponsUL = styled.ul`
   cursor: default;
 `;
 
-const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
-  characterName,
-  settingCustomWeapons,
-  playbookUniqueCreator,
-  handleSubmitCustomWeapons,
-  existingCustomWeapons,
-}) => {
+const CustomWeaponsForm: FC = () => {
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game, character, userGameRole } = useGame();
+  const { crustReady } = useFonts();
+
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [baseValue, setBaseValue] = useState<TaggedItem | undefined>();
   const [characteristics, setCharacteristics] = useState<ItemCharacteristic[]>([]);
   const [value, setValue] = useState('');
-  const [weapons, setWeapons] = useState<string[]>(!!existingCustomWeapons ? [...existingCustomWeapons.weapons] : []);
+  const [weapons, setWeapons] = useState<string[]>(
+    !!character?.playbookUnique?.customWeapons ? [...character.playbookUnique.customWeapons.weapons] : []
+  );
 
-  const { crustReady } = useFonts();
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const history = useHistory();
 
+  // ------------------------------------------------------ graphQL -------------------------------------------------------- //
+  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
+    // @ts-ignore
+    variables: { playbookType: character?.playbook },
+    skip: !character,
+  });
   const {
     firearmsTitle,
     firearmsBaseInstructions,
@@ -52,8 +56,12 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
     handBaseOptions,
     handOptionsInstructions,
     handOptionsOptions,
-  } = playbookUniqueCreator.customWeaponsCreator || {};
+  } = pbCreatorData?.playbookCreator.playbookUniqueCreator?.customWeaponsCreator || {};
+  const [setCustomWeapons, { loading: settingCustomWeapons }] = useMutation<SetCustomWeaponsData, SetCustomWeaponsVars>(
+    SET_CUSTOM_WEAPONS
+  );
 
+  // ------------------------------------------------- Component functions -------------------------------------------------- //
   const getParsedValue = useCallback(() => {
     if (!baseValue && characteristics.length === 0) {
       return '';
@@ -185,6 +193,28 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
     setValue('');
   };
 
+  const handleSubmitCustomWeapons = async (weapons: string[]) => {
+    if (!!userGameRole && !!character && !!game) {
+      try {
+        await setCustomWeapons({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, weapons },
+          // refetchQueries: [{ query: GAME, variables: { gameId } }],
+        });
+        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  // ----------------------------------------------------- Effects ------------------------------------------------------- //
+  useEffect(() => {
+    getParsedValue();
+  }, [baseValue, characteristics, getParsedValue]);
+
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
+
   const renderBasePill = (option: TaggedItem) => {
     const selectedId = baseValue?.id;
     return (
@@ -234,17 +264,19 @@ const CustomWeaponsForm: FC<CustomWeaponsFormProps> = ({
     );
   };
 
-  useEffect(() => {
-    getParsedValue();
-  }, [baseValue, characteristics, getParsedValue]);
-
   return (
-    <Box width="60vw" direction="column" align="start" justify="between" flex="grow" style={{ minHeight: '625px' }}>
-      <HeadingWS
-        crustReady={crustReady}
-        level={2}
-        alignSelf="center"
-      >{`WHAT ARE ${characterName.toUpperCase()}'S TWO CUSTOM WEAPONS?`}</HeadingWS>
+    <Box
+      data-testid="custom-weapons-form"
+      width="70vw"
+      direction="column"
+      align="start"
+      justify="between"
+      flex="grow"
+      style={{ minHeight: '625px' }}
+    >
+      <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`WHAT ARE ${
+        !!character && !!character.name ? character.name.toUpperCase() : ' ...'
+      }'S TWO CUSTOM WEAPONS?`}</HeadingWS>
       <TextWS alignSelf="center">Mix'n'match. Edit directly if necessary.</TextWS>
       <Box fill="horizontal" direction="row" justify="start" height="145px">
         <Box height="152px" gap="12px" align="center" justify="between" width="60%">

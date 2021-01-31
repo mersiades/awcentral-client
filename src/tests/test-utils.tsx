@@ -12,7 +12,7 @@ import { KeycloakUserProvider } from '../contexts/keycloakUserContext';
 import { theme } from '../config/grommetConfig';
 import { mockKeycloakUser1 } from './mocks';
 import { GameProvider } from '../contexts/gameContext';
-import { Game } from '../@types/dataInterfaces';
+import { Character, Game } from '../@types/dataInterfaces';
 
 interface CustomRenderOptions {
   isAuthenticated?: boolean;
@@ -22,6 +22,7 @@ interface CustomRenderOptions {
   keycloakUser?: KeycloakUser;
   injectedGame?: Game;
   injectedUserId?: string;
+  injectedCharacter?: Character;
 }
 
 // All the providers for unit tests
@@ -34,6 +35,7 @@ const ComponentProviders = ({
   keycloakUser = mockKeycloakUser1,
   injectedGame,
   injectedUserId,
+  injectedCharacter,
 }: any) => {
   return (
     <BrowserRouter>
@@ -46,7 +48,11 @@ const ComponentProviders = ({
                 onLoad: 'login-required',
               }}
             >
-              <GameProvider injectedGame={injectedGame} injectedUserId={injectedUserId}>
+              <GameProvider
+                injectedGame={injectedGame}
+                injectedUserId={injectedUserId}
+                injectedCharacter={injectedCharacter}
+              >
                 <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
               </GameProvider>
             </ReactKeycloakProvider>
@@ -67,6 +73,7 @@ const AppProviders = ({
   keycloakUser = mockKeycloakUser1,
   injectedGame,
   injectedUserId,
+  injectedCharacter,
 }: any) => {
   return (
     <BrowserRouter>
@@ -79,7 +86,11 @@ const AppProviders = ({
                 onLoad: 'login-required',
               }}
             >
-              <GameProvider injectedGame={injectedGame} injectedUserId={injectedUserId}>
+              <GameProvider
+                injectedGame={injectedGame}
+                injectedUserId={injectedUserId}
+                injectedCharacter={injectedCharacter}
+              >
                 <KeycloakUserProvider keycloakUser={{ ...keycloakUser }}>{children}</KeycloakUserProvider>
               </GameProvider>
             </ReactKeycloakProvider>

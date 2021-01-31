@@ -63,6 +63,7 @@ const GAME = gql`
           hasCompletedCharacterCreation
           gear
           barter
+          vehicleCount
           harm {
             id
             value
@@ -72,7 +73,6 @@ const GAME = gql`
             hasChangedPlaybook
             hasDied
           }
-          vehicleCount
           statsBlock {
             id
             statsOptionId
@@ -108,6 +108,30 @@ const GAME = gql`
               statToRollWith
             }
           }
+          vehicles {
+            id
+            name
+            vehicleType
+            vehicleFrame {
+              id
+              frameType
+              massive
+              examples
+              battleOptionCount
+            }
+            speed
+            handling
+            armor
+            massive
+            strengths
+            weaknesses
+            looks
+            battleOptions {
+              id
+              battleOptionType
+              name
+            }
+          }
           playbookUnique {
             id
             type
@@ -139,29 +163,6 @@ const GAME = gql`
             customWeapons {
               id
               weapons
-            }
-            vehicles {
-              id
-              name
-              vehicleFrame {
-                id
-                frameType
-                massive
-                examples
-                battleOptionCount
-              }
-              speed
-              handling
-              armor
-              massive
-              strengths
-              weaknesses
-              looks
-              battleOptions {
-                id
-                battleOptionType
-                name
-              }
             }
           }
         }

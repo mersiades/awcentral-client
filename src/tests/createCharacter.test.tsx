@@ -6,7 +6,8 @@ import userEvent from '@testing-library/user-event';
 import App from '../components/App';
 import { renderWithRouter } from './test-utils';
 import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
-import { mockCharacter1, mockCharacter2, mockGame5, mockKeycloakUserInfo1, mockPlaybookCreatorAngel } from './mocks';
+import { mockCharacter1, mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from './mocks';
+import { mockPlaybookCreatorAngel } from './mockStaticData';
 import {
   mockCreateCharacter,
   mockfinishCharacterCreation,

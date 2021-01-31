@@ -2,17 +2,19 @@ import React, { FC } from 'react';
 import { Anchor, Box } from 'grommet';
 
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
-import { Game } from '../../@types/dataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 
 interface NewGameIntroProps {
   closeNewGameIntro: () => void;
-  game?: Game;
 }
 
-const NewGameIntro: FC<NewGameIntroProps> = ({ game, closeNewGameIntro }) => {
+const NewGameIntro: FC<NewGameIntroProps> = ({ closeNewGameIntro }) => {
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game } = useGame();
   const { crustReady } = useFonts();
 
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
   const renderComms = () => {
     if (!!game) {
       if (!!game.commsApp) {

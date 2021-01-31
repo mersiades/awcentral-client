@@ -20,6 +20,7 @@ import SET_CHARACTER_NAME from '../mutations/setCharacterName';
 import SET_CHARACTER_PLAYBOOK from '../mutations/setCharacterPlaybook';
 import SET_CHARACTER_STATS from '../mutations/setCharacterStats';
 import SET_GAME_NAME from '../mutations/setGameName';
+import SET_VEHICLE from '../mutations/setVehicle';
 import TOGGLE_STAT_HIGHLIGHT from '../mutations/toggleStatHighlight';
 import ALL_MOVES from '../queries/allMoves';
 import GAME from '../queries/game';
@@ -28,10 +29,14 @@ import GAMES_FOR_INVITEE from '../queries/gamesForInvitee';
 import PLAYBOOK from '../queries/playbook';
 import PLAYBOOK_CREATOR from '../queries/playbookCreator';
 import PLAYBOOKS from '../queries/playbooks';
+import VEHICLE_CREATOR from '../queries/vehicleCreator';
 import {
   dummyAngelKitMove,
   mockAllMovesArray,
   mockCharacter2,
+  mockCharacterMoveAngel1,
+  mockCharacterMoveAngel2,
+  mockCharacterMoveAngel4,
   mockGame1,
   mockGame2,
   mockGame3,
@@ -44,11 +49,32 @@ import {
   mockHxInput,
   mockKeycloakUser1,
   mockKeycloakUser2,
+  mockLookAngel1,
+  mockLookAngel10,
+  mockLookAngel2,
+  mockLookAngel3,
+  mockLookAngel4,
+  mockLookAngel5,
+  mockLookAngel6,
+  mockLookAngel7,
+  mockLookAngel8,
+  mockLookAngel9,
+  mockNameAngel1,
+  mockNameAngel2,
   mockNewGameName,
+  mockStatsBlockWithHighlight,
+  mockVehicleInput,
   mockPlaybookAngel,
   mockPlaybookCreatorAngel,
   mockPlaybooks,
-  mockStatsBlockWithHighlight,
+  mockPlaybookCreatorDriver,
+  mockgearInstructionsAngel,
+  mockStatsOptionsAngel1,
+  mockStatsOptionsAngel2,
+  mockStatsOptionsAngel3,
+  mockUniqueCreatorAngel,
+  mockUniqueCreatorBrainer,
+  mockVehicleCreator,
 } from './mocks';
 
 export const mockGameRolesByUserId: MockedResponse = {
@@ -606,9 +632,9 @@ export const mockPlaybookCreator: MockedResponse = {
           moveChoiceCount: mockPlaybookCreatorAngel.moveChoiceCount,
           playbookMoves: mockPlaybookCreatorAngel.optionalMoves,
           playbookUniqueCreator: {
-            id: mockPlaybookCreatorAngel.playbookUniqueCreator.id,
-            type: mockPlaybookCreatorAngel.playbookUniqueCreator.type,
-            angelKitCreator: mockPlaybookCreatorAngel.playbookUniqueCreator.angelKitCreator,
+            id: mockPlaybookCreatorAngel.playbookUniqueCreator?.id,
+            type: mockPlaybookCreatorAngel.playbookUniqueCreator?.type,
+            angelKitCreator: mockPlaybookCreatorAngel.playbookUniqueCreator?.angelKitCreator,
             customWeaponsCreator: {
               id: 'dummy',
               firearmsTitle: 'dummy',
@@ -1498,12 +1524,12 @@ export const mockSetAngelKit: MockedResponse = {
     variables: {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
-      stock: mockPlaybookCreatorAngel.playbookUniqueCreator.angelKitCreator?.startingStock,
+      stock: mockPlaybookCreatorAngel.playbookUniqueCreator?.angelKitCreator?.startingStock,
       hasSupplier: false,
     },
   },
   result: () => {
-    // console.log('mockSetAngelKit');
+    console.log('mockSetAngelKit');
     return {
       data: {
         setAngelKit: {
@@ -2212,5 +2238,121 @@ export const mockAddInvitee3: MockedResponse = {
         invitees: ['new@email.com'],
       },
     },
+  },
+};
+
+export const mockSetVehicle: MockedResponse = {
+  request: {
+    query: SET_VEHICLE,
+    variables: { gameroleId: 'mock-gamerole-id-8', characterId: mockCharacter2.id, vehicleInput: mockVehicleInput },
+  },
+  result: () => {
+    console.log('mockSetVehicle');
+    return {
+      data: {
+        setVehicle: {
+          id: mockCharacter2.id,
+          // name: mockCharacter2.name,
+          // playbook: mockCharacter2.playbook,
+          // playbookUnique: mockPlaybookUniqueDriver,
+        },
+      },
+    };
+  },
+};
+
+export const mockPlayBookCreatorQueryAngel: MockedResponse = {
+  request: {
+    query: PLAYBOOK_CREATOR,
+    variables: { playbookType: PlaybookType.angel },
+  },
+  result: () => {
+    // console.log('mockPlayBookCreatorQueryAngel');
+    return {
+      data: {
+        playbookCreator: {
+          id: 'driver-playbook-creator-id',
+          playbookType: PlaybookType.angel,
+          gearInstructions: mockgearInstructionsAngel,
+          improvementInstructions: 'Whenever you roll a highlighted stat...',
+          movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
+          hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+          names: [mockNameAngel1, mockNameAngel2],
+          looks: [
+            mockLookAngel1,
+            mockLookAngel2,
+            mockLookAngel3,
+            mockLookAngel4,
+            mockLookAngel5,
+            mockLookAngel6,
+            mockLookAngel7,
+            mockLookAngel8,
+            mockLookAngel9,
+            mockLookAngel10,
+          ],
+          statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+          optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel1, mockCharacterMoveAngel4],
+          defaultMoves: [mockCharacterMoveAngel1],
+          defaultMoveCount: 1,
+          moveChoiceCount: 2,
+          playbookUniqueCreator: mockUniqueCreatorAngel,
+        },
+      },
+    };
+  },
+};
+
+export const mockPlayBookCreatorQueryBrainer: MockedResponse = {
+  request: {
+    query: PLAYBOOK_CREATOR,
+    variables: { playbookType: PlaybookType.brainer },
+  },
+  result: () => {
+    console.log('mockPlayBookCreatorQueryBrainer');
+    return {
+      data: {
+        playbookCreator: {
+          id: 'brainer-playbook-creator-id',
+          playbookType: PlaybookType.brainer,
+          gearInstructions: mockgearInstructionsAngel,
+          improvementInstructions: 'Whenever you roll a highlighted stat...',
+          movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
+          hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+          looks: [
+            mockLookAngel1,
+            mockLookAngel2,
+            mockLookAngel3,
+            mockLookAngel4,
+            mockLookAngel5,
+            mockLookAngel6,
+            mockLookAngel7,
+            mockLookAngel8,
+            mockLookAngel9,
+            mockLookAngel10,
+          ],
+          names: [mockNameAngel1, mockNameAngel2],
+          statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+          defaultMoveCount: 1,
+          moveChoiceCount: 2,
+          optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel1, mockCharacterMoveAngel4],
+          defaultMoves: [mockCharacterMoveAngel1],
+          playbookUniqueCreator: mockUniqueCreatorBrainer,
+        },
+      },
+    };
+  },
+};
+
+export const mockVehicleCreatorQuery: MockedResponse = {
+  request: {
+    query: VEHICLE_CREATOR,
+  },
+  result: () => {
+    // console.log('mockVehicleCreator');
+    return {
+      data: {
+        vehicleCreator: mockVehicleCreator,
+      },
+    };
   },
 };

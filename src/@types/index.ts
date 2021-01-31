@@ -1,3 +1,4 @@
+import { VehicleType } from './enums';
 import { VehicleFrame, VehicleBattleOption } from './staticDataInterfaces';
 
 export interface KeycloakUser {
@@ -46,6 +47,7 @@ export interface HarmInput {
 
 export interface VehicleInput {
   id?: string;
+  vehicleType: VehicleType;
   name: string;
   vehicleFrame: VehicleFrame;
   speed: number;

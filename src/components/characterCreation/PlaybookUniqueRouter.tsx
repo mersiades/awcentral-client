@@ -1,30 +1,13 @@
-import React, { FC } from 'react';
-import { useQuery } from '@apollo/client';
+import React, { FC, useEffect } from 'react';
 import { Box } from 'grommet';
 
 import Spinner from '../Spinner';
 import AngelKitForm from './uniques/AngelKitForm';
 import CustomWeaponsForm from './uniques/CustomWeaponsForm';
 import BrainerGearForm from './uniques/BrainerGearForm';
-import { AngelKit, BrainerGear, CustomWeapons, Vehicle } from '../../@types/dataInterfaces';
-import { PlaybookType } from '../../@types/enums';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
-import VehiclesFormContainer from './uniques/VehiclesFormContainer';
-
-interface PlaybookUniqueRouterProps {
-  playbookType: PlaybookType;
-  characterName: string;
-  settingAngelKit: boolean;
-  settingCustomWeapons: boolean;
-  settingBrainerGear: boolean;
-  handleSubmitBrainerGear: (brainerGear: string[]) => void;
-  handleSubmitAngelKit: (stock: number, hasSupplier: boolean) => void;
-  handleSubmitCustomWeapons: (weapons: string[]) => void;
-  existingCustomWeapons?: CustomWeapons;
-  existingAngelKit?: AngelKit;
-  existingBrainerGear?: BrainerGear;
-  existingVehicles?: Vehicle[];
-}
+import { CharacterCreationSteps, PlaybookType } from '../../@types/enums';
+import { useGame } from '../../contexts/gameContext';
+import { useHistory } from 'react-router-dom';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -36,72 +19,34 @@ interface PlaybookUniqueRouterProps {
  * For example, only the BATTLEBABE has a Custom Weapons property,
  * so only the BATTLEBABE needs a CustomWeaponsForm.
  */
-const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
-  playbookType,
-  characterName,
-  settingAngelKit,
-  settingCustomWeapons,
-  settingBrainerGear,
-  handleSubmitAngelKit,
-  handleSubmitBrainerGear,
-  handleSubmitCustomWeapons,
-  existingCustomWeapons,
-  existingAngelKit,
-  existingBrainerGear,
-  existingVehicles,
-}) => {
-  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
-    variables: { playbookType },
-  });
+const PlaybookUniqueRouter: FC = () => {
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game, character } = useGame();
 
-  const playbookUniqueCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator;
+  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
+  const history = useHistory();
 
-  if (!playbookUniqueCreator) {
-    return (
-      <Box fill background="transparent" justify="center" align="center">
-        <Spinner />
-      </Box>
-    );
-  }
-
+  // ------------------------------------------------------ Render -------------------------------------------------------- //
   const renderForm = () => {
-    switch (playbookType) {
+    switch (character?.playbook) {
       case PlaybookType.angel:
-        return (
-          <AngelKitForm
-            characterName={characterName}
-            settingAngelKit={settingAngelKit}
-            playbookUniqueCreator={playbookUniqueCreator}
-            handleSubmitAngelKit={handleSubmitAngelKit}
-            existingAngelKit={existingAngelKit}
-          />
-        );
+        return <AngelKitForm />;
       case PlaybookType.battlebabe:
-        return (
-          <CustomWeaponsForm
-            characterName={characterName}
-            settingCustomWeapons={settingCustomWeapons}
-            playbookUniqueCreator={playbookUniqueCreator}
-            handleSubmitCustomWeapons={handleSubmitCustomWeapons}
-            existingCustomWeapons={existingCustomWeapons}
-          />
-        );
+        return <CustomWeaponsForm />;
       case PlaybookType.brainer:
-        return (
-          <BrainerGearForm
-            characterName={characterName}
-            settingBrainerGear={settingBrainerGear}
-            playbookUniqueCreator={playbookUniqueCreator}
-            handleSubmitBrainerGear={handleSubmitBrainerGear}
-            existingBrainerGear={existingBrainerGear}
-          />
-        );
+        return <BrainerGearForm />;
       case PlaybookType.driver:
-        return <VehiclesFormContainer />;
+        break;
       default:
         return null;
     }
   };
+
+  useEffect(() => {
+    if (character?.playbook === PlaybookType.driver) {
+      !!game && history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+    }
+  }, [game, character, history]);
 
   return (
     <Box
@@ -112,7 +57,7 @@ const PlaybookUniqueRouter: FC<PlaybookUniqueRouterProps> = ({
       align="center"
       justify="start"
     >
-      {renderForm()}
+      {!!character ? renderForm() : <Spinner />}
     </Box>
   );
 };

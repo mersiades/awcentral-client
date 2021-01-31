@@ -1,21 +1,30 @@
 import React, { FC, useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
 import { Box, FormField, TextInput } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS, RedBox, TextWS } from '../../config/grommetConfig';
-import { PlaybookType, StatType } from '../../@types/enums';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
+import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../../mutations/setCharacterHx';
+import TOGGLE_STAT_HIGHLIGHT, {
+  ToggleStatHighlightData,
+  ToggleStatHighlightVars,
+} from '../../mutations/toggleStatHighlight';
+import FINISH_CHARACTER_CREATION, {
+  FinishCharacterCreationData,
+  FinishCharacterCreationVars,
+} from '../../mutations/finishCharacterCreation';
+import { StatType } from '../../@types/enums';
 import { HxInput } from '../../@types';
 import { Character } from '../../@types/dataInterfaces';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { useFonts } from '../../contexts/fontContext';
-import { decapitalize } from '../../helpers/decapitalize';
 import { useGame } from '../../contexts/gameContext';
 import StatsBox from '../playbookPanel/StatsBox';
+import { decapitalize } from '../../helpers/decapitalize';
 
-//     margin: unset;
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
     margin-top: 6px;
@@ -25,50 +34,79 @@ const StyledMarkdown = styled(ReactMarkdown)`
   }
 `;
 
-interface CharacterHxFormProps {
-  playbookType: PlaybookType;
-  character: Character;
-  settingHx: boolean;
-  togglingHighlight: boolean;
-  finishingCreation: boolean;
-  handleToggleHighlight: (stat: StatType) => void;
-  handleSubmitCharacterHx: (hxInputs: HxInput[]) => void;
-  handleFinishCreation: () => void;
-}
-
-const CharacterHxForm: FC<CharacterHxFormProps> = ({
-  playbookType,
-  character,
-  settingHx,
-  togglingHighlight,
-  finishingCreation,
-  handleToggleHighlight,
-  handleSubmitCharacterHx,
-  handleFinishCreation,
-}) => {
+const CharacterHxForm: FC = () => {
+  // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [value, setValue] = useState<HxInput[]>([]);
   const [hasSet, setHasSet] = useState(false);
 
-  // -------------------------------------------------- Context hooks ---------------------------------------------------- //
+  // ------------------------------------------------------- Hooks --------------------------------------------------------- //
+  const { game, character, userGameRole, otherPlayerGameRoles } = useGame();
   const { crustReady } = useFonts();
-  const { otherPlayerGameRoles } = useGame();
+
+  // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
+  const history = useHistory();
 
   // -------------------------------------------------- Graphql hooks ---------------------------------------------------- //
-  const { data: pbCreatorData, loading: loadingPbCreator } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
+  const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
     PLAYBOOK_CREATOR,
-    {
-      variables: { playbookType },
-    }
+    // @ts-ignore
+    { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
   );
-
   const hxInstructions = pbCreatorData?.playbookCreator.hxInstructions;
+  const [toggleStatHighlight, { loading: togglingHighlight }] = useMutation<
+    ToggleStatHighlightData,
+    ToggleStatHighlightVars
+  >(TOGGLE_STAT_HIGHLIGHT);
+  const [setCharacterHx, { loading: settingHx }] = useMutation<SetCharacterHxData, SetCharacterHxVars>(SET_CHARACTER_HX);
+  const [finishCharacterCreation, { loading: finishingCreation }] = useMutation<
+    FinishCharacterCreationData,
+    FinishCharacterCreationVars
+  >(FINISH_CHARACTER_CREATION);
 
+  // ------------------------------------------ Component functions and variables ------------------------------------------ //
   let characters: Character[] = [];
   otherPlayerGameRoles?.forEach((gameRole) => {
     if (!!gameRole.characters && gameRole.characters.length === 1) {
       characters = [...characters, gameRole.characters[0]];
     }
   });
+
+  const handleToggleHighlight = async (stat: StatType) => {
+    if (!!userGameRole && !!character) {
+      try {
+        await toggleStatHighlight({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, stat },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleSubmitCharacterHx = async (hxInputs: HxInput[]) => {
+    if (!!userGameRole && !!character) {
+      try {
+        await setCharacterHx({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, hxStats: hxInputs },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  const handleFinishCreation = async () => {
+    if (!!userGameRole && !!character && !!game) {
+      try {
+        await finishCharacterCreation({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id },
+        });
+        history.push(`/pre-game/${game.id}`);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const filterSubmit = (hxInputs: HxInput[]) => {
     characters.forEach((char) => {
@@ -84,20 +122,12 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
   // Loads any existing HxStats into component state
   useEffect(() => {
     let initialValue: HxInput[] = [];
-    !!character.hxBlock &&
+    !!character?.hxBlock &&
       character.hxBlock.forEach(({ characterId, characterName, hxValue }) => {
         initialValue = [...initialValue, { characterId, characterName, hxValue }];
       });
     setValue(initialValue);
   }, [character, setValue]);
-
-  if (loadingPbCreator || !hxInstructions) {
-    return (
-      <Box fill background="transparent" justify="center" align="center">
-        <Spinner />
-      </Box>
-    );
-  }
 
   return (
     <Box
@@ -108,16 +138,13 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
       justify="start"
     >
       <Box width="60vw" flex="grow" align="center">
-        <HeadingWS
-          level={2}
-          crustReady={crustReady}
-          textAlign="center"
-          style={{ maxWidth: 'unset' }}
-        >{`WHAT HISTORY DOES ${character.name?.toUpperCase()} HAVE?`}</HeadingWS>
+        <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT HISTORY DOES ${
+          !!character?.name ? character.name.toUpperCase() : '...'
+        } HAVE?`}</HeadingWS>
         <Box direction="row" wrap justify="around">
           {characters.map((char) => {
             const looks = char.looks?.map((look) => look.look);
-            const existingValue = character.hxBlock.find((hxStat) => hxStat.characterId === char.id)?.hxValue;
+            const existingValue = character?.hxBlock.find((hxStat) => hxStat.characterId === char.id)?.hxValue;
             return (
               !!char.name && (
                 <RedBox
@@ -173,7 +200,7 @@ const CharacterHxForm: FC<CharacterHxFormProps> = ({
         <Box pad="6px" style={{ maxWidth: '812px' }}>
           <StyledMarkdown>{hxInstructions}</StyledMarkdown>
         </Box>
-        {!!character.statsBlock && (
+        {!!character?.statsBlock && (
           <StatsBox
             stats={character.statsBlock.stats}
             togglingHighlight={togglingHighlight}
