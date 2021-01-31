@@ -18,31 +18,27 @@ const SET_VEHICLE = gql`
       id
       name
       playbook
-      playbookUnique {
+      vehicles {
         id
-        type
-        vehicles {
+        name
+        vehicleFrame {
           id
-          name
-          vehicleFrame {
-            id
-            frameType
-            massive
-            examples
-            battleOptionCount
-          }
-          speed
-          handling
-          armor
+          frameType
           massive
-          strengths
-          weaknesses
-          looks
-          battleOptions {
-            id
-            battleOptionType
-            name
-          }
+          examples
+          battleOptionCount
+        }
+        speed
+        handling
+        armor
+        massive
+        strengths
+        weaknesses
+        looks
+        battleOptions {
+          id
+          battleOptionType
+          name
         }
       }
     }

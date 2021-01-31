@@ -59,7 +59,7 @@ const CharacterCreationStepper: FC = () => {
   const handlePrevious = () => {
     if (!!character?.name && !!character?.playbook && !!currentStep) {
       // Skip over playbookUnique page for Driver
-      if (currentStep === CharacterCreationSteps.setVehicle && character.playbook === PlaybookType.driver) {
+      if (currentStep === CharacterCreationSteps.selectMoves && character.playbook === PlaybookType.driver) {
         changeStep(currentStep - 2);
       } else {
         changeStep(currentStep - 1);
@@ -402,9 +402,10 @@ const CharacterCreationStepper: FC = () => {
   );
 
   // Omit box for PlayBookUniques for Driver
-  const boxesArray = !!character?.playbookUnique
-    ? [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8, box7Step9]
-    : [box0Step1, box1Step3, box2Step4, box3Step5, box5Step7, box6Step8, box7Step9];
+  const boxesArray =
+    character?.playbook !== PlaybookType.driver
+      ? [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8, box7Step9]
+      : [box0Step1, box1Step3, box2Step4, box3Step5, box5Step7, box6Step8, box7Step9];
 
   const renderBoxesSmall = () => {
     if (currentStep !== undefined) {
@@ -476,13 +477,13 @@ const CharacterCreationStepper: FC = () => {
             </>
           );
 
-        case 8:
+        case 9:
           return (
             <>
-              {boxesArray[3]}
               {boxesArray[4]}
               {boxesArray[5]}
               {boxesArray[6]}
+              {boxesArray[7]}
             </>
           );
 
@@ -520,7 +521,7 @@ const CharacterCreationStepper: FC = () => {
         <div style={{ height: 48, width: 48, background: 'transparent' }} />
       )}
       {window.innerWidth < 800 ? renderBoxesSmall() : renderBoxes()}
-      {!!currentStep && currentStep < 8 && currentStep > 1 && !!character?.name ? (
+      {!!currentStep && currentStep < 9 && currentStep > 1 && !!character?.name ? (
         <NextWithHover cursor="pointer" onClick={() => handleNext()} size="large" color="accent-1" />
       ) : (
         <div style={{ height: 48, width: 48, background: 'transparent' }} />

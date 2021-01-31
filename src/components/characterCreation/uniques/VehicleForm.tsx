@@ -2,16 +2,9 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Box, TextInput, Text, Tip } from 'grommet';
 import { omit } from 'lodash';
 import React, { FC, useEffect, useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
 import { VehicleInput } from '../../../@types';
 import { Vehicle } from '../../../@types/dataInterfaces';
-import {
-  BattleOptionType,
-  CharacterCreationSteps,
-  PlaybookType,
-  VehicleFrameType,
-  VehicleType,
-} from '../../../@types/enums';
+import { BattleOptionType, PlaybookType, VehicleFrameType, VehicleType } from '../../../@types/enums';
 import { VehicleBattleOption, VehicleFrame } from '../../../@types/staticDataInterfaces';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
 import { useFonts } from '../../../contexts/fontContext';
@@ -21,6 +14,7 @@ import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../.
 import Spinner from '../../Spinner';
 
 interface VehicleFormProps {
+  navigateOnSet: (numVehicles: number) => void;
   existingVehicle?: Vehicle;
 }
 
@@ -168,7 +162,7 @@ const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
   }
 };
 
-const VehicleForm: FC<VehicleFormProps> = ({ existingVehicle }) => {
+const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) => {
   const initialState: VehicleFormState = {
     name: !!existingVehicle ? existingVehicle.name : 'Unnamed vehicle',
     // @ts-ignore
@@ -191,11 +185,8 @@ const VehicleForm: FC<VehicleFormProps> = ({ existingVehicle }) => {
     dispatch,
   ] = useReducer(vehicleFormReducer, initialState);
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { game, character, userGameRole } = useGame();
+  const { character, userGameRole } = useGame();
   const { crustReady } = useFonts();
-
-  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
-  const history = useHistory();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: vehicleCreatorData, loading } = useQuery<VehicleCreatorData, VehicleCreatorVars>(VEHICLE_CREATOR);
@@ -306,7 +297,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ existingVehicle }) => {
       };
 
       try {
-        await setVehicle({
+        const { data } = await setVehicle({
           variables: {
             gameRoleId: userGameRole.id,
             characterId: character.id,
@@ -314,10 +305,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ existingVehicle }) => {
             vehicleInput: omit(vehicleInput, ['__typename']),
           },
         });
-        if (!character.hasCompletedCharacterCreation && !!game) {
-          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setHx}`);
-          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-        }
+        !!data && navigateOnSet(data.setVehicle.vehicles.length);
       } catch (error) {
         console.error(error);
       }
