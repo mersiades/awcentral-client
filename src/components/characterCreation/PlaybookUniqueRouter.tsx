@@ -44,7 +44,7 @@ const PlaybookUniqueRouter: FC = () => {
 
   useEffect(() => {
     if (character?.playbook === PlaybookType.driver) {
-      !!game && history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setVehicle}`);
+      !!game && history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
     }
   }, [game, character, history]);
 

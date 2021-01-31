@@ -6,8 +6,8 @@ export enum CharacterCreationSteps {
   selectStats = 4,
   selectGear = 5,
   setUnique = 6,
-  setVehicle = 7,
-  selectMoves = 8,
+  selectMoves = 7,
+  setVehicle = 8,
   setHx = 9,
 }
 

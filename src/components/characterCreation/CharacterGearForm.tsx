@@ -84,7 +84,7 @@ const CharacterGearForm: FC = () => {
         });
         // Skip playbookUnique form if Driver
         const nextStep =
-          character.playbook === PlaybookType.driver ? CharacterCreationSteps.setVehicle : CharacterCreationSteps.setUnique;
+          character.playbook === PlaybookType.driver ? CharacterCreationSteps.selectMoves : CharacterCreationSteps.setUnique;
         history.push(`/character-creation/${game.id}?step=${nextStep}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {

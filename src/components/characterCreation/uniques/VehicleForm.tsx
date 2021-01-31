@@ -315,7 +315,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ existingVehicle }) => {
           },
         });
         if (!character.hasCompletedCharacterCreation && !!game) {
-          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setHx}`);
           window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
         }
       } catch (error) {

@@ -293,42 +293,6 @@ const CharacterCreationStepper: FC = () => {
 
   const box5Step7 = (
     <Box
-      data-testid="vehicles-box"
-      margin={{ left: 'xsmall', right: 'xsmall' }}
-      justify="start"
-      width="11rem"
-      height="10rem"
-      gap="small"
-      align="center"
-      pad="small"
-      border
-      background={{ color: 'neutral-1', opacity: CharacterCreationSteps.setVehicle === currentStep ? 1 : 0.5 }}
-      onClick={(e: any) => {
-        e.currentTarget.blur();
-        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.setVehicle);
-      }}
-    >
-      <Text color="white" weight="bold" alignSelf="center">
-        Vehicles
-      </Text>
-      {!!character && !!character.vehicles && character.vehicles.length > 0 ? (
-        <CustomUL>
-          {character.vehicles.map((vehicle) => {
-            return (
-              <li key={vehicle.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                {vehicle.name}
-              </li>
-            );
-          })}
-        </CustomUL>
-      ) : (
-        <Text>...</Text>
-      )}
-    </Box>
-  );
-
-  const box6Step8 = (
-    <Box
       data-testid="moves-box"
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
@@ -358,6 +322,42 @@ const CharacterCreationStepper: FC = () => {
               );
             }
             return null;
+          })}
+        </CustomUL>
+      ) : (
+        <Text>...</Text>
+      )}
+    </Box>
+  );
+
+  const box6Step8 = (
+    <Box
+      data-testid="vehicles-box"
+      margin={{ left: 'xsmall', right: 'xsmall' }}
+      justify="start"
+      width="11rem"
+      height="10rem"
+      gap="small"
+      align="center"
+      pad="small"
+      border
+      background={{ color: 'neutral-1', opacity: CharacterCreationSteps.setVehicle === currentStep ? 1 : 0.5 }}
+      onClick={(e: any) => {
+        e.currentTarget.blur();
+        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.setVehicle);
+      }}
+    >
+      <Text color="white" weight="bold" alignSelf="center">
+        Vehicles
+      </Text>
+      {!!character && !!character.vehicles && character.vehicles.length > 0 ? (
+        <CustomUL>
+          {character.vehicles.map((vehicle) => {
+            return (
+              <li key={vehicle.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {vehicle.name}
+              </li>
+            );
           })}
         </CustomUL>
       ) : (
