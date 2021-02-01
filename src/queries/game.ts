@@ -164,6 +164,17 @@ const GAME = gql`
               id
               weapons
             }
+            gang {
+              id
+              size
+              harm
+              armor
+              gangOptions {
+                id
+                description
+              }
+              tags
+            }
           }
         }
       }

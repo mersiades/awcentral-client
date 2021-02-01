@@ -128,3 +128,9 @@ export enum VehicleType {
   car = 'CAR',
   combat = 'COMBAT',
 }
+
+export enum GangSize {
+  small = 'SMALL',
+  medium = 'MEDIUM',
+  large = 'LARGE',
+}

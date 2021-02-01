@@ -207,3 +207,11 @@ export interface VehicleBattleOption {
   battleOptionType: BattleOptionType;
   name: string;
 }
+
+export interface GangOption {
+  id: string;
+  description: string;
+  modifier?: string;
+  // For example, +rich, -savage, +Vulnerable: disease
+  tag?: string;
+}

@@ -10,11 +10,24 @@ export interface PerformStatRollMoveVars {
   gameroleId: string;
   characterId: string;
   moveId: string;
+  isGangMove: boolean;
 }
 
 const PERFORM_STAT_ROLL_MOVE = gql`
-  mutation PerformStatRollMove($gameId: String!, $gameroleId: String!, $characterId: String!, $moveId: String!) {
-    performStatRollMove(gameId: $gameId, gameroleId: $gameroleId, characterId: $characterId, moveId: $moveId) {
+  mutation PerformStatRollMove(
+    $gameId: String!
+    $gameroleId: String!
+    $characterId: String!
+    $moveId: String!
+    $isGangMove: Boolean!
+  ) {
+    performStatRollMove(
+      gameId: $gameId
+      gameroleId: $gameroleId
+      characterId: $characterId
+      moveId: $moveId
+      isGangMove: $isGangMove
+    ) {
       id
       gameMessages {
         id

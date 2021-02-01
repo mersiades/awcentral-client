@@ -66,7 +66,7 @@ const PlayerPage: FC = () => {
    * 1 - MovesPanel
    * 2 - None, side panel is closed
    */
-  const [sidePanel, setSidePanel] = useState<number>(2);
+  const [sidePanel, setSidePanel] = useState<number>(0);
   const [character, setCharacter] = useState<Character | undefined>();
   const [dialog, setDialog] = useState<Move | CharacterMove | undefined>();
 
