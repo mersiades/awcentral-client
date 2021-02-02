@@ -14,6 +14,7 @@ import {
 } from '../@types/dataInterfaces';
 import {
   BattleOptionType,
+  GangSize,
   LookType,
   MoveActionType,
   MoveType,
@@ -32,6 +33,8 @@ import {
   CarCreator,
   CharacterMove,
   CustomWeaponsCreator,
+  GangCreator,
+  GangOption,
   GearInstructions,
   HoldConditions,
   Look,
@@ -126,6 +129,24 @@ export const dummyCustomWeaponsCreator: CustomWeaponsCreator = {
 export const dummyBrainerGearCreator: BrainerGearCreator = {
   id: 'dummy',
   gear: ['dummy'],
+};
+
+export const dummyGangOption: GangOption = {
+  id: 'dummy',
+  description: 'dummy',
+};
+
+export const dummyGangCreator: GangCreator = {
+  id: 'dummy',
+  intro: 'dummy',
+  defaultSize: GangSize.small,
+  defaultHarm: 0,
+  defaultArmor: 0,
+  strengthChoiceCount: 0,
+  weaknessChoiceCount: 0,
+  defaultTags: ['dummy'],
+  strengths: [dummyGangOption],
+  weaknesses: [dummyGangOption],
 };
 
 export const dummyHoldConditions: HoldConditions = {
@@ -1107,6 +1128,7 @@ export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
   angelKitCreator: mockAngelKitCreator,
   customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: dummyBrainerGearCreator,
+  gangCreator: dummyGangCreator,
 };
 
 export const mockPlaybookCreatorAngel: PlaybookCreator = {
@@ -1315,6 +1337,7 @@ export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
   angelKitCreator: dummyAngelKitCreator,
   customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: mockBrainerGearCreator,
+  gangCreator: dummyGangCreator,
 };
 
 // ---------------------------------------------- Mock user-generated data --------------------------------------------- //

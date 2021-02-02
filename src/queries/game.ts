@@ -169,9 +169,17 @@ const GAME = gql`
               size
               harm
               armor
-              gangOptions {
+              strengths {
                 id
                 description
+                modifier
+                tag
+              }
+              weaknesses {
+                id
+                description
+                modifier
+                tag
               }
               tags
             }

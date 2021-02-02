@@ -1,5 +1,5 @@
-import { VehicleType } from './enums';
-import { VehicleFrame, VehicleBattleOption } from './staticDataInterfaces';
+import { GangSize, VehicleType } from './enums';
+import { VehicleFrame, VehicleBattleOption, GangOption } from './staticDataInterfaces';
 
 export interface KeycloakUser {
   id?: string;
@@ -58,4 +58,14 @@ export interface VehicleInput {
   weaknesses: string[];
   looks: string[];
   battleOptions: VehicleBattleOption[];
+}
+
+export interface GangInput {
+  id?: string;
+  size: GangSize;
+  harm: number;
+  armor: number;
+  strengths: GangOption[];
+  weaknesses: GangOption[];
+  tags: string[];
 }
