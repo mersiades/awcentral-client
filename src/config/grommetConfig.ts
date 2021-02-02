@@ -703,3 +703,8 @@ export const treatNpcBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-20.jpg)',
 };
+
+export const chopperSpecialBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-21.jpg)',
+};

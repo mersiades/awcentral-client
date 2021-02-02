@@ -27,7 +27,7 @@ const BarterBox: FC<BarterBoxProps> = ({ barter, instructions, handleSetBarter, 
   };
 
   return (
-    <Box fill="horizontal" align="center" justify="start">
+    <Box fill="horizontal" align="center" justify="start" style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.25)' }}>
       <Box fill="horizontal" direction="row" justify="between" align="center" pad={{ vertical: '12px' }}>
         <Box direction="row" align="center" gap="12px" pad={{ vertical: '12px' }}>
           <HeadingWS crustReady={crustReady} level="3" margin="0px">
