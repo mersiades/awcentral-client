@@ -80,9 +80,7 @@ const PreGamePage = () => {
       case PlaybookType.brainer:
         return 'Brainer gear';
       case PlaybookType.chopper:
-        return 'Bike & gang';
-      case PlaybookType.driver:
-        return 'Cars';
+        return 'gang';
       case PlaybookType.gunlugger:
         return 'Weapons';
       case PlaybookType.hardholder:
@@ -164,6 +162,24 @@ const PreGamePage = () => {
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
+  const renderVehicleProgress = (character: Character) => {
+    if ([PlaybookType.driver, PlaybookType.chopper].includes(character.playbook)) {
+      return character.vehicles.length > 0 ? (
+        <Box align="center" pad="12px" gap="12px" width="80px">
+          <Checkmark size="large" color="accent-1" />
+          <TextWS size="large">Vehicles</TextWS>
+        </Box>
+      ) : (
+        <Box align="center" pad="12px" gap="12px" width="80px">
+          <Checkbox size="large" color="neutral-1" />
+          <TextWS size="large">Vehicles</TextWS>
+        </Box>
+      );
+    } else {
+      return null;
+    }
+  };
+
   const renderPlayerBox = (character: Character, index: number) => {
     return (
       <RedBox
@@ -209,16 +225,18 @@ const PreGamePage = () => {
             )}
             <TextWS size="large">Gear</TextWS>
           </Box>
-          <Box align="center" pad="12px" gap="12px" width="80px">
-            {!!character && !!character.playbookUnique ? (
-              <Checkmark size="large" color="accent-1" />
-            ) : (
-              <Checkbox size="large" color="neutral-1" />
-            )}
-            <TextWS size="large" textAlign="center">
-              {!!character && !!character.playbook ? getUnique(character.playbook) : 'Unique'}
-            </TextWS>
-          </Box>
+          {!!character && character.playbook !== PlaybookType.driver && (
+            <Box align="center" pad="12px" gap="12px" width="80px">
+              {!!character.playbookUnique ? (
+                <Checkmark size="large" color="accent-1" />
+              ) : (
+                <Checkbox size="large" color="neutral-1" />
+              )}
+              <TextWS size="large" textAlign="center">
+                {!!character.playbook ? getUnique(character.playbook) : 'Unique'}
+              </TextWS>
+            </Box>
+          )}
           <Box align="center" pad="12px" gap="12px" width="80px">
             {!!character && character.characterMoves.length > 2 ? (
               <Checkmark size="large" color="accent-1" />
@@ -227,6 +245,9 @@ const PreGamePage = () => {
             )}
             <TextWS size="large">Moves</TextWS>
           </Box>
+
+          {!!character && renderVehicleProgress(character)}
+
           <Box align="center" pad="12px" gap="12px" width="80px">
             {!!character && character.hxBlock.length > 0 ? (
               <Checkmark size="large" color="accent-1" />

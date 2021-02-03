@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box } from 'grommet';
 import { FormDown, FormUp } from 'grommet-icons';
@@ -27,6 +27,7 @@ interface GangBoxProps {
 const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [showMoves, setShowMoves] = useState(false);
+  const [gangMoves, setGangMoves] = useState<Move[]>([]);
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { crustReady } = useFonts();
@@ -37,9 +38,7 @@ const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) 
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
-  const gangMoves = allMovesData?.allMoves.filter((move) => move.kind === MoveType.battle) as Move[];
-  gangMoves.push(allMovesData?.allMoves.find((move) => move.name === GO_AGGRO) as Move);
-  gangMoves.push(allMovesData?.allMoves.find((move) => move.name === SUCKER_SOMEONE) as Move);
+
   const [performPrintMove, { loading: performingPrintMove }] = useMutation<PerformPrintMoveData, PerformPrintMoveVars>(
     PERFORM_PRINT_MOVE
   );
@@ -113,6 +112,15 @@ const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) 
     }
   };
 
+  useEffect(() => {
+    if (!!allMovesData) {
+      const gangMoves = allMovesData?.allMoves.filter((move) => move.kind === MoveType.battle) as Move[];
+      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === GO_AGGRO) as Move);
+      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === SUCKER_SOMEONE) as Move);
+      setGangMoves(gangMoves);
+    }
+  }, [allMovesData]);
+
   return (
     <CollapsiblePanelBox open title="Gang" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="6">
       <Box fill="horizontal" align="start" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
@@ -153,9 +161,9 @@ const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) 
             Gang moves
           </HeadingWS>
           {showMoves ? (
-            <FormUp data-testid="hide-moves-icon" onClick={() => setShowMoves(false)} style={{ cursor: 'pointer' }} />
+            <FormUp data-testid="hide-gang-moves-icon" onClick={() => setShowMoves(false)} style={{ cursor: 'pointer' }} />
           ) : (
-            <FormDown data-testid="show-moves-icon" onClick={() => setShowMoves(true)} style={{ cursor: 'pointer' }} />
+            <FormDown data-testid="show-gang-moves-icon" onClick={() => setShowMoves(true)} style={{ cursor: 'pointer' }} />
           )}
         </Box>
         {showMoves && (

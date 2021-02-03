@@ -7,6 +7,7 @@ import {
   CustomWeapons,
   Game,
   GameRole,
+  Gang,
   HxStat,
   PlaybookUnique,
   StatsBlock,
@@ -134,6 +135,8 @@ export const dummyBrainerGearCreator: BrainerGearCreator = {
 export const dummyGangOption: GangOption = {
   id: 'dummy',
   description: 'dummy',
+  modifier: 'dummy',
+  tag: 'dummy',
 };
 
 export const dummyGangCreator: GangCreator = {
@@ -147,6 +150,16 @@ export const dummyGangCreator: GangCreator = {
   defaultTags: ['dummy'],
   strengths: [dummyGangOption],
   weaknesses: [dummyGangOption],
+};
+
+export const dummyGang: Gang = {
+  id: 'dummy',
+  size: GangSize.small,
+  harm: 2,
+  armor: 1,
+  strengths: [dummyGangOption],
+  weaknesses: [dummyGangOption],
+  tags: ['dummy'],
 };
 
 export const dummyHoldConditions: HoldConditions = {
@@ -530,7 +543,7 @@ export const mockPlaybookUniqueBattlebabe: PlaybookUnique = {
   customWeapons: mockCustomWeapons,
   brainerGear: dummyBrainerGear,
   angelKit: dummyAngelKit,
-  // vehicles: mockVehicles,
+  gang: dummyGang,
 };
 
 export const mockAngelKit: AngelKit = {
@@ -548,7 +561,7 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   customWeapons: dummyCustomWeapons,
   brainerGear: dummyBrainerGear,
   angelKit: mockAngelKit,
-  // vehicles: mockVehicles,
+  gang: dummyGang,
 };
 
 export const mockCharacterHarm: CharacterHarm = {
@@ -567,10 +580,11 @@ export const mockCharacter1: MockCharacter = {
   playbook: PlaybookType.battlebabe,
   hasCompletedCharacterCreation: false,
   gear: ['leather jacket', 'Timberland boots'],
-  statsBlock: mockStatsBlock1,
   barter: 2,
-  hxBlock: [],
+  vehicleCount: 0,
   harm: mockCharacterHarm,
+  statsBlock: mockStatsBlock1,
+  hxBlock: [],
   looks: [mockLookBettleBabe1, mockLookBattlebabe2],
   characterMoves: [
     mockCharacterMoveAngel1,
@@ -578,7 +592,6 @@ export const mockCharacter1: MockCharacter = {
     { ...mockCharacterMoveAngel3, isSelected: true },
   ], // TODO: change to battlebabe moves
   playbookUnique: mockPlaybookUniqueBattlebabe,
-  vehicleCount: 0,
   vehicles: [],
 };
 
