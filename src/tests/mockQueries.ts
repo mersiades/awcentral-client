@@ -1972,10 +1972,10 @@ export const mockGameForPreGame1: MockedResponse = {
           commsApp: mockGame5.commsApp,
           commsUrl: mockGame5.commsUrl,
           hasFinishedPreGame: mockGame5.hasFinishedPreGame,
+          gameMessages: mockGame5.gameMessages,
           mc: mockGame5.mc,
           players: mockGame5.players,
           gameRoles: mockGame5.gameRoles,
-          gameMessages: mockGame5.gameMessages,
         },
       },
     };

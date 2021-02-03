@@ -1,6 +1,7 @@
 import { ItemCharacteristic, TaggedItem } from '.';
 import {
   BattleOptionType,
+  GangSize,
   LookType,
   MoveActionType,
   MoveType,
@@ -139,6 +140,20 @@ export interface PlaybookUniqueCreator {
   angelKitCreator?: AngelKitCreator;
   customWeaponsCreator?: CustomWeaponsCreator;
   brainerGearCreator?: BrainerGearCreator;
+  gangCreator: GangCreator;
+}
+
+export interface GangCreator {
+  id: string;
+  intro: string;
+  defaultSize: GangSize;
+  defaultHarm: number;
+  defaultArmor: number;
+  strengthChoiceCount: number;
+  weaknessChoiceCount: number;
+  defaultTags: string[];
+  strengths: GangOption[];
+  weaknesses: GangOption[];
 }
 
 export interface AngelKitCreator {
@@ -206,4 +221,12 @@ export interface VehicleBattleOption {
   id: string;
   battleOptionType: BattleOptionType;
   name: string;
+}
+
+export interface GangOption {
+  id: string;
+  description: string;
+  modifier?: string;
+  // For example, +rich, -savage, +Vulnerable: disease
+  tag?: string;
 }

@@ -263,6 +263,19 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
+        case UniqueTypes.gang:
+          if (!!character.playbookUnique.gang) {
+            const { size, harm, armor, tags } = character.playbookUnique.gang;
+            return (
+              <CustomUL>
+                <li>Size: {size}</li>
+                <li>Harm: {harm}</li>
+                <li>Armor: {armor}</li>
+                <li>Tags: {tags.join(', ')}</li>
+              </CustomUL>
+            );
+          }
+          return null;
         default:
           return null;
       }

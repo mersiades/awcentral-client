@@ -10,11 +10,24 @@ export interface PerformPrintMoveVars {
   gameroleId: string;
   characterId: string;
   moveId: string;
+  isGangMove: boolean;
 }
 
 const PERFORM_PRINT_MOVE = gql`
-  mutation PerformPrintMove($gameId: String!, $gameroleId: String!, $characterId: String!, $moveId: String!) {
-    performPrintMove(gameId: $gameId, gameroleId: $gameroleId, characterId: $characterId, moveId: $moveId) {
+  mutation PerformPrintMove(
+    $gameId: String!
+    $gameroleId: String!
+    $characterId: String!
+    $moveId: String!
+    $isGangMove: Boolean!
+  ) {
+    performPrintMove(
+      gameId: $gameId
+      gameroleId: $gameroleId
+      characterId: $characterId
+      moveId: $moveId
+      isGangMove: $isGangMove
+    ) {
       id
       gameMessages {
         id

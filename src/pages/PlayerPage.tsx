@@ -29,6 +29,7 @@ import HealHarmDialog from '../components/dialogs/HealHarmDialog';
 import AngelSpecialDialog from '../components/dialogs/AngelSpecialDialog';
 import {
   ANGEL_SPECIAL_NAME,
+  CHOPPER_SPECIAL_NAME,
   HEAL_HARM_NAME,
   HELP_OR_INTERFERE_NAME,
   INFLICT_HARM_NAME,
@@ -42,6 +43,7 @@ import StabilizeDialog from '../components/dialogs/StabilizeDialog';
 import SpeedRecoveryDialog from '../components/dialogs/SpeedRecoveryDialog';
 import ReviveDialog from '../components/dialogs/ReviveDialog';
 import TreatNpcDialog from '../components/dialogs/TreatNpcDialog';
+import ChopperSpecialDialog from '../components/dialogs/ChopperSpecialDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -212,6 +214,9 @@ const PlayerPage: FC = () => {
         )}
         {dialog?.name === REVIVE_SOMEONE_NAME && <ReviveDialog move={dialog} handleClose={() => setDialog(undefined)} />}
         {dialog?.name === TREAT_NPC_NAME && <TreatNpcDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+        {dialog?.name === CHOPPER_SPECIAL_NAME && (
+          <ChopperSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
+        )}
         <ThemeContext.Extend value={customDefaultButtonStyles}>
           <Menu
             style={{ backgroundColor: 'transparent' }}

@@ -134,6 +134,28 @@ const PLAYBOOK_CREATOR = gql`
           id
           gear
         }
+        gangCreator {
+          id
+          intro
+          defaultSize
+          defaultHarm
+          defaultArmor
+          strengthChoiceCount
+          weaknessChoiceCount
+          defaultTags
+          strengths {
+            id
+            description
+            modifier
+            tag
+          }
+          weaknesses {
+            id
+            description
+            modifier
+            tag
+          }
+        }
       }
     }
   }

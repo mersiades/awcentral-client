@@ -8,6 +8,7 @@ import BrainerGearForm from './uniques/BrainerGearForm';
 import { CharacterCreationSteps, PlaybookType } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
 import { useHistory } from 'react-router-dom';
+import GangForm from './uniques/GangForm';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -35,6 +36,8 @@ const PlaybookUniqueRouter: FC = () => {
         return <CustomWeaponsForm />;
       case PlaybookType.brainer:
         return <BrainerGearForm />;
+      case PlaybookType.chopper:
+        return <GangForm />;
       case PlaybookType.driver:
         break;
       default:

@@ -74,7 +74,13 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
     if (!!userGameRole && userGameRole.characters.length === 1 && !performingPrintMove) {
       try {
         performPrintMove({
-          variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole.characters[0].id, moveId: move.id },
+          variables: {
+            gameId,
+            gameroleId: userGameRole.id,
+            characterId: userGameRole.characters[0].id,
+            moveId: move.id,
+            isGangMove: false,
+          },
         });
       } catch (error) {
         console.error(error);
@@ -86,7 +92,13 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
     if (!!userGameRole && userGameRole.characters.length === 1 && !performingStatRollMove) {
       try {
         performStatRollMove({
-          variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole.characters[0].id, moveId: move.id },
+          variables: {
+            gameId,
+            gameroleId: userGameRole.id,
+            characterId: userGameRole.characters[0].id,
+            moveId: move.id,
+            isGangMove: false,
+          },
         });
       } catch (error) {
         console.error(error);
