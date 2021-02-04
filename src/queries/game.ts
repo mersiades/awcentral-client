@@ -55,6 +55,11 @@ const GAME = gql`
         }
         threats {
           id
+          name
+          threatKind
+          impulse
+          description
+          stakes
         }
         characters {
           id
