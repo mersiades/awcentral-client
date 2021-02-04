@@ -69,14 +69,14 @@ export enum UniqueTypes {
   skinnerGear = 'SKINNER_GEAR',
 }
 
-export enum Threats {
-  'WARLORD',
-  'GROTESQUE',
-  'BRUTE',
-  'AFFLICTION',
-  'LANDSCAPE',
-  'TERRAIN',
-  'VEHICLE',
+export enum ThreatType {
+  warlord = 'WARLORD',
+  grotesque = 'GROTESQUE',
+  brute = 'BRUTE',
+  affliction = 'AFFLICTION',
+  landscape = 'LANDSCAPE',
+  terrain = 'TERRAIN',
+  vehicle = 'VEHICLE',
 }
 
 export enum MoveActionType {

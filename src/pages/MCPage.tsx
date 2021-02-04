@@ -22,6 +22,7 @@ import { useGame } from '../contexts/gameContext';
 import { useFonts } from '../contexts/fontContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles, HeadingWS } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
+import ThreatsPanel from '../components/threatsPanel/ThreatsPanel';
 
 export const background = {
   color: 'black',
@@ -209,12 +210,8 @@ const MCPage: FC = () => {
               </Box>
             </LeftMainContainer>
             <RightMainContainer rightPanel={rightPanel}>
-              <Box fill align="center" justify="center" wrap pad="12px" overflow="auto">
-                {rightPanel === 0 && (
-                  <HeadingWS vtksReady={vtksReady} level={1}>
-                    Threats
-                  </HeadingWS>
-                )}
+              <Box fill align="center" justify="start" pad="12px">
+                {rightPanel === 0 && <ThreatsPanel />}
                 {rightPanel === 1 && (
                   <HeadingWS vtksReady={vtksReady} level={1}>
                     Npcs

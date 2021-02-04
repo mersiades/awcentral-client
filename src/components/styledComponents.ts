@@ -93,4 +93,7 @@ export const StyledMarkdown = styled(ReactMarkdown)`
     margin-bottom: 6px;
     text-shadow: 0 0 1px #000, 0 0 3px #000;
   }
+  & li {
+    text-shadow: 0 0 1px #000, 0 0 3px #000;
+  }
 `;
