@@ -33,15 +33,16 @@ interface Action {
 
 const threatFormReducer: Reducer<ThreatFormState, Action> = (state: ThreatFormState, action: Action) => {
   switch (action.type) {
-    case 'SET_NAME':
-      return {
-        ...state,
-        name: action.payload,
-      };
     case 'SET_KIND':
       return {
         ...state,
         threatKind: action.payload,
+        impulse: '',
+      };
+    case 'SET_NAME':
+      return {
+        ...state,
+        name: action.payload,
       };
     case 'SET_IMPULSE':
       return {
@@ -216,7 +217,7 @@ const ThreatDialog: FC<ThreatDialogProps> = ({ handleClose, existingThreat }) =>
     <ButtonWS
       primary
       fill="horizontal"
-      label={addingThreat ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+      label={addingThreat ? <Spinner fillColor="#FFF" width="100%" height="36px" /> : 'SET'}
       onClick={() => !addingThreat && !!name && !!threatKind && !!impulse && handleSetThreat()}
       disabled={!!addingThreat || !name || !threatKind || !impulse}
     />
