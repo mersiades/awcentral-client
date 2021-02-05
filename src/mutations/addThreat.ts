@@ -7,25 +7,21 @@ export interface AddThreatData {
 }
 
 export interface AddThreatVars {
-  gameId: string;
   gameRoleId: string;
   threat: ThreatInput;
 }
 
 const ADD_THREAT = gql`
-  mutation AddThreat($gameId: String!, $gameRoleId: String!, $threat: ThreatInput!) {
-    addThreat(gameId: $gameId, gameRoleId: $gameRoleId, threat: $threat) {
+  mutation AddThreat($gameRoleId: String!, $threat: ThreatInput!) {
+    addThreat(gameRoleId: $gameRoleId, threat: $threat) {
       id
-      gameRoles {
+      threats {
         id
-        threats {
-          id
-          name
-          threatKind
-          impulse
-          description
-          stakes
-        }
+        name
+        threatKind
+        impulse
+        description
+        stakes
       }
     }
   }

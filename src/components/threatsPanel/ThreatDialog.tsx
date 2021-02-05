@@ -101,7 +101,7 @@ const ThreatDialog: FC<ThreatDialogProps> = ({ handleClose, existingThreat }) =>
       };
       try {
         await addThreat({
-          variables: { gameId: game.id, gameRoleId: mcGameRole.id, threat },
+          variables: { gameRoleId: mcGameRole.id, threat },
         });
         handleClose();
       } catch (error) {
