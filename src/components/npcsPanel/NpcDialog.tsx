@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, FormField, TextArea } from 'grommet';
+import { shuffle } from 'lodash';
 import React, { ChangeEvent, FC, Reducer, useEffect, useReducer, useState } from 'react';
 import { Npc } from '../../@types/dataInterfaces';
 import { ButtonWS, HeadingWS, npcDialogBackground, TextInputWS } from '../../config/grommetConfig';
@@ -102,7 +103,7 @@ const NpcDialog: FC<NpcDialogProps> = ({ handleClose, existingNpc }) => {
             name="threatName"
             value={name}
             size="xlarge"
-            suggestions={name === '' ? threatCreator.threatNames : filteredNames}
+            suggestions={name === '' ? shuffle(threatCreator.threatNames) : filteredNames}
             onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
             // @ts-ignore
             onSuggestionSelect={({ suggestion }) => dispatch({ type: 'SET_NAME', payload: suggestion })}

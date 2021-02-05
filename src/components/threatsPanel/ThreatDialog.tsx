@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, FormField, ResponsiveContext, Select, TextArea } from 'grommet';
+import { shuffle } from 'lodash';
 import React, { ChangeEvent, FC, Reducer, useContext, useEffect, useReducer, useState } from 'react';
 import { ThreatInput } from '../../@types';
 import { Threat } from '../../@types/dataInterfaces';
@@ -136,7 +137,7 @@ const ThreatDialog: FC<ThreatDialogProps> = ({ handleClose, existingThreat }) =>
             name="threatName"
             value={name}
             size="xlarge"
-            suggestions={name === '' ? threatCreator.threatNames : filteredNames}
+            suggestions={name === '' ? shuffle(threatCreator.threatNames) : filteredNames}
             onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
             // @ts-ignore
             onSuggestionSelect={({ suggestion }) => dispatch({ type: 'SET_NAME', payload: suggestion })}
