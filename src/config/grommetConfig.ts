@@ -741,3 +741,8 @@ export const threatDialogBackground = {
   size: 'contain',
   image: 'url(/images/background-image-22.jpg)',
 };
+
+export const npcDialogBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-23.jpg)',
+};
