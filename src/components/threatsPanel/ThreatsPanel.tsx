@@ -17,7 +17,7 @@ const ThreatsPanel = () => {
   const { crustReady } = useFonts();
 
   const threats = mcGameRole?.threats;
-  console.log('threats', threats);
+
   return (
     <Box fill="horizontal" direction="row" wrap pad="12px" overflow="auto">
       {showThreatDialog.show && (
