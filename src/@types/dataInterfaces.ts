@@ -5,7 +5,7 @@ import {
   PlaybookType,
   RoleType,
   StatType,
-  Threats,
+  ThreatType,
   UniqueTypes,
   VehicleFrameType,
 } from './enums';
@@ -159,7 +159,7 @@ export interface Npc {
 export interface Threat {
   id: string;
   name: string;
-  threatKind: Threats;
+  threatKind: ThreatType;
   impulse: string;
   description?: string;
   stakes?: string;

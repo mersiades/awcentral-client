@@ -8,6 +8,7 @@ import {
   PlaybookType,
   RollType,
   StatType,
+  ThreatType,
   UniqueTypes,
   VehicleFrameType,
   VehicleType,
@@ -229,4 +230,19 @@ export interface GangOption {
   modifier?: string;
   // For example, +rich, -savage, +Vulnerable: disease
   tag?: string;
+}
+
+export interface ThreatCreatorContent {
+  id: string;
+  threatType: ThreatType;
+  impulses: string[];
+  moves: [];
+}
+
+export interface ThreatCreator {
+  id: string;
+  createThreatInstructions: string;
+  essentialThreatInstructions: string;
+  threats: ThreatCreatorContent[];
+  threatNames: string[];
 }

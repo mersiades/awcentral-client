@@ -4,13 +4,14 @@ import { FormUp, FormDown, Edit } from 'grommet-icons';
 
 import { HeadingWS } from '../config/grommetConfig';
 import { useFonts } from '../contexts/fontContext';
+import { Threat } from '../@types/dataInterfaces';
 
 interface CollapsiblePanelBoxProps {
   title: string;
   children: JSX.Element;
   open?: boolean;
   navigateToCharacterCreation?: (step: string) => void;
-  onEdit?: () => void;
+  onEdit?: (threat?: Threat) => void;
   targetCreationStep?: string;
 }
 
@@ -67,7 +68,7 @@ const CollapsiblePanelBox: FC<CollapsiblePanelBoxProps> = ({
             <Edit
               data-testid={`${title.toLowerCase()}-edit-link`}
               color="accent-1"
-              onClick={onEdit}
+              onClick={() => onEdit()}
               style={{ cursor: 'pointer' }}
             />
           )}

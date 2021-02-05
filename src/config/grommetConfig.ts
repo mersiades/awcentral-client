@@ -13,6 +13,8 @@ import {
   Paragraph,
   ParagraphProps,
   Text,
+  TextInput,
+  TextInputProps,
   TextProps,
 } from 'grommet';
 import { Close, IconProps } from 'grommet-icons';
@@ -269,6 +271,20 @@ export const theme = (vtksReady: boolean, crustReady: boolean) => {
       extend: vtksReady
         ? "font-family: 'Vtks good luck for you', sans-serif; font-size: 36px; line-height: 36px;"
         : 'font-family: sans-serif; font-size: 28px; line-height: 36px; font-weight: 600; letter-spacing: -3px;',
+    },
+    textInput: {
+      suggestions: {
+        extend: `
+          & button {
+            font-family: 'chaparral pro', sans-serif;
+            text-shadow: 0 0 1px #000, 0 0 3px #000;
+            font-weight: 600;
+            margin: 0px;
+            font-size: 18px;
+            line-height: 24px;
+          }
+        `,
+      },
     },
     heading: {
       font: {
@@ -593,6 +609,16 @@ export const ParagraphWS = styled(Paragraph as FC<ParagraphProps & JSX.Intrinsic
   `;
 });
 
+export const TextInputWS = styled(
+  TextInput as React.ComponentClass<
+    TextInputProps & Omit<JSX.IntrinsicElements['input'], 'onSelect' | 'size' | 'placeholder'>
+  >
+)(() => {
+  return css`
+    text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000;
+  `;
+});
+
 // Renders Grommet Button with black box shadow
 export const ButtonWS = styled(Button as FC<ButtonProps & JSX.IntrinsicElements['button']>)(({ primary, secondary }) => {
   return css`
@@ -707,4 +733,11 @@ export const treatNpcBackground = {
 export const chopperSpecialBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-21.jpg)',
+};
+
+export const threatDialogBackground = {
+  ...backgroundBase,
+  position: 'right bottom',
+  size: 'contain',
+  image: 'url(/images/background-image-22.jpg)',
 };

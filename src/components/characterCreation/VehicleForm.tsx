@@ -435,7 +435,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
       overflow="auto"
       flex="grow"
     >
-      <Box direction="row" fill justify="end">
+      <Box direction="row" fill justify="center">
         <Box pad="12px" justify="between">
           <TextWS>{introText}</TextWS>
           <Box>
