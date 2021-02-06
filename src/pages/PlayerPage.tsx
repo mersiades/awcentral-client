@@ -1,8 +1,7 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { useKeycloak } from '@react-keycloak/web';
 import { useHistory, useParams } from 'react-router-dom';
-import { Box, Button, Collapsible, Header, Menu, Tab, Tabs, ThemeContext, Tip } from 'grommet';
+import { Box, Collapsible, Tab, Tabs, ThemeContext } from 'grommet';
 
 import MovesPanel from '../components/MovesPanel';
 import PlaybookPanel from '../components/playbookPanel/PlaybookPanel';
@@ -10,6 +9,11 @@ import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 import HelpOrInterfereDialog from '../components/dialogs/HelpOrInterfereDialog';
 import BarterDialog from '../components/dialogs/BarterDialog';
 import MakeWantKnownDialog from '../components/dialogs/MakeWantKnownDialog';
+import StabilizeDialog from '../components/dialogs/StabilizeDialog';
+import SpeedRecoveryDialog from '../components/dialogs/SpeedRecoveryDialog';
+import ReviveDialog from '../components/dialogs/ReviveDialog';
+import TreatNpcDialog from '../components/dialogs/TreatNpcDialog';
+import ChopperSpecialDialog from '../components/dialogs/ChopperSpecialDialog';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES from '../queries/allMoves';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
@@ -19,10 +23,10 @@ import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars
 import { MoveActionType, RollType, StatType } from '../@types/enums';
 import { HarmInput } from '../@types';
 import { CharacterMove, Move } from '../@types/staticDataInterfaces';
-import { Character, GameRole } from '../@types/dataInterfaces';
+import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
-import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import { customTabStyles } from '../config/grommetConfig';
 import HarmDialog from '../components/dialogs/HarmDialog';
 import InflictHarmDialog from '../components/dialogs/InflictHarmDialog';
 import HealHarmDialog from '../components/dialogs/HealHarmDialog';
@@ -39,12 +43,7 @@ import {
   STABILIZE_AND_HEAL_NAME,
   TREAT_NPC_NAME,
 } from '../config/constants';
-import StabilizeDialog from '../components/dialogs/StabilizeDialog';
-import SpeedRecoveryDialog from '../components/dialogs/SpeedRecoveryDialog';
-import ReviveDialog from '../components/dialogs/ReviveDialog';
-import TreatNpcDialog from '../components/dialogs/TreatNpcDialog';
-import ChopperSpecialDialog from '../components/dialogs/ChopperSpecialDialog';
-import CharacterPreview from '../components/CharacterPreview';
+import GameNavbar from '../components/GameNavbar';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -75,12 +74,11 @@ const PlayerPage: FC = () => {
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
-  const { keycloak } = useKeycloak();
   const { gameId } = useParams<{ gameId: string }>();
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
-  const { game, fetchingGame, userGameRole, setGameContext, otherPlayerGameRoles } = useGame();
+  const { game, fetchingGame, userGameRole, setGameContext } = useGame();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
@@ -185,72 +183,33 @@ const PlayerPage: FC = () => {
 
   return (
     <Box fill background={background}>
-      <Header
-        background={{ color: 'rgba(76, 104, 76, 0.5)' }}
-        style={{ borderBottom: `1px solid ${accentColors[0]}` }}
-        height="4vh"
-      >
-        {dialog?.moveAction?.rollType === RollType.harm && (
-          <HarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
-        )}
-        {dialog?.moveAction?.actionType === MoveActionType.barter && (
-          <BarterDialog move={dialog} handleClose={() => setDialog(undefined)} />
-        )}
-        {dialog?.name === HELP_OR_INTERFERE_NAME && (
-          <HelpOrInterfereDialog move={dialog} buttonTitle="ROLL" handleClose={() => setDialog(undefined)} />
-        )}
-        {dialog?.name === MAKE_WANT_KNOWN_NAME && (
-          <MakeWantKnownDialog move={dialog} handleClose={() => setDialog(undefined)} />
-        )}
-        {dialog?.name === INFLICT_HARM_NAME && <InflictHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
-        {dialog?.name === HEAL_HARM_NAME && <HealHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
-        {dialog?.name === ANGEL_SPECIAL_NAME && (
-          <AngelSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
-        )}
-        {dialog?.name === STABILIZE_AND_HEAL_NAME && (
-          <StabilizeDialog move={dialog} handleClose={() => setDialog(undefined)} />
-        )}
-        {dialog?.name === SPEED_RECOVERY_NAME && (
-          <SpeedRecoveryDialog move={dialog} handleClose={() => setDialog(undefined)} />
-        )}
-        {dialog?.name === REVIVE_SOMEONE_NAME && <ReviveDialog move={dialog} handleClose={() => setDialog(undefined)} />}
-        {dialog?.name === TREAT_NPC_NAME && <TreatNpcDialog move={dialog} handleClose={() => setDialog(undefined)} />}
-        {dialog?.name === CHOPPER_SPECIAL_NAME && (
-          <ChopperSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
-        )}
-        <ThemeContext.Extend value={customDefaultButtonStyles}>
-          <Menu
-            style={{ backgroundColor: 'transparent' }}
-            dropBackground={{ color: 'rgba(76, 104, 76, 0.5)' }}
-            label="AW Central"
-            items={[
-              { label: 'Main menu', onClick: () => history.push('/menu') },
-              {
-                label: 'Log out',
-                onClick: () => keycloak.logout(),
-              },
-            ]}
-          />
-          {!!otherPlayerGameRoles &&
-            otherPlayerGameRoles.map((gameRole: GameRole) =>
-              gameRole.characters?.map((character: any) => (
-                <Tip key={character.id} content={<CharacterPreview character={character} isMc={false} />}>
-                  <Button
-                    label={character.name}
-                    style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
-                  />
-                </Tip>
-              ))
-            )}
-          {!!game && !game?.hasFinishedPreGame && (
-            <Button
-              label="PRE-GAME"
-              onClick={() => history.push(`/pre-game/${game.id}`)}
-              style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
-            />
-          )}
-        </ThemeContext.Extend>
-      </Header>
+      <GameNavbar isMc={false} />
+      {dialog?.moveAction?.rollType === RollType.harm && (
+        <HarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog?.moveAction?.actionType === MoveActionType.barter && (
+        <BarterDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog?.name === HELP_OR_INTERFERE_NAME && (
+        <HelpOrInterfereDialog move={dialog} buttonTitle="ROLL" handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog?.name === MAKE_WANT_KNOWN_NAME && (
+        <MakeWantKnownDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog?.name === INFLICT_HARM_NAME && <InflictHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.name === HEAL_HARM_NAME && <HealHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.name === ANGEL_SPECIAL_NAME && <AngelSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.name === STABILIZE_AND_HEAL_NAME && (
+        <StabilizeDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog?.name === SPEED_RECOVERY_NAME && (
+        <SpeedRecoveryDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog?.name === REVIVE_SOMEONE_NAME && <ReviveDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.name === TREAT_NPC_NAME && <TreatNpcDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.name === CHOPPER_SPECIAL_NAME && (
+        <ChopperSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>

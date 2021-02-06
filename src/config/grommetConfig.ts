@@ -450,7 +450,7 @@ export const customDefaultButtonStyles = deepMerge(grommet, {
       extend: 'font-weight: 500; font-size: 18px;',
     },
     extend: `
-    font-family: 'Vtks good luck for you', sans-serif;
+    font-family: 'crust_clean', sans-serif;
     font-size: 18px;
     line-height: 24px;
     color: #fff;
