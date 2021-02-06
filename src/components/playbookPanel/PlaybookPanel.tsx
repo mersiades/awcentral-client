@@ -18,6 +18,7 @@ import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import AngelKitBox from './AngelKitBox';
 import VehiclesBox from './VehiclesBox';
 import GangBox from './GangBox';
+import WeaponsBox from './WeaponsBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -107,6 +108,12 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
       )}
       {!!character.playbookUnique?.gang && (
         <GangBox navigateToCharacterCreation={navigateToCharacterCreation} openDialog={openDialog} />
+      )}
+      {!!character.playbookUnique?.weapons && (
+        <WeaponsBox
+          weapons={character.playbookUnique.weapons.weapons}
+          navigateToCharacterCreation={navigateToCharacterCreation}
+        />
       )}
       {character.vehicles.length > 0 && (
         <VehiclesBox vehicles={character.vehicles} navigateToCharacterCreation={navigateToCharacterCreation} />
