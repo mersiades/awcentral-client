@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useKeycloak } from '@react-keycloak/web';
 import { useHistory, useParams } from 'react-router-dom';
-import { Box, Collapsible, Header, Menu, Tab, Tabs, ThemeContext } from 'grommet';
+import { Box, Button, Collapsible, Header, Menu, Tab, Tabs, ThemeContext, Tip } from 'grommet';
 
 import MovesPanel from '../components/MovesPanel';
 import PlaybookPanel from '../components/playbookPanel/PlaybookPanel';
@@ -19,7 +19,7 @@ import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars
 import { MoveActionType, RollType, StatType } from '../@types/enums';
 import { HarmInput } from '../@types';
 import { CharacterMove, Move } from '../@types/staticDataInterfaces';
-import { Character } from '../@types/dataInterfaces';
+import { Character, GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
@@ -44,6 +44,7 @@ import SpeedRecoveryDialog from '../components/dialogs/SpeedRecoveryDialog';
 import ReviveDialog from '../components/dialogs/ReviveDialog';
 import TreatNpcDialog from '../components/dialogs/TreatNpcDialog';
 import ChopperSpecialDialog from '../components/dialogs/ChopperSpecialDialog';
+import CharacterPreview from '../components/CharacterPreview';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -79,7 +80,7 @@ const PlayerPage: FC = () => {
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { id: userId } = useKeycloakUser();
-  const { game, fetchingGame, userGameRole, setGameContext } = useGame();
+  const { game, fetchingGame, userGameRole, setGameContext, otherPlayerGameRoles } = useGame();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
@@ -230,6 +231,24 @@ const PlayerPage: FC = () => {
               },
             ]}
           />
+          {!!otherPlayerGameRoles &&
+            otherPlayerGameRoles.map((gameRole: GameRole) =>
+              gameRole.characters?.map((character: any) => (
+                <Tip key={character.id} content={<CharacterPreview character={character} isMc={false} />}>
+                  <Button
+                    label={character.name}
+                    style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
+                  />
+                </Tip>
+              ))
+            )}
+          {!!game && !game?.hasFinishedPreGame && (
+            <Button
+              label="PRE-GAME"
+              onClick={() => history.push(`/pre-game/${game.id}`)}
+              style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
+            />
+          )}
         </ThemeContext.Extend>
       </Header>
       <div data-testid="player-page">
