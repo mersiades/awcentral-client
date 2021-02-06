@@ -12,6 +12,7 @@ import {
   PlaybookUnique,
   StatsBlock,
   Vehicle,
+  Weapons,
 } from '../@types/dataInterfaces';
 import {
   BattleOptionType,
@@ -200,6 +201,11 @@ export const dummyMoveAction: MoveAction = {
 };
 
 export const dummyCustomWeapons: CustomWeapons = {
+  id: 'dummy',
+  weapons: ['dummy'],
+};
+
+export const dummyWeapons: Weapons = {
   id: 'dummy',
   weapons: ['dummy'],
 };
@@ -557,6 +563,7 @@ export const mockPlaybookUniqueBattlebabe: PlaybookUnique = {
   brainerGear: dummyBrainerGear,
   angelKit: dummyAngelKit,
   gang: dummyGang,
+  weapons: dummyWeapons,
 };
 
 export const mockAngelKit: AngelKit = {
@@ -575,6 +582,7 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   brainerGear: dummyBrainerGear,
   angelKit: mockAngelKit,
   gang: dummyGang,
+  weapons: dummyWeapons,
 };
 
 export const mockCharacterHarm: CharacterHarm = {
