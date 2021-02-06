@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, Tip, Text } from 'grommet';
@@ -61,6 +61,27 @@ const WeaponsForm: FC = () => {
       seriousWeapons.length < 2 && setSeriousWeapons([...seriousWeapons, weapon]);
     }
   };
+  // ------------------------------------------------------ Effects -------------------------------------------------------- //
+
+  useEffect(() => {
+    if (!!character?.playbookUnique?.weapons && !!bigFuckOffGuns && !!seriousGuns && !!backupWeapons) {
+      let existingSeriousWeapons: string[] = [];
+      character.playbookUnique.weapons.weapons.forEach((weapon) => {
+        if (bigFuckOffGuns.includes(weapon)) {
+          setFobGun(weapon);
+        }
+
+        if (backupWeapons.includes(weapon)) {
+          setBackupWeapon(weapon);
+        }
+
+        if (seriousGuns.includes(weapon)) {
+          existingSeriousWeapons = [...existingSeriousWeapons, weapon];
+        }
+      });
+      setSeriousWeapons(existingSeriousWeapons);
+    }
+  }, [character?.playbookUnique?.weapons, bigFuckOffGuns, seriousGuns, backupWeapons]);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
@@ -114,8 +135,6 @@ const WeaponsForm: FC = () => {
       </Tip>
     );
   };
-
-  console.log('[...seriousWeapons, fobGun, backupWeapon]', [...seriousWeapons, fobGun, backupWeapon]);
 
   return (
     <Box
