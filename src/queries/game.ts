@@ -52,6 +52,8 @@ const GAME = gql`
         userId
         npcs {
           id
+          name
+          description
         }
         threats {
           id

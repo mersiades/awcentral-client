@@ -1,17 +1,19 @@
+import React, { ChangeEvent, FC, Reducer, useContext, useEffect, useReducer, useState } from 'react';
+import { shuffle } from 'lodash';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, FormField, ResponsiveContext, Select, TextArea } from 'grommet';
-import React, { ChangeEvent, FC, Reducer, useContext, useEffect, useReducer, useState } from 'react';
+
+import Spinner from '../Spinner';
+import DialogWrapper from '../DialogWrapper';
+import { StyledMarkdown } from '../styledComponents';
+import { ButtonWS, TextInputWS, TextWS, threatDialogBackground } from '../../config/grommetConfig';
+import THREAT_CREATOR, { ThreatCreatorData, ThreatCreatorVars } from '../../queries/threatCreator';
+import ADD_THREAT, { AddThreatData, AddThreatVars } from '../../mutations/addThreat';
+import { ThreatType } from '../../@types/enums';
 import { ThreatInput } from '../../@types';
 import { Threat } from '../../@types/dataInterfaces';
-import { ThreatType } from '../../@types/enums';
-import { ButtonWS, TextInputWS, TextWS, threatDialogBackground } from '../../config/grommetConfig';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
-import ADD_THREAT, { AddThreatData, AddThreatVars } from '../../mutations/addThreat';
-import THREAT_CREATOR, { ThreatCreatorData, ThreatCreatorVars } from '../../queries/threatCreator';
-import DialogWrapper from '../DialogWrapper';
-import Spinner from '../Spinner';
-import { StyledMarkdown } from '../styledComponents';
 
 interface ThreatDialogProps {
   handleClose: () => void;
@@ -78,7 +80,7 @@ const ThreatDialog: FC<ThreatDialogProps> = ({ handleClose, existingThreat }) =>
   const [filteredNames, setFilteredNames] = useState<string[]>([]);
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { game, mcGameRole } = useGame();
+  const { mcGameRole } = useGame();
 
   // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
   const size = useContext(ResponsiveContext);
@@ -90,7 +92,7 @@ const ThreatDialog: FC<ThreatDialogProps> = ({ handleClose, existingThreat }) =>
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
   const handleSetThreat = async () => {
-    if (!!game && mcGameRole) {
+    if (!!mcGameRole) {
       const threat: ThreatInput = {
         id: existingThreat ? existingThreat.id : undefined,
         name,
@@ -136,7 +138,7 @@ const ThreatDialog: FC<ThreatDialogProps> = ({ handleClose, existingThreat }) =>
             name="threatName"
             value={name}
             size="xlarge"
-            suggestions={name === '' ? threatCreator.threatNames : filteredNames}
+            suggestions={name === '' ? shuffle(threatCreator.threatNames) : filteredNames}
             onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
             // @ts-ignore
             onSuggestionSelect={({ suggestion }) => dispatch({ type: 'SET_NAME', payload: suggestion })}

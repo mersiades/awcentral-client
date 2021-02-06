@@ -6,10 +6,12 @@ import { useMutation, useQuery } from '@apollo/client';
 
 import GamePanel from '../components/gamePanel/GamePanel';
 import MovesPanel from '../components/MovesPanel';
+import ThreatsPanel from '../components/threatsPanel/ThreatsPanel';
+import NpcsPanel from '../components/npcsPanel/NpcsPanel';
+import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 import InvitationForm from '../components/InvitationForm';
 import GameForm from '../components/GameForm';
 import WarningDialog from '../components/dialogs/WarningDialog';
-import MessagesPanel from '../components/messagesPanel/MessagesPanel';
 import { Footer, LeftMainContainer, MainContainer, RightMainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
@@ -19,10 +21,8 @@ import { RoleType } from '../@types/enums';
 import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
-import { useFonts } from '../contexts/fontContext';
-import { accentColors, customDefaultButtonStyles, customTabStyles, HeadingWS } from '../config/grommetConfig';
+import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
-import ThreatsPanel from '../components/threatsPanel/ThreatsPanel';
 
 export const background = {
   color: 'black',
@@ -76,7 +76,6 @@ const MCPage: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, setGameContext } = useGame();
   const { id: userId } = useKeycloakUser();
-  const { vtksReady } = useFonts();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
@@ -212,11 +211,7 @@ const MCPage: FC = () => {
             <RightMainContainer rightPanel={rightPanel}>
               <Box fill align="center" justify="start" pad="12px">
                 {rightPanel === 0 && <ThreatsPanel />}
-                {rightPanel === 1 && (
-                  <HeadingWS vtksReady={vtksReady} level={1}>
-                    Npcs
-                  </HeadingWS>
-                )}
+                {rightPanel === 1 && <NpcsPanel />}
               </Box>
             </RightMainContainer>
           </MainContainer>

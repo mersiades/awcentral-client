@@ -78,3 +78,9 @@ export interface ThreatInput {
   description?: string;
   stakes?: string;
 }
+
+export interface NpcInput {
+  id?: string;
+  name: string;
+  description?: string;
+}
