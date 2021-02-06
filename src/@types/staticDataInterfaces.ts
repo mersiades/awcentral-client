@@ -142,6 +142,17 @@ export interface PlaybookUniqueCreator {
   customWeaponsCreator?: CustomWeaponsCreator;
   brainerGearCreator?: BrainerGearCreator;
   gangCreator: GangCreator;
+  weaponsCreator: WeaponsCreator;
+}
+
+export interface WeaponsCreator {
+  id: string;
+  bfoGunOptionCount: number;
+  seriousGunOptionCount: number;
+  backupWeaponsOptionCount: number;
+  bigFuckOffGuns: string[];
+  seriousGuns: string[];
+  backupWeapons: string[];
 }
 
 export interface GangCreator {

@@ -52,6 +52,7 @@ import {
   VehicleBattleOption,
   VehicleCreator,
   VehicleFrame,
+  WeaponsCreator,
 } from '../@types/staticDataInterfaces';
 import { ANGEL_SPECIAL_NAME, UNDER_FIRE_NAME } from '../config/constants';
 
@@ -101,6 +102,16 @@ export const dummyAngelKitCreator: AngelKitCreator = {
   id: 'dummy',
   angelKitInstructions: 'dummy',
   startingStock: 0,
+};
+
+export const dummyWeaponsCreator: WeaponsCreator = {
+  id: 'dummy',
+  bfoGunOptionCount: 1,
+  seriousGunOptionCount: 2,
+  backupWeaponsOptionCount: 1,
+  bigFuckOffGuns: ['dummy'],
+  seriousGuns: ['dummy'],
+  backupWeapons: ['dummy'],
 };
 
 export const dummyTaggedItem: TaggedItem = {
@@ -1144,6 +1155,7 @@ export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
   customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: dummyBrainerGearCreator,
   gangCreator: dummyGangCreator,
+  weaponsCreator: dummyWeaponsCreator,
 };
 
 export const mockPlaybookCreatorAngel: PlaybookCreator = {
@@ -1353,6 +1365,7 @@ export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
   customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: mockBrainerGearCreator,
   gangCreator: dummyGangCreator,
+  weaponsCreator: dummyWeaponsCreator,
 };
 
 // ---------------------------------------------- Mock user-generated data --------------------------------------------- //

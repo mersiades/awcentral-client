@@ -9,6 +9,7 @@ import { CharacterCreationSteps, PlaybookType } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
 import { useHistory } from 'react-router-dom';
 import GangForm from './uniques/GangForm';
+import WeaponsForm from './uniques/WeaponsForm';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -40,6 +41,8 @@ const PlaybookUniqueRouter: FC = () => {
         return <GangForm />;
       case PlaybookType.driver:
         break;
+      case PlaybookType.gunlugger:
+        return <WeaponsForm />;
       default:
         return null;
     }

@@ -156,6 +156,15 @@ const PLAYBOOK_CREATOR = gql`
             tag
           }
         }
+        weaponsCreator {
+          id
+          bfoGunOptionCount
+          seriousGunOptionCount
+          backupWeaponsOptionCount
+          bigFuckOffGuns
+          seriousGuns
+          backupWeapons
+        }
       }
     }
   }
