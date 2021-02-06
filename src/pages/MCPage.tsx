@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useKeycloak } from '@react-keycloak/web';
-import { Box, Header, Menu, Button, Tabs, Tab, ThemeContext, Collapsible } from 'grommet';
+import { Box, Tabs, Tab, ThemeContext, Collapsible } from 'grommet';
 import { useMutation, useQuery } from '@apollo/client';
 
 import GamePanel from '../components/gamePanel/GamePanel';
@@ -17,12 +16,11 @@ import ALL_MOVES, { AllMovesData } from '../queries/allMoves';
 import GAMEROLES_BY_USER_ID from '../queries/gameRolesByUserId';
 import DELETE_GAME, { DeleteGameData, DeleteGameVars } from '../mutations/deleteGame';
 import REMOVE_INVITEE, { RemoveInviteeData, RemoveInviteeVars } from '../mutations/removeInvitee';
-import { RoleType } from '../@types/enums';
-import { GameRole } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
-import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
+import { customTabStyles } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
+import GameNavbar from '../components/GameNavbar';
 
 export const background = {
   color: 'black',
@@ -71,7 +69,6 @@ const MCPage: FC = () => {
 
   const { gameId } = useParams<{ gameId: string }>();
   const history = useHistory();
-  const { keycloak } = useKeycloak();
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, setGameContext } = useGame();
@@ -137,7 +134,7 @@ const MCPage: FC = () => {
   };
 
   return (
-    <>
+    <Box fill background={background}>
       {!!game && showDeleteGameDialog && (
         <WarningDialog
           title="Delete game?"
@@ -147,95 +144,55 @@ const MCPage: FC = () => {
           handleConfirm={handleDeleteGame}
         />
       )}
-      <Box fill background={background}>
-        <Header
-          background={{ color: 'rgba(76, 104, 76, 0.5)' }}
-          style={{ borderBottom: `1px solid ${accentColors[0]}` }}
-          height="4vh"
-        >
-          <ThemeContext.Extend value={customDefaultButtonStyles}>
-            <Menu
-              style={{ backgroundColor: 'transparent' }}
-              dropBackground={{ color: 'rgba(76, 104, 76, 0.5)' }}
-              label="AW Central"
-              items={[
-                { label: 'Main menu', onClick: () => history.push('/menu') },
-                {
-                  label: 'Log out',
-                  onClick: () => keycloak.logout(),
-                },
-              ]}
-            />
-            {game?.gameRoles
-              .filter((gameRole: GameRole) => gameRole.role === RoleType.player)
-              .map((gameRole: GameRole) =>
-                gameRole.characters?.map((character: any) => (
-                  <Button
-                    key={character.name}
-                    label={character.name}
-                    style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
-                  />
-                ))
-              )}
-            <Button label="THREAT MAP" style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }} />
-            {!!game && !game?.hasFinishedPreGame && (
-              <Button
-                label="PRE-GAME"
-                onClick={() => history.push(`/pre-game/${game.id}`)}
-                style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
+      <GameNavbar isMc={true} />
+      <div data-testid="mc-page">
+        <Collapsible direction="horizontal" open={sidePanel < 3}>
+          <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
+            {!!game && sidePanel === 0 && (
+              <GamePanel
+                setShowDeleteGameDialog={setShowDeleteGameDialog}
+                handleShowInvitationForm={setLeftPanel}
+                handleShowGameForm={setLeftPanel}
+                handleRemoveInvitee={handleRemoveInvitee}
               />
             )}
-          </ThemeContext.Extend>
-        </Header>
-        <div data-testid="mc-page">
-          <Collapsible direction="horizontal" open={sidePanel < 3}>
-            <SidePanel sidePanel={sidePanel} growWidth={sidePanelWidth}>
-              {!!game && sidePanel === 0 && (
-                <GamePanel
-                  setShowDeleteGameDialog={setShowDeleteGameDialog}
-                  handleShowInvitationForm={setLeftPanel}
-                  handleShowGameForm={setLeftPanel}
-                  handleRemoveInvitee={handleRemoveInvitee}
-                />
-              )}
-              {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} />}
-              {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
-            </SidePanel>
-          </Collapsible>
-          <MainContainer fill sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
-            <LeftMainContainer fill rightPanel={rightPanel}>
-              <Box fill align="center" justify="center" pad="12px">
-                {renderLeftPanel()}
-              </Box>
-            </LeftMainContainer>
-            <RightMainContainer rightPanel={rightPanel}>
-              <Box fill align="center" justify="start" pad="12px">
-                {rightPanel === 0 && <ThreatsPanel />}
-                {rightPanel === 1 && <NpcsPanel />}
-              </Box>
-            </RightMainContainer>
-          </MainContainer>
-        </div>
-        <Footer direction="row" justify="between" align="center" height="10vh">
-          <ThemeContext.Extend value={customTabStyles}>
-            <Tabs
-              activeIndex={sidePanel}
-              onActive={(tab) => {
-                tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
-              }}
-            >
-              <Tab title="Game" />
-              {allMoves && <Tab title="Moves" />}
-              <Tab title="MC Moves" />
-            </Tabs>
-            <Tabs activeIndex={rightPanel} onActive={(tab) => (tab === rightPanel ? setRightPanel(2) : setRightPanel(tab))}>
-              <Tab title="Threats" />
-              <Tab title="NPCs" />
-            </Tabs>
-          </ThemeContext.Extend>
-        </Footer>
-      </Box>
-    </>
+            {sidePanel === 1 && !!allMoves && <MovesPanel allMoves={allMoves} />}
+            {sidePanel === 2 && <p onClick={() => setSidePanel(3)}>MCMovesPanel</p>}
+          </SidePanel>
+        </Collapsible>
+        <MainContainer fill sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
+          <LeftMainContainer fill rightPanel={rightPanel}>
+            <Box fill align="center" justify="center" pad="12px">
+              {renderLeftPanel()}
+            </Box>
+          </LeftMainContainer>
+          <RightMainContainer rightPanel={rightPanel}>
+            <Box fill align="center" justify="start" pad="12px">
+              {rightPanel === 0 && <ThreatsPanel />}
+              {rightPanel === 1 && <NpcsPanel />}
+            </Box>
+          </RightMainContainer>
+        </MainContainer>
+      </div>
+      <Footer direction="row" justify="between" align="center" height="10vh">
+        <ThemeContext.Extend value={customTabStyles}>
+          <Tabs
+            activeIndex={sidePanel}
+            onActive={(tab) => {
+              tab === sidePanel ? setSidePanel(3) : setSidePanel(tab);
+            }}
+          >
+            <Tab title="Game" />
+            {allMoves && <Tab title="Moves" />}
+            <Tab title="MC Moves" />
+          </Tabs>
+          <Tabs activeIndex={rightPanel} onActive={(tab) => (tab === rightPanel ? setRightPanel(2) : setRightPanel(tab))}>
+            <Tab title="Threats" />
+            <Tab title="NPCs" />
+          </Tabs>
+        </ThemeContext.Extend>
+      </Footer>
+    </Box>
   );
 };
 

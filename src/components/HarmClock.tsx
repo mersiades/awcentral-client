@@ -6,9 +6,11 @@ interface HarmClockProps {
   harmValue: number;
   isStabilized: boolean;
   diameter?: number;
+  showNumbers?: boolean;
+  margin?: number;
 }
 
-const HarmClock: FC<HarmClockProps> = ({ harmValue, isStabilized, diameter = 200 }) => {
+const HarmClock: FC<HarmClockProps> = ({ harmValue, isStabilized, diameter = 200, showNumbers = true, margin = 50 }) => {
   const highlightColor = isStabilized ? accentColors[0] : brandColor;
 
   const circle = {
@@ -122,20 +124,24 @@ const HarmClock: FC<HarmClockProps> = ({ harmValue, isStabilized, diameter = 200
         data-testid="harm-clock"
         align="center"
         justify="center"
-        style={{ position: 'relative', width: `${diameter + 50}px`, height: `${diameter + 50}px` }}
+        style={{ position: 'relative', width: `${diameter + margin}px`, height: `${diameter + margin}px` }}
       >
-        <Box style={oclock12} align="center" justify="center">
-          <TextWS style={{ textAlign: 'center' }}>12</TextWS>
-        </Box>
-        <Box style={oclock3} align="center" justify="center">
-          <TextWS>3</TextWS>
-        </Box>
-        <Box style={oclock6} align="center" justify="center">
-          <TextWS>6</TextWS>
-        </Box>
-        <Box style={oclock9} align="center" justify="center">
-          <TextWS>9</TextWS>
-        </Box>
+        {showNumbers && (
+          <>
+            <Box style={oclock12} align="center" justify="center">
+              <TextWS style={{ textAlign: 'center' }}>12</TextWS>
+            </Box>
+            <Box style={oclock3} align="center" justify="center">
+              <TextWS>3</TextWS>
+            </Box>
+            <Box style={oclock6} align="center" justify="center">
+              <TextWS>6</TextWS>
+            </Box>
+            <Box style={oclock9} align="center" justify="center">
+              <TextWS>9</TextWS>
+            </Box>
+          </>
+        )}
 
         <div style={circle}>
           <div data-testid="harm-sector-0" style={sector0(harmValue)} />

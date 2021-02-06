@@ -55,8 +55,8 @@ describe('Rendering MCPage', () => {
         screen.getByRole('button', { name: gameRole.characters[0].name });
       }
     });
-    screen.getByRole('button', { name: 'THREAT MAP' });
-    screen.getByRole('button', { name: 'PRE-GAME' });
+    screen.getByRole('button', { name: 'Threat map' });
+    screen.getByRole('button', { name: 'Pre-game' });
     screen.getByRole('tab', { name: 'Game' });
     screen.getByRole('tab', { name: 'MC Moves' });
     screen.getByRole('tab', { name: 'Threats' });
