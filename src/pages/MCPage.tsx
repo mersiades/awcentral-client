@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { useKeycloak } from '@react-keycloak/web';
-import { Box, Header, Menu, Button, Tabs, Tab, ThemeContext, Collapsible } from 'grommet';
+import { Box, Header, Menu, Button, Tabs, Tab, ThemeContext, Collapsible, Tip } from 'grommet';
 import { useMutation, useQuery } from '@apollo/client';
 
 import GamePanel from '../components/gamePanel/GamePanel';
@@ -23,6 +23,7 @@ import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
 import { accentColors, customDefaultButtonStyles, customTabStyles } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
+import CharacterPreview from '../components/CharacterPreview';
 
 export const background = {
   color: 'black',
@@ -74,7 +75,7 @@ const MCPage: FC = () => {
   const { keycloak } = useKeycloak();
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { game, setGameContext } = useGame();
+  const { game, setGameContext, allPlayerGameRoles } = useGame();
   const { id: userId } = useKeycloakUser();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
@@ -166,15 +167,15 @@ const MCPage: FC = () => {
                 },
               ]}
             />
-            {game?.gameRoles
-              .filter((gameRole: GameRole) => gameRole.role === RoleType.player)
-              .map((gameRole: GameRole) =>
+            {!!allPlayerGameRoles &&
+              allPlayerGameRoles.map((gameRole: GameRole) =>
                 gameRole.characters?.map((character: any) => (
-                  <Button
-                    key={character.name}
-                    label={character.name}
-                    style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
-                  />
+                  <Tip key={character.id} content={<CharacterPreview character={character} isMc={true} />}>
+                    <Button
+                      label={character.name}
+                      style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }}
+                    />
+                  </Tip>
                 ))
               )}
             <Button label="THREAT MAP" style={{ backgroundColor: 'transparent', height: '4vh', lineHeight: '16px' }} />
