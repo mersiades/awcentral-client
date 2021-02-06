@@ -79,13 +79,15 @@ export const mockNewGameName = 'My new mock game';
 
 export const dummyRollModifier: RollModifier = {
   id: 'dummy',
-  moveToModify: {
-    id: 'dummy',
-    name: 'dummy',
-    description: 'dummy',
-    kind: MoveType.basic,
-    playbook: PlaybookType.angel,
-  },
+  movesToModify: [
+    {
+      id: 'dummy',
+      name: 'dummy',
+      description: 'dummy',
+      kind: MoveType.basic,
+      playbook: PlaybookType.angel,
+    },
+  ],
   statToRollWith: StatType.sharp,
 };
 
