@@ -276,6 +276,18 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
+        case UniqueTypes.weapons:
+          if (!!character.playbookUnique.weapons) {
+            return (
+              <CustomUL>
+                {character.playbookUnique.weapons.weapons.map((weapon) => {
+                  const weaponName = weapon.substring(0, weapon.indexOf(' ('));
+                  return <li key={weapon}>{weaponName}</li>;
+                })}
+              </CustomUL>
+            );
+          }
+          return null;
         default:
           return null;
       }

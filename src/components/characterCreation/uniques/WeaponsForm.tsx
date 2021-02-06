@@ -1,17 +1,15 @@
 import React, { FC, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
+import { useHistory } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, Tip, Text } from 'grommet';
 
 import Spinner from '../../Spinner';
-import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
-import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../../../mutations/setAngelKit';
+import { accentColors, ButtonWS, HeadingWS, neutralColors, TextWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
+import SET_WEAPONS, { SetWeaponsData, SetWeaponsVars } from '../../../mutations/setWeapons';
+import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
-import { useHistory } from 'react-router-dom';
-import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
-import SET_WEAPONS, { SetWeaponsData, SetWeaponsVars } from '../../../mutations/setWeapons';
 
 const WeaponsForm: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
