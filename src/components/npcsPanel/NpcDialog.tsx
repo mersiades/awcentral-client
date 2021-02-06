@@ -1,15 +1,17 @@
+import React, { ChangeEvent, FC, Reducer, useEffect, useReducer, useState } from 'react';
+import { shuffle } from 'lodash';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, FormField, TextArea } from 'grommet';
-import { shuffle } from 'lodash';
-import React, { ChangeEvent, FC, Reducer, useEffect, useReducer, useState } from 'react';
-import { Npc } from '../../@types/dataInterfaces';
-import { ButtonWS, HeadingWS, npcDialogBackground, TextInputWS } from '../../config/grommetConfig';
-import { useFonts } from '../../contexts/fontContext';
-import { useGame } from '../../contexts/gameContext';
-import ADD_THREAT, { AddThreatData, AddThreatVars } from '../../mutations/addThreat';
-import THREAT_CREATOR, { ThreatCreatorData, ThreatCreatorVars } from '../../queries/threatCreator';
+
 import DialogWrapper from '../DialogWrapper';
 import Spinner from '../Spinner';
+import { ButtonWS, HeadingWS, npcDialogBackground, TextInputWS } from '../../config/grommetConfig';
+import THREAT_CREATOR, { ThreatCreatorData, ThreatCreatorVars } from '../../queries/threatCreator';
+import ADD_NPC, { AddNpcData, AddNpcVars } from '../../mutations/addNpc';
+import { NpcInput } from '../../@types';
+import { Npc } from '../../@types/dataInterfaces';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 
 interface NpcDialogProps {
   handleClose: () => void;
@@ -54,34 +56,31 @@ const NpcDialog: FC<NpcDialogProps> = ({ handleClose, existingNpc }) => {
   const [filteredNames, setFilteredNames] = useState<string[]>([]);
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { game, mcGameRole } = useGame();
+  const { mcGameRole } = useGame();
   const { crustReady } = useFonts();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data } = useQuery<ThreatCreatorData, ThreatCreatorVars>(THREAT_CREATOR);
   const threatCreator = data?.threatCreator;
-  const [addThreat, { loading: addingThreat }] = useMutation<AddThreatData, AddThreatVars>(ADD_THREAT);
+  const [addNpc, { loading: addingNpc }] = useMutation<AddNpcData, AddNpcVars>(ADD_NPC);
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
 
   const handleSetNpc = async () => {
-    // if (!!game && mcGameRole) {
-    //   const threat: ThreatInput = {
-    //     id: existingThreat ? existingThreat.id : undefined,
-    //     name,
-    //     threatKind,
-    //     impulse,
-    //     description,
-    //     stakes,
-    //   };
-    //   try {
-    //     await addThreat({
-    //       variables: { gameRoleId: mcGameRole.id, threat },
-    //     });
-    //     handleClose();
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
+    if (!!mcGameRole) {
+      const npc: NpcInput = {
+        id: existingNpc ? existingNpc.id : undefined,
+        name,
+        description,
+      };
+      try {
+        await addNpc({
+          variables: { gameRoleId: mcGameRole.id, npc },
+        });
+        handleClose();
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   // ------------------------------------------------------- Effects -------------------------------------------------------- //
@@ -132,10 +131,9 @@ const NpcDialog: FC<NpcDialogProps> = ({ handleClose, existingNpc }) => {
     <ButtonWS
       primary
       fill="horizontal"
-      label="SET"
-      // label={addingThreat ? <Spinner fillColor="#FFF" width="100%" height="36px" /> : 'SET'}
-      // onClick={() => !addingThreat && !!name && !!threatKind && !!impulse && handleSetNpc()}
-      // disabled={!!addingThreat || !name}
+      label={addingNpc ? <Spinner fillColor="#FFF" width="100%" height="36px" /> : 'SET'}
+      onClick={() => !addingNpc && !!name && handleSetNpc()}
+      disabled={!!addingNpc || !name}
     />
   );
 
