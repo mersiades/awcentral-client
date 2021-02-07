@@ -103,6 +103,7 @@ export interface PlaybookUnique {
   angelKit?: AngelKit;
   customWeapons?: CustomWeapons;
   gang?: Gang;
+  weapons?: Weapons;
 }
 
 export interface BrainerGear {
@@ -120,6 +121,11 @@ export interface AngelKit {
 }
 
 export interface CustomWeapons {
+  id: string;
+  weapons: string[];
+}
+
+export interface Weapons {
   id: string;
   weapons: string[];
 }

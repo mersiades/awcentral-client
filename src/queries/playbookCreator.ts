@@ -81,7 +81,7 @@ const PLAYBOOK_CREATOR = gql`
         }
         rollModifier {
           id
-          moveToModify {
+          movesToModify {
             id
           }
           statToRollWith
@@ -155,6 +155,15 @@ const PLAYBOOK_CREATOR = gql`
             modifier
             tag
           }
+        }
+        weaponsCreator {
+          id
+          bfoGunOptionCount
+          seriousGunOptionCount
+          backupWeaponsOptionCount
+          bigFuckOffGuns
+          seriousGuns
+          backupWeapons
         }
       }
     }

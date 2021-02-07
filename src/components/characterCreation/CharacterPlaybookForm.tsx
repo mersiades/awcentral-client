@@ -182,6 +182,7 @@ const CharacterPlaybookForm: FC = () => {
               PlaybookType.brainer,
               PlaybookType.driver,
               PlaybookType.chopper,
+              PlaybookType.gunlugger,
             ].includes(selectedPlaybook.playbookType) && (
               <ButtonWS
                 label={

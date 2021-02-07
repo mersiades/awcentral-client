@@ -12,6 +12,7 @@ import {
   PlaybookUnique,
   StatsBlock,
   Vehicle,
+  Weapons,
 } from '../@types/dataInterfaces';
 import {
   BattleOptionType,
@@ -52,6 +53,7 @@ import {
   VehicleBattleOption,
   VehicleCreator,
   VehicleFrame,
+  WeaponsCreator,
 } from '../@types/staticDataInterfaces';
 import { ANGEL_SPECIAL_NAME, UNDER_FIRE_NAME } from '../config/constants';
 
@@ -79,13 +81,15 @@ export const mockNewGameName = 'My new mock game';
 
 export const dummyRollModifier: RollModifier = {
   id: 'dummy',
-  moveToModify: {
-    id: 'dummy',
-    name: 'dummy',
-    description: 'dummy',
-    kind: MoveType.basic,
-    playbook: PlaybookType.angel,
-  },
+  movesToModify: [
+    {
+      id: 'dummy',
+      name: 'dummy',
+      description: 'dummy',
+      kind: MoveType.basic,
+      playbook: PlaybookType.angel,
+    },
+  ],
   statToRollWith: StatType.sharp,
 };
 
@@ -99,6 +103,16 @@ export const dummyAngelKitCreator: AngelKitCreator = {
   id: 'dummy',
   angelKitInstructions: 'dummy',
   startingStock: 0,
+};
+
+export const dummyWeaponsCreator: WeaponsCreator = {
+  id: 'dummy',
+  bfoGunOptionCount: 1,
+  seriousGunOptionCount: 2,
+  backupWeaponsOptionCount: 1,
+  bigFuckOffGuns: ['dummy'],
+  seriousGuns: ['dummy'],
+  backupWeapons: ['dummy'],
 };
 
 export const dummyTaggedItem: TaggedItem = {
@@ -187,6 +201,11 @@ export const dummyMoveAction: MoveAction = {
 };
 
 export const dummyCustomWeapons: CustomWeapons = {
+  id: 'dummy',
+  weapons: ['dummy'],
+};
+
+export const dummyWeapons: Weapons = {
   id: 'dummy',
   weapons: ['dummy'],
 };
@@ -544,6 +563,7 @@ export const mockPlaybookUniqueBattlebabe: PlaybookUnique = {
   brainerGear: dummyBrainerGear,
   angelKit: dummyAngelKit,
   gang: dummyGang,
+  weapons: dummyWeapons,
 };
 
 export const mockAngelKit: AngelKit = {
@@ -562,6 +582,7 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   brainerGear: dummyBrainerGear,
   angelKit: mockAngelKit,
   gang: dummyGang,
+  weapons: dummyWeapons,
 };
 
 export const mockCharacterHarm: CharacterHarm = {
@@ -1142,6 +1163,7 @@ export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
   customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: dummyBrainerGearCreator,
   gangCreator: dummyGangCreator,
+  weaponsCreator: dummyWeaponsCreator,
 };
 
 export const mockPlaybookCreatorAngel: PlaybookCreator = {
@@ -1351,6 +1373,7 @@ export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
   customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: mockBrainerGearCreator,
   gangCreator: dummyGangCreator,
+  weaponsCreator: dummyWeaponsCreator,
 };
 
 // ---------------------------------------------- Mock user-generated data --------------------------------------------- //

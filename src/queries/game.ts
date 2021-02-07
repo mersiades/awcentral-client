@@ -171,6 +171,10 @@ const GAME = gql`
               id
               weapons
             }
+            weapons {
+              id
+              weapons
+            }
             gang {
               id
               size

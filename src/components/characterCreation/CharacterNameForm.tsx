@@ -28,6 +28,7 @@ const CharacterNameForm: FC = () => {
     // @ts-ignore
     { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
   );
+  console.log('pbCreatorData', pbCreatorData);
   const names = pbCreatorData?.playbookCreator.names;
   const [setCharacterName, { loading: settingName }] = useMutation<SetCharacterNameData, SetCharacterNameVars>(
     SET_CHARACTER_NAME
