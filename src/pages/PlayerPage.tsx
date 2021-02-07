@@ -34,6 +34,7 @@ import AngelSpecialDialog from '../components/dialogs/AngelSpecialDialog';
 import {
   ANGEL_SPECIAL_NAME,
   CHOPPER_SPECIAL_NAME,
+  GUNLUGGER_SPECIAL_NAME,
   HEAL_HARM_NAME,
   HELP_OR_INTERFERE_NAME,
   INFLICT_HARM_NAME,
@@ -44,6 +45,8 @@ import {
   TREAT_NPC_NAME,
 } from '../config/constants';
 import GameNavbar from '../components/GameNavbar';
+import Plus1ForwardPill from '../components/Plus1ForwardPill';
+import GunluggerSpecialDialog from '../components/dialogs/GunluggerSpecialDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -181,6 +184,7 @@ const PlayerPage: FC = () => {
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
+  console.log('dialog', dialog);
   return (
     <Box fill background={background}>
       <GameNavbar isMc={false} />
@@ -209,6 +213,9 @@ const PlayerPage: FC = () => {
       {dialog?.name === TREAT_NPC_NAME && <TreatNpcDialog move={dialog} handleClose={() => setDialog(undefined)} />}
       {dialog?.name === CHOPPER_SPECIAL_NAME && (
         <ChopperSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog?.name === GUNLUGGER_SPECIAL_NAME && (
+        <GunluggerSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
@@ -257,6 +264,7 @@ const PlayerPage: FC = () => {
             {allMoves && <Tab title="Moves" />}
           </Tabs>
         </ThemeContext.Extend>
+        {character?.hasPlusOneForward && <Plus1ForwardPill />}
       </Footer>
     </Box>
   );

@@ -29,6 +29,7 @@ const GAME = gql`
         roll1
         roll2
         rollModifier
+        usedPlusOneForward
         rollResult
         modifierStatName
         barterSpent
@@ -68,6 +69,7 @@ const GAME = gql`
           name
           playbook
           hasCompletedCharacterCreation
+          hasPlusOneForward
           gear
           barter
           vehicleCount
