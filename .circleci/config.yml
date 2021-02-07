@@ -20,13 +20,10 @@ jobs:
             - node_modules
       - run: mkdir -p test-results/jest
       - run:
-          name: Install JUnit coverage reporter
-          command: yarn add --dev jest-junit
-      - run:
-          name: Run tests with JUnit as reporter
-          command: jest --ci --runInBand --reporters=default --reporters=jest-junit
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: ./test-results/jest/
+          name: 'Globbing'
+          command: |
+            echo $(circleci tests glob "tests/*.test.tsx" "pages/__tests__/*")
+            circleci tests glob "tests/*.test.tsx" "pages/__tests__/*" | xargs -n 1 echo
       - run: yarn test
       - store_test_results:
           path: ./test-results/jest/
