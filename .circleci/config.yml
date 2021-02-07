@@ -6,14 +6,17 @@ jobs:
         auth:
           username: qdfn3af9be
           password: $DOCKERHUB_PASSWORD
-    parallelism: 2
+    parallelism: 1
     steps:
       - checkout
       - run: yarn install
-      - run: pwd
+      - run: |
+          pwd
+          mkdir -p test-results/jest
+          ls
       - run: yarn test
       - store_test_results:
-          path: test-results
+          path: test-results/jest
 
 workflow:
   jobs:
