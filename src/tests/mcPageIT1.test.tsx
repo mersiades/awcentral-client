@@ -38,6 +38,7 @@ describe('Testing MCPage functionality', () => {
   });
 
   test('should delete game and navigate to /menu', async () => {
+    jest.setTimeout(10000);
     renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockAllMoves, mockDeleteGame, mockGameRolesByUserId2],
@@ -66,6 +67,7 @@ describe('Testing MCPage functionality', () => {
   });
 
   test('should remove invitee', async () => {
+    jest.setTimeout(10000);
     renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockAllMoves, mockRemoveInvitee],
@@ -83,6 +85,7 @@ describe('Testing MCPage functionality', () => {
   });
 
   test('should navigate to /menu from navbar', async () => {
+    jest.setTimeout(10000);
     renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockAllMoves, mockGameRolesByUserId2],
@@ -100,6 +103,7 @@ describe('Testing MCPage functionality', () => {
   });
 
   test('should logout from navbar', async () => {
+    jest.setTimeout(10000);
     renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockAllMoves, mockGameRolesByUserId2],
