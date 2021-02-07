@@ -9,7 +9,7 @@ export const PillBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>
     padding: 12px;
     margin: 12px;
     border-radius: 30px;
-    box-shadow: 0 0 5px 1px #000, 0 0 8px 2px #000;
+    box-shadow: 0 0 5px 1px #000;
   `;
 });
 

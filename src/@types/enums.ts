@@ -85,6 +85,7 @@ export enum MoveActionType {
   barter = 'BARTER',
   adjustHx = 'ADJUST_HX',
   stock = 'STOCK',
+  gunlugger = 'GUNLUGGER_SPECIAL',
 }
 
 export enum RollType {

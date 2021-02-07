@@ -746,3 +746,10 @@ export const npcDialogBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-23.jpg)',
 };
+
+export const gunluggerSpecialDialogBackground = {
+  ...backgroundBase,
+  position: 'right top',
+  size: 'contain',
+  image: 'url(/images/background-image-24.jpg)',
+};

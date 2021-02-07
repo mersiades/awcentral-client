@@ -123,10 +123,13 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
   };
 
   const handleMoveClick = (move: Move | CharacterMove) => {
+    console.log('move.moveAction?.actionType', move.moveAction);
     switch (move.moveAction?.actionType) {
       case MoveActionType.roll:
         handleRollClick(move);
         break;
+      case MoveActionType.gunlugger:
+      // Deliberately falls through
       case MoveActionType.adjustHx:
       // Deliberately falls through
       case MoveActionType.barter:
