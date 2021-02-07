@@ -22,7 +22,7 @@ jobs:
       - run:
           name: 'Run Tests'
           command: |
-            TEST=$(circleci tests glob **/__tests__/*.tsx tests/*.test.tsx | circleci tests split)
+            TEST=$(circleci tests glob *.test.tsx | circleci tests split)
             yarn test $TEST
       - store_test_results:
           path: ./test-results/jest/
