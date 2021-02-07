@@ -19,8 +19,8 @@ jobs:
           paths:
             - node_modules
       - run: |
-        mkdir -p test-results/jest
-        mkdir -p tmp/artifacts
+          mkdir -p test-results/jest
+          mkdir -p tmp/artifacts
       - run: yarn test
       - store_test_results:
           path: test-results/jest
