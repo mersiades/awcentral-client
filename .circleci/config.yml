@@ -18,14 +18,18 @@ jobs:
           key: v1-deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
-      - run: |
-          mkdir -p test-results/jest
-          mkdir -p tmp/artifacts
+      - run: mkdir -p test-results/jest
+      - run:
+          name: Install JUnit coverage reporter
+          command: yarn add --dev jest-junit
+      - run:
+          name: Run tests with JUnit as reporter
+          command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT_DIR: ./test-results/jest/
       - run: yarn test
       - store_test_results:
-          path: test-results/jest
-      - store_artifacts:
-          path: tmp/artifacts
+          path: ./test-results/jest/
 
 workflow:
   jobs:
