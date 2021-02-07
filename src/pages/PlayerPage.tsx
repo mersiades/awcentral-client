@@ -44,6 +44,7 @@ import {
   TREAT_NPC_NAME,
 } from '../config/constants';
 import GameNavbar from '../components/GameNavbar';
+import Plus1ForwardPill from '../components/Plus1ForwardPill';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -257,6 +258,7 @@ const PlayerPage: FC = () => {
             {allMoves && <Tab title="Moves" />}
           </Tabs>
         </ThemeContext.Extend>
+        {character?.hasPlusOneForward && <Plus1ForwardPill />}
       </Footer>
     </Box>
   );

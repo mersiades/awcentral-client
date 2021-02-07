@@ -54,6 +54,7 @@ export interface Character {
   id: string;
   playbook: PlaybookType;
   hasCompletedCharacterCreation: boolean;
+  hasPlusOneForward: boolean;
   statsBlock: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
@@ -184,6 +185,7 @@ export interface GameMessage {
   roll1: number;
   roll2: number;
   rollModifier: number;
+  usedPlusOneForward: boolean;
   rollResult: number;
   modifierStatName: StatType;
   barterSpent: number;
