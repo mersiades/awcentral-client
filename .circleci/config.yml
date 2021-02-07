@@ -10,13 +10,10 @@ jobs:
     steps:
       - checkout
       - run: yarn install
-      - run: |
-          pwd
-          mkdir -p test-results/jest
-          ls
+      - run: mkdir -p test-results/jest
       - run: yarn test
       - store_test_results:
-          path: test-results/jest
+          path: test-results
 
 workflow:
   jobs:
