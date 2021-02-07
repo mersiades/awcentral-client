@@ -1,7 +1,7 @@
 import { Box, BoxProps, Text } from 'grommet';
 import React, { FC } from 'react';
 import styled, { css } from 'styled-components';
-import { accentColors, brandColor } from '../config/grommetConfig';
+import { accentColors } from '../config/grommetConfig';
 
 export const PillBox = styled(Box as FC<BoxProps & JSX.IntrinsicElements['div']>)(() => {
   return css`

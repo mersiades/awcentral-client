@@ -43,6 +43,24 @@ const HxRollMessage: FC<HxRollMessageProps> = ({ message, messagesLength, index,
               </HeadingWS>
               <TextWS>{message.modifierStatName}</TextWS>
             </Box>
+            {message.usedPlusOneForward && (
+              <>
+                <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">
+                  +
+                </HeadingWS>
+                <Box align="center" justify="between" pad="12px">
+                  <HeadingWS
+                    crustReady={crustReady}
+                    level={2}
+                    color="brand"
+                    margin={{ top: '32px', bottom: '0px', horizontal: '3px' }}
+                  >
+                    1
+                  </HeadingWS>
+                  <TextWS>FWD</TextWS>
+                </Box>
+              </>
+            )}
             <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">
               =
             </HeadingWS>
