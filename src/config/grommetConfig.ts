@@ -610,9 +610,7 @@ export const ParagraphWS = styled(Paragraph as FC<ParagraphProps & JSX.Intrinsic
 });
 
 export const TextInputWS = styled(
-  TextInput as React.ComponentClass<
-    TextInputProps & Omit<JSX.IntrinsicElements['input'], 'onSelect' | 'size' | 'placeholder'>
-  >
+  TextInput as FC<TextInputProps & Omit<JSX.IntrinsicElements['input'], 'onSelect' | 'size' | 'placeholder'>>
 )(() => {
   return css`
     text-shadow: 0 0 1px #000, 0 0 3px #000, 0 0 5px #000, 0 0 10px #000;
