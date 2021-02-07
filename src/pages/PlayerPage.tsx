@@ -184,7 +184,6 @@ const PlayerPage: FC = () => {
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
-  console.log('dialog', dialog);
   return (
     <Box fill background={background}>
       <GameNavbar isMc={false} />

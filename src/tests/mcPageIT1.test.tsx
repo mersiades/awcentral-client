@@ -1,5 +1,5 @@
 import React from 'react';
-// import wait from 'waait';
+import wait from 'waait';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -25,6 +25,8 @@ jest.mock('@react-keycloak/web', () => {
     useKeycloak: () => ({ keycloak: mockKeycloakStub(true, mockKeycloakUserInfo2), initialized: true }),
   };
 });
+
+jest.setTimeout(10000);
 
 describe('Testing MCPage functionality', () => {
   const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
@@ -63,6 +65,8 @@ describe('Testing MCPage functionality', () => {
 
     const welcomeHeading = await screen.findByRole('heading');
     expect(welcomeHeading.textContent).toEqual(`Welcome, ${mockKeycloakUserInfo2.preferred_username}`);
+
+    wait(1);
   });
 
   test('should remove invitee', async () => {
