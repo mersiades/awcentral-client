@@ -1,5 +1,5 @@
 import React from 'react';
-// import wait from 'waait';
+import wait from 'waait';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
@@ -26,6 +26,8 @@ jest.mock('@react-keycloak/web', () => {
   };
 });
 
+jest.setTimeout(10000);
+
 describe('Testing MCPage functionality', () => {
   const originalScrollIntoView = window.HTMLElement.prototype.scrollIntoView;
   const mockScrollIntoView = jest.fn();
@@ -38,7 +40,6 @@ describe('Testing MCPage functionality', () => {
   });
 
   test('should delete game and navigate to /menu', async () => {
-    jest.setTimeout(10000);
     renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockAllMoves, mockDeleteGame, mockGameRolesByUserId2],
@@ -64,10 +65,11 @@ describe('Testing MCPage functionality', () => {
 
     const welcomeHeading = await screen.findByRole('heading');
     expect(welcomeHeading.textContent).toEqual(`Welcome, ${mockKeycloakUserInfo2.preferred_username}`);
+
+    wait(1);
   });
 
   test('should remove invitee', async () => {
-    jest.setTimeout(10000);
     renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockAllMoves, mockRemoveInvitee],
@@ -85,7 +87,6 @@ describe('Testing MCPage functionality', () => {
   });
 
   test('should navigate to /menu from navbar', async () => {
-    jest.setTimeout(10000);
     renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockAllMoves, mockGameRolesByUserId2],
@@ -103,7 +104,6 @@ describe('Testing MCPage functionality', () => {
   });
 
   test('should logout from navbar', async () => {
-    jest.setTimeout(10000);
     renderWithRouter(<App />, `/mc-game/${mockGame7.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockAllMoves, mockGameRolesByUserId2],
