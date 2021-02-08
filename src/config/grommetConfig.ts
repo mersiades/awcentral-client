@@ -751,3 +751,8 @@ export const gunluggerSpecialDialogBackground = {
   size: 'contain',
   image: 'url(/images/background-image-24.jpg)',
 };
+
+export const relativeSpeedDialogBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-25.jpg)',
+};

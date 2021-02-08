@@ -188,6 +188,8 @@ export interface GameMessage {
   usedPlusOneForward: boolean;
   rollResult: number;
   modifierStatName: StatType;
+  additionalModifierValue: number;
+  additionalModifierName: string;
   barterSpent: number;
   currentBarter: number;
   harmSuffered: number;

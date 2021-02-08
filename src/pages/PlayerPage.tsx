@@ -39,6 +39,8 @@ import {
   HELP_OR_INTERFERE_NAME,
   INFLICT_HARM_NAME,
   MAKE_WANT_KNOWN_NAME,
+  OUTDISTANCE_VEHICLE,
+  OVERTAKE_VEHICLE,
   REVIVE_SOMEONE_NAME,
   SPEED_RECOVERY_NAME,
   STABILIZE_AND_HEAL_NAME,
@@ -47,6 +49,7 @@ import {
 import GameNavbar from '../components/GameNavbar';
 import Plus1ForwardPill from '../components/Plus1ForwardPill';
 import GunluggerSpecialDialog from '../components/dialogs/GunluggerSpecialDialog';
+import RelativeSpeedDialog from '../components/dialogs/RelativeSpeedDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -189,6 +192,9 @@ const PlayerPage: FC = () => {
       <GameNavbar isMc={false} />
       {dialog?.moveAction?.rollType === RollType.harm && (
         <HarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog && [OUTDISTANCE_VEHICLE, OVERTAKE_VEHICLE].includes(dialog.name) && (
+        <RelativeSpeedDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
       {dialog?.moveAction?.actionType === MoveActionType.barter && (
         <BarterDialog move={dialog} handleClose={() => setDialog(undefined)} />
