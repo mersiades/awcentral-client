@@ -761,3 +761,8 @@ export const boardVehicleDialogBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-26.jpg)',
 };
+
+export const dealTerrainDialogBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-27.jpg)',
+};

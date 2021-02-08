@@ -1,28 +1,20 @@
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
-import { Box, RadioButtonGroup, Select } from 'grommet';
+import { Box, Select } from 'grommet';
 
 import DialogWrapper from '../DialogWrapper';
 import { StyledMarkdown } from '../styledComponents';
-import {
-  HeadingWS,
-  ParagraphWS,
-  ButtonWS,
-  gunluggerSpecialDialogBackground,
-  relativeSpeedDialogBackground,
-  boardVehicleDialogBackground,
-} from '../../config/grommetConfig';
+import { HeadingWS, ParagraphWS, ButtonWS, boardVehicleDialogBackground } from '../../config/grommetConfig';
+import PERFORM_SPEED_ROLL_MOVE, {
+  PerformSpeedRollMoveData,
+  PerformSpeedRollMoveVars,
+} from '../../mutations/performSpeedRollMove';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { Vehicle } from '../../@types/dataInterfaces';
 import { dummyVehicleFrame } from '../../tests/mocks';
-import { OUTDISTANCE_VEHICLE } from '../../config/constants';
-import PERFORM_SPEED_ROLL_MOVE, {
-  PerformSpeedRollMoveData,
-  PerformSpeedRollMoveVars,
-} from '../../mutations/performSpeedRollMove';
 
 interface BoardVehicleDialogProps {
   move: Move | CharacterMove;
@@ -39,7 +31,7 @@ const BoardVehicleDialog: FC<BoardVehicleDialogProps> = ({ move, handleClose }) 
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { crustReady } = useFonts();
-  const { userGameRole, otherPlayerGameRoles, character } = useGame();
+  const { userGameRole, character } = useGame();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const [performSpeedRollMove, { loading: performingSpeedRollMove }] = useMutation<
@@ -118,6 +110,8 @@ const BoardVehicleDialog: FC<BoardVehicleDialogProps> = ({ move, handleClose }) 
               setSelectedVehicle(e.value);
               if (e.value.id !== 'other-vehicle-id' && e.value.id !== 'on-foot-id') {
                 setMySpeed(e.value.speed.toString());
+              } else if (e.value.id === 'other-vehicle-id') {
+                setMySpeed('');
               }
 
               if (e.value.id === 'on-foot-id') {

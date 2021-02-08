@@ -5,7 +5,7 @@ import { Box, Select } from 'grommet';
 
 import DialogWrapper from '../DialogWrapper';
 import { StyledMarkdown } from '../styledComponents';
-import { HeadingWS, ParagraphWS, ButtonWS, relativeSpeedDialogBackground } from '../../config/grommetConfig';
+import { HeadingWS, ParagraphWS, ButtonWS, dealTerrainDialogBackground } from '../../config/grommetConfig';
 import PERFORM_SPEED_ROLL_MOVE, {
   PerformSpeedRollMoveData,
   PerformSpeedRollMoveVars,
@@ -15,17 +15,15 @@ import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { Vehicle } from '../../@types/dataInterfaces';
 import { dummyVehicleFrame } from '../../tests/mocks';
-import { OUTDISTANCE_VEHICLE } from '../../config/constants';
 
-interface RelativeSpeedDialogProps {
+interface DealTerrainDialogProps {
   move: Move | CharacterMove;
   handleClose: () => void;
 }
 
-const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }) => {
+const DealTerrainDialog: FC<DealTerrainDialogProps> = ({ move, handleClose }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [mySpeed, setMySpeed] = useState('');
-  const [theirSpeed, setTheirSpeed] = useState('');
+  const [myHandling, setMyHandling] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | undefined>();
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const { gameId } = useParams<{ gameId: string }>();
@@ -56,8 +54,8 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
   };
 
   const handleSpeedRollMove = () => {
-    if (!!userGameRole && !!character && !performingSpeedRollMove && !!mySpeed && !!theirSpeed) {
-      const modifier = parseInt(mySpeed) - parseInt(theirSpeed);
+    if (!!userGameRole && !!character && !performingSpeedRollMove && !!myHandling) {
+      const modifier = parseInt(myHandling);
       try {
         performSpeedRollMove({
           variables: {
@@ -76,7 +74,6 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
   };
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
-
   const renderVehicleChoice = () => {
     if (!!character && character.vehicles.length > 0) {
       return (
@@ -93,9 +90,9 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
             onChange={(e) => {
               setSelectedVehicle(e.value);
               if (e.value.id !== 'other-vehicle-id') {
-                setMySpeed(e.value.speed.toString());
+                setMyHandling(e.value.handling.toString());
               } else {
-                setMySpeed('');
+                setMyHandling('');
               }
             }}
           />
@@ -104,10 +101,10 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
               id="target-character-input"
               aria-label="target-character-input"
               name="target-character"
-              placeholder="My speed"
+              placeholder="My handling"
               options={['0', '1', '2', '3']}
-              value={mySpeed}
-              onChange={(e) => setMySpeed(e.value)}
+              value={myHandling}
+              onChange={(e) => setMyHandling(e.value)}
               margin={{ top: '12px' }}
             />
           )}
@@ -121,10 +118,10 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
             id="target-character-input"
             aria-label="target-character-input"
             name="target-character"
-            placeholder="My speed"
+            placeholder="My handling"
             options={['0', '1', '2', '3']}
-            value={mySpeed}
-            onChange={(e) => setMySpeed(e.value)}
+            value={myHandling}
+            onChange={(e) => setMyHandling(e.value)}
           />
         </Box>
       );
@@ -132,7 +129,7 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
   };
 
   return (
-    <DialogWrapper background={relativeSpeedDialogBackground} handleClose={handleClose}>
+    <DialogWrapper background={dealTerrainDialogBackground} handleClose={handleClose}>
       <Box gap="12px">
         <HeadingWS crustReady={crustReady} level={4} alignSelf="start">
           {move.name}
@@ -140,18 +137,6 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
         <StyledMarkdown>{move.description}</StyledMarkdown>
         <Box direction="row" gap="24px">
           {character && renderVehicleChoice()}
-          <Box fill align="start" justify="start">
-            <ParagraphWS alignSelf="start">What is the speed of their vehicle?</ParagraphWS>
-            <Select
-              id="target-character-input"
-              aria-label="target-character-input"
-              name="target-character"
-              placeholder="Their speed"
-              options={['0', '1', '2', '3']}
-              value={theirSpeed}
-              onChange={(e) => setTheirSpeed(e.value)}
-            />
-          </Box>
         </Box>
         <Box fill="horizontal" direction="row" justify="end" gap="small">
           <ButtonWS
@@ -163,10 +148,10 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
             onClick={handleClose}
           />
           <ButtonWS
-            label={move.name === OUTDISTANCE_VEHICLE ? 'OUTDISTANCE' : 'OVERTAKE'}
+            label={'DRIVE'}
             primary
             onClick={() => !performingSpeedRollMove && handleSpeedRollMove()}
-            disabled={performingSpeedRollMove || !mySpeed || !theirSpeed}
+            disabled={performingSpeedRollMove || !myHandling}
           />
         </Box>
       </Box>
@@ -174,4 +159,4 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
   );
 };
 
-export default RelativeSpeedDialog;
+export default DealTerrainDialog;

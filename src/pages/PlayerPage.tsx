@@ -35,6 +35,7 @@ import {
   ANGEL_SPECIAL_NAME,
   BOARD_VEHICLE,
   CHOPPER_SPECIAL_NAME,
+  DEAL_WITH_TERRAIN,
   GUNLUGGER_SPECIAL_NAME,
   HEAL_HARM_NAME,
   HELP_OR_INTERFERE_NAME,
@@ -52,6 +53,7 @@ import Plus1ForwardPill from '../components/Plus1ForwardPill';
 import GunluggerSpecialDialog from '../components/dialogs/GunluggerSpecialDialog';
 import RelativeSpeedDialog from '../components/dialogs/RelativeSpeedDialog';
 import BoardVehicleDialog from '../components/dialogs/BoardVehicleDialog';
+import DealTerrainDialog from '../components/dialogs/DealTerrainDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -225,6 +227,7 @@ const PlayerPage: FC = () => {
         <GunluggerSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
       {dialog?.name === BOARD_VEHICLE && <BoardVehicleDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.name === DEAL_WITH_TERRAIN && <DealTerrainDialog move={dialog} handleClose={() => setDialog(undefined)} />}
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>
