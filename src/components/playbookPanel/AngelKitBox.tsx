@@ -12,6 +12,7 @@ import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
+import { StyledMarkdown } from '../styledComponents';
 
 interface AngelKitBoxProps {
   angelKit: AngelKit;
@@ -124,35 +125,42 @@ const AngelKitBox: FC<AngelKitBoxProps> = ({ angelKit, navigateToCharacterCreati
           const canPerformMove = !!move.moveAction && userGameRole?.role !== RoleType.mc;
           return (
             <Box key={move.id} fill="horizontal" direction="row" justify="between" align="center">
-              <Box direction="row" justify="start" align="center" pad="12px" gap="12px">
-                {showMoveDetails.includes(move.id) ? (
-                  <FormUp
-                    data-testid="hide-move-details-icon"
-                    onClick={() => toggleShowMoveDetails(move.id)}
-                    style={{ cursor: 'pointer' }}
-                  />
-                ) : (
-                  <FormDown
-                    data-testid="show-move-details-icon"
-                    onClick={() => toggleShowMoveDetails(move.id)}
-                    style={{ cursor: 'pointer' }}
-                  />
-                )}
-                <HeadingWS
-                  crustReady={crustReady}
-                  level="3"
-                  margin={{ top: '3px', bottom: '3px' }}
-                  onClick={() => canPerformMove && !!openDialog && openDialog(move)}
-                  onMouseOver={(e: React.MouseEvent<HTMLHeadingElement>) =>
+              <Box>
+                <Box direction="row" justify="start" align="center" pad="12px" gap="12px">
+                  {showMoveDetails.includes(move.id) ? (
+                    <FormUp
+                      data-testid="hide-move-details-icon"
+                      onClick={() => toggleShowMoveDetails(move.id)}
+                      style={{ cursor: 'pointer' }}
+                    />
+                  ) : (
+                    <FormDown
+                      data-testid="show-move-details-icon"
+                      onClick={() => toggleShowMoveDetails(move.id)}
+                      style={{ cursor: 'pointer' }}
+                    />
+                  )}
+                  <HeadingWS
+                    crustReady={crustReady}
+                    level="3"
+                    margin={{ top: '3px', bottom: '3px' }}
+                    onClick={() => canPerformMove && !!openDialog && openDialog(move)}
+                    onMouseOver={(e: React.MouseEvent<HTMLHeadingElement>) =>
+                      // @ts-ignore
+                      (e.target.style.color = canPerformMove ? '#CD3F3E' : '#FFF')
+                    }
                     // @ts-ignore
-                    (e.target.style.color = canPerformMove ? '#CD3F3E' : '#FFF')
-                  }
-                  // @ts-ignore
-                  onMouseOut={(e: React.MouseEvent<HTMLHeadingElement>) => (e.target.style.color = '#FFF')}
-                  style={canPerformMove ? clickableStyle : unClickableStyle}
-                >
-                  {decapitalize(move.name)}
-                </HeadingWS>
+                    onMouseOut={(e: React.MouseEvent<HTMLHeadingElement>) => (e.target.style.color = '#FFF')}
+                    style={canPerformMove ? clickableStyle : unClickableStyle}
+                  >
+                    {decapitalize(move.name)}
+                  </HeadingWS>
+                </Box>
+                {showMoveDetails.includes(move.id) && (
+                  <Box pad="24px">
+                    <StyledMarkdown>{move.description}</StyledMarkdown>
+                  </Box>
+                )}
               </Box>
             </Box>
           );
