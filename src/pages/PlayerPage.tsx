@@ -33,12 +33,16 @@ import HealHarmDialog from '../components/dialogs/HealHarmDialog';
 import AngelSpecialDialog from '../components/dialogs/AngelSpecialDialog';
 import {
   ANGEL_SPECIAL_NAME,
+  BOARD_VEHICLE,
   CHOPPER_SPECIAL_NAME,
+  DEAL_WITH_TERRAIN,
   GUNLUGGER_SPECIAL_NAME,
   HEAL_HARM_NAME,
   HELP_OR_INTERFERE_NAME,
   INFLICT_HARM_NAME,
   MAKE_WANT_KNOWN_NAME,
+  OUTDISTANCE_VEHICLE,
+  OVERTAKE_VEHICLE,
   REVIVE_SOMEONE_NAME,
   SPEED_RECOVERY_NAME,
   STABILIZE_AND_HEAL_NAME,
@@ -47,6 +51,9 @@ import {
 import GameNavbar from '../components/GameNavbar';
 import Plus1ForwardPill from '../components/Plus1ForwardPill';
 import GunluggerSpecialDialog from '../components/dialogs/GunluggerSpecialDialog';
+import RelativeSpeedDialog from '../components/dialogs/RelativeSpeedDialog';
+import BoardVehicleDialog from '../components/dialogs/BoardVehicleDialog';
+import DealTerrainDialog from '../components/dialogs/DealTerrainDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -190,6 +197,9 @@ const PlayerPage: FC = () => {
       {dialog?.moveAction?.rollType === RollType.harm && (
         <HarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
+      {dialog && [OUTDISTANCE_VEHICLE, OVERTAKE_VEHICLE].includes(dialog.name) && (
+        <RelativeSpeedDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
       {dialog?.moveAction?.actionType === MoveActionType.barter && (
         <BarterDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
@@ -216,6 +226,8 @@ const PlayerPage: FC = () => {
       {dialog?.name === GUNLUGGER_SPECIAL_NAME && (
         <GunluggerSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
+      {dialog?.name === BOARD_VEHICLE && <BoardVehicleDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.name === DEAL_WITH_TERRAIN && <DealTerrainDialog move={dialog} handleClose={() => setDialog(undefined)} />}
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>

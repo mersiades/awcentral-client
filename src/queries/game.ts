@@ -32,6 +32,8 @@ const GAME = gql`
         usedPlusOneForward
         rollResult
         modifierStatName
+        additionalModifierValue
+        additionalModifierName
         barterSpent
         currentBarter
         harmSuffered

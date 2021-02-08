@@ -23,7 +23,7 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
     <MoveMessage message={message} messagesLength={messagesLength} index={index} ticker={ticker}>
       <Box fill>
         <Box fill="horizontal" direction="row" align="center" justify="center" pad="12px">
-          <Box direction="row" align="center" justify="around" width="67%">
+          <Box direction="row" align="center" justify="center" width="90%" wrap gap="3px">
             {getDiceImage(message.roll1)}
             <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">
               +
@@ -43,6 +43,24 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
               </HeadingWS>
               <TextWS>{message.modifierStatName}</TextWS>
             </Box>
+            {message.additionalModifierName && (
+              <>
+                <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">
+                  +
+                </HeadingWS>
+                <Box align="center" justify="between" pad="12px">
+                  <HeadingWS
+                    crustReady={crustReady}
+                    level={2}
+                    color="brand"
+                    margin={{ top: '32px', bottom: '0px', horizontal: '3px' }}
+                  >
+                    {message.additionalModifierValue}
+                  </HeadingWS>
+                  <TextWS>{message.additionalModifierName}</TextWS>
+                </Box>
+              </>
+            )}
             {message.usedPlusOneForward && (
               <>
                 <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">

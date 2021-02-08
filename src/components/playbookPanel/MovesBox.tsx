@@ -115,6 +115,10 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
       // deliberately falls through
       case RollType.harm:
       // deliberately falls through
+      case RollType.speed:
+      // deliberately falls through
+      case RollType.handling:
+      // deliberately falls through
       case RollType.hx:
         !!openDialog && openDialog(move);
         break;
@@ -123,7 +127,6 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
   };
 
   const handleMoveClick = (move: Move | CharacterMove) => {
-    console.log('move.moveAction?.actionType', move.moveAction);
     switch (move.moveAction?.actionType) {
       case MoveActionType.roll:
         handleRollClick(move);
