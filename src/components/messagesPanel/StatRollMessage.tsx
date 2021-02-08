@@ -43,7 +43,7 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
               </HeadingWS>
               <TextWS>{message.modifierStatName}</TextWS>
             </Box>
-            {message.additionalModifierName && message.additionalModifierValue && (
+            {message.additionalModifierName && (
               <>
                 <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">
                   +

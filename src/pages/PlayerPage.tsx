@@ -33,6 +33,7 @@ import HealHarmDialog from '../components/dialogs/HealHarmDialog';
 import AngelSpecialDialog from '../components/dialogs/AngelSpecialDialog';
 import {
   ANGEL_SPECIAL_NAME,
+  BOARD_VEHICLE,
   CHOPPER_SPECIAL_NAME,
   GUNLUGGER_SPECIAL_NAME,
   HEAL_HARM_NAME,
@@ -50,6 +51,7 @@ import GameNavbar from '../components/GameNavbar';
 import Plus1ForwardPill from '../components/Plus1ForwardPill';
 import GunluggerSpecialDialog from '../components/dialogs/GunluggerSpecialDialog';
 import RelativeSpeedDialog from '../components/dialogs/RelativeSpeedDialog';
+import BoardVehicleDialog from '../components/dialogs/BoardVehicleDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -222,6 +224,7 @@ const PlayerPage: FC = () => {
       {dialog?.name === GUNLUGGER_SPECIAL_NAME && (
         <GunluggerSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
+      {dialog?.name === BOARD_VEHICLE && <BoardVehicleDialog move={dialog} handleClose={() => setDialog(undefined)} />}
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>
