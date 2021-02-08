@@ -16,7 +16,7 @@ import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '
 const GearUL = styled.ul`
   margin: unset;
   width: -webkit-fill-available;
-  align-self: center;
+  align-self: left;
   cursor: default;
 `;
 
