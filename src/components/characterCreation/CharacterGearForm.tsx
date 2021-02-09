@@ -221,9 +221,9 @@ const CharacterGearForm: FC = () => {
             {renderIntroduceChoice()}
             {renderChooseableGear()}
             {renderWithMC()}
-            <ParagraphWS textAlign="start">{`... and you get oddments worth ${
-              !!pbCreator ? pbCreator.gearInstructions.startingBarter : 'x'
-            }-barter`}</ParagraphWS>
+            {!!pbCreator && pbCreator.gearInstructions.startingBarter > 0 && (
+              <ParagraphWS textAlign="start">{`... and you get oddments worth ${pbCreator.gearInstructions.startingBarter}-barter`}</ParagraphWS>
+            )}
           </Box>
           <Box fill gridArea="gear-box" pad="6px">
             <Box fill="horizontal">

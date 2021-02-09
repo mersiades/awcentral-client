@@ -135,3 +135,9 @@ export enum GangSize {
   medium = 'MEDIUM',
   large = 'LARGE',
 }
+
+export enum HoldingSize {
+  small = 'SMALL',
+  medium = 'MEDIUM',
+  large = 'LARGE',
+}

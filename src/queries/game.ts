@@ -198,6 +198,26 @@ const GAME = gql`
               }
               tags
             }
+            holding {
+              id
+              holdingSize
+              gangSize
+              souls
+              surplus
+              barter
+              gangHarm
+              gangArmor
+              gangDefenseArmorBonus
+              wants
+              gigs
+              gangTags
+              selectedStrengths {
+                id
+              }
+              selectedWeaknesses {
+                id
+              }
+            }
           }
         }
       }

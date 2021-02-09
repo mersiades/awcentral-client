@@ -1,6 +1,7 @@
 import {
   BattleOptionType,
   GangSize,
+  HoldingSize,
   MessageType,
   PlaybookType,
   RoleType,
@@ -9,7 +10,15 @@ import {
   UniqueTypes,
   VehicleFrameType,
 } from './enums';
-import { CharacterMove, GangOption, Look, Move, VehicleBattleOption, VehicleFrame } from './staticDataInterfaces';
+import {
+  CharacterMove,
+  GangOption,
+  HoldingOption,
+  Look,
+  Move,
+  VehicleBattleOption,
+  VehicleFrame,
+} from './staticDataInterfaces';
 
 /**
  * This file contains interfaces that represent data models that are dynamic,
@@ -105,6 +114,7 @@ export interface PlaybookUnique {
   customWeapons?: CustomWeapons;
   gang?: Gang;
   weapons?: Weapons;
+  holding?: Holding;
 }
 
 export interface BrainerGear {
@@ -129,6 +139,23 @@ export interface CustomWeapons {
 export interface Weapons {
   id: string;
   weapons: string[];
+}
+
+export interface Holding {
+  id: string;
+  holdingSize: HoldingSize;
+  gangSize: GangSize;
+  souls: string;
+  surplus: number;
+  barter: number;
+  gangHarm: number;
+  gangArmor: number;
+  gangDefenseArmorBonus: number;
+  wants: string[];
+  gigs: string[];
+  gangTags: string[];
+  selectedStrengths: HoldingOption[];
+  selectedWeaknesses: HoldingOption[];
 }
 
 export interface Gang {

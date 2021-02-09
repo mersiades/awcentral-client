@@ -10,6 +10,7 @@ import { useGame } from '../../contexts/gameContext';
 import { useHistory } from 'react-router-dom';
 import GangForm from './uniques/GangForm';
 import WeaponsForm from './uniques/WeaponsForm';
+import HoldingForm from './uniques/HoldingForm';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -43,6 +44,8 @@ const PlaybookUniqueRouter: FC = () => {
         break;
       case PlaybookType.gunlugger:
         return <WeaponsForm />;
+      case PlaybookType.hardholder:
+        return <HoldingForm />;
       default:
         return null;
     }

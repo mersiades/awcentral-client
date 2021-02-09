@@ -2,6 +2,7 @@ import { ItemCharacteristic, TaggedItem } from '.';
 import {
   BattleOptionType,
   GangSize,
+  HoldingSize,
   LookType,
   MoveActionType,
   MoveType,
@@ -141,8 +142,9 @@ export interface PlaybookUniqueCreator {
   angelKitCreator?: AngelKitCreator;
   customWeaponsCreator?: CustomWeaponsCreator;
   brainerGearCreator?: BrainerGearCreator;
-  gangCreator: GangCreator;
-  weaponsCreator: WeaponsCreator;
+  gangCreator?: GangCreator;
+  weaponsCreator?: WeaponsCreator;
+  holdingCreator?: HoldingCreator;
 }
 
 export interface WeaponsCreator {
@@ -193,6 +195,26 @@ export interface BrainerGearCreator {
   gear: string[];
 }
 
+export interface HoldingCreator {
+  id: string;
+  defaultHoldingSize: HoldingSize;
+  instructions: string;
+  defaultSurplus: number;
+  defaultWant: string;
+  defaultGigs: string[];
+  defaultArmorBonus: number;
+  defaultVehiclesCount: number;
+  defaultBattleVehicleCount: number;
+  defaultGangSize: GangSize;
+  defaultGangHarm: number;
+  defaultGangArmor: number;
+  defaultGangTag: string;
+  strengthCount: number;
+  weaknessCount: number;
+  strengthOptions: HoldingOption[];
+  weaknessOptions: HoldingOption[];
+}
+
 export interface VehicleCreator {
   id: string;
   carCreator: CarCreator;
@@ -227,6 +249,32 @@ export interface VehicleFrame {
   massive: number;
   examples: string;
   battleOptionCount: number;
+}
+
+export interface HoldingOption {
+  id: string;
+  description: string;
+
+  // Ranges from -1 to 1, with -2 representing null
+  surplusChange: number;
+
+  wantChange?: string[];
+  newHoldingSize?: HoldingSize;
+  gigChange?: string;
+  newGangSize?: GangSize;
+  gangTagChange?: string;
+
+  // Ranges from -1 to 1, with -2 representing null
+  gangHarmChange: number;
+
+  // Ranges from 2 to 6, with - 1 representing null
+  newVehicleCount: number;
+
+  // Ranges from 2 to 7, with - 1 representing null
+  newBattleVehicleCount: number;
+
+  // Ranges from 0 - 2, with -1 representing null
+  newArmorBonus: number;
 }
 
 export interface VehicleBattleOption {
