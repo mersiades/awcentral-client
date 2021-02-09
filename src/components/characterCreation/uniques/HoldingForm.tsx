@@ -15,6 +15,7 @@ import SET_GANG, { SetGangData, SetGangVars } from '../../../mutations/setGang';
 import { GangInput, HoldingInput } from '../../../@types';
 import { omit } from 'lodash';
 import { StyledMarkdown } from '../../styledComponents';
+import SET_HOLDING, { SetHoldingData, SetHoldingVars } from '../../../mutations/setHolding';
 
 interface HoldingFormProps {
   existingHolding?: Holding;
@@ -124,39 +125,46 @@ const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
   });
 
   const holdingCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator?.holdingCreator;
-  const [setGang, { loading: settingGang }] = useMutation<SetGangData, SetGangVars>(SET_GANG);
+  const [setHolding, { loading: settingHolding }] = useMutation<SetHoldingData, SetHoldingVars>(SET_HOLDING);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
-  // const handleSubmitGang = async () => {
-  //   if (!!userGameRole && !!character && !!game) {
-  //     // @ts-ignore
-  //     const strengthsNoTypename = strengths.map((str: GangOption) => omit(str, ['__typename']));
-  //     // @ts-ignore
-  //     const weaknessesNoTypename = weaknesses.map((wk: GangOption) => omit(wk, ['__typename']));
+  const handleSubmitHolding = async () => {
+    if (!!userGameRole && !!character && !!game) {
+      // @ts-ignore
+      const strengthsNoTypename = selectedStrengths.map((str: GangOption) => omit(str, ['__typename']));
+      // @ts-ignore
+      const weaknessesNoTypename = selectedWeaknesses.map((wk: GangOption) => omit(wk, ['__typename']));
 
-  //     const gangInput: GangInput = {
-  //       id: existingGang ? existingGang.id : undefined,
-  //       size,
-  //       harm,
-  //       armor,
-  //       strengths: strengthsNoTypename,
-  //       weaknesses: weaknessesNoTypename,
-  //       tags,
-  //     };
-  //     try {
-  //       await setGang({
-  //         variables: { gameRoleId: userGameRole.id, characterId: character.id, gang: gangInput },
-  //       });
+      const holdingInput: HoldingInput = {
+        id: existingHolding ? existingHolding.id : undefined,
+        selectedStrengths: strengthsNoTypename,
+        selectedWeaknesses: weaknessesNoTypename,
+        holdingSize,
+        gangSize,
+        surplus,
+        gangHarm,
+        gangArmor,
+        gangDefenseArmorBonus,
+        wants,
+        gigs,
+        gangTags,
+        souls: getSouls(holdingSize),
+        barter: 0,
+      };
+      try {
+        await setHolding({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, holding: holdingInput, vehicleCount },
+        });
 
-  //       if (!character.hasCompletedCharacterCreation) {
-  //         history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
-  //         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // };
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const updateTags = (existingTags: string[], newTags: string[]) => {
     let updatedTags = existingTags;
@@ -433,13 +441,13 @@ const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
           <ButtonWS
             primary
             fill="horizontal"
-            label={settingGang ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
-            // onClick={() => !settingGang && handleSubmitGang()}
-            // disabled={
-            //   settingGang ||
-            //   (!!holdingCreator && strengths.length < holdingCreator.strengthChoiceCount) ||
-            //   (!!holdingCreator && weaknesses.length < holdingCreator.weaknessChoiceCount)
-            // }
+            label={settingHolding ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+            onClick={() => !settingHolding && handleSubmitHolding()}
+            disabled={
+              settingHolding ||
+              (!!holdingCreator && selectedStrengths.length < holdingCreator.strengthCount) ||
+              (!!holdingCreator && selectedWeaknesses.length < holdingCreator.weaknessCount)
+            }
           />
         </Box>
       </Box>
