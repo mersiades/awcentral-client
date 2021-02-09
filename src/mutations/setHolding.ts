@@ -38,10 +38,30 @@ const SET_HOLDING = gql`
           selectedStrengths {
             id
             description
+            surplusChange
+            wantChange
+            newHoldingSize
+            gigChange
+            newGangSize
+            gangTagChange
+            gangHarmChange
+            newVehicleCount
+            newBattleVehicleCount
+            newArmorBonus
           }
           selectedWeaknesses {
             id
             description
+            surplusChange
+            wantChange
+            newHoldingSize
+            gigChange
+            newGangSize
+            gangTagChange
+            gangHarmChange
+            newVehicleCount
+            newBattleVehicleCount
+            newArmorBonus
           }
         }
       }

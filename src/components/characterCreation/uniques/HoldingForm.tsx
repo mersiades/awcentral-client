@@ -1,21 +1,23 @@
 import React, { FC, useEffect, useReducer, useState } from 'react';
+import { omit } from 'lodash';
 import { useMutation, useQuery } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 import { Box, CheckBox } from 'grommet';
 
 import Spinner from '../../Spinner';
-import { ButtonWS, HeadingWS, ParagraphWS, RedBox, TextWS } from '../../../config/grommetConfig';
+import DoubleRedBox from '../../DoubleRedBox';
+import RedTagsBox from '../../RedTagsBox';
+import SingleRedBox from '../../SingleRedBox';
+import { StyledMarkdown } from '../../styledComponents';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
+import SET_HOLDING, { SetHoldingData, SetHoldingVars } from '../../../mutations/setHolding';
+import { CharacterCreationSteps, GangSize, HoldingSize, PlaybookType } from '../../../@types/enums';
+import { HoldingInput } from '../../../@types';
+import { GangOption, HoldingOption } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
-import { useHistory } from 'react-router-dom';
-import { CharacterCreationSteps, GangSize, HoldingSize, PlaybookType } from '../../../@types/enums';
-import { GangOption, HoldingOption } from '../../../@types/staticDataInterfaces';
-import { Gang, Holding } from '../../../@types/dataInterfaces';
-import SET_GANG, { SetGangData, SetGangVars } from '../../../mutations/setGang';
-import { GangInput, HoldingInput } from '../../../@types';
-import { omit } from 'lodash';
-import { StyledMarkdown } from '../../styledComponents';
-import SET_HOLDING, { SetHoldingData, SetHoldingVars } from '../../../mutations/setHolding';
+import { Holding } from '../../../@types/dataInterfaces';
 
 interface HoldingFormProps {
   existingHolding?: Holding;
@@ -136,7 +138,7 @@ const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
       const weaknessesNoTypename = selectedWeaknesses.map((wk: GangOption) => omit(wk, ['__typename']));
 
       const holdingInput: HoldingInput = {
-        id: existingHolding ? existingHolding.id : undefined,
+        id: character?.playbookUnique?.holding ? character.playbookUnique.holding.id : undefined,
         selectedStrengths: strengthsNoTypename,
         selectedWeaknesses: weaknessesNoTypename,
         holdingSize,
@@ -151,6 +153,7 @@ const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
         souls: getSouls(holdingSize),
         barter: 0,
       };
+
       try {
         await setHolding({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, holding: holdingInput, vehicleCount },
@@ -349,52 +352,13 @@ const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
   }, [character, holdingCreator]);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
-  const renderDoubleBox = (value: string, label: string) => (
-    <Box fill="horizontal" align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
-      <RedBox pad="12px" align="center" fill justify="center">
-        <HeadingWS crustReady={crustReady} level={3} margin={{ horizontal: '9px', bottom: '-3px', top: '3px' }}>
-          {value}
-        </HeadingWS>
-      </RedBox>
-      <TextWS style={{ fontWeight: 600 }}>{label}</TextWS>
-    </Box>
-  );
-
-  const renderSingleBox = (value: string, label: string) => (
-    <Box align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
-      <RedBox align="center" width="50px" fill="vertical" justify="center">
-        <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
-          {value}
-        </HeadingWS>
-      </RedBox>
-      <TextWS style={{ fontWeight: 600 }}>{label}</TextWS>
-    </Box>
-  );
-
-  const renderTagBox = (tags: string[], label: string) => (
-    <Box align="center" justify="between" height="100%" gap="6px" margin={{ bottom: '6px' }}>
-      <RedBox pad="12px" fill justify="center">
-        <TextWS>{tags.join(', ')}</TextWS>
-      </RedBox>
-      <TextWS style={{ fontWeight: 600 }}>{label}</TextWS>
-    </Box>
-  );
 
   return (
-    <Box
-      border
-      data-testid="holding-form"
-      width="80vw"
-      direction="column"
-      align="start"
-      justify="between"
-      overflow="auto"
-      // flex="grow"
-    >
+    <Box data-testid="holding-form" width="80vw" direction="column" align="start" justify="between" overflow="auto">
       <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
         !!character?.name ? character.name?.toUpperCase() : '...'
       }'S HOLDING`}</HeadingWS>
-      <Box border fill="horizontal" direction="row" align="start" justify="between">
+      <Box fill="horizontal" direction="row" align="start" justify="between">
         <Box fill="horizontal" pad="12px" gap="6px">
           {!!holdingCreator && <StyledMarkdown>{holdingCreator.instructions}</StyledMarkdown>}
           <ParagraphWS>Then, choose {!!holdingCreator ? holdingCreator?.strengthCount : 2}:</ParagraphWS>
@@ -423,21 +387,25 @@ const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
             })}
         </Box>
         <Box flex="grow" width="150px" pad="12px" gap="12px">
-          <TextWS textAlign="center">---- Holding ----</TextWS>
-          {renderDoubleBox(holdingSize, 'Size')}
-          {renderDoubleBox(`+${surplus}barter`, 'Surplus')}
-          {wants.length > 0 && renderTagBox(wants, 'Wants')}
-          {gigs.length > 0 && renderTagBox(gigs, 'Gigs')}
-          {renderDoubleBox(`+${gangDefenseArmorBonus}armor`, 'Defense bonus')}
+          <HeadingWS level={4} margin={{ vertical: '3px' }} alignSelf="center">
+            Holding
+          </HeadingWS>
+          <DoubleRedBox value={holdingSize} label="Size" />
+          <DoubleRedBox value={`+${surplus}barter`} label="Surplus" />
+          {wants.length > 0 && <RedTagsBox tags={wants} label="Wants" height="100%" />}
+          {gigs.length > 0 && <RedTagsBox tags={gigs} label="Gigs" height="100%" />}
+          <DoubleRedBox value={`+${gangDefenseArmorBonus}armor`} label="Defense bonus" />
         </Box>
         <Box flex="grow" width="150px" pad="12px" gap="12px">
-          <TextWS textAlign="center">----- Gang -----</TextWS>
-          {renderDoubleBox(gangSize, 'Size')}
+          <HeadingWS level={4} margin={{ vertical: '3px' }} alignSelf="center">
+            Gang
+          </HeadingWS>
+          <DoubleRedBox value={gangSize} label="Size" />
           <Box fill="horizontal" direction="row" justify="between">
-            {renderSingleBox(gangHarm, 'Harm')}
-            {renderSingleBox(gangArmor, 'Armor')}
+            <SingleRedBox value={gangHarm} label="Harm" />
+            <SingleRedBox value={gangArmor} label="Armor" />
           </Box>
-          {gangTags.length > 0 && renderTagBox(gangTags, 'Tags')}
+          {gangTags.length > 0 && <RedTagsBox tags={gangTags} label="Tags" height="100%" />}
           <ButtonWS
             primary
             fill="horizontal"

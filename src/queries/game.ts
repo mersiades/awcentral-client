@@ -214,10 +214,30 @@ const GAME = gql`
               selectedStrengths {
                 id
                 description
+                surplusChange
+                wantChange
+                newHoldingSize
+                gigChange
+                newGangSize
+                gangTagChange
+                gangHarmChange
+                newVehicleCount
+                newBattleVehicleCount
+                newArmorBonus
               }
               selectedWeaknesses {
                 id
                 description
+                surplusChange
+                wantChange
+                newHoldingSize
+                gigChange
+                newGangSize
+                gangTagChange
+                gangHarmChange
+                newVehicleCount
+                newBattleVehicleCount
+                newArmorBonus
               }
             }
           }

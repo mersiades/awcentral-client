@@ -19,6 +19,8 @@ import AngelKitBox from './AngelKitBox';
 import VehiclesBox from './VehiclesBox';
 import GangBox from './GangBox';
 import WeaponsBox from './WeaponsBox';
+import HoldingForm from '../characterCreation/uniques/HoldingForm';
+import HoldingBox from './HoldingBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -108,6 +110,9 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
       )}
       {!!character.playbookUnique?.gang && (
         <GangBox navigateToCharacterCreation={navigateToCharacterCreation} openDialog={openDialog} />
+      )}
+      {!!character.playbookUnique?.holding && (
+        <HoldingBox navigateToCharacterCreation={navigateToCharacterCreation} openDialog={openDialog} />
       )}
       {!!character.playbookUnique?.weapons && (
         <WeaponsBox
