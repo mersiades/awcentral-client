@@ -1,15 +1,15 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Box, Tab, Tabs } from 'grommet';
 
 import VehicleForm from '../VehicleForm';
 import Spinner from '../../Spinner';
+import { ButtonWS, HeadingWS } from '../../../config/grommetConfig';
+import { COLLECTOR } from '../../../config/constants';
 import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
 import { useGame } from '../../../contexts/gameContext';
-import { COLLECTOR } from '../../../config/constants';
-import { useHistory } from 'react-router-dom';
-import { ButtonWS, HeadingWS } from '../../../config/grommetConfig';
-import { decapitalize } from '../../../helpers/decapitalize';
 import { useFonts } from '../../../contexts/fontContext';
+import { decapitalize } from '../../../helpers/decapitalize';
 
 const VehiclesFormContainer: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -30,7 +30,7 @@ const VehiclesFormContainer: FC = () => {
         history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setHx}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } else {
-        setActiveTab((prevTab) => (prevTab < 2 ? prevTab + 1 : prevTab));
+        !!character && setActiveTab((prevTab) => (prevTab < character.vehicleCount ? prevTab + 1 : prevTab));
       }
     }
   };
@@ -49,6 +49,8 @@ const VehiclesFormContainer: FC = () => {
         } else {
           !!vehicles && vehicles.length > 1 ? setNumberVehiclesNeeded(vehicles.length) : setNumberVehiclesNeeded(1);
         }
+      } else if (character.playbook === PlaybookType.hardholder) {
+        setNumberVehiclesNeeded(character.vehicleCount);
       } else {
         !!vehicles && vehicles.length > 0 ? setNumberVehiclesNeeded(vehicles.length) : setNumberVehiclesNeeded(0);
       }

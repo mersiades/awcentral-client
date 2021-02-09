@@ -213,9 +213,11 @@ const GAME = gql`
               gangTags
               selectedStrengths {
                 id
+                description
               }
               selectedWeaknesses {
                 id
+                description
               }
             }
           }

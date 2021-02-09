@@ -83,9 +83,8 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
         <Box fill align="start" justify="start">
           <ParagraphWS alignSelf="start">What are you driving?</ParagraphWS>
           <Select
-            id="target-character-input"
-            aria-label="target-character-input"
-            name="target-character"
+            aria-label="my-vehicle-input"
+            name="my-vehicle"
             placeholder="My vehicle"
             options={[...character.vehicles, otherVehicle]}
             labelKey="name"
@@ -101,9 +100,8 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
           />
           {selectedVehicle?.id === 'other-vehicle-id' && (
             <Select
-              id="target-character-input"
-              aria-label="target-character-input"
-              name="target-character"
+              aria-label="manual-vehicle-input"
+              name="manual-vehicle"
               placeholder="My speed"
               options={['0', '1', '2', '3']}
               value={mySpeed}
@@ -118,9 +116,8 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
         <Box fill align="start" justify="start">
           <ParagraphWS alignSelf="start">What is the speed of your vehicle?</ParagraphWS>
           <Select
-            id="target-character-input"
-            aria-label="target-character-input"
-            name="target-character"
+            aria-label="my-speed-input"
+            name="my-speed"
             placeholder="My speed"
             options={['0', '1', '2', '3']}
             value={mySpeed}
