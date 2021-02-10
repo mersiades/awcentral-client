@@ -75,6 +75,7 @@ export interface Character {
   barter?: number;
   playbookUnique?: PlaybookUnique;
   vehicles: Vehicle[];
+  __typename?: 'Character';
 }
 
 export interface CharacterHarm {

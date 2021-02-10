@@ -9,18 +9,17 @@ import BarterBox from './BarterBox';
 import GearBox from './GearBox';
 import HxBox from './HxBox';
 import HarmBox from './HarmBox';
+import AngelKitBox from './AngelKitBox';
+import VehiclesBox from './VehiclesBox';
+import GangBox from './GangBox';
+import UniqueItemsBox from './UniqueItemsBox';
+import HoldingBox from './HoldingBox';
 import PLAYBOOK, { PlaybookData, PlaybookVars } from '../../queries/playbook';
 import { MoveType, StatType } from '../../@types/enums';
 import { HarmInput } from '../../@types';
 import { Character } from '../../@types/dataInterfaces';
-import { decapitalize } from '../../helpers/decapitalize';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
-import AngelKitBox from './AngelKitBox';
-import VehiclesBox from './VehiclesBox';
-import GangBox from './GangBox';
-import WeaponsBox from './WeaponsBox';
-import HoldingForm from '../characterCreation/uniques/HoldingForm';
-import HoldingBox from './HoldingBox';
+import { decapitalize } from '../../helpers/decapitalize';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -111,12 +110,26 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
       {!!character.playbookUnique?.gang && (
         <GangBox navigateToCharacterCreation={navigateToCharacterCreation} openDialog={openDialog} />
       )}
-      {!!character.playbookUnique?.holding && (
-        <HoldingBox navigateToCharacterCreation={navigateToCharacterCreation} openDialog={openDialog} />
-      )}
+      {!!character.playbookUnique?.holding && <HoldingBox navigateToCharacterCreation={navigateToCharacterCreation} />}
       {!!character.playbookUnique?.weapons && (
-        <WeaponsBox
-          weapons={character.playbookUnique.weapons.weapons}
+        <UniqueItemsBox
+          title="Weapons"
+          items={character.playbookUnique.weapons.weapons}
+          navigateToCharacterCreation={navigateToCharacterCreation}
+        />
+      )}
+      {!!character.playbookUnique?.customWeapons && (
+        <UniqueItemsBox
+          title="Custom weapons"
+          items={character.playbookUnique.customWeapons.weapons}
+          navigateToCharacterCreation={navigateToCharacterCreation}
+        />
+      )}
+
+      {!!character.playbookUnique?.brainerGear && (
+        <UniqueItemsBox
+          title="Brainer gear"
+          items={character.playbookUnique.brainerGear.brainerGear}
           navigateToCharacterCreation={navigateToCharacterCreation}
         />
       )}

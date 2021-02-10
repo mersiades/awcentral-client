@@ -33,16 +33,16 @@ import HealHarmDialog from '../components/dialogs/HealHarmDialog';
 import AngelSpecialDialog from '../components/dialogs/AngelSpecialDialog';
 import {
   ANGEL_SPECIAL_NAME,
-  BOARD_VEHICLE,
+  BOARD_VEHICLE_NAME,
   CHOPPER_SPECIAL_NAME,
-  DEAL_WITH_TERRAIN,
+  DEAL_WITH_TERRAIN_NAME,
   GUNLUGGER_SPECIAL_NAME,
   HEAL_HARM_NAME,
   HELP_OR_INTERFERE_NAME,
   INFLICT_HARM_NAME,
   MAKE_WANT_KNOWN_NAME,
-  OUTDISTANCE_VEHICLE,
-  OVERTAKE_VEHICLE,
+  OUTDISTANCE_VEHICLE_NAME,
+  OVERTAKE_VEHICLE_NAME,
   REVIVE_SOMEONE_NAME,
   SPEED_RECOVERY_NAME,
   STABILIZE_AND_HEAL_NAME,
@@ -197,7 +197,7 @@ const PlayerPage: FC = () => {
       {dialog?.moveAction?.rollType === RollType.harm && (
         <HarmDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
-      {dialog && [OUTDISTANCE_VEHICLE, OVERTAKE_VEHICLE].includes(dialog.name) && (
+      {dialog && [OUTDISTANCE_VEHICLE_NAME, OVERTAKE_VEHICLE_NAME].includes(dialog.name) && (
         <RelativeSpeedDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
       {dialog?.moveAction?.actionType === MoveActionType.barter && (
@@ -226,8 +226,10 @@ const PlayerPage: FC = () => {
       {dialog?.name === GUNLUGGER_SPECIAL_NAME && (
         <GunluggerSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
-      {dialog?.name === BOARD_VEHICLE && <BoardVehicleDialog move={dialog} handleClose={() => setDialog(undefined)} />}
-      {dialog?.name === DEAL_WITH_TERRAIN && <DealTerrainDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.name === BOARD_VEHICLE_NAME && <BoardVehicleDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.name === DEAL_WITH_TERRAIN_NAME && (
+        <DealTerrainDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
       <div data-testid="player-page">
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>

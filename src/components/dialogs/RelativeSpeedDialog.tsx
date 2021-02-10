@@ -15,7 +15,7 @@ import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { Vehicle } from '../../@types/dataInterfaces';
 import { dummyVehicleFrame } from '../../tests/mocks';
-import { OUTDISTANCE_VEHICLE } from '../../config/constants';
+import { OUTDISTANCE_VEHICLE_NAME } from '../../config/constants';
 
 interface RelativeSpeedDialogProps {
   move: Move | CharacterMove;
@@ -160,7 +160,7 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
             onClick={handleClose}
           />
           <ButtonWS
-            label={move.name === OUTDISTANCE_VEHICLE ? 'OUTDISTANCE' : 'OVERTAKE'}
+            label={move.name === OUTDISTANCE_VEHICLE_NAME ? 'OUTDISTANCE' : 'OVERTAKE'}
             primary
             onClick={() => !performingSpeedRollMove && handleSpeedRollMove()}
             disabled={performingSpeedRollMove || !mySpeed || !theirSpeed}

@@ -3,23 +3,19 @@ import { Box } from 'grommet';
 
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
 
-interface WeaponsBoxProps {
-  weapons: string[];
+interface UniqueItemsBoxProps {
+  items: string[];
+  title: string;
   navigateToCharacterCreation: (step: string) => void;
 }
 
-const WeaponsBox: FC<WeaponsBoxProps> = ({ weapons, navigateToCharacterCreation }) => {
+const UniqueItemsBox: FC<UniqueItemsBoxProps> = ({ items, title, navigateToCharacterCreation }) => {
   return (
-    <CollapsiblePanelBox
-      open
-      title="Weapons"
-      navigateToCharacterCreation={navigateToCharacterCreation}
-      targetCreationStep="6"
-    >
+    <CollapsiblePanelBox open title={title} navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="6">
       <Box fill="horizontal" align="start" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
         <ul style={{ margin: 0, paddingInlineStart: '28px' }}>
-          {weapons.map((weapon) => (
-            <li key={weapon}>{weapon}</li>
+          {items.map((item) => (
+            <li key={item}>{item}</li>
           ))}
         </ul>
       </Box>
@@ -27,4 +23,4 @@ const WeaponsBox: FC<WeaponsBoxProps> = ({ weapons, navigateToCharacterCreation 
   );
 };
 
-export default WeaponsBox;
+export default UniqueItemsBox;

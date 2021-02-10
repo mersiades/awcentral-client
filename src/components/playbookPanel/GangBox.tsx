@@ -11,7 +11,7 @@ import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
 import ALL_MOVES, { AllMovesData } from '../../queries/allMoves';
-import { GO_AGGRO, SUCKER_SOMEONE } from '../../config/constants';
+import { GO_AGGRO_NAME, SUCKER_SOMEONE_NAME } from '../../config/constants';
 import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
 import { useParams } from 'react-router-dom';
 import PERFORM_STAT_ROLL_MOVE, {
@@ -115,8 +115,8 @@ const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) 
   useEffect(() => {
     if (!!allMovesData) {
       const gangMoves = allMovesData?.allMoves.filter((move) => move.kind === MoveType.battle) as Move[];
-      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === GO_AGGRO) as Move);
-      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === SUCKER_SOMEONE) as Move);
+      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === GO_AGGRO_NAME) as Move);
+      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === SUCKER_SOMEONE_NAME) as Move);
       setGangMoves(gangMoves);
     }
   }, [allMovesData]);

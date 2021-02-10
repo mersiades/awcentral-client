@@ -5,7 +5,7 @@ import { Box, Tab, Tabs } from 'grommet';
 import VehicleForm from '../VehicleForm';
 import Spinner from '../../Spinner';
 import { ButtonWS, HeadingWS } from '../../../config/grommetConfig';
-import { COLLECTOR } from '../../../config/constants';
+import { COLLECTOR_NAME } from '../../../config/constants';
 import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
 import { useGame } from '../../../contexts/gameContext';
 import { useFonts } from '../../../contexts/fontContext';
@@ -43,7 +43,7 @@ const VehiclesFormContainer: FC = () => {
       if (character.playbook === PlaybookType.chopper) {
         !!vehicles && vehicles.length > 1 ? setNumberVehiclesNeeded(vehicles.length) : setNumberVehiclesNeeded(1);
       } else if (character.playbook === PlaybookType.driver) {
-        const collectorMove = character.characterMoves.find((cm) => cm.name === COLLECTOR);
+        const collectorMove = character.characterMoves.find((cm) => cm.name === COLLECTOR_NAME);
         if (!!collectorMove) {
           !!vehicles && vehicles.length > 3 ? setNumberVehiclesNeeded(vehicles.length) : setNumberVehiclesNeeded(3);
         } else {

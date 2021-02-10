@@ -11,7 +11,7 @@ import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
 import ALL_MOVES, { AllMovesData } from '../../queries/allMoves';
-import { GO_AGGRO, SUCKER_SOMEONE } from '../../config/constants';
+import { GO_AGGRO_NAME, SUCKER_SOMEONE_NAME } from '../../config/constants';
 import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
 import { useParams } from 'react-router-dom';
 import PERFORM_STAT_ROLL_MOVE, {
@@ -21,13 +21,14 @@ import PERFORM_STAT_ROLL_MOVE, {
 import DoubleRedBox from '../DoubleRedBox';
 import SingleRedBox from '../SingleRedBox';
 import RedTagsBox from '../RedTagsBox';
+import IncreaseDecreaseButtons from '../IncreaseDecreaseButtons';
+import SET_HOLDING_BARTER, { SetHoldingBarterData, SetHoldingBarterVars } from '../../mutations/setHoldingBarter';
 
 interface HoldingBoxProps {
   navigateToCharacterCreation: (step: string) => void;
-  openDialog: (move: Move | CharacterMove) => void;
 }
 
-const HoldingBox: FC<HoldingBoxProps> = ({ navigateToCharacterCreation, openDialog }) => {
+const HoldingBox: FC<HoldingBoxProps> = ({ navigateToCharacterCreation }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [showMoves, setShowMoves] = useState(false);
   const [gangMoves, setGangMoves] = useState<Move[]>([]);
@@ -41,6 +42,10 @@ const HoldingBox: FC<HoldingBoxProps> = ({ navigateToCharacterCreation, openDial
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
+
+  const [setHoldingBarter, { loading: settingHoldingBarter }] = useMutation<SetHoldingBarterData, SetHoldingBarterVars>(
+    SET_HOLDING_BARTER
+  );
 
   const [performPrintMove, { loading: performingPrintMove }] = useMutation<PerformPrintMoveData, PerformPrintMoveVars>(
     PERFORM_PRINT_MOVE
@@ -57,6 +62,33 @@ const HoldingBox: FC<HoldingBoxProps> = ({ navigateToCharacterCreation, openDial
     },
   };
   const holding = character?.playbookUnique?.holding;
+
+  const adjustBarter = (type: 'increase' | 'decrease') => {
+    if (!!userGameRole && !!character && !!character.playbookUnique && !!holding) {
+      const amount = type === 'increase' ? holding.barter + 1 : holding.barter - 1;
+      try {
+        setHoldingBarter({
+          variables: { gameRoleId: userGameRole?.id, characterId: character.id, amount },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setHoldingBarter: {
+              __typename: 'Character',
+              ...character,
+              playbookUnique: {
+                ...character.playbookUnique,
+                holding: {
+                  ...holding,
+                  barter: amount,
+                },
+              },
+            },
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const handleStatRollMove = (move: Move | CharacterMove) => {
     if (!!userGameRole && userGameRole.characters.length === 1 && !performingStatRollMove) {
@@ -119,8 +151,8 @@ const HoldingBox: FC<HoldingBoxProps> = ({ navigateToCharacterCreation, openDial
   useEffect(() => {
     if (!!allMovesData) {
       const gangMoves = allMovesData?.allMoves.filter((move) => move.kind === MoveType.battle) as Move[];
-      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === GO_AGGRO) as Move);
-      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === SUCKER_SOMEONE) as Move);
+      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === GO_AGGRO_NAME) as Move);
+      gangMoves.push(allMovesData?.allMoves.find((move) => move.name === SUCKER_SOMEONE_NAME) as Move);
       setGangMoves(gangMoves);
     }
   }, [allMovesData]);
@@ -140,7 +172,13 @@ const HoldingBox: FC<HoldingBoxProps> = ({ navigateToCharacterCreation, openDial
         </HeadingWS>
         {!!holding && (
           <Box fill="horizontal" direction="row" align="center" justify="start" wrap gap="12px" pad="12px">
-            <SingleRedBox value={holding.barter.toString()} label="Barter" />
+            <SingleRedBox
+              value={holding.barter.toString()}
+              label="Barter"
+              loading={settingHoldingBarter}
+              onIncrease={() => adjustBarter('increase')}
+              onDecrease={() => adjustBarter('decrease')}
+            />
             <DoubleRedBox value={holding.holdingSize} label="Size" />
             <DoubleRedBox value={holding.souls} label="Population" />
             <RedTagsBox tags={holding.wants} label="Wants" height="90px" />

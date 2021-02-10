@@ -29,6 +29,7 @@ describe('Rendering VehicleForm', () => {
             {
               id: mockCharacter2.id,
               hasCompletedCharacterCreation: mockCharacter2.hasCompletedCharacterCreation,
+              hasPlusOneForward: false,
               harm: mockCharacter2.harm,
               name: mockCharacter2.name,
               playbook: PlaybookType.driver,
@@ -64,11 +65,9 @@ describe('Rendering VehicleForm', () => {
     // @ts-ignore
     expect(screen.getByRole('textbox', { name: 'name-input' }).value).toEqual('Unnamed vehicle');
     expect(screen.getByRole('heading', { name: 'vehicle-name' }).textContent).toEqual('Unnamed vehicle');
-    expect(screen.getByRole('heading', { name: 'frame-type' }).textContent).toEqual('MEDIUM');
-    expect(screen.getByRole('heading', { name: 'speed' }).textContent).toEqual('0');
-    expect(screen.getByRole('heading', { name: 'handling' }).textContent).toEqual('0');
-    expect(screen.getByRole('heading', { name: 'massive' }).textContent).toEqual('2');
-    expect(screen.getByRole('heading', { name: 'armor' }).textContent).toEqual('0');
+    screen.getByRole('heading', { name: 'MEDIUM' });
+    expect(screen.getAllByRole('heading', { name: '0' }).length).toEqual(3);
+    expect(screen.getAllByRole('heading', { name: '2' }).length).toEqual(1);
   });
 });
 
