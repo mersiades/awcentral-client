@@ -511,7 +511,9 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
             <SingleRedBox value={massive} label="Massive" width="80px" />
           </Box>
           <Box fill="horizontal" direction="row" wrap align="center" justify="center">
-            <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="132px" />
+            {strengths.concat(looks).concat(weaknesses).length > 0 && (
+              <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="132px" />
+            )}
             <ButtonWS
               primary
               fill="horizontal"
