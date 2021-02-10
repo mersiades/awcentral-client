@@ -72,6 +72,7 @@ const GAME = gql`
           playbook
           hasCompletedCharacterCreation
           hasPlusOneForward
+          holds
           gear
           barter
           vehicleCount

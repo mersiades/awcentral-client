@@ -74,6 +74,7 @@ interface MockCharacter {
   vehicleCount: 0;
   hasCompletedCharacterCreation: boolean;
   hasPlusOneForward: boolean;
+  holds: number;
   playbookUnique: PlaybookUnique;
   characterMoves: CharacterMove[];
   vehicles: Vehicle[];
@@ -639,6 +640,7 @@ export const mockCharacter1: MockCharacter = {
   playbook: PlaybookType.battlebabe,
   hasCompletedCharacterCreation: false,
   hasPlusOneForward: false,
+  holds: 0,
   gear: ['leather jacket', 'Timberland boots'],
   barter: 2,
   vehicleCount: 0,
@@ -661,6 +663,7 @@ export const mockCharacter2: MockCharacter = {
   playbook: PlaybookType.angel,
   hasCompletedCharacterCreation: false,
   hasPlusOneForward: false,
+  holds: 0,
   gear: ['Grimey green raincoat', '9mm (2-harm close loud)'],
   statsBlock: mockStatsBlock1,
   barter: 2,

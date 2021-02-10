@@ -64,6 +64,7 @@ export interface Character {
   playbook: PlaybookType;
   hasCompletedCharacterCreation: boolean;
   hasPlusOneForward: boolean;
+  holds: number;
   statsBlock: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
