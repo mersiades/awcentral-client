@@ -13,6 +13,7 @@ import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
 import { StyledMarkdown } from '../styledComponents';
+import SingleRedBox from '../SingleRedBox';
 
 interface AngelKitBoxProps {
   angelKit: AngelKit;
@@ -80,45 +81,14 @@ const AngelKitBox: FC<AngelKitBoxProps> = ({ angelKit, navigateToCharacterCreati
           <Box>{angelKit.description}</Box>
           <Box flex="grow">
             <Box direction="row" align="center" gap="12px" margin={{ left: '12px' }}>
-              <RedBox width="50px" align="center" margin={{ left: '12px' }}>
-                <HeadingWS
-                  crustReady={crustReady}
-                  level="2"
-                  margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}
-                >
-                  {angelKit.stock}
-                </HeadingWS>
-              </RedBox>
-              <Box align="center" justify="around">
-                {settingAngelKit ? (
-                  <Box width="48px" height="80px" />
-                ) : (
-                  <Box
-                    align="center"
-                    justify="around"
-                    animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
-                  >
-                    <CaretUpFill
-                      data-testid="increase-hx-caret"
-                      size="large"
-                      color="brand"
-                      onClick={() => handleSetAngelKit(angelKit.stock + 1, angelKit.hasSupplier)}
-                      style={{ height: '40px' }}
-                    />
-                    <CaretDownFill
-                      data-testid="decrease-hx-caret"
-                      size="large"
-                      color="brand"
-                      onClick={() => handleSetAngelKit(angelKit.stock - 1, angelKit.hasSupplier)}
-                      style={{ height: '40px' }}
-                    />
-                  </Box>
-                )}
-              </Box>
+              <SingleRedBox
+                value={angelKit.stock.toString()}
+                label="Stock"
+                loading={settingAngelKit}
+                onIncrease={() => handleSetAngelKit(angelKit.stock + 1, angelKit.hasSupplier)}
+                onDecrease={() => handleSetAngelKit(angelKit.stock - 1, angelKit.hasSupplier)}
+              />
             </Box>
-            <HeadingWS crustReady={crustReady} level="4" textAlign="center" margin={{ vertical: '6px', left: '12px' }}>
-              Stock
-            </HeadingWS>
           </Box>
         </Box>
         {angelKit.angelKitMoves.map((move) => {

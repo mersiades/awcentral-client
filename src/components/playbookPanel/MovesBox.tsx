@@ -16,6 +16,8 @@ import { useGame } from '../../contexts/gameContext';
 import { useFonts } from '../../contexts/fontContext';
 import { brandColor, HeadingWS } from '../../config/grommetConfig';
 import { decapitalize } from '../../helpers/decapitalize';
+import { WEALTH_NAME } from '../../config/constants';
+import PERFORM_WEALTH_MOVE, { PerformWealthMoveData, PerformWealthMoveVars } from '../../mutations/performWealthMove';
 
 interface MovesBoxProps {
   moves: Array<CharacterMove | Move>;
@@ -41,6 +43,9 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
 
   const [performPrintMove, { loading: performingPrintMove }] = useMutation<PerformPrintMoveData, PerformPrintMoveVars>(
     PERFORM_PRINT_MOVE
+  );
+  const [performWealthMove, { loading: performingWealthMove }] = useMutation<PerformWealthMoveData, PerformWealthMoveVars>(
+    PERFORM_WEALTH_MOVE
   );
 
   const [performStatRollMove, { loading: performingStatRollMove }] = useMutation<
@@ -89,19 +94,36 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
   };
 
   const handleStatRollMove = (move: Move | CharacterMove) => {
-    if (!!userGameRole && userGameRole.characters.length === 1 && !performingStatRollMove) {
-      try {
-        performStatRollMove({
-          variables: {
-            gameId,
-            gameroleId: userGameRole.id,
-            characterId: userGameRole.characters[0].id,
-            moveId: move.id,
-            isGangMove: false,
-          },
-        });
-      } catch (error) {
-        console.error(error);
+    if (!!userGameRole && userGameRole.characters.length === 1) {
+      const commonVariables = {
+        gameId,
+        gameroleId: userGameRole.id,
+        characterId: userGameRole.characters[0].id,
+      };
+      if (move.name === WEALTH_NAME) {
+        if (!performingWealthMove) {
+          try {
+            performWealthMove({
+              variables: commonVariables,
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      } else {
+        if (!performingStatRollMove) {
+          try {
+            performStatRollMove({
+              variables: {
+                ...commonVariables,
+                moveId: move.id,
+                isGangMove: false,
+              },
+            });
+          } catch (error) {
+            console.error(error);
+          }
+        }
       }
     }
   };

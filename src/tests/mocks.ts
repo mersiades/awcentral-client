@@ -8,6 +8,7 @@ import {
   Game,
   GameRole,
   Gang,
+  Holding,
   HxStat,
   PlaybookUnique,
   StatsBlock,
@@ -17,6 +18,7 @@ import {
 import {
   BattleOptionType,
   GangSize,
+  HoldingSize,
   LookType,
   MoveActionType,
   MoveType,
@@ -39,6 +41,7 @@ import {
   GangOption,
   GearInstructions,
   HoldConditions,
+  HoldingOption,
   Look,
   Move,
   MoveAction,
@@ -175,6 +178,38 @@ export const dummyGang: Gang = {
   strengths: [dummyGangOption],
   weaknesses: [dummyGangOption],
   tags: ['dummy'],
+};
+
+export const dummyHoldingOption: HoldingOption = {
+  id: 'dummy',
+  description: 'dummy',
+  surplusChange: 0,
+  wantChange: ['string'],
+  newHoldingSize: HoldingSize.medium,
+  gigChange: 'dummy',
+  newGangSize: GangSize.medium,
+  gangTagChange: 'dummy',
+  gangHarmChange: 0,
+  newVehicleCount: 0,
+  newBattleVehicleCount: 0,
+  newArmorBonus: 0,
+};
+
+export const dummyHolding: Holding = {
+  id: 'dummy',
+  holdingSize: HoldingSize.medium,
+  gangSize: GangSize.medium,
+  souls: 'dummy',
+  surplus: 0,
+  barter: 0,
+  gangHarm: 0,
+  gangArmor: 0,
+  gangDefenseArmorBonus: 0,
+  wants: ['dummy'],
+  gigs: ['dummy'],
+  gangTags: ['dummy'],
+  selectedStrengths: [dummyHoldingOption],
+  selectedWeaknesses: [dummyHoldingOption],
 };
 
 export const dummyHoldConditions: HoldConditions = {
@@ -565,6 +600,7 @@ export const mockPlaybookUniqueBattlebabe: PlaybookUnique = {
   angelKit: dummyAngelKit,
   gang: dummyGang,
   weapons: dummyWeapons,
+  holding: dummyHolding,
 };
 
 export const mockAngelKit: AngelKit = {
@@ -584,6 +620,7 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   angelKit: mockAngelKit,
   gang: dummyGang,
   weapons: dummyWeapons,
+  holding: dummyHolding,
 };
 
 export const mockCharacterHarm: CharacterHarm = {

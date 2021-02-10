@@ -288,6 +288,19 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
+        case UniqueTypes.holding:
+          if (!!character.playbookUnique.holding) {
+            const { holdingSize, gangSize, barter, wants } = character.playbookUnique.holding;
+            return (
+              <CustomUL>
+                <li>Holding size: {decapitalize(holdingSize)}</li>
+                <li>Gang size: {decapitalize(gangSize)}</li>
+                <li>Barter: {barter}</li>
+                <li>Wants: {wants.join(', ')}</li>
+              </CustomUL>
+            );
+          }
+          return null;
         default:
           return null;
       }

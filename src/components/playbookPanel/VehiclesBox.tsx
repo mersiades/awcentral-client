@@ -3,8 +3,8 @@ import { Box } from 'grommet';
 
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
 import { Vehicle } from '../../@types/dataInterfaces';
-import { HeadingWS, RedBox, TextWS } from '../../config/grommetConfig';
-import { useFonts } from '../../contexts/fontContext';
+import { HeadingWS, TextWS } from '../../config/grommetConfig';
+import SingleRedBox from '../SingleRedBox';
 
 interface VehiclesBoxProps {
   vehicles: Vehicle[];
@@ -12,7 +12,6 @@ interface VehiclesBoxProps {
 }
 
 const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreation }) => {
-  const { crustReady } = useFonts();
   const renderVehicle = (vehicle: Vehicle) => {
     return (
       <Box
@@ -29,46 +28,18 @@ const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreati
             {vehicle.name}
           </HeadingWS>
           <TextWS>Frame: {vehicle.vehicleFrame.frameType.toLowerCase()}</TextWS>
-          <TextWS>{vehicle.vehicleFrame.examples}</TextWS>
           <TextWS>Tags: {vehicle.strengths.concat(vehicle.weaknesses).concat(vehicle.looks).join(', ')}</TextWS>
         </Box>
         <Box direction="row" align="center" justify="around" gap="6px" pad="12px" width="350px">
-          <Box align="center" justify="between" width="80px" height="90px">
-            <RedBox align="center" width="50px">
-              <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
-                {vehicle.speed}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Speed</TextWS>
-          </Box>
-          <Box align="center" justify="between" width="80px" height="90px">
-            <RedBox align="center" width="50px">
-              <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
-                {vehicle.handling}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Handling</TextWS>
-          </Box>
-          <Box align="center" justify="between" width="80px" height="90px">
-            <RedBox align="center" width="50px">
-              <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
-                {vehicle.massive}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Massive</TextWS>
-          </Box>
-          <Box align="center" justify="between" width="80px" height="90px">
-            <RedBox align="center" width="50px">
-              <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
-                {vehicle.armor}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Armor</TextWS>
-          </Box>
+          <SingleRedBox value={vehicle.speed.toString()} label="Speed" width="80px" />
+          <SingleRedBox value={vehicle.handling.toString()} label="Handling" width="80px" />
+          <SingleRedBox value={vehicle.armor.toString()} label="Armor" width="80px" />
+          <SingleRedBox value={vehicle.massive.toString()} label="Massive" width="80px" />
         </Box>
       </Box>
     );
   };
+
   return (
     <CollapsiblePanelBox
       open

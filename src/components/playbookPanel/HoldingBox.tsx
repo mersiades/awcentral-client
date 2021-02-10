@@ -18,13 +18,17 @@ import PERFORM_STAT_ROLL_MOVE, {
   PerformStatRollMoveData,
   PerformStatRollMoveVars,
 } from '../../mutations/performStatRollMove';
+import DoubleRedBox from '../DoubleRedBox';
+import SingleRedBox from '../SingleRedBox';
+import RedTagsBox from '../RedTagsBox';
+import IncreaseDecreaseButtons from '../IncreaseDecreaseButtons';
+import SET_HOLDING_BARTER, { SetHoldingBarterData, SetHoldingBarterVars } from '../../mutations/setHoldingBarter';
 
-interface GangBoxProps {
+interface HoldingBoxProps {
   navigateToCharacterCreation: (step: string) => void;
-  openDialog: (move: Move | CharacterMove) => void;
 }
 
-const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) => {
+const HoldingBox: FC<HoldingBoxProps> = ({ navigateToCharacterCreation }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [showMoves, setShowMoves] = useState(false);
   const [gangMoves, setGangMoves] = useState<Move[]>([]);
@@ -39,6 +43,10 @@ const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: allMovesData } = useQuery<AllMovesData>(ALL_MOVES);
 
+  const [setHoldingBarter, { loading: settingHoldingBarter }] = useMutation<SetHoldingBarterData, SetHoldingBarterVars>(
+    SET_HOLDING_BARTER
+  );
+
   const [performPrintMove, { loading: performingPrintMove }] = useMutation<PerformPrintMoveData, PerformPrintMoveVars>(
     PERFORM_PRINT_MOVE
   );
@@ -52,6 +60,34 @@ const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) 
     '&:hover': {
       color: brandColor,
     },
+  };
+  const holding = character?.playbookUnique?.holding;
+
+  const adjustBarter = (type: 'increase' | 'decrease') => {
+    if (!!userGameRole && !!character && !!character.playbookUnique && !!holding) {
+      const amount = type === 'increase' ? holding.barter + 1 : holding.barter - 1;
+      try {
+        setHoldingBarter({
+          variables: { gameRoleId: userGameRole?.id, characterId: character.id, amount },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setHoldingBarter: {
+              __typename: 'Character',
+              ...character,
+              playbookUnique: {
+                ...character.playbookUnique,
+                holding: {
+                  ...holding,
+                  barter: amount,
+                },
+              },
+            },
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   const handleStatRollMove = (move: Move | CharacterMove) => {
@@ -121,41 +157,47 @@ const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) 
     }
   }, [allMovesData]);
 
+  // -------------------------------------------------- Render component  ---------------------------------------------------- //
+
   return (
-    <CollapsiblePanelBox open title="Gang" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="6">
+    <CollapsiblePanelBox
+      open
+      title="Holding & Gang"
+      navigateToCharacterCreation={navigateToCharacterCreation}
+      targetCreationStep="6"
+    >
       <Box fill="horizontal" align="start" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
-        <Box fill="horizontal" direction="row" align="center" justify="start" wrap gap="12px" pad="12px">
-          <Box align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
-            <RedBox pad="12px" align="center" fill justify="center">
-              <HeadingWS crustReady={crustReady} level={3} margin={{ horizontal: '9px', bottom: '-3px', top: '3px' }}>
-                {character?.playbookUnique?.gang?.size}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Size</TextWS>
+        <HeadingWS level={4} margin={{ vertical: '3px' }}>
+          Holding
+        </HeadingWS>
+        {!!holding && (
+          <Box fill="horizontal" direction="row" align="center" justify="start" wrap gap="12px" pad="12px">
+            <SingleRedBox
+              value={holding.barter.toString()}
+              label="Barter"
+              loading={settingHoldingBarter}
+              onIncrease={() => adjustBarter('increase')}
+              onDecrease={() => adjustBarter('decrease')}
+            />
+            <DoubleRedBox value={holding.holdingSize} label="Size" />
+            <DoubleRedBox value={holding.souls} label="Population" />
+            <RedTagsBox tags={holding.wants} label="Wants" height="90px" />
+            <DoubleRedBox value={`+${holding.surplus}barter`} label="Surplus" />
+            <RedTagsBox tags={holding.gigs} label="Gigs" height="90px" />
+            <DoubleRedBox value={`+${holding.gangDefenseArmorBonus}armor`} label="Defense bonus" />
           </Box>
-          <Box align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
-            <RedBox align="center" width="50px" fill="vertical" justify="center">
-              <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
-                {character?.playbookUnique?.gang?.harm}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Harm</TextWS>
+        )}
+        <HeadingWS level={4} margin={{ vertical: '3px' }}>
+          Gang
+        </HeadingWS>
+        {!!holding && (
+          <Box fill="horizontal" direction="row" align="center" justify="start" wrap gap="12px" pad="12px">
+            <DoubleRedBox value={holding.gangSize} label="Size" />
+            <SingleRedBox value={holding.gangHarm.toString()} label="Harm" />
+            <SingleRedBox value={holding.gangArmor.toString()} label="Armor" />
+            <RedTagsBox tags={holding.gangTags} label="Tags" height="90px" />
           </Box>
-          <Box align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
-            <RedBox align="center" width="50px" fill="vertical" justify="center">
-              <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
-                {character?.playbookUnique?.gang?.armor}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Armor</TextWS>
-          </Box>
-          <Box align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
-            <RedBox pad="12px" fill justify="center">
-              <TextWS>{character?.playbookUnique?.gang?.tags.join(', ')}</TextWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Tags</TextWS>
-          </Box>
-        </Box>
+        )}
         <Box direction="row" justify="between" fill="horizontal" align="center" pad="12px">
           <HeadingWS level="4" margin={{ vertical: '3px' }}>
             Gang moves
@@ -197,4 +239,4 @@ const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) 
   );
 };
 
-export default GangBox;
+export default HoldingBox;

@@ -1,5 +1,5 @@
-import { GangSize, ThreatType, VehicleType } from './enums';
-import { VehicleFrame, VehicleBattleOption, GangOption } from './staticDataInterfaces';
+import { GangSize, HoldingSize, ThreatType, VehicleType } from './enums';
+import { VehicleFrame, VehicleBattleOption, GangOption, HoldingOption } from './staticDataInterfaces';
 
 export interface KeycloakUser {
   id?: string;
@@ -83,4 +83,21 @@ export interface NpcInput {
   id?: string;
   name: string;
   description?: string;
+}
+
+export interface HoldingInput {
+  id?: string;
+  holdingSize: HoldingSize;
+  gangSize: GangSize;
+  souls: string;
+  surplus: number;
+  barter: number;
+  gangHarm: number;
+  gangArmor: number;
+  gangDefenseArmorBonus: number;
+  wants: string[];
+  gigs: string[];
+  gangTags: string[];
+  selectedStrengths: HoldingOption[];
+  selectedWeaknesses: HoldingOption[];
 }

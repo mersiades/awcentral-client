@@ -198,6 +198,48 @@ const GAME = gql`
               }
               tags
             }
+            holding {
+              id
+              holdingSize
+              gangSize
+              souls
+              surplus
+              barter
+              gangHarm
+              gangArmor
+              gangDefenseArmorBonus
+              wants
+              gigs
+              gangTags
+              selectedStrengths {
+                id
+                description
+                surplusChange
+                wantChange
+                newHoldingSize
+                gigChange
+                newGangSize
+                gangTagChange
+                gangHarmChange
+                newVehicleCount
+                newBattleVehicleCount
+                newArmorBonus
+              }
+              selectedWeaknesses {
+                id
+                description
+                surplusChange
+                wantChange
+                newHoldingSize
+                gigChange
+                newGangSize
+                gangTagChange
+                gangHarmChange
+                newVehicleCount
+                newBattleVehicleCount
+                newArmorBonus
+              }
+            }
           }
         }
       }

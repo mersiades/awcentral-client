@@ -234,7 +234,6 @@ const GangForm: FC<GangFormProps> = ({ existingGang }) => {
   // ------------------------------------------------------ Render -------------------------------------------------------- //
   return (
     <Box
-      border
       data-testid="gang-form"
       width="60vw"
       direction="column"
@@ -246,7 +245,7 @@ const GangForm: FC<GangFormProps> = ({ existingGang }) => {
       <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
         !!character?.name ? character.name?.toUpperCase() : '...'
       }'S GANG`}</HeadingWS>
-      <Box border fill="horizontal" direction="row" align="start" justify="between">
+      <Box fill="horizontal" direction="row" align="start" justify="between">
         <Box fill="horizontal" pad="12px" gap="6px">
           {!!gangCreator && <ParagraphWS style={{ maxWidth: 'unset' }}>{gangCreator.intro}</ParagraphWS>}
           <ParagraphWS>Then, choose {!!gangCreator ? gangCreator?.strengthChoiceCount : 2}:</ParagraphWS>

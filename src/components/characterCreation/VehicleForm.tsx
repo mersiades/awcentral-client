@@ -11,6 +11,9 @@ import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import SET_VEHICLE, { SetVehicleData, SetVehicleVars } from '../../mutations/setVehicle';
 import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../queries/vehicleCreator';
+import DoubleRedBox from '../DoubleRedBox';
+import RedTagsBox from '../RedTagsBox';
+import SingleRedBox from '../SingleRedBox';
 import Spinner from '../Spinner';
 
 interface VehicleFormProps {
@@ -195,11 +198,6 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
   const [setVehicle, { loading: settingVehicle }] = useMutation<SetVehicleData, SetVehicleVars>(SET_VEHICLE);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
-  const redBoxLabelStyling = {
-    fontWeight: 600,
-    marginTop: '3px',
-    marginBottom: '6px',
-  };
 
   const introText =
     frame?.frameType === VehicleFrameType.bike ? bikeCreator?.introInstructions : carCreator?.introInstructions;
@@ -497,67 +495,33 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
             </Box>
           </Box>
         </Box>
-        <Box direction="row" justify="between" align="start" wrap width="200px" pad="12px" style={{ minWidth: '200px' }}>
+        <Box justify="between" align="start" width="200px" pad="12px" style={{ minWidth: '200px' }}>
           <Box fill="horizontal" align="center" justify="center">
             <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ vertical: '3px' }}>
               {name}
             </HeadingWS>
+            <DoubleRedBox value={frame?.frameType} label="Frame" />
           </Box>
-          <Box fill="horizontal" justify="start" align="center">
-            <RedBox align="center" justify="center" pad="12px" width="200px">
-              <HeadingWS aria-label="frame-type" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
-                {frame?.frameType}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={redBoxLabelStyling}>Frame</TextWS>
+          <Box fill="horizontal" direction="row" align="center" justify="between">
+            <SingleRedBox value={speed} label="Speed" width="80px" />
+            <SingleRedBox value={handling} label="Handling" width="80px" />
           </Box>
-          <Box justify="start" align="center">
-            <RedBox align="center" justify="center" pad="12px" width="80px">
-              <HeadingWS aria-label="speed" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
-                {speed}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={redBoxLabelStyling}>Speed</TextWS>
+          <Box fill="horizontal" direction="row" align="center" justify="between">
+            <SingleRedBox value={armor} label="Armor" width="80px" />
+            <SingleRedBox value={massive} label="Massive" width="80px" />
           </Box>
-          <Box justify="start" align="center">
-            <RedBox align="center" justify="center" pad="12px" width="80px">
-              <HeadingWS aria-label="handling" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
-                {handling}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={redBoxLabelStyling}>Handling</TextWS>
+          <Box fill="horizontal" direction="row" wrap align="center" justify="center">
+            {strengths.concat(looks).concat(weaknesses).length > 0 && (
+              <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="132px" />
+            )}
+            <ButtonWS
+              primary
+              fill="horizontal"
+              label={settingVehicle ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+              onClick={() => !settingVehicle && handleSetVehicle()}
+              disabled={settingVehicle || battleOptions.length < frame.battleOptionCount}
+            />
           </Box>
-          <Box justify="start" align="center">
-            <RedBox align="center" justify="center" pad="12px" width="80px">
-              <HeadingWS aria-label="massive" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
-                {massive}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={redBoxLabelStyling}>Massive</TextWS>
-          </Box>
-          <Box justify="start" align="center">
-            <RedBox align="center" justify="center" pad="12px" width="80px">
-              <HeadingWS aria-label="armor" level={2} crustReady={crustReady} margin={{ bottom: '0px', top: '6px' }}>
-                {armor}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={redBoxLabelStyling}>Armor</TextWS>
-          </Box>
-
-          <Box fill="horizontal" justify="start" align="center">
-            <RedBox data-testid="vehicle-tags-box" align="center" justify="center" pad="12px" width="200px" height="132px">
-              <TextWS>{strengths.concat(looks).concat(weaknesses).join(', ')}</TextWS>
-            </RedBox>
-            <TextWS style={redBoxLabelStyling}>Tags</TextWS>
-          </Box>
-
-          <ButtonWS
-            primary
-            fill="horizontal"
-            label={settingVehicle ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
-            onClick={() => !settingVehicle && handleSetVehicle()}
-            disabled={settingVehicle || battleOptions.length < frame.battleOptionCount}
-          />
         </Box>
       </Box>
     </Box>

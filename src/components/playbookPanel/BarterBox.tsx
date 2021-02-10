@@ -5,6 +5,9 @@ import { FormUp, FormDown, CaretUpFill, CaretDownFill } from 'grommet-icons';
 import { HeadingWS, RedBox } from '../../config/grommetConfig';
 import { StyledMarkdown } from '../styledComponents';
 import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
+import { PlaybookType } from '../../@types/enums';
+import IncreaseDecreaseButtons from '../IncreaseDecreaseButtons';
 
 interface BarterBoxProps {
   barter: number;
@@ -16,6 +19,7 @@ interface BarterBoxProps {
 const BarterBox: FC<BarterBoxProps> = ({ barter, instructions, handleSetBarter, settingBarter }) => {
   const [showInstructions, setShowInstructions] = useState(false);
 
+  const { character } = useGame();
   const { crustReady } = useFonts();
 
   const increaseBarter = () => {
@@ -40,33 +44,20 @@ const BarterBox: FC<BarterBoxProps> = ({ barter, instructions, handleSetBarter, 
           ) : (
             <FormDown onClick={() => setShowInstructions(true)} />
           )}
-          <RedBox data-testid="barter-value-box" width="50px" align="center" margin={{ left: '12px' }}>
-            <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
-              {barter}
-            </HeadingWS>
-          </RedBox>
-          <Box align="center" justify="around">
-            {settingBarter ? (
-              <Box width="48px" height="80px" />
-            ) : (
-              <Box align="center" justify="around" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
-                <CaretUpFill
-                  data-testid="increase-barter-caret"
-                  size="large"
-                  color="brand"
-                  onClick={increaseBarter}
-                  style={{ height: '40px' }}
-                />
-                <CaretDownFill
-                  data-testid="decrease-barter-caret"
-                  size="large"
-                  color="brand"
-                  onClick={decreaseBarter}
-                  style={{ height: '40px' }}
-                />
-              </Box>
-            )}
-          </Box>
+          {character?.playbook !== PlaybookType.hardholder && (
+            <>
+              <RedBox data-testid="barter-value-box" width="50px" align="center" margin={{ left: '12px' }}>
+                <HeadingWS
+                  crustReady={crustReady}
+                  level="2"
+                  margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}
+                >
+                  {barter}
+                </HeadingWS>
+              </RedBox>
+              <IncreaseDecreaseButtons loading={settingBarter} onIncrease={increaseBarter} onDecrease={decreaseBarter} />
+            </>
+          )}
         </Box>
       </Box>
       {showInstructions && (

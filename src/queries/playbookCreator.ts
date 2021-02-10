@@ -165,6 +165,51 @@ const PLAYBOOK_CREATOR = gql`
           seriousGuns
           backupWeapons
         }
+        holdingCreator {
+          id
+          defaultHoldingSize
+          instructions
+          defaultSurplus
+          defaultGigs
+          defaultWant
+          defaultArmorBonus
+          defaultVehiclesCount
+          defaultBattleVehicleCount
+          defaultGangSize
+          defaultGangHarm
+          defaultGangArmor
+          defaultGangTag
+          strengthCount
+          weaknessCount
+          strengthOptions {
+            id
+            description
+            surplusChange
+            wantChange
+            newHoldingSize
+            gigChange
+            newGangSize
+            gangTagChange
+            gangHarmChange
+            newVehicleCount
+            newBattleVehicleCount
+            newArmorBonus
+          }
+          weaknessOptions {
+            id
+            description
+            surplusChange
+            wantChange
+            newHoldingSize
+            gigChange
+            newGangSize
+            gangTagChange
+            gangHarmChange
+            newVehicleCount
+            newBattleVehicleCount
+            newArmorBonus
+          }
+        }
       }
     }
   }
