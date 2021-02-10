@@ -54,6 +54,7 @@ import GunluggerSpecialDialog from '../components/dialogs/GunluggerSpecialDialog
 import RelativeSpeedDialog from '../components/dialogs/RelativeSpeedDialog';
 import BoardVehicleDialog from '../components/dialogs/BoardVehicleDialog';
 import DealTerrainDialog from '../components/dialogs/DealTerrainDialog';
+import Holds from '../components/Holds';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -278,6 +279,7 @@ const PlayerPage: FC = () => {
           </Tabs>
         </ThemeContext.Extend>
         {character?.hasPlusOneForward && <Plus1ForwardPill />}
+        {!!character && character.holds > 0 && <Holds holds={character.holds} />}
       </Footer>
     </Box>
   );
