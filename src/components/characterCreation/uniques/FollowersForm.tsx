@@ -16,6 +16,7 @@ import { FollowersInput } from '../../../@types';
 import { FollowersOption } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
+import { updateTags, unUpdateTags } from '../../../helpers/updateTags';
 
 interface FollowersFormState {
   description: string;
@@ -72,6 +73,14 @@ const followersFormReducer = (state: FollowersFormState, action: Action) => {
     default:
       return state;
   }
+};
+
+const updateTagsWithBarter = (existingTags: string[], newBarterTag: string) => {
+  // remove old barter tag
+  const noBarterArray = existingTags.filter((tag) => !tag.includes('barter'));
+
+  // Add new barter tag
+  return [...noBarterArray, newBarterTag];
 };
 
 const getDescription = (characterization?: string, followers?: number, travelOption?: string) => {
@@ -188,44 +197,6 @@ const FollowersForm: FC = () => {
   const handleTravelOptionSelect = (option: string) => {
     const description = getDescription(characterization, followers, option);
     dispatch({ type: 'SET_TRAVEL_OPTION', payload: { travelOption: option, description } });
-  };
-
-  const updateTags = (existingTags: string[], newTags: string[]) => {
-    let updatedTags = existingTags;
-    newTags.forEach((newTag) => {
-      let tagPrefix = newTag[0];
-      let tag = newTag.substring(1);
-      if (tagPrefix === '-') {
-        updatedTags = updatedTags.filter((t) => t !== tag);
-      } else if (tagPrefix === '+') {
-        updatedTags = [...updatedTags, tag];
-      } else {
-        console.warn('incorrect tag prefix', newTag);
-      }
-    });
-    return updatedTags;
-  };
-
-  const updateTagsWithBarter = (existingTags: string[], newBarterTag: string) => {
-    // remove old barter tag
-    const noBarterArray = existingTags.filter((tag) => !tag.includes('barter'));
-    return [...noBarterArray, newBarterTag];
-  };
-
-  const unUpdateTags = (existingTags: string[], newTags: string[]) => {
-    let updatedTags = existingTags;
-    newTags.forEach((newTag) => {
-      let tagPrefix = newTag[0];
-      let tag = newTag.substring(1);
-      if (tagPrefix === '+') {
-        updatedTags = updatedTags.filter((t) => t !== tag);
-      } else if (tagPrefix === '-') {
-        updatedTags = [...updatedTags, tag];
-      } else {
-        console.warn('incorrect tag prefix', newTag);
-      }
-    });
-    return updatedTags;
   };
 
   const addOption = (option: FollowersOption, type: 'strength' | 'weakness') => {

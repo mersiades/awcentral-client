@@ -18,6 +18,7 @@ import { GangOption, HoldingOption } from '../../../@types/staticDataInterfaces'
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 import { Holding } from '../../../@types/dataInterfaces';
+import { updateTags, unUpdateTags } from '../../../helpers/updateTags';
 
 interface HoldingFormProps {
   existingHolding?: Holding;
@@ -167,38 +168,6 @@ const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
         console.error(error);
       }
     }
-  };
-
-  const updateTags = (existingTags: string[], newTags: string[]) => {
-    let updatedTags = existingTags;
-    newTags.forEach((newTag) => {
-      let tagPrefix = newTag[0];
-      let tag = newTag.substring(1);
-      if (tagPrefix === '-') {
-        updatedTags = updatedTags.filter((t) => t !== tag);
-      } else if (tagPrefix === '+') {
-        updatedTags = [...updatedTags, tag];
-      } else {
-        console.warn('incorrect tag prefix', newTag);
-      }
-    });
-    return updatedTags;
-  };
-
-  const unUpdateTags = (existingTags: string[], newTags: string[]) => {
-    let updatedTags = existingTags;
-    newTags.forEach((newTag) => {
-      let tagPrefix = newTag[0];
-      let tag = newTag.substring(1);
-      if (tagPrefix === '+') {
-        updatedTags = updatedTags.filter((t) => t !== tag);
-      } else if (tagPrefix === '-') {
-        updatedTags = [...updatedTags, tag];
-      } else {
-        console.warn('incorrect tag prefix', newTag);
-      }
-    });
-    return updatedTags;
   };
 
   const addOption = (option: HoldingOption, type: 'strength' | 'weakness') => {
