@@ -165,6 +165,36 @@ const PLAYBOOK_CREATOR = gql`
           seriousGuns
           backupWeapons
         }
+        followersCreator {
+          id
+          instructions
+          defaultNumberOfFollowers
+          defaultSurplusBarter
+          defaultFortune
+          strengthCount
+          weaknessCount
+          travelOptions
+          characterizationOptions
+          defaultWants
+          strengthOptions {
+            id
+            description
+            newNumberOfFollowers
+            surplusBarterChange
+            fortuneChange
+            surplusChange
+            wantChange
+          }
+          weaknessOptions {
+            id
+            description
+            newNumberOfFollowers
+            surplusBarterChange
+            fortuneChange
+            surplusChange
+            wantChange
+          }
+        }
         holdingCreator {
           id
           defaultHoldingSize
