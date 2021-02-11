@@ -21,6 +21,7 @@ import { useGame } from '../contexts/gameContext';
 import { customTabStyles } from '../config/grommetConfig';
 import '../assets/styles/transitions.css';
 import GameNavbar from '../components/GameNavbar';
+import { gamePageBottomNavbarHeight } from '../config/constants';
 
 export const background = {
   color: 'black',
@@ -162,7 +163,7 @@ const MCPage: FC = () => {
         </Collapsible>
         <MainContainer fill sidePanel={sidePanel} maxPanels={maxSidePanel} shinkWidth={sidePanelWidth}>
           <LeftMainContainer fill rightPanel={rightPanel}>
-            <Box fill align="center" justify="center" pad="12px">
+            <Box fill align="center" justify="center" pad={{ horizontal: '12px' }}>
               {renderLeftPanel()}
             </Box>
           </LeftMainContainer>
@@ -174,7 +175,7 @@ const MCPage: FC = () => {
           </RightMainContainer>
         </MainContainer>
       </div>
-      <Footer direction="row" justify="between" align="center" height="10vh">
+      <Footer direction="row" justify="between" align="center" height={`${gamePageBottomNavbarHeight}px`}>
         <ThemeContext.Extend value={customTabStyles}>
           <Tabs
             activeIndex={sidePanel}

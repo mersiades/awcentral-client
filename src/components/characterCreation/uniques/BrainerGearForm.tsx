@@ -59,6 +59,7 @@ const BrainerGearForm: FC = () => {
       }
     }
   };
+  console.log('selectedGear', selectedGear);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
   return (

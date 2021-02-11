@@ -36,6 +36,7 @@ import {
   BOARD_VEHICLE_NAME,
   CHOPPER_SPECIAL_NAME,
   DEAL_WITH_TERRAIN_NAME,
+  gamePageBottomNavbarHeight,
   GUNLUGGER_SPECIAL_NAME,
   HEAL_HARM_NAME,
   HELP_OR_INTERFERE_NAME,
@@ -263,7 +264,7 @@ const PlayerPage: FC = () => {
           <MessagesPanel />
         </MainContainer>
       </div>
-      <Footer direction="row" justify="between" align="center" height="10vh">
+      <Footer direction="row" justify="between" align="center" height={`${gamePageBottomNavbarHeight}px`}>
         <ThemeContext.Extend value={customTabStyles}>
           <Tabs
             activeIndex={sidePanel}

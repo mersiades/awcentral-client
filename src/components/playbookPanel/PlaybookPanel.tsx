@@ -129,7 +129,7 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
       {!!character.playbookUnique?.brainerGear && (
         <UniqueItemsBox
           title="Brainer gear"
-          items={character.playbookUnique.brainerGear.brainerGear}
+          items={character.playbookUnique.brainerGear.brainerGear.map((item) => item.substring(0, item.indexOf(')_') + 1))}
           navigateToCharacterCreation={navigateToCharacterCreation}
         />
       )}
