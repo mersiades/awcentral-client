@@ -28,4 +28,4 @@ export const LEADERSHIP_NAME = 'LEADERSHIPO';
 export const WEALTH_NAME = 'WEALTH';
 
 export const gamePageTopNavbarHeight = 30;
-export const gamePageBottomNavbarHeight = 70;
+export const gamePageBottomNavbarHeight = 80;

@@ -7,11 +7,12 @@ interface RedTagsBoxProps {
   tags: string[];
   label: string;
   height: string;
+  maxWidth?: string;
 }
 
-const RedTagsBox: FC<RedTagsBoxProps> = ({ tags, label, height }) => {
+const RedTagsBox: FC<RedTagsBoxProps> = ({ tags, label, height, maxWidth = '320px' }) => {
   return (
-    <Box align="center" justify="between" height={height} gap="6px" margin={{ bottom: '6px' }} style={{ maxWidth: '320px' }}>
+    <Box align="center" justify="between" height={height} gap="6px" margin={{ bottom: '6px' }} style={{ maxWidth }}>
       <RedBox pad="12px" fill justify="center">
         <TextWS>{tags.join(', ')}</TextWS>
       </RedBox>

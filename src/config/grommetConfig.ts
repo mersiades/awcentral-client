@@ -766,3 +766,8 @@ export const dealTerrainDialogBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-27.jpg)',
 };
+
+export const hocusSpecialDialogBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-28.jpg)',
+};

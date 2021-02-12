@@ -153,6 +153,8 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
       case MoveActionType.roll:
         handleRollClick(move);
         break;
+      case MoveActionType.hocus:
+      // Deliberately falls through
       case MoveActionType.gunlugger:
       // Deliberately falls through
       case MoveActionType.adjustHx:

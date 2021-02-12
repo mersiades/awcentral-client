@@ -17,6 +17,7 @@ import { FollowersOption } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 import { updateTags, unUpdateTags } from '../../../helpers/updateTags';
+import { getFollowersDescription } from '../../../helpers/getFollowersDescription';
 
 interface FollowersFormState {
   description: string;
@@ -81,28 +82,6 @@ const updateTagsWithBarter = (existingTags: string[], newBarterTag: string) => {
 
   // Add new barter tag
   return [...noBarterArray, newBarterTag];
-};
-
-const getDescription = (characterization?: string, followers?: number, travelOption?: string) => {
-  if (!characterization && !followers && !travelOption) {
-    return '';
-  } else if (characterization && !followers && !travelOption) {
-    return capitalize(characterization);
-  } else if (characterization && followers && !travelOption) {
-    return `${capitalize(characterization)} ${
-      characterization === 'your students' ? 'are' : 'is'
-    } about ${followers} followers.`;
-  } else if (!characterization && followers && !travelOption) {
-    return `You have about ${followers} followers.`;
-  } else if (!characterization && followers && travelOption) {
-    return `You have about ${followers} followers. When you travel, they ${travelOption}.`;
-  } else if (!characterization && !followers && travelOption) {
-    return `When you travel, your followers ${travelOption}.`;
-  } else if (characterization && followers && travelOption) {
-    return `${capitalize(characterization)} ${
-      characterization === 'your students' ? 'are' : 'is'
-    } about ${followers} followers. When you travel, they ${travelOption}.`;
-  }
 };
 
 const FollowersForm: FC = () => {
@@ -188,12 +167,12 @@ const FollowersForm: FC = () => {
   };
 
   const handleCharacterizationSelect = (option: string) => {
-    const description = getDescription(option, followers, travelOption);
+    const description = getFollowersDescription(option, followers, travelOption);
     dispatch({ type: 'SET_CHARACTERIZATION', payload: { characterization: option, description } });
   };
 
   const handleTravelOptionSelect = (option: string) => {
-    const description = getDescription(characterization, followers, option);
+    const description = getFollowersDescription(characterization, followers, option);
     dispatch({ type: 'SET_TRAVEL_OPTION', payload: { travelOption: option, description } });
   };
 
@@ -204,7 +183,7 @@ const FollowersForm: FC = () => {
         : { selectedWeaknesses: [...selectedWeaknesses, option] };
 
     if (option.newNumberOfFollowers > -1) {
-      const description = getDescription(characterization, option.newNumberOfFollowers, travelOption);
+      const description = getFollowersDescription(characterization, option.newNumberOfFollowers, travelOption);
       update = { ...update, followers: option.newNumberOfFollowers, description };
     }
 
@@ -240,7 +219,7 @@ const FollowersForm: FC = () => {
           };
 
     if (!!followersCreator && option.newNumberOfFollowers > -1) {
-      const description = getDescription(characterization, followersCreator.defaultNumberOfFollowers, travelOption);
+      const description = getFollowersDescription(characterization, followersCreator.defaultNumberOfFollowers, travelOption);
       update = { ...update, followers: followersCreator.defaultNumberOfFollowers, description };
     }
 
