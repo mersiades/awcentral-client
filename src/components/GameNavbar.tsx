@@ -8,6 +8,7 @@ import { ThemeContext } from 'styled-components';
 import { Character, GameRole } from '../@types/dataInterfaces';
 import { accentColors, customDefaultButtonStyles } from '../config/grommetConfig';
 import { useGame } from '../contexts/gameContext';
+import { gamePageTopNavbarHeight } from '../config/constants';
 
 interface GameNavbarProps {
   isMc: boolean;
@@ -36,7 +37,7 @@ const GameNavbar: FC<GameNavbarProps> = ({ isMc }) => {
     <Header
       background={{ color: 'rgba(76, 104, 76, 0.5)' }}
       style={{ borderBottom: `1px solid ${accentColors[0]}` }}
-      height="30px"
+      height={`${gamePageTopNavbarHeight}px`}
     >
       {/*
         // @ts-ignore */}

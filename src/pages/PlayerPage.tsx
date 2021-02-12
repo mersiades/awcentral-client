@@ -36,6 +36,8 @@ import {
   BOARD_VEHICLE_NAME,
   CHOPPER_SPECIAL_NAME,
   DEAL_WITH_TERRAIN_NAME,
+  gamePageBottomNavbarHeight,
+  gamePageTopNavbarHeight,
   GUNLUGGER_SPECIAL_NAME,
   HEAL_HARM_NAME,
   HELP_OR_INTERFERE_NAME,
@@ -55,6 +57,7 @@ import RelativeSpeedDialog from '../components/dialogs/RelativeSpeedDialog';
 import BoardVehicleDialog from '../components/dialogs/BoardVehicleDialog';
 import DealTerrainDialog from '../components/dialogs/DealTerrainDialog';
 import Holds from '../components/Holds';
+import HocusSpecialDialog from '../components/dialogs/HocusSpecialDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -213,6 +216,9 @@ const PlayerPage: FC = () => {
       {dialog?.name === INFLICT_HARM_NAME && <InflictHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
       {dialog?.name === HEAL_HARM_NAME && <HealHarmDialog move={dialog} handleClose={() => setDialog(undefined)} />}
       {dialog?.name === ANGEL_SPECIAL_NAME && <AngelSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />}
+      {dialog?.moveAction?.actionType === MoveActionType.hocus && (
+        <HocusSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
       {dialog?.name === STABILIZE_AND_HEAL_NAME && (
         <StabilizeDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
@@ -231,7 +237,10 @@ const PlayerPage: FC = () => {
       {dialog?.name === DEAL_WITH_TERRAIN_NAME && (
         <DealTerrainDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
-      <div data-testid="player-page">
+      <div
+        data-testid="player-page"
+        style={{ height: `calc(100vh - ${gamePageBottomNavbarHeight + gamePageTopNavbarHeight}px)` }}
+      >
         <Collapsible direction="horizontal" open={sidePanel < 2}>
           <SidePanel sidePanel={sidePanel} growWidth={SIDE_PANEL_WIDTH}>
             {sidePanel === 0 && !!character && (
@@ -263,7 +272,7 @@ const PlayerPage: FC = () => {
           <MessagesPanel />
         </MainContainer>
       </div>
-      <Footer direction="row" justify="between" align="center" height="10vh">
+      <Footer direction="row" justify="between" align="center" height={`${gamePageBottomNavbarHeight}px`}>
         <ThemeContext.Extend value={customTabStyles}>
           <Tabs
             activeIndex={sidePanel}

@@ -1,6 +1,7 @@
 import { Box, BoxProps } from 'grommet';
 import ReactMarkdown from 'react-markdown';
 import styled, { css } from 'styled-components';
+import { gamePageBottomNavbarHeight, gamePageTopNavbarHeight } from '../config/constants';
 import { accentColors } from '../config/grommetConfig';
 
 export const Footer = styled(Box as React.FC<BoxProps & JSX.IntrinsicElements['div']>)`
@@ -13,11 +14,10 @@ interface MainContainerProps {
   readonly shinkWidth: number; // 0-100, for vw
 }
 
-//height: calc(100vh - 102px);
 export const MainContainer = styled(Box as React.FC<MainContainerProps & BoxProps & JSX.IntrinsicElements['div']>)(
   ({ sidePanel, maxPanels, shinkWidth }) => {
     return css`
-      height: 86vh;
+      height: calc(100vh - ${gamePageBottomNavbarHeight + gamePageTopNavbarHeight}px);
       width: 100vw;
       transition: width 200ms ease-in-out, transform 200ms ease-in-out;
       ${sidePanel < maxPanels &&
@@ -40,7 +40,7 @@ export const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.
       border-right: 1px solid ${accentColors[0]};
       background: transparent;
       position: absolute;
-      height: 86vh;
+      height: calc(100vh - ${gamePageBottomNavbarHeight + gamePageTopNavbarHeight}px);
       width: ${growWidth}vw;
     `;
   }
@@ -53,7 +53,7 @@ interface LeftMainProps {
 export const LeftMainContainer = styled(Box as React.FC<LeftMainProps & BoxProps & JSX.IntrinsicElements['div']>)(
   ({ rightPanel }) => {
     return css`
-      height: 86vh;
+      height: calc(100vh - ${gamePageBottomNavbarHeight + gamePageTopNavbarHeight}px);
       width: 100%;
       transition: width 200ms ease-in-out;
       ${rightPanel !== 2 &&
@@ -72,7 +72,7 @@ export const RightMainContainer = styled(Box as React.FC<RightMainProps & BoxPro
     return css`
       border-left: 1px solid ${accentColors[0]};
       position: absolute;
-      height: 86vh;
+      height: calc(100vh - ${gamePageBottomNavbarHeight + gamePageTopNavbarHeight}px);
       opacity: 0;
       transform: translateX(200%);
       transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;

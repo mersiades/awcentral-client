@@ -1,10 +1,19 @@
-import { HxInput, ItemCharacteristic, KeycloakUser, KeycloakUserInfo, TaggedItem, VehicleInput } from '../@types';
+import {
+  FollowersInput,
+  HxInput,
+  ItemCharacteristic,
+  KeycloakUser,
+  KeycloakUserInfo,
+  TaggedItem,
+  VehicleInput,
+} from '../@types';
 import {
   AngelKit,
   BrainerGear,
   CharacterHarm,
   CharacterStat,
   CustomWeapons,
+  Followers,
   Game,
   GameRole,
   Gang,
@@ -37,6 +46,7 @@ import {
   CarCreator,
   CharacterMove,
   CustomWeaponsCreator,
+  FollowersOption,
   GangCreator,
   GangOption,
   GearInstructions,
@@ -271,6 +281,31 @@ export const dummyAngelKit: AngelKit = {
   hasSupplier: false,
   supplierText: 'dummy',
   angelKitMoves: [dummyAngelKitMove],
+};
+
+export const dummyFollowersOption: FollowersOption = {
+  id: 'dummy',
+  description: 'dummy',
+  newNumberOfFollowers: 0,
+  surplusBarterChange: 0,
+  fortuneChange: 0,
+  surplusChange: 'dummy',
+  wantChange: ['dummy'],
+};
+
+export const dummyFollowers: Followers = {
+  id: 'dummy',
+  description: 'dummy',
+  travelOption: 'dummy',
+  characterization: 'dummy',
+  followers: 0,
+  fortune: 0,
+  barter: 0,
+  surplusBarter: 0,
+  surplus: ['dummy'],
+  wants: ['dummy'],
+  selectedStrengths: [dummyFollowersOption],
+  selectedWeaknesses: [dummyFollowersOption],
 };
 
 export const dummyVehicleFrame: VehicleFrame = {
@@ -602,6 +637,7 @@ export const mockPlaybookUniqueBattlebabe: PlaybookUnique = {
   gang: dummyGang,
   weapons: dummyWeapons,
   holding: dummyHolding,
+  followers: dummyFollowers,
 };
 
 export const mockAngelKit: AngelKit = {
@@ -622,6 +658,7 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   gang: dummyGang,
   weapons: dummyWeapons,
   holding: dummyHolding,
+  followers: dummyFollowers,
 };
 
 export const mockCharacterHarm: CharacterHarm = {

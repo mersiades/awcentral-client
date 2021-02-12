@@ -86,6 +86,7 @@ export enum MoveActionType {
   adjustHx = 'ADJUST_HX',
   stock = 'STOCK',
   gunlugger = 'GUNLUGGER_SPECIAL',
+  hocus = 'HOCUS_SPECIAL',
 }
 
 export enum RollType {
@@ -96,6 +97,7 @@ export enum RollType {
   speed = 'SPEED',
   handling = 'HANDLING',
   stock = 'STOCK',
+  fortune = 'FORTUNE',
 }
 
 export enum MessageType {

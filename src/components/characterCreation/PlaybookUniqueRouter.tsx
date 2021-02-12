@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom';
 import GangForm from './uniques/GangForm';
 import WeaponsForm from './uniques/WeaponsForm';
 import HoldingForm from './uniques/HoldingForm';
+import FollowersForm from './uniques/FollowersForm';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -46,6 +47,8 @@ const PlaybookUniqueRouter: FC = () => {
         return <WeaponsForm />;
       case PlaybookType.hardholder:
         return <HoldingForm />;
+      case PlaybookType.hocus:
+        return <FollowersForm />;
       default:
         return null;
     }

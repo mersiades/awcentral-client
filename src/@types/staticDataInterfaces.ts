@@ -145,6 +145,7 @@ export interface PlaybookUniqueCreator {
   gangCreator?: GangCreator;
   weaponsCreator?: WeaponsCreator;
   holdingCreator?: HoldingCreator;
+  followersCreator?: FollowersCreator;
 }
 
 export interface WeaponsCreator {
@@ -215,6 +216,21 @@ export interface HoldingCreator {
   weaknessOptions: HoldingOption[];
 }
 
+export interface FollowersCreator {
+  id: string;
+  instructions: string;
+  defaultNumberOfFollowers: number;
+  defaultSurplusBarter: number;
+  defaultFortune: number;
+  strengthCount: number;
+  weaknessCount: number;
+  travelOptions: string[];
+  characterizationOptions: string[];
+  defaultWants: string[];
+  strengthOptions: FollowersOption[];
+  weaknessOptions: FollowersOption[];
+}
+
 export interface VehicleCreator {
   id: string;
   carCreator: CarCreator;
@@ -249,6 +265,22 @@ export interface VehicleFrame {
   massive: number;
   examples: string;
   battleOptionCount: number;
+}
+
+export interface FollowersOption {
+  id: string;
+  description: string;
+
+  //  -1 represents null
+  newNumberOfFollowers: number;
+
+  // Ranges from -1 to 1, with -2 representing null
+  surplusBarterChange: number;
+
+  // Ranges from 0 to 1, with -1 representing null
+  fortuneChange: number;
+  surplusChange?: string;
+  wantChange?: string[];
 }
 
 export interface HoldingOption {

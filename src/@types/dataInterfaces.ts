@@ -12,6 +12,7 @@ import {
 } from './enums';
 import {
   CharacterMove,
+  FollowersOption,
   GangOption,
   HoldingOption,
   Look,
@@ -117,6 +118,7 @@ export interface PlaybookUnique {
   gang?: Gang;
   weapons?: Weapons;
   holding?: Holding;
+  followers?: Followers;
 }
 
 export interface BrainerGear {
@@ -158,6 +160,21 @@ export interface Holding {
   gangTags: string[];
   selectedStrengths: HoldingOption[];
   selectedWeaknesses: HoldingOption[];
+}
+
+export interface Followers {
+  id: string;
+  description: string;
+  travelOption: string;
+  characterization: string;
+  followers: number;
+  fortune: number;
+  barter: number;
+  surplusBarter: number;
+  surplus: string[];
+  wants: string[];
+  selectedStrengths: FollowersOption[];
+  selectedWeaknesses: FollowersOption[];
 }
 
 export interface Gang {
