@@ -241,6 +241,36 @@ const GAME = gql`
                 newArmorBonus
               }
             }
+            followers {
+              id
+              description
+              travelOption
+              characterization
+              followers
+              fortune
+              barter
+              surplusBarter
+              surplus
+              wants
+              selectedStrengths {
+                id
+                description
+                newNumberOfFollowers
+                surplusBarterChange
+                fortuneChange
+                surplusChange
+                wantChange
+              }
+              selectedWeaknesses {
+                id
+                description
+                newNumberOfFollowers
+                surplusBarterChange
+                fortuneChange
+                surplusChange
+                wantChange
+              }
+            }
           }
         }
       }

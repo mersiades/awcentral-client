@@ -10,8 +10,8 @@ import RedTagsBox from '../../RedTagsBox';
 import { StyledMarkdown } from '../../styledComponents';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import SET_HOLDING, { SetHoldingData, SetHoldingVars } from '../../../mutations/setHolding';
-import { PlaybookType } from '../../../@types/enums';
+import SET_FOLLOWERS, { SetFollowersData, SetFollowersVars } from '../../../mutations/setFollowers';
+import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
 import { FollowersInput } from '../../../@types';
 import { FollowersOption } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
@@ -95,13 +95,13 @@ const getDescription = (characterization?: string, followers?: number, travelOpt
   } else if (!characterization && followers && !travelOption) {
     return `You have about ${followers} followers.`;
   } else if (!characterization && followers && travelOption) {
-    return `You have about ${followers} followers, who ${travelOption} when you travel.`;
+    return `You have about ${followers} followers. When you travel, they ${travelOption}.`;
   } else if (!characterization && !followers && travelOption) {
-    return `Your followers ${travelOption} when you travel.`;
+    return `When you travel, your followers ${travelOption}.`;
   } else if (characterization && followers && travelOption) {
     return `${capitalize(characterization)} ${
       characterization === 'your students' ? 'are' : 'is'
-    } about ${followers} followers, who ${travelOption} when you travel.`;
+    } about ${followers} followers. When you travel, they ${travelOption}.`;
   }
 };
 
@@ -150,43 +150,41 @@ const FollowersForm: FC = () => {
   });
 
   const followersCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator?.followersCreator;
-  const [setHolding, { loading: settingHolding }] = useMutation<SetHoldingData, SetHoldingVars>(SET_HOLDING);
+  const [setFollowers, { loading: settingFollowers }] = useMutation<SetFollowersData, SetFollowersVars>(SET_FOLLOWERS);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
-  const handleSubmitHolding = async () => {
-    // if (!!userGameRole && !!character && !!game) {
-    //   // @ts-ignore
-    //   const strengthsNoTypename = selectedStrengths.map((str: GangOption) => omit(str, ['__typename']));
-    //   // @ts-ignore
-    //   const weaknessesNoTypename = selectedWeaknesses.map((wk: GangOption) => omit(wk, ['__typename']));
-    //   const holdingInput: HoldingInput = {
-    //     id: character?.playbookUnique?.holding ? character.playbookUnique.holding.id : undefined,
-    //     selectedStrengths: strengthsNoTypename,
-    //     selectedWeaknesses: weaknessesNoTypename,
-    //     holdingSize,
-    //     gangSize,
-    //     surplus,
-    //     gangHarm,
-    //     gangArmor,
-    //     gangDefenseArmorBonus,
-    //     wants,
-    //     gigs,
-    //     gangTags,
-    //     souls: getSouls(holdingSize),
-    //     barter: 0,
-    //   };
-    //   try {
-    //     await setHolding({
-    //       variables: { gameRoleId: userGameRole.id, characterId: character.id, holding: holdingInput, vehicleCount },
-    //     });
-    //     if (!character.hasCompletedCharacterCreation) {
-    //       history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
-    //       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
+  const handleSubmitFollowers = async () => {
+    if (!!userGameRole && !!character && !!game) {
+      // @ts-ignore
+      const strengthsNoTypename = selectedStrengths.map((str: FollowersOption) => omit(str, ['__typename']));
+      // @ts-ignore
+      const weaknessesNoTypename = selectedWeaknesses.map((wk: FollowersOption) => omit(wk, ['__typename']));
+      const followersInput: FollowersInput = {
+        id: character?.playbookUnique?.followers ? character.playbookUnique.followers.id : undefined,
+        selectedStrengths: strengthsNoTypename,
+        selectedWeaknesses: weaknessesNoTypename,
+        description,
+        travelOption,
+        characterization,
+        followers,
+        fortune,
+        barter,
+        surplusBarter,
+        surplus,
+        wants,
+      };
+      try {
+        await setFollowers({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, followers: followersInput },
+        });
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
   const handleCharacterizationSelect = (option: string) => {
@@ -394,10 +392,10 @@ const FollowersForm: FC = () => {
           <ButtonWS
             primary
             fill="horizontal"
-            label={settingHolding ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
-            onClick={() => !settingHolding && handleSubmitHolding()}
+            label={settingFollowers ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+            onClick={() => !settingFollowers && handleSubmitFollowers()}
             disabled={
-              settingHolding ||
+              settingFollowers ||
               (!!followersCreator && selectedStrengths.length < followersCreator.strengthCount) ||
               (!!followersCreator && selectedWeaknesses.length < followersCreator.weaknessCount)
             }

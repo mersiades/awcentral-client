@@ -301,6 +301,15 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
+        case UniqueTypes.followers:
+          if (!!character.playbookUnique.followers) {
+            return (
+              <CustomUL>
+                <li>{character.playbookUnique.followers.description}</li>
+              </CustomUL>
+            );
+          }
+          return null;
         default:
           return null;
       }

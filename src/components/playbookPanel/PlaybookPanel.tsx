@@ -20,6 +20,7 @@ import { HarmInput } from '../../@types';
 import { Character } from '../../@types/dataInterfaces';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
+import FollowersBox from './FollowersBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -111,6 +112,7 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
         <GangBox navigateToCharacterCreation={navigateToCharacterCreation} openDialog={openDialog} />
       )}
       {!!character.playbookUnique?.holding && <HoldingBox navigateToCharacterCreation={navigateToCharacterCreation} />}
+      {!!character.playbookUnique?.followers && <FollowersBox navigateToCharacterCreation={navigateToCharacterCreation} />}
       {!!character.playbookUnique?.weapons && (
         <UniqueItemsBox
           title="Weapons"

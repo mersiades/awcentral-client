@@ -94,7 +94,6 @@ const CharacterMovesForm: FC = () => {
                     checked
                     label={
                       <div>
-                        <Text weight="bold">{move.name}</Text>
                         <StyledMarkdown>{move.description}</StyledMarkdown>
                       </div>
                     }
@@ -105,6 +104,7 @@ const CharacterMovesForm: FC = () => {
                     style={{ minHeight: '52px' }}
                     disabled={selectedMoveIds.length !== moveChoiceCount}
                     onClick={() => !settingMoves && handleSubmitCharacterMoves([...selectedMoveIds, ...defaultMoveIds])}
+                    margin={{ left: '12px', bottom: '12px' }}
                   />
                 </Box>
               );
@@ -115,7 +115,6 @@ const CharacterMovesForm: FC = () => {
                   checked
                   label={
                     <div>
-                      <Text weight="bold">{move.name}</Text>
                       <StyledMarkdown>{move.description}</StyledMarkdown>
                     </div>
                   }
@@ -134,7 +133,6 @@ const CharacterMovesForm: FC = () => {
                   key={move.id}
                   label={
                     <div>
-                      <Text weight="bold">{move.name}</Text>
                       <StyledMarkdown>{move.description}</StyledMarkdown>
                     </div>
                   }
