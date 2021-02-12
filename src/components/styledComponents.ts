@@ -14,11 +14,10 @@ interface MainContainerProps {
   readonly shinkWidth: number; // 0-100, for vw
 }
 
-//height: calc(100vh - 102px);
 export const MainContainer = styled(Box as React.FC<MainContainerProps & BoxProps & JSX.IntrinsicElements['div']>)(
   ({ sidePanel, maxPanels, shinkWidth }) => {
     return css`
-      height: calc(100vh - 100px);
+      height: calc(100vh - ${gamePageBottomNavbarHeight + gamePageTopNavbarHeight}px);
       width: 100vw;
       transition: width 200ms ease-in-out, transform 200ms ease-in-out;
       ${sidePanel < maxPanels &&

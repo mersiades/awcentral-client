@@ -16,8 +16,12 @@ import { useGame } from '../../contexts/gameContext';
 import { useFonts } from '../../contexts/fontContext';
 import { brandColor, HeadingWS } from '../../config/grommetConfig';
 import { decapitalize } from '../../helpers/decapitalize';
-import { WEALTH_NAME } from '../../config/constants';
+import { FORTUNES_NAME, WEALTH_NAME } from '../../config/constants';
 import PERFORM_WEALTH_MOVE, { PerformWealthMoveData, PerformWealthMoveVars } from '../../mutations/performWealthMove';
+import PERFORM_FORTUNES_MOVE, {
+  PerformFortunesMoveData,
+  PerformFortunesMoveVars,
+} from '../../mutations/performFortunesMove';
 
 interface MovesBoxProps {
   moves: Array<CharacterMove | Move>;
@@ -47,6 +51,11 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
   const [performWealthMove, { loading: performingWealthMove }] = useMutation<PerformWealthMoveData, PerformWealthMoveVars>(
     PERFORM_WEALTH_MOVE
   );
+
+  const [performFortunesMove, { loading: performingFortunesMove }] = useMutation<
+    PerformFortunesMoveData,
+    PerformFortunesMoveVars
+  >(PERFORM_FORTUNES_MOVE);
 
   const [performStatRollMove, { loading: performingStatRollMove }] = useMutation<
     PerformStatRollMoveData,
@@ -128,8 +137,25 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
     }
   };
 
+  const handleFortuneRollMove = () => {
+    if (!!userGameRole && userGameRole.characters.length === 1) {
+      if (!performingFortunesMove) {
+        try {
+          performFortunesMove({
+            variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole.characters[0].id },
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
+  };
+
   const handleRollClick = (move: Move | CharacterMove) => {
     switch (move.moveAction?.rollType) {
+      case RollType.fortune:
+        handleFortuneRollMove();
+        break;
       case RollType.stat:
         handleStatRollMove(move);
         break;

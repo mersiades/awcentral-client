@@ -29,20 +29,24 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
               +
             </HeadingWS>
             {getDiceImage(message.roll2)}
-            <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">
-              +
-            </HeadingWS>
-            <Box align="center" justify="between" pad="12px">
-              <HeadingWS
-                crustReady={crustReady}
-                level={2}
-                color="brand"
-                margin={{ top: '32px', bottom: '0px', horizontal: '3px' }}
-              >
-                {message.rollModifier}
-              </HeadingWS>
-              <TextWS>{message.modifierStatName}</TextWS>
-            </Box>
+            {!!message.modifierStatName && (
+              <>
+                <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">
+                  +
+                </HeadingWS>
+                <Box align="center" justify="between" pad="12px">
+                  <HeadingWS
+                    crustReady={crustReady}
+                    level={2}
+                    color="brand"
+                    margin={{ top: '32px', bottom: '0px', horizontal: '3px' }}
+                  >
+                    {message.rollModifier}
+                  </HeadingWS>
+                  <TextWS>{message.modifierStatName}</TextWS>
+                </Box>
+              </>
+            )}
             {message.additionalModifierName && (
               <>
                 <HeadingWS crustReady={crustReady} level={2} color="brand" margin="3px">
