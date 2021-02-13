@@ -125,7 +125,7 @@ export interface FollowersInput {
 }
 
 export interface SkinnerGearInput {
-  id: string;
+  id?: string;
   graciousWeapon: SkinnerGearItem;
   luxeGear: SkinnerGearItem[];
 }

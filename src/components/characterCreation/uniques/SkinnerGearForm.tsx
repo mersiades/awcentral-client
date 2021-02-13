@@ -1,17 +1,18 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, CheckBox, Text } from 'grommet';
+import { omit } from 'lodash';
+import { useMutation, useQuery } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
+import { Box, CheckBox } from 'grommet';
 
 import Spinner from '../../Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../../../config/grommetConfig';
-import { StyledMarkdown } from '../../styledComponents';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
+import SET_SKINNER_GEAR, { SetSkinnerGearData, SetSkinnerGearVars } from '../../../mutations/setSkinnerGear';
+import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../../@types/enums';
+import { SkinnerGearInput } from '../../../@types';
+import { SkinnerGearItem } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
-import { useMutation, useQuery } from '@apollo/client';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../../../mutations/setBrainerGear';
-import { useHistory } from 'react-router-dom';
-import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
-import { SkinnerGearItem } from '../../../@types/staticDataInterfaces';
 
 const SkinnerGearForm: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
@@ -31,8 +32,8 @@ const SkinnerGearForm: FC = () => {
   });
   const gearCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator?.skinnerGearCreator;
 
-  const [setBrainerGear, { loading: settingBrainerGear }] = useMutation<SetBrainerGearData, SetBrainerGearVars>(
-    SET_BRAINER_GEAR
+  const [setSkinnerGear, { loading: settingSkinnerGear }] = useMutation<SetSkinnerGearData, SetSkinnerGearVars>(
+    SET_SKINNER_GEAR
   );
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
@@ -46,20 +47,39 @@ const SkinnerGearForm: FC = () => {
     }
   };
 
-  // const handleSubmitBrainerGear = async (brainerGear: string[]) => {
-  //   if (!!userGameRole && !!character && !!game) {
-  //     try {
-  //       await setBrainerGear({
-  //         variables: { gameRoleId: userGameRole.id, characterId: character.id, brainerGear },
-  //         // refetchQueries: [{ query: GAME, variables: { gameId } }],
-  //       });
-  //       history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
-  //       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // };
+  const handleSubmitSkinnerGear = async () => {
+    if (!!userGameRole && !!character && !!game && !!selectedWeapon && selectedGear.length === 2) {
+      const skinnerGear: SkinnerGearInput = {
+        id: character.playbookUnique?.skinnerGear ? character.playbookUnique.skinnerGear.id : undefined,
+        graciousWeapon: omit(selectedWeapon, ['__typename']) as SkinnerGearItem,
+        luxeGear: selectedGear.map((item) => omit(item, ['__typename']) as SkinnerGearItem),
+      };
+      try {
+        await setSkinnerGear({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, skinnerGear },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setSkinnerGear: {
+              __typename: 'Character',
+              ...character,
+              playbookUnique: {
+                id: character.playbookUnique ? character.playbookUnique.id : 'temporary-id',
+                type: character.playbookUnique ? character.playbookUnique.type : UniqueTypes.skinnerGear,
+                skinnerGear: {
+                  ...skinnerGear,
+                  id: character.playbookUnique?.skinnerGear ? character.playbookUnique.skinnerGear.id : 'temporary-id',
+                },
+              },
+            },
+          },
+        });
+        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
   // ------------------------------------------------------ Effects -------------------------------------------------------- //
 
   // Load the Character's existing SkinnerGear into component state
@@ -76,8 +96,8 @@ const SkinnerGearForm: FC = () => {
       <HeadingWS crustReady={crustReady} level={2}>
         {!!character && !!character.name ? `WHAT SPECIAL SKINNER GEAR DOES ${character.name.toUpperCase()} HAVE?` : '...'}
       </HeadingWS>
-      <Box border direction="row">
-        <Box border direction="column" fill="horizontal" pad="12px">
+      <Box direction="row">
+        <Box direction="column" fill="horizontal" pad="12px">
           <ParagraphWS size="large" margin={{ bottom: '6px' }}>
             Gracious weapons (choose {gearCreator?.graciousWeaponCount})
           </ParagraphWS>
@@ -103,7 +123,7 @@ const SkinnerGearForm: FC = () => {
           </ParagraphWS>
           <Box align="start" gap="12px">
             {!!gearCreator &&
-              gearCreator.luxeGearChoices.map((item, index) => {
+              gearCreator.luxeGearChoices.map((item) => {
                 return (
                   <CheckBox
                     key={item.id}
@@ -120,19 +140,19 @@ const SkinnerGearForm: FC = () => {
                         )}
                       </div>
                     }
-                    checked={selectedGear.includes(item)}
+                    checked={selectedGear.map((gear) => gear.id).includes(item.id)}
                     onChange={() => handleSelectGear(item)}
                   />
                 );
               })}
           </Box>
         </Box>
-        <Box border margin="12px" flex="grow">
+        <Box margin="12px" flex="grow">
           <ButtonWS
-            label={settingBrainerGear ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+            label={settingSkinnerGear ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
             primary
             disabled={selectedGear.length !== 2 || !selectedWeapon}
-            // onClick={() => !settingBrainerGear && handleSubmitBrainerGear(selectedGear)}
+            onClick={() => !settingSkinnerGear && handleSubmitSkinnerGear()}
           />
         </Box>
       </Box>
