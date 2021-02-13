@@ -21,6 +21,7 @@ import { Character } from '../../@types/dataInterfaces';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
 import FollowersBox from './FollowersBox';
+import SkinnerGearBox from './SkinnerGearBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -113,6 +114,9 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
       )}
       {!!character.playbookUnique?.holding && <HoldingBox navigateToCharacterCreation={navigateToCharacterCreation} />}
       {!!character.playbookUnique?.followers && <FollowersBox navigateToCharacterCreation={navigateToCharacterCreation} />}
+      {!!character.playbookUnique?.skinnerGear && (
+        <SkinnerGearBox navigateToCharacterCreation={navigateToCharacterCreation} />
+      )}
       {!!character.playbookUnique?.weapons && (
         <UniqueItemsBox
           title="Weapons"

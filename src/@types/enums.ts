@@ -87,6 +87,7 @@ export enum MoveActionType {
   stock = 'STOCK',
   gunlugger = 'GUNLUGGER_SPECIAL',
   hocus = 'HOCUS_SPECIAL',
+  skinner = 'SKINNER_SPECIAL',
 }
 
 export enum RollType {

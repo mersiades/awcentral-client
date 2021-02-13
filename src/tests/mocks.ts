@@ -20,6 +20,7 @@ import {
   Holding,
   HxStat,
   PlaybookUnique,
+  SkinnerGear,
   StatsBlock,
   Vehicle,
   Weapons,
@@ -61,6 +62,8 @@ import {
   PlaybookUniqueCreator,
   PlusOneForwardConditions,
   RollModifier,
+  SkinnerGearCreator,
+  SkinnerGearItem,
   StatModifier,
   StatsOption,
   VehicleBattleOption,
@@ -260,6 +263,26 @@ export const dummyWeapons: Weapons = {
 export const dummyBrainerGear: BrainerGear = {
   id: 'dummy',
   brainerGear: ['dummy'],
+};
+
+export const dummySkinnerGearItem: SkinnerGearItem = {
+  id: 'dummy',
+  item: 'dummy',
+  note: 'dummy',
+};
+
+export const dummySkinnerGearCreator: SkinnerGearCreator = {
+  id: 'dummy',
+  graciousWeaponCount: 0,
+  luxeGearCount: 0,
+  graciousWeaponChoices: [dummySkinnerGearItem],
+  luxeGearChoices: [dummySkinnerGearItem],
+};
+
+export const dummySkinnerGear: SkinnerGear = {
+  id: 'dummy',
+  graciousWeapon: dummySkinnerGearItem,
+  luxeGear: [dummySkinnerGearItem],
 };
 
 export const dummyAngelKitMove: Move = {
@@ -638,6 +661,7 @@ export const mockPlaybookUniqueBattlebabe: PlaybookUnique = {
   weapons: dummyWeapons,
   holding: dummyHolding,
   followers: dummyFollowers,
+  skinnerGear: dummySkinnerGear,
 };
 
 export const mockAngelKit: AngelKit = {
@@ -659,6 +683,7 @@ export const mockPlaybookUniqueAngel: PlaybookUnique = {
   weapons: dummyWeapons,
   holding: dummyHolding,
   followers: dummyFollowers,
+  skinnerGear: dummySkinnerGear,
 };
 
 export const mockCharacterHarm: CharacterHarm = {

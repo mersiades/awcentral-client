@@ -310,6 +310,19 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
+        case UniqueTypes.skinnerGear:
+          if (!!character.playbookUnique.skinnerGear) {
+            const splitItem = (item: string) => item.substring(0, item.indexOf(' ('));
+            return (
+              <CustomUL>
+                <li>{splitItem(character.playbookUnique.skinnerGear.graciousWeapon.item)}</li>
+                {character.playbookUnique.skinnerGear.luxeGear.map((item) => (
+                  <li key={item.id}>{splitItem(item.item)}</li>
+                ))}
+              </CustomUL>
+            );
+          }
+          return null;
         default:
           return null;
       }

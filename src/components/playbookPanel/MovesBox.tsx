@@ -183,6 +183,8 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
       // Deliberately falls through
       case MoveActionType.gunlugger:
       // Deliberately falls through
+      case MoveActionType.skinner:
+      // Deliberately falls through
       case MoveActionType.adjustHx:
       // Deliberately falls through
       case MoveActionType.barter:

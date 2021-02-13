@@ -199,6 +199,19 @@ const GAME = gql`
               }
               tags
             }
+            skinnerGear {
+              id
+              graciousWeapon {
+                id
+                item
+                note
+              }
+              luxeGear {
+                id
+                item
+                note
+              }
+            }
             holding {
               id
               holdingSize

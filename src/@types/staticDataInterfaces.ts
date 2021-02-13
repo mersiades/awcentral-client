@@ -146,6 +146,7 @@ export interface PlaybookUniqueCreator {
   weaponsCreator?: WeaponsCreator;
   holdingCreator?: HoldingCreator;
   followersCreator?: FollowersCreator;
+  skinnerGearCreator?: SkinnerGearCreator;
 }
 
 export interface WeaponsCreator {
@@ -229,6 +230,20 @@ export interface FollowersCreator {
   defaultWants: string[];
   strengthOptions: FollowersOption[];
   weaknessOptions: FollowersOption[];
+}
+
+export interface SkinnerGearItem {
+  id: string;
+  item: string;
+  note?: string;
+}
+
+export interface SkinnerGearCreator {
+  id: string;
+  graciousWeaponCount: number;
+  luxeGearCount: number;
+  graciousWeaponChoices: SkinnerGearItem[];
+  luxeGearChoices: SkinnerGearItem[];
 }
 
 export interface VehicleCreator {

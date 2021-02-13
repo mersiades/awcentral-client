@@ -12,6 +12,7 @@ import GangForm from './uniques/GangForm';
 import WeaponsForm from './uniques/WeaponsForm';
 import HoldingForm from './uniques/HoldingForm';
 import FollowersForm from './uniques/FollowersForm';
+import SkinnerGearForm from './uniques/SkinnerGearForm';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -49,6 +50,8 @@ const PlaybookUniqueRouter: FC = () => {
         return <HoldingForm />;
       case PlaybookType.hocus:
         return <FollowersForm />;
+      case PlaybookType.skinner:
+        return <SkinnerGearForm />;
       default:
         return null;
     }

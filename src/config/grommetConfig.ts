@@ -771,3 +771,8 @@ export const hocusSpecialDialogBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-28.jpg)',
 };
+
+export const skinnerSpecialDialogBackground = {
+  ...backgroundBase,
+  image: 'url(/images/background-image-29.jpg)',
+};
