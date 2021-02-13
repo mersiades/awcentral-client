@@ -2,11 +2,11 @@ import React, { FC, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 import { useHistory } from 'react-router-dom';
-import styled from 'styled-components';
-import { Box, CheckBox, Text } from 'grommet';
+import styled, { css } from 'styled-components';
+import { Box, CheckBox, CheckBoxProps, Text } from 'grommet';
 
 import Spinner from '../Spinner';
-import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../../mutations/setCharacterMoves';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { CharacterCreationSteps } from '../../@types/enums';
@@ -81,47 +81,28 @@ const CharacterMovesForm: FC = () => {
       justify="start"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box width="70vw" flex="grow" margin={{ bottom: '48px' }}>
+      <Box width="70vw" flex="grow" margin={{ bottom: '48px' }} gap="12px">
         <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT ARE ${
           !!character?.name ? character.name.toUpperCase() : '...'
         }'S MOVES?`}</HeadingWS>
+        <Box direction="row" align="center" justify="between">
+          <StyledMarkdown>{pbCreatorData?.playbookCreator.movesInstructions}</StyledMarkdown>
+          <ButtonWS
+            primary
+            label={settingMoves ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+            style={{ minHeight: '52px' }}
+            disabled={selectedMoveIds.length !== moveChoiceCount}
+            onClick={() => !settingMoves && handleSubmitCharacterMoves([...selectedMoveIds, ...defaultMoveIds])}
+            margin={{ left: '12px', bottom: '12px' }}
+          />
+        </Box>
+        <Text size="large" weight="bold" margin={{ vertical: '12px' }}>
+          Default moves
+        </Text>
         {!!defaultMoves &&
-          defaultMoves.map((move, index) => {
-            if (index === 0) {
-              return (
-                <Box key={move.id} direction="row" align="center" justify="between">
-                  <CheckBox
-                    checked
-                    label={
-                      <div>
-                        <StyledMarkdown>{move.description}</StyledMarkdown>
-                      </div>
-                    }
-                  />
-                  <ButtonWS
-                    primary
-                    label={settingMoves ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-                    style={{ minHeight: '52px' }}
-                    disabled={selectedMoveIds.length !== moveChoiceCount}
-                    onClick={() => !settingMoves && handleSubmitCharacterMoves([...selectedMoveIds, ...defaultMoveIds])}
-                    margin={{ left: '12px', bottom: '12px' }}
-                  />
-                </Box>
-              );
-            } else {
-              return (
-                <CheckBox
-                  key={move.id}
-                  checked
-                  label={
-                    <div>
-                      <StyledMarkdown>{move.description}</StyledMarkdown>
-                    </div>
-                  }
-                />
-              );
-            }
-          })}
+          defaultMoves.map((move, index) => (
+            <CheckBox key={move.id} checked label={<StyledMarkdown>{move.description}</StyledMarkdown>} />
+          ))}
         <Text size="large" weight="bold" margin={{ vertical: '12px' }}>
           Select {moveChoiceCount}
         </Text>
