@@ -195,6 +195,21 @@ const PLAYBOOK_CREATOR = gql`
             wantChange
           }
         }
+        skinnerGearCreator {
+          id
+          graciousWeaponCount
+          luxeGearCount
+          graciousWeaponChoices {
+            id
+            item
+            note
+          }
+          luxeGearChoices {
+            id
+            item
+            note
+          }
+        }
         holdingCreator {
           id
           defaultHoldingSize

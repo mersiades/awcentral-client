@@ -17,6 +17,7 @@ import {
   HoldingOption,
   Look,
   Move,
+  SkinnerGearItem,
   VehicleBattleOption,
   VehicleFrame,
 } from './staticDataInterfaces';
@@ -119,6 +120,7 @@ export interface PlaybookUnique {
   weapons?: Weapons;
   holding?: Holding;
   followers?: Followers;
+  skinnerGear?: SkinnerGear;
 }
 
 export interface BrainerGear {
@@ -175,6 +177,12 @@ export interface Followers {
   wants: string[];
   selectedStrengths: FollowersOption[];
   selectedWeaknesses: FollowersOption[];
+}
+
+export interface SkinnerGear {
+  id: string;
+  graciousWeapon: SkinnerGearItem;
+  luxeGear: SkinnerGearItem[];
 }
 
 export interface Gang {

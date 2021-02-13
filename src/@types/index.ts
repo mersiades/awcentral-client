@@ -1,5 +1,12 @@
 import { GangSize, HoldingSize, ThreatType, VehicleType } from './enums';
-import { VehicleFrame, VehicleBattleOption, GangOption, HoldingOption, FollowersOption } from './staticDataInterfaces';
+import {
+  VehicleFrame,
+  VehicleBattleOption,
+  GangOption,
+  HoldingOption,
+  FollowersOption,
+  SkinnerGearItem,
+} from './staticDataInterfaces';
 
 export interface KeycloakUser {
   id?: string;
@@ -115,4 +122,10 @@ export interface FollowersInput {
   wants: string[];
   selectedStrengths: FollowersOption[];
   selectedWeaknesses: FollowersOption[];
+}
+
+export interface SkinnerGearInput {
+  id: string;
+  graciousWeapon: SkinnerGearItem;
+  luxeGear: SkinnerGearItem[];
 }
