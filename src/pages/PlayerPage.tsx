@@ -46,6 +46,7 @@ import {
   OUTDISTANCE_VEHICLE_NAME,
   OVERTAKE_VEHICLE_NAME,
   REVIVE_SOMEONE_NAME,
+  SKINNER_SPECIAL_NAME,
   SPEED_RECOVERY_NAME,
   STABILIZE_AND_HEAL_NAME,
   TREAT_NPC_NAME,
@@ -58,6 +59,7 @@ import BoardVehicleDialog from '../components/dialogs/BoardVehicleDialog';
 import DealTerrainDialog from '../components/dialogs/DealTerrainDialog';
 import Holds from '../components/Holds';
 import HocusSpecialDialog from '../components/dialogs/HocusSpecialDialog';
+import SkinnerSpecialDialog from '../components/dialogs/SkinnerSpecialDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -232,6 +234,9 @@ const PlayerPage: FC = () => {
       )}
       {dialog?.name === GUNLUGGER_SPECIAL_NAME && (
         <GunluggerSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog?.name === SKINNER_SPECIAL_NAME && (
+        <SkinnerSpecialDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
       {dialog?.name === BOARD_VEHICLE_NAME && <BoardVehicleDialog move={dialog} handleClose={() => setDialog(undefined)} />}
       {dialog?.name === DEAL_WITH_TERRAIN_NAME && (
