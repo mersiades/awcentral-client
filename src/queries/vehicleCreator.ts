@@ -51,6 +51,39 @@ const VEHICLE_CREATOR = gql`
           name
         }
       }
+      battleVehicleCreator {
+        id
+        vehicleType
+        introInstructions
+        frames {
+          id
+          frameType
+          massive
+          examples
+          battleOptionCount
+        }
+        strengths
+        looks
+        weaknesses
+        battleOptions {
+          id
+          battleOptionType
+          name
+        }
+        bikeStrengths
+        bikeLooks
+        bikeWeaknesses
+        bikeBattleOptions {
+          id
+          battleOptionType
+          name
+        }
+        battleVehicleOptions {
+          id
+          battleOptionType
+          name
+        }
+      }
     }
   }
 `;

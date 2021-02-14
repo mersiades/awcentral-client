@@ -196,7 +196,6 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
   const carCreator = vehicleCreatorData?.vehicleCreator.carCreator;
   const bikeCreator = vehicleCreatorData?.vehicleCreator.bikeCreator;
   const [setVehicle, { loading: settingVehicle }] = useMutation<SetVehicleData, SetVehicleVars>(SET_VEHICLE);
-
   // ------------------------------------------------- Component functions -------------------------------------------------- //
 
   const introText =
@@ -510,7 +509,6 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
             <SingleRedBox value={armor} label="Armor" width="80px" />
             <SingleRedBox value={massive} label="Massive" width="80px" />
           </Box>
-          {/* <Box fill="horizontal" direction="row" wrap align="center" justify="center"> */}
           {strengths.concat(looks).concat(weaknesses).length > 0 && (
             <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="132px" />
           )}
@@ -523,7 +521,6 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
             onClick={() => !settingVehicle && handleSetVehicle()}
             disabled={settingVehicle || battleOptions.length < frame.battleOptionCount}
           />
-          {/* </Box> */}
         </Box>
       </Box>
     </Box>

@@ -125,12 +125,13 @@ export enum BattleOptionType {
   handling = 'HANDLING',
   massive = 'MASSIVE',
   armor = 'ARMOR',
+  weapon = 'WEAPON',
 }
 
 export enum VehicleType {
   bike = 'BIKE',
   car = 'CAR',
-  combat = 'COMBAT',
+  battle = 'BATTLE',
 }
 
 export enum GangSize {

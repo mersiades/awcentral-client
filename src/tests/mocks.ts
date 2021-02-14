@@ -42,6 +42,7 @@ import {
 } from '../@types/enums';
 import {
   AngelKitCreator,
+  BattleVehicleCreator,
   BikeCreator,
   BrainerGearCreator,
   CarCreator,
@@ -1367,6 +1368,18 @@ export const mockBattleOption4: VehicleBattleOption = {
   name: '+1armor',
 };
 
+export const mockBattleOption5: VehicleBattleOption = {
+  id: 'mock-battle-option-id-5',
+  battleOptionType: BattleOptionType.weapon,
+  name: 'Mounted machine guns (3-harm close/far area messy)',
+};
+
+export const mockBattleOption6: VehicleBattleOption = {
+  id: 'mock-battle-option-id-6',
+  battleOptionType: BattleOptionType.weapon,
+  name: 'Mounted grenade launcher (4-harm close area messy)',
+};
+
 export const mockCarCreator: CarCreator = {
   id: 'car-creator-id',
   vehicleType: VehicleType.car,
@@ -1376,6 +1389,29 @@ export const mockCarCreator: CarCreator = {
   looks: ['sleek', 'antique'],
   weaknesses: ['guzzler', 'unreliable'],
   battleOptions: [mockBattleOption1, mockBattleOption2, mockBattleOption3, mockBattleOption4],
+};
+
+export const mockBattleVehicleCreator: BattleVehicleCreator = {
+  id: 'battle-vehicle-creator-id',
+  vehicleType: VehicleType.battle,
+  introInstructions: 'By default, your vehicle...',
+  frames: [mockVehicleFrame1, mockVehicleFrame2, mockVehicleFrame3, mockVehicleFrame4],
+  strengths: ['fast', 'reliable'],
+  looks: ['sleek', 'antique'],
+  weaknesses: ['guzzler', 'unreliable'],
+  battleOptions: [mockBattleOption1, mockBattleOption2, mockBattleOption3, mockBattleOption4],
+  bikeStrengths: ['fast', 'reliable'],
+  bikeLooks: ['sleek', 'antique'],
+  bikeWeaknesses: ['guzzler'],
+  bikeBattleOptions: [mockBattleOption1, mockBattleOption2],
+  battleVehicleOptions: [
+    mockBattleOption1,
+    mockBattleOption2,
+    mockBattleOption3,
+    mockBattleOption4,
+    mockBattleOption5,
+    mockBattleOption6,
+  ],
 };
 
 export const mockBikeCreator: BikeCreator = {
@@ -1393,6 +1429,7 @@ export const mockVehicleCreator: VehicleCreator = {
   id: 'mock-vehicle=creator-id',
   carCreator: mockCarCreator,
   bikeCreator: mockBikeCreator,
+  battleVehicleCreator: mockBattleVehicleCreator,
 };
 
 export const mockFirearmBaseOption: TaggedItem = {
