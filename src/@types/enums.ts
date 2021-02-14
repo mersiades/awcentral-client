@@ -8,7 +8,8 @@ export enum CharacterCreationSteps {
   setUnique = 6,
   selectMoves = 7,
   setVehicle = 8,
-  setHx = 9,
+  setBattleVehicle = 9,
+  setHx = 10,
 }
 
 export enum RoleType {

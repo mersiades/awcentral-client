@@ -74,10 +74,12 @@ export interface Character {
   characterMoves: CharacterMove[];
   harm: CharacterHarm;
   vehicleCount: number;
+  battleVehicleCount: number;
   name?: string;
   barter?: number;
   playbookUnique?: PlaybookUnique;
   vehicles: Vehicle[];
+  battleVehicles: BattleVehicle[];
   __typename?: 'Character';
 }
 
@@ -207,6 +209,22 @@ export interface Vehicle {
   weaknesses: string[];
   looks: string[];
   battleOptions: VehicleBattleOption[];
+}
+
+export interface BattleVehicle {
+  id: string;
+  name: string;
+  vehicleFrame: VehicleFrame;
+  speed: number;
+  handling: number;
+  armor: number;
+  massive: number;
+  strengths: string[];
+  weaknesses: string[];
+  looks: string[];
+  battleOptions: VehicleBattleOption[];
+  battleVehicleOptions: VehicleBattleOption[];
+  weapons: string[];
 }
 
 // --------------------------------------------------- MC interfaces --------------------------------------------------- //

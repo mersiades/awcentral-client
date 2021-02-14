@@ -76,6 +76,7 @@ const GAME = gql`
           gear
           barter
           vehicleCount
+          battleVehicleCount
           harm {
             id
             value
@@ -139,6 +140,36 @@ const GAME = gql`
             weaknesses
             looks
             battleOptions {
+              id
+              battleOptionType
+              name
+            }
+          }
+          battleVehicles {
+            id
+            name
+            vehicleType
+            vehicleFrame {
+              id
+              frameType
+              massive
+              examples
+              battleOptionCount
+            }
+            speed
+            handling
+            armor
+            massive
+            strengths
+            weaknesses
+            looks
+            weapons
+            battleOptions {
+              id
+              battleOptionType
+              name
+            }
+            battleVehicleOptions {
               id
               battleOptionType
               name

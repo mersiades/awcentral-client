@@ -9,6 +9,7 @@ import {
 } from '../@types';
 import {
   AngelKit,
+  BattleVehicle,
   BrainerGear,
   CharacterHarm,
   CharacterStat,
@@ -85,13 +86,15 @@ interface MockCharacter {
   barter: number;
   playbook: PlaybookType;
   harm: CharacterHarm;
-  vehicleCount: 0;
+  vehicleCount: number;
+  battleVehicleCount: number;
   hasCompletedCharacterCreation: boolean;
   hasPlusOneForward: boolean;
   holds: number;
   playbookUnique: PlaybookUnique;
   characterMoves: CharacterMove[];
   vehicles: Vehicle[];
+  battleVehicles: BattleVehicle[];
 }
 
 export const mockNewGameName = 'My new mock game';
@@ -707,6 +710,7 @@ export const mockCharacter1: MockCharacter = {
   gear: ['leather jacket', 'Timberland boots'],
   barter: 2,
   vehicleCount: 0,
+  battleVehicleCount: 0,
   harm: mockCharacterHarm,
   statsBlock: mockStatsBlock1,
   hxBlock: [],
@@ -718,6 +722,7 @@ export const mockCharacter1: MockCharacter = {
   ], // TODO: change to battlebabe moves
   playbookUnique: mockPlaybookUniqueBattlebabe,
   vehicles: [],
+  battleVehicles: [],
 };
 
 export const mockCharacter2: MockCharacter = {
@@ -746,7 +751,9 @@ export const mockCharacter2: MockCharacter = {
   ],
   playbookUnique: mockPlaybookUniqueAngel,
   vehicleCount: 0,
+  battleVehicleCount: 0,
   vehicles: [],
+  battleVehicles: [],
 };
 
 export const mockGame1: Game = {
