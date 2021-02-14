@@ -1,32 +1,61 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Box, Tab, Tabs } from 'grommet';
+import { Box, Tab, Tabs, Tip } from 'grommet';
 
 import VehicleForm from '../VehicleForm';
 import Spinner from '../../Spinner';
-import { ButtonWS, HeadingWS } from '../../../config/grommetConfig';
-import { COLLECTOR_NAME } from '../../../config/constants';
-import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
+import { brandColor, ButtonWS, HeadingWS, TextWS } from '../../../config/grommetConfig';
+import { CharacterCreationSteps } from '../../../@types/enums';
 import { useGame } from '../../../contexts/gameContext';
 import { useFonts } from '../../../contexts/fontContext';
 import { decapitalize } from '../../../helpers/decapitalize';
+import { Add, AddCircle } from 'grommet-icons';
+import SET_VEHICLE_COUNT, { SetVehicleCountData, SetVehicleCountVars } from '../../../mutations/setVehicleCount';
+import { useMutation } from '@apollo/client';
 
 const VehiclesFormContainer: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [numberVehiclesNeeded, setNumberVehiclesNeeded] = useState(0);
+
   const [activeTab, setActiveTab] = useState(0);
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
-  const { game, character } = useGame();
+  const { game, character, userGameRole } = useGame();
   const { crustReady } = useFonts();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
 
+  // --------------------------------------------------- Graphql hooks ----------------------------------------------------- //
+  const [setVehicleCount, { loading: settingMoves }] = useMutation<SetVehicleCountData, SetVehicleCountVars>(
+    SET_VEHICLE_COUNT
+  );
+
   // ------------------------------------------------- Component functions -------------------------------------------------- //
+
+  const handleAddVehicle = async () => {
+    if (!!userGameRole && !!character && !!game) {
+      const vehicleCount = character.vehicleCount + 1;
+      try {
+        await setVehicleCount({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, vehicleCount },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setVehicleCount: {
+              __typename: 'Character',
+              ...character,
+              vehicleCount,
+            },
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   const navigateOnSet = (numVehicles: number) => {
     if (!character?.hasCompletedCharacterCreation && !!game) {
-      if (numberVehiclesNeeded === numVehicles) {
+      if (character?.vehicleCount === numVehicles) {
         history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setHx}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } else {
@@ -35,35 +64,13 @@ const VehiclesFormContainer: FC = () => {
     }
   };
 
-  // ------------------------------------------------------- Effects -------------------------------------------------------- //
-
-  useEffect(() => {
-    if (!!character && !!character.playbook) {
-      const vehicles = character.vehicles;
-      if (character.playbook === PlaybookType.chopper) {
-        !!vehicles && vehicles.length > 1 ? setNumberVehiclesNeeded(vehicles.length) : setNumberVehiclesNeeded(1);
-      } else if (character.playbook === PlaybookType.driver) {
-        const collectorMove = character.characterMoves.find((cm) => cm.name === COLLECTOR_NAME);
-        if (!!collectorMove) {
-          !!vehicles && vehicles.length > 3 ? setNumberVehiclesNeeded(vehicles.length) : setNumberVehiclesNeeded(3);
-        } else {
-          !!vehicles && vehicles.length > 1 ? setNumberVehiclesNeeded(vehicles.length) : setNumberVehiclesNeeded(1);
-        }
-      } else if (character.playbook === PlaybookType.hardholder) {
-        setNumberVehiclesNeeded(character.vehicleCount);
-      } else {
-        !!vehicles && vehicles.length > 0 ? setNumberVehiclesNeeded(vehicles.length) : setNumberVehiclesNeeded(0);
-      }
-    }
-  }, [character]);
-
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   if (!character) {
     return <Spinner />;
   }
 
-  if (numberVehiclesNeeded === 0) {
+  if (character.vehicleCount === 0) {
     // If a non-vehicle character makes it here accidentally, they can use the stepper to navigate away.
     // In future, may give the ability to add vehicles outside the rules
     return (
@@ -87,24 +94,6 @@ const VehiclesFormContainer: FC = () => {
         </Box>
       </Box>
     );
-  } else if (numberVehiclesNeeded === 1) {
-    // Render a single VehicleForm
-    return (
-      <Box
-        fill
-        direction="column"
-        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
-        pad="12px"
-        align="center"
-        justify="start"
-      >
-        <Tabs>
-          <Tab title="Vehicle 1">
-            <VehicleForm navigateOnSet={navigateOnSet} existingVehicle={character.vehicles[0]} />
-          </Tab>
-        </Tabs>
-      </Box>
-    );
   } else {
     return (
       <Box
@@ -118,11 +107,18 @@ const VehiclesFormContainer: FC = () => {
         <Tabs activeIndex={activeTab} onActive={(tab) => setActiveTab(tab)}>
           {/*
           // @ts-ignore */}
-          {[...Array(numberVehiclesNeeded).keys()].map((number) => (
+          {[...Array(character.vehicleCount).keys()].map((number) => (
             <Tab key={number} title={`Vehicle ${number + 1}`}>
               <VehicleForm navigateOnSet={navigateOnSet} existingVehicle={character.vehicles[number]} />
             </Tab>
           ))}
+          {character.vehicleCount === character.vehicles.length && (
+            <Tip content="Add another vehicle">
+              <Box margin={{ horizontal: '24px' }} justify="center" align="center">
+                <AddCircle color="brand" style={{ cursor: 'pointer' }} onClick={() => handleAddVehicle()} />
+              </Box>
+            </Tip>
+          )}
         </Tabs>
       </Box>
     );

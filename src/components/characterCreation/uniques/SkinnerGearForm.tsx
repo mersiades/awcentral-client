@@ -92,7 +92,15 @@ const SkinnerGearForm: FC = () => {
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
   return (
-    <Box data-testid="skinner-gear-form" direction="column" width="70vw" flex="grow" align="center" justify="start">
+    <Box
+      data-testid="skinner-gear-form"
+      direction="column"
+      width="70vw"
+      align="center"
+      justify="start"
+      overflow="auto"
+      flex="grow"
+    >
       <HeadingWS crustReady={crustReady} level={2}>
         {!!character && !!character.name ? `WHAT SPECIAL SKINNER GEAR DOES ${character.name.toUpperCase()} HAVE?` : '...'}
       </HeadingWS>

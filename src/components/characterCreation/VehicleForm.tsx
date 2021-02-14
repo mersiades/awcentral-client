@@ -426,15 +426,15 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
   return (
     <Box
       data-testid="vehicle-form"
-      width="80vw"
       direction="column"
+      width="80vw"
       align="start"
       justify="start"
       overflow="auto"
       flex="grow"
     >
-      <Box direction="row" fill justify="center">
-        <Box pad="12px" justify="between">
+      <Box direction="row">
+        <Box direction="column" fill="horizontal" pad="12px" gap="12px">
           <TextWS>{introText}</TextWS>
           <Box>
             <TextWS>
@@ -495,7 +495,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
             </Box>
           </Box>
         </Box>
-        <Box justify="between" align="start" width="200px" pad="12px" style={{ minWidth: '200px' }}>
+        <Box margin="12px" flex="grow" style={{ maxWidth: '200px' }} width="200px">
           <Box fill="horizontal" align="center" justify="center">
             <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ vertical: '3px' }}>
               {name}
@@ -510,18 +510,20 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
             <SingleRedBox value={armor} label="Armor" width="80px" />
             <SingleRedBox value={massive} label="Massive" width="80px" />
           </Box>
-          <Box fill="horizontal" direction="row" wrap align="center" justify="center">
-            {strengths.concat(looks).concat(weaknesses).length > 0 && (
-              <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="132px" />
-            )}
-            <ButtonWS
-              primary
-              fill="horizontal"
-              label={settingVehicle ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
-              onClick={() => !settingVehicle && handleSetVehicle()}
-              disabled={settingVehicle || battleOptions.length < frame.battleOptionCount}
-            />
-          </Box>
+          {/* <Box fill="horizontal" direction="row" wrap align="center" justify="center"> */}
+          {strengths.concat(looks).concat(weaknesses).length > 0 && (
+            <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="132px" />
+          )}
+          <ButtonWS
+            primary
+            alignSelf="center"
+            fill="horizontal"
+            style={{ width: '100px' }}
+            label={settingVehicle ? <Spinner fillColor="#FFF" width="56px" height="36px" /> : 'SET'}
+            onClick={() => !settingVehicle && handleSetVehicle()}
+            disabled={settingVehicle || battleOptions.length < frame.battleOptionCount}
+          />
+          {/* </Box> */}
         </Box>
       </Box>
     </Box>
