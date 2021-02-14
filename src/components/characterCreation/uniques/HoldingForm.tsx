@@ -157,7 +157,13 @@ const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
 
       try {
         await setHolding({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, holding: holdingInput, vehicleCount },
+          variables: {
+            gameRoleId: userGameRole.id,
+            characterId: character.id,
+            holding: holdingInput,
+            vehicleCount,
+            battleVehicleCount,
+          },
         });
 
         if (!character.hasCompletedCharacterCreation) {

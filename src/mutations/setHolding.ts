@@ -11,11 +11,24 @@ export interface SetHoldingVars {
   characterId: string;
   holding: HoldingInput;
   vehicleCount: number;
+  battleVehicleCount: number;
 }
 
 const SET_HOLDING = gql`
-  mutation SetHolding($gameRoleId: String!, $characterId: String!, $holding: HoldingInput!, $vehicleCount: Int!) {
-    setHolding(gameRoleId: $gameRoleId, characterId: $characterId, holding: $holding, vehicleCount: $vehicleCount) {
+  mutation SetHolding(
+    $gameRoleId: String!
+    $characterId: String!
+    $holding: HoldingInput!
+    $vehicleCount: Int!
+    $battleVehicleCount: Int!
+  ) {
+    setHolding(
+      gameRoleId: $gameRoleId
+      characterId: $characterId
+      holding: $holding
+      vehicleCount: $vehicleCount
+      battleVehicleCount: $battleVehicleCount
+    ) {
       id
       name
       playbook
