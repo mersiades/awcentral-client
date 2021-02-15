@@ -276,6 +276,13 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
         battleOptions,
         battleVehicleOptions,
       };
+      const index = character.battleVehicles.findIndex((vehicle) => vehicle.id === existingVehicle?.id);
+      let replacementVehicles = character.battleVehicles;
+      if (index > -1) {
+        replacementVehicles[index] = battleVehicleInput as BattleVehicle;
+      } else {
+        replacementVehicles = [...replacementVehicles, { ...battleVehicleInput, id: 'temporary-id' }];
+      }
 
       try {
         const { data } = await setBattleVehicle({
@@ -284,7 +291,14 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
             characterId: character.id,
             battleVehicle: battleVehicleInput,
           },
-          // TODO: add optimisticResponse
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setBattleVehicle: {
+              __typename: 'Character',
+              ...character,
+              battleVehicles: replacementVehicles,
+            },
+          },
         });
         !!data && navigateOnSet(data.setBattleVehicle.battleVehicles.length);
       } catch (error) {

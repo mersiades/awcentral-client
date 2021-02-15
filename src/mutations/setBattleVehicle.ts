@@ -4,6 +4,7 @@ import { Character } from '../@types/dataInterfaces';
 
 export interface SetBattleVehicleData {
   setBattleVehicle: Character;
+  __typename: 'Mutation';
 }
 
 export interface SetBattleVehicleVars {
