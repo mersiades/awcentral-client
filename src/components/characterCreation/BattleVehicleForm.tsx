@@ -324,9 +324,6 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   }, [existingVehicle, character, bikeCreator, carCreator]);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
-  console.log('vehicleFrame', vehicleFrame);
-  console.log('battleOptions', battleOptions);
-  console.log('battleVehicleOptions', battleVehicleOptions);
 
   const renderPill = (item: string, isSelected: boolean, callback: (item: string) => void) => {
     return (

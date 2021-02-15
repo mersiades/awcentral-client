@@ -1402,16 +1402,6 @@ export const mockCarCreator: CarCreator = {
 export const mockBattleVehicleCreator: BattleVehicleCreator = {
   id: 'battle-vehicle-creator-id',
   vehicleType: VehicleType.battle,
-  introInstructions: 'By default, your vehicle...',
-  frames: [mockVehicleFrame1, mockVehicleFrame2, mockVehicleFrame3, mockVehicleFrame4],
-  strengths: ['fast', 'reliable'],
-  looks: ['sleek', 'antique'],
-  weaknesses: ['guzzler', 'unreliable'],
-  battleOptions: [mockBattleOption1, mockBattleOption2, mockBattleOption3, mockBattleOption4],
-  bikeStrengths: ['fast', 'reliable'],
-  bikeLooks: ['sleek', 'antique'],
-  bikeWeaknesses: ['guzzler'],
-  bikeBattleOptions: [mockBattleOption1, mockBattleOption2],
   battleVehicleOptions: [
     mockBattleOption1,
     mockBattleOption2,
