@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom';
 import { Box, Tab, Tabs, Tip } from 'grommet';
 import { AddCircle } from 'grommet-icons';
 
-import VehicleForm from './VehicleForm';
 import Spinner from '../Spinner';
-import { brandColor, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../../config/grommetConfig';
+import BattleVehicleForm from './BattleVehicleForm';
+import { ButtonWS, ParagraphWS } from '../../config/grommetConfig';
 import SET_BATTLE_VEHICLE_COUNT, {
   SetBattleVehicleCountData,
   SetBattleVehicleCountVars,
@@ -15,7 +15,6 @@ import { CharacterCreationSteps } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
-import BattleVehicleForm from './BattleVehicleForm';
 
 const BattleVehiclesFormContainer: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -102,9 +101,7 @@ const BattleVehiclesFormContainer: FC = () => {
             <ButtonWS
               label="PASS"
               primary
-              onClick={() =>
-                !!game && history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setBattleVehicle}`)
-              }
+              onClick={() => !!game && history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setHx}`)}
             />
           </Box>
         </Box>

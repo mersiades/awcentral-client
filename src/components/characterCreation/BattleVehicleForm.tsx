@@ -1,20 +1,21 @@
+import React, { FC, useEffect, useReducer } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Box, TextInput, Text, Tip, CheckBox } from 'grommet';
 import { omit } from 'lodash';
-import React, { FC, useEffect, useReducer } from 'react';
-import { BattleVehicleInput, VehicleInput } from '../../@types';
-import { BattleVehicle, Vehicle } from '../../@types/dataInterfaces';
-import { BattleOptionType, PlaybookType, VehicleFrameType, VehicleType } from '../../@types/enums';
-import { VehicleBattleOption, VehicleFrame } from '../../@types/staticDataInterfaces';
-import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../config/grommetConfig';
-import { useFonts } from '../../contexts/fontContext';
-import { useGame } from '../../contexts/gameContext';
-import SET_BATTLE_VEHICLE, { SetBattleVehicleData, SetBattleVehicleVars } from '../../mutations/setBattleVehicle';
-import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../queries/vehicleCreator';
+
 import DoubleRedBox from '../DoubleRedBox';
 import RedTagsBox from '../RedTagsBox';
 import SingleRedBox from '../SingleRedBox';
 import Spinner from '../Spinner';
+import { accentColors, ButtonWS, HeadingWS, neutralColors, TextWS } from '../../config/grommetConfig';
+import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../queries/vehicleCreator';
+import SET_BATTLE_VEHICLE, { SetBattleVehicleData, SetBattleVehicleVars } from '../../mutations/setBattleVehicle';
+import { BattleOptionType, VehicleFrameType, VehicleType } from '../../@types/enums';
+import { BattleVehicleInput } from '../../@types';
+import { BattleVehicle } from '../../@types/dataInterfaces';
+import { VehicleBattleOption, VehicleFrame } from '../../@types/staticDataInterfaces';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 
 interface BattleVehicleFormProps {
   navigateOnSet: (numVehicles: number) => void;
