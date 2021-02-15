@@ -15,6 +15,7 @@ import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { Vehicle } from '../../@types/dataInterfaces';
 import { dummyVehicleFrame } from '../../tests/mocks';
+import { VehicleType } from '../../@types/enums';
 
 interface DealTerrainDialogProps {
   move: Move | CharacterMove;
@@ -41,6 +42,7 @@ const DealTerrainDialog: FC<DealTerrainDialogProps> = ({ move, handleClose }) =>
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const otherVehicle: Vehicle = {
     id: 'other-vehicle-id',
+    vehicleType: VehicleType.car,
     name: 'Other',
     vehicleFrame: dummyVehicleFrame,
     speed: 0,

@@ -297,6 +297,7 @@ export interface VehicleFrame {
   massive: number;
   examples: string;
   battleOptionCount: number;
+  __typename?: 'VehicleFrame';
 }
 
 export interface FollowersOption {
@@ -345,6 +346,7 @@ export interface VehicleBattleOption {
   id: string;
   battleOptionType: BattleOptionType;
   name: string;
+  __typename?: 'VehicleBattleOption';
 }
 
 export interface GangOption {

@@ -168,7 +168,7 @@ const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
 const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) => {
   const initialState: VehicleFormState = {
     name: !!existingVehicle ? existingVehicle.name : 'Unnamed vehicle',
-    // @ts-ignore
+    vehicleType: !!existingVehicle ? existingVehicle.vehicleType : VehicleType.car,
     frame: !!existingVehicle ? omit(existingVehicle.vehicleFrame, ['__typename']) : undefined,
     strengths: !!existingVehicle ? existingVehicle.strengths : [],
     weaknesses: !!existingVehicle ? existingVehicle.weaknesses : [],
@@ -331,7 +331,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
           : omit(carCreator.frames[2], ['__typename']);
       const payload: VehicleFormState = {
         name: !!existingVehicle ? existingVehicle.name : 'Unnamed vehicle',
-        // @ts-ignore
+        vehicleType: !!existingVehicle ? existingVehicle.vehicleType : VehicleType.car,
         frame: !!existingVehicle ? omit(existingVehicle.vehicleFrame, ['__typename']) : defaultFrame,
         strengths: !!existingVehicle ? existingVehicle.strengths : [],
         weaknesses: !!existingVehicle ? existingVehicle.weaknesses : [],

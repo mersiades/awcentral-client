@@ -200,6 +200,7 @@ export interface Gang {
 
 export interface Vehicle {
   id: string;
+  vehicleType: VehicleType;
   name: string;
   vehicleFrame: VehicleFrame;
   speed: number;

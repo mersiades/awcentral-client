@@ -9,7 +9,7 @@ import { VehicleBattleOption, VehicleFrame } from '../../@types/staticDataInterf
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../config/grommetConfig';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
-import SET_VEHICLE, { SetVehicleData, SetVehicleVars } from '../../mutations/setVehicle';
+import SET_BATTLE_VEHICLE, { SetBattleVehicleData, SetBattleVehicleVars } from '../../mutations/setBattleVehicle';
 import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../queries/vehicleCreator';
 import DoubleRedBox from '../DoubleRedBox';
 import RedTagsBox from '../RedTagsBox';
@@ -77,7 +77,7 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   const initialState: BattleVehicleFormState = {
     vehicleType: !!existingVehicle ? existingVehicle.vehicleType : VehicleType.battle,
     name: !!existingVehicle ? existingVehicle.name : 'Unnamed vehicle',
-    vehicleFrame: !!existingVehicle ? existingVehicle.vehicleFrame : undefined,
+    vehicleFrame: !!existingVehicle ? omit(existingVehicle.vehicleFrame, ['__typename']) : undefined,
     speed: !!existingVehicle ? existingVehicle.speed : 0,
     handling: !!existingVehicle ? existingVehicle.handling : 0,
     armor: !!existingVehicle ? existingVehicle.armor : 0,
@@ -86,14 +86,19 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
     weaknesses: !!existingVehicle ? existingVehicle.weaknesses : [],
     looks: !!existingVehicle ? existingVehicle.looks : [],
     weapons: !!existingVehicle ? existingVehicle.weapons : [],
-    battleOptions: !!existingVehicle ? existingVehicle.battleOptions : [],
-    battleVehicleOptions: !!existingVehicle ? existingVehicle.battleVehicleOptions : [],
+    battleOptions: !!existingVehicle
+      ? (existingVehicle.battleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[])
+      : [],
+    battleVehicleOptions: !!existingVehicle
+      ? (existingVehicle.battleVehicleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[])
+      : [],
   };
 
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [
     {
       vehicleFrame,
+      vehicleType,
       name,
       speed,
       handling,
@@ -117,7 +122,9 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   const carCreator = vehicleCreatorData?.vehicleCreator.carCreator;
   const bikeCreator = vehicleCreatorData?.vehicleCreator.bikeCreator;
   const battleVehicleCreator = vehicleCreatorData?.vehicleCreator.battleVehicleCreator;
-  const [setVehicle, { loading: settingVehicle }] = useMutation<SetVehicleData, SetVehicleVars>(SET_VEHICLE);
+  const [setBattleVehicle, { loading: settingBattleVehicle }] = useMutation<SetBattleVehicleData, SetBattleVehicleVars>(
+    SET_BATTLE_VEHICLE
+  );
   // ------------------------------------------------- Component functions -------------------------------------------------- //
 
   const introText =
@@ -135,70 +142,6 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
     vehicleFrame?.frameType === VehicleFrameType.bike ? bikeCreator?.battleOptions : carCreator?.battleOptions;
 
   const battleVehicleOptionOptions: VehicleBattleOption[] | undefined = battleVehicleCreator?.battleVehicleOptions;
-
-  // const handleClickStrength = (strength: string) => {
-  //   if (strengths.includes(strength)) {
-  //     dispatch({ type: 'REMOVE_STRENGTH', payload: strength });
-  //   } else if (strengths.length < 2) {
-  //     dispatch({ type: 'ADD_STRENGTH', payload: strength });
-  //   }
-  // };
-
-  // const handleClickLook = (look: string) => {
-  //   if (looks.includes(look)) {
-  //     dispatch({ type: 'REMOVE_LOOK', payload: look });
-  //   } else if (looks.length < 2) {
-  //     dispatch({ type: 'ADD_LOOK', payload: look });
-  //   }
-  // };
-
-  // const handleClickWeakness = (weakness: string) => {
-  //   if (weaknesses.includes(weakness)) {
-  //     dispatch({ type: 'REMOVE_WEAKNESS', payload: weakness });
-  //   } else if (weaknesses.length < 2) {
-  //     dispatch({ type: 'ADD_WEAKNESS', payload: weakness });
-  //   }
-  // };
-
-  // const handleClickBattleOption = (battleOption: VehicleBattleOption, isSelected: boolean) => {
-  //   if (!!vehicleFrame) {
-  //     if (isSelected) {
-  //       dispatch({ type: 'REMOVE_BATTLE_OPTION', payload: battleOption });
-  //       switch (battleOption.battleOptionType) {
-  //         case BattleOptionType.speed:
-  //           dispatch({ type: 'REDUCE_SPEED' });
-  //           break;
-  //         case BattleOptionType.handling:
-  //           dispatch({ type: 'REDUCE_HANDLING' });
-  //           break;
-  //         case BattleOptionType.massive:
-  //           dispatch({ type: 'REDUCE_MASSIVE' });
-  //           break;
-  //         case BattleOptionType.armor:
-  //           dispatch({ type: 'REDUCE_ARMOR' });
-  //           break;
-  //         default:
-  //       }
-  //     } else if (battleOptions.length < vehicleFrame.battleOptionCount) {
-  //       dispatch({ type: 'ADD_BATTLE_OPTION', payload: battleOption });
-  //       switch (battleOption.battleOptionType) {
-  //         case BattleOptionType.speed:
-  //           dispatch({ type: 'INCREASE_SPEED' });
-  //           break;
-  //         case BattleOptionType.handling:
-  //           dispatch({ type: 'INCREASE_HANDLING' });
-  //           break;
-  //         case BattleOptionType.massive:
-  //           dispatch({ type: 'INCREASE_MASSIVE' });
-  //           break;
-  //         case BattleOptionType.armor:
-  //           dispatch({ type: 'INCREASE_ARMOR' });
-  //           break;
-  //         default:
-  //       }
-  //     }
-  //   }
-  // };
 
   const increaseStats = (update: Partial<BattleVehicleInput>, option: VehicleBattleOption, isSelected: boolean) => {
     let newUpdate = update;
@@ -316,12 +259,12 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   };
 
   const handleSetVehicle = async () => {
-    if (!!userGameRole && !!character) {
-      const vehicleInput: VehicleInput = {
+    if (!!userGameRole && !!character && vehicleFrame) {
+      const battleVehicleInput: BattleVehicleInput = {
         id: !!existingVehicle ? existingVehicle.id : undefined,
+        vehicleType,
         name,
-        // @ts-ignore
-        vehicleFrame: omit(frame, ['__typename']),
+        vehicleFrame,
         speed,
         handling,
         armor,
@@ -329,19 +272,21 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
         strengths,
         weaknesses,
         looks,
+        weapons,
         battleOptions,
+        battleVehicleOptions,
       };
 
       try {
-        const { data } = await setVehicle({
+        const { data } = await setBattleVehicle({
           variables: {
             gameRoleId: userGameRole.id,
             characterId: character.id,
-            // @ts-ignore
-            vehicleInput: omit(vehicleInput, ['__typename']),
+            battleVehicle: battleVehicleInput,
           },
+          // TODO: add optimisticResponse
         });
-        !!data && navigateOnSet(data.setVehicle.vehicles.length);
+        !!data && navigateOnSet(data.setBattleVehicle.battleVehicles.length);
       } catch (error) {
         console.error(error);
       }
@@ -350,20 +295,15 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
 
   // ------------------------------------------------------- Effects -------------------------------------------------------- //
 
-  // Set initial frame if none set already
-  // useEffect(() => {
-  //   if (!!character && !!carCreator && !existingVehicle) {
-  //     dispatch({ type: 'SET_FRAME', payload: omit(carCreator.frames[2], ['__typename']) });
-  //   }
-  // }, [character, carCreator, existingVehicle]);
-
   // Change component state if vehicle changes (ie, when user click on a tab for another vehicle)
   useEffect(() => {
     if (!!character && !!bikeCreator && !!carCreator) {
       const payload: BattleVehicleFormState = {
         vehicleType: !!existingVehicle ? existingVehicle.vehicleType : VehicleType.battle,
         name: !!existingVehicle ? existingVehicle.name : 'Unnamed vehicle',
-        vehicleFrame: !!existingVehicle ? existingVehicle.vehicleFrame : carCreator.frames[2],
+        vehicleFrame: !!existingVehicle
+          ? omit(existingVehicle.vehicleFrame, ['__typename'])
+          : omit(carCreator.frames[2], ['__typename']),
         strengths: !!existingVehicle ? existingVehicle.strengths : [],
         weaknesses: !!existingVehicle ? existingVehicle.weaknesses : [],
         looks: !!existingVehicle ? existingVehicle.looks : [],
@@ -372,14 +312,21 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
         massive: !!existingVehicle ? existingVehicle.massive : (carCreator.frames[2].massive as number),
         armor: !!existingVehicle ? existingVehicle.armor : 0,
         weapons: !!existingVehicle ? existingVehicle.weapons : [],
-        battleOptions: !!existingVehicle ? existingVehicle.battleOptions : [],
-        battleVehicleOptions: !!existingVehicle ? existingVehicle.battleVehicleOptions : [],
+        battleOptions: !!existingVehicle
+          ? (existingVehicle.battleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[])
+          : [],
+        battleVehicleOptions: !!existingVehicle
+          ? (existingVehicle.battleVehicleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[])
+          : [],
       };
       dispatch({ type: 'REPLACE_VEHICLE', payload });
     }
   }, [existingVehicle, character, bikeCreator, carCreator]);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
+  console.log('vehicleFrame', vehicleFrame);
+  console.log('battleOptions', battleOptions);
+  console.log('battleVehicleOptions', battleVehicleOptions);
 
   const renderPill = (item: string, isSelected: boolean, callback: (item: string) => void) => {
     return (
@@ -453,36 +400,36 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   }
 
   return (
-    <Box data-testid="battle-vehicle-form" direction="column" width="90vw" align="start" justify="start" flex="grow">
+    <Box data-testid="battle-vehicle-form" direction="column" width="80vw" align="start" justify="start" flex="grow">
       <Box direction="row" fill="horizontal" flex="grow" align="center" gap="12px" wrap>
-        <Box direction="row" gap="12px" align="center" height="90px" pad={{ bottom: '24px' }}>
+        <Box direction="column" align="start" height="96px" justify="between">
           <ButtonWS
             primary
-            alignSelf="center"
+            alignSelf="start"
             fill="horizontal"
             style={{ width: '100px' }}
-            label={settingVehicle ? <Spinner fillColor="#FFF" width="56px" height="36px" /> : 'SET'}
-            onClick={() => !settingVehicle && handleSetVehicle()}
-            disabled={settingVehicle || battleOptions.length < vehicleFrame.battleOptionCount}
+            label={settingBattleVehicle ? <Spinner fillColor="#FFF" width="56px" height="36px" /> : 'SET'}
+            onClick={() => !settingBattleVehicle && handleSetVehicle()}
+            disabled={
+              settingBattleVehicle ||
+              battleOptions.length < vehicleFrame.battleOptionCount ||
+              battleVehicleOptions.length < 2
+            }
           />
-          <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ top: '9px', bottom: '3px' }}>
+          <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ vertical: '0px' }}>
             {name}
           </HeadingWS>
         </Box>
-        <Box direction="row" wrap gap="6px">
-          <DoubleRedBox value={vehicleFrame?.frameType} label="Frame" />
 
-          <SingleRedBox value={speed} label="Speed" width="80px" />
-          <SingleRedBox value={handling} label="Handling" width="80px" />
-
-          <SingleRedBox value={armor} label="Armor" width="80px" />
-          <SingleRedBox value={massive} label="Massive" width="80px" />
-
-          {strengths.concat(looks).concat(weaknesses).length > 0 && (
-            <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="90px" maxWidth="350px" />
-          )}
-          {weapons.length > 0 && <RedTagsBox tags={weapons} label="Weapons" height="90px" maxWidth="650px" />}
-        </Box>
+        <DoubleRedBox value={vehicleFrame?.frameType} label="Frame" />
+        <SingleRedBox value={speed} label="Speed" width="80px" />
+        <SingleRedBox value={handling} label="Handling" width="80px" />
+        <SingleRedBox value={armor} label="Armor" width="80px" />
+        <SingleRedBox value={massive} label="Massive" width="80px" />
+        {strengths.concat(looks).concat(weaknesses).length > 0 && (
+          <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="90px" maxWidth="350px" />
+        )}
+        {weapons.length > 0 && <RedTagsBox tags={weapons} label="Weapons" height="90px" maxWidth="650px" />}
       </Box>
       <Box direction="column" fill="horizontal" pad="12px" gap="12px" overflow="auto" height="50vh">
         <TextWS>{introText}</TextWS>

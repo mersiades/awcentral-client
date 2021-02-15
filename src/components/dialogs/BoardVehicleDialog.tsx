@@ -15,6 +15,7 @@ import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { Vehicle } from '../../@types/dataInterfaces';
 import { dummyVehicleFrame } from '../../tests/mocks';
+import { VehicleType } from '../../@types/enums';
 
 interface BoardVehicleDialogProps {
   move: Move | CharacterMove;
@@ -42,6 +43,7 @@ const BoardVehicleDialog: FC<BoardVehicleDialogProps> = ({ move, handleClose }) 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const otherVehicle: Vehicle = {
     id: 'other-vehicle-id',
+    vehicleType: VehicleType.car,
     name: 'Other',
     vehicleFrame: dummyVehicleFrame,
     speed: 0,
@@ -57,6 +59,7 @@ const BoardVehicleDialog: FC<BoardVehicleDialogProps> = ({ move, handleClose }) 
   const onFoot: Vehicle = {
     id: 'on-foot-id',
     name: 'On foot',
+    vehicleType: VehicleType.car,
     vehicleFrame: dummyVehicleFrame,
     speed: 0,
     handling: 0,
