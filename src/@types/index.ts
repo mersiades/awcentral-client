@@ -67,6 +67,23 @@ export interface VehicleInput {
   battleOptions: VehicleBattleOption[];
 }
 
+export interface BattleVehicleInput {
+  id?: string;
+  vehicleType: VehicleType;
+  name: string;
+  vehicleFrame: VehicleFrame;
+  speed: number;
+  handling: number;
+  armor: number;
+  massive: number;
+  strengths: string[];
+  weaknesses: string[];
+  looks: string[];
+  weapons: string[];
+  battleOptions: VehicleBattleOption[];
+  battleVehicleOptions: VehicleBattleOption[];
+}
+
 export interface GangInput {
   id?: string;
   size: GangSize;

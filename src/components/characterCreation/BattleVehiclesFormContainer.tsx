@@ -15,6 +15,7 @@ import { CharacterCreationSteps } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
 import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
+import BattleVehicleForm from './BattleVehicleForm';
 
 const BattleVehiclesFormContainer: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -124,7 +125,7 @@ const BattleVehiclesFormContainer: FC = () => {
           // @ts-ignore */}
           {[...Array(character.battleVehicleCount).keys()].map((number) => (
             <Tab key={number} title={`Battle Vehicle ${number + 1}`}>
-              {/* <VehicleForm navigateOnSet={navigateOnSet} existingVehicle={character.battleVehicles[number]} /> */}
+              <BattleVehicleForm navigateOnSet={navigateOnSet} existingVehicle={character.battleVehicles[number]} />
             </Tab>
           ))}
           {character.battleVehicleCount === character.battleVehicles.length && (

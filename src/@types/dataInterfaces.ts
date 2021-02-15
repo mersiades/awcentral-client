@@ -9,6 +9,7 @@ import {
   ThreatType,
   UniqueTypes,
   VehicleFrameType,
+  VehicleType,
 } from './enums';
 import {
   CharacterMove,
@@ -213,6 +214,7 @@ export interface Vehicle {
 
 export interface BattleVehicle {
   id: string;
+  vehicleType: VehicleType;
   name: string;
   vehicleFrame: VehicleFrame;
   speed: number;
@@ -222,9 +224,9 @@ export interface BattleVehicle {
   strengths: string[];
   weaknesses: string[];
   looks: string[];
+  weapons: string[];
   battleOptions: VehicleBattleOption[];
   battleVehicleOptions: VehicleBattleOption[];
-  weapons: string[];
 }
 
 // --------------------------------------------------- MC interfaces --------------------------------------------------- //
