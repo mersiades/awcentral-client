@@ -423,104 +423,100 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
   }
 
   return (
-    <Box
-      data-testid="vehicle-form"
-      direction="column"
-      width="80vw"
-      align="start"
-      justify="start"
-      overflow="auto"
-      flex="grow"
-    >
-      <Box direction="row">
-        <Box direction="column" fill="horizontal" pad="12px" gap="12px">
-          <TextWS>{introText}</TextWS>
-          <Box>
-            <TextWS>
-              <strong>Give your vehicle a name</strong> (make/model, nickname, whatever):
-            </TextWS>
-            <TextInput
-              aria-label="name-input"
-              name="name"
-              value={name}
-              onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
-            />
-          </Box>
-          <Box>
-            <TextWS>Choose its frame (resets other settings):</TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {carCreator.frames.map((frame) => renderFramePill(frame))}
-            </Box>
-          </Box>
-          <Box>
-            <TextWS>
-              <strong>Strengths</strong> (choose 1 or 2):
-            </TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {strengthOptions?.map((strength) => {
-                const isSelected = strengths.includes(strength);
-                return renderPill(strength, isSelected, handleClickStrength);
-              })}
-            </Box>
-          </Box>
-          <Box>
-            <TextWS>
-              <strong>Looks</strong> (choose 1 or 2):
-            </TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {lookOptions?.map((look) => {
-                const isSelected = looks.includes(look);
-                return renderPill(look, isSelected, handleClickLook);
-              })}
-            </Box>
-          </Box>
-          <Box>
-            <TextWS>
-              <strong>Weaknesses</strong> (choose 1 or 2):
-            </TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {weaknessOptions?.map((weakness) => {
-                const isSelected = weaknesses.includes(weakness);
-                return renderPill(weakness, isSelected, handleClickWeakness);
-              })}
-            </Box>
-          </Box>
-          <Box>
-            <TextWS>
-              <strong>Battle options</strong> (choose {frame.battleOptionCount})
-            </TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {battleOptionOptions?.map((battleOption) => renderBattleOptionPill(battleOption))}
-            </Box>
-          </Box>
-        </Box>
-        <Box margin="12px" flex="grow" style={{ maxWidth: '200px' }} width="200px">
-          <Box fill="horizontal" align="center" justify="center">
-            <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ vertical: '3px' }}>
-              {name}
-            </HeadingWS>
-            <DoubleRedBox value={frame?.frameType} label="Frame" />
-          </Box>
-          <Box fill="horizontal" direction="row" align="center" justify="between">
-            <SingleRedBox value={speed} label="Speed" width="80px" />
-            <SingleRedBox value={handling} label="Handling" width="80px" />
-          </Box>
-          <Box fill="horizontal" direction="row" align="center" justify="between">
-            <SingleRedBox value={armor} label="Armor" width="80px" />
-            <SingleRedBox value={massive} label="Massive" width="80px" />
-          </Box>
-          {strengths.concat(looks).concat(weaknesses).length > 0 && (
-            <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="132px" />
-          )}
+    <Box data-testid="vehicle-form" width="80vw" align="start" justify="start" flex="grow">
+      <Box
+        direction="row"
+        fill="horizontal"
+        flex="grow"
+        align="center"
+        gap="12px"
+        wrap
+        margin={{ bottom: '12px' }}
+        border={{ side: 'bottom' }}
+      >
+        <Box direction="column" align="start" height="96px" justify="between">
           <ButtonWS
             primary
-            alignSelf="center"
+            alignSelf="start"
             fill="horizontal"
             style={{ width: '100px' }}
             label={settingVehicle ? <Spinner fillColor="#FFF" width="56px" height="36px" /> : 'SET'}
             onClick={() => !settingVehicle && handleSetVehicle()}
             disabled={settingVehicle || battleOptions.length < frame.battleOptionCount}
           />
+          <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ top: '0px', bottom: '3px' }}>
+            {name}
+          </HeadingWS>
+        </Box>
+
+        <DoubleRedBox value={frame?.frameType} label="Frame" />
+        <SingleRedBox value={speed} label="Speed" width="80px" />
+        <SingleRedBox value={handling} label="Handling" width="80px" />
+        <SingleRedBox value={armor} label="Armor" width="80px" />
+        <SingleRedBox value={massive} label="Massive" width="80px" />
+        {strengths.concat(looks).concat(weaknesses).length > 0 && (
+          <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="90px" maxWidth="350px" />
+        )}
+      </Box>
+      <Box fill="horizontal" gap="12px" overflow="auto" height="calc(100vh - 340px)">
+        <TextWS>{introText}</TextWS>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Give your vehicle a name</strong> (make/model, nickname, whatever):
+          </TextWS>
+          <TextInput
+            aria-label="name-input"
+            name="name"
+            value={name}
+            onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
+          />
+        </Box>
+        <Box flex="grow">
+          <TextWS>Choose its frame (resets other settings):</TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {carCreator.frames.map((frame) => renderFramePill(frame))}
+          </Box>
+        </Box>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Strengths</strong> (choose 1 or 2):
+          </TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {strengthOptions?.map((strength) => {
+              const isSelected = strengths.includes(strength);
+              return renderPill(strength, isSelected, handleClickStrength);
+            })}
+          </Box>
+        </Box>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Looks</strong> (choose 1 or 2):
+          </TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {lookOptions?.map((look) => {
+              const isSelected = looks.includes(look);
+              return renderPill(look, isSelected, handleClickLook);
+            })}
+          </Box>
+        </Box>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Weaknesses</strong> (choose 1 or 2):
+          </TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {weaknessOptions?.map((weakness) => {
+              const isSelected = weaknesses.includes(weakness);
+              return renderPill(weakness, isSelected, handleClickWeakness);
+            })}
+          </Box>
+        </Box>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Battle options</strong> (choose {frame.battleOptionCount})
+          </TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {battleOptionOptions?.map((battleOption) => renderBattleOptionPill(battleOption))}
+          </Box>
         </Box>
       </Box>
     </Box>
