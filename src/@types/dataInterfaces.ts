@@ -18,6 +18,7 @@ import {
   HoldingOption,
   Look,
   Move,
+  SecurityOption,
   SkinnerGearItem,
   VehicleBattleOption,
   VehicleFrame,
@@ -113,6 +114,8 @@ export interface HxStat {
   hxValue: number;
 }
 
+// ------------------------------------------------- Playbook Unique interfaces ------------------------------------------------- //
+
 export interface PlaybookUnique {
   id: string;
   type: UniqueTypes;
@@ -124,11 +127,7 @@ export interface PlaybookUnique {
   holding?: Holding;
   followers?: Followers;
   skinnerGear?: SkinnerGear;
-}
-
-export interface BrainerGear {
-  id: string;
-  brainerGear: string[];
+  establishment?: Establishment;
 }
 
 export interface AngelKit {
@@ -140,14 +139,58 @@ export interface AngelKit {
   supplierText: string;
 }
 
+export interface BrainerGear {
+  id: string;
+  brainerGear: string[];
+}
+
 export interface CustomWeapons {
   id: string;
   weapons: string[];
 }
 
-export interface Weapons {
+export interface CastCrew {
   id: string;
-  weapons: string[];
+  name: string;
+  description: string;
+}
+
+export interface Establishment {
+  id: string;
+  mainAttraction: string;
+  sideAttractions: string[];
+  atmospheres: string[];
+  regulars: string[];
+  highlightedRegulars: string[];
+  interestedParties: string[];
+  highlightedInterestedParties: string[];
+  securityOptions: SecurityOption[];
+  castAndCrew: CastCrew[];
+}
+
+export interface Followers {
+  id: string;
+  description: string;
+  travelOption: string;
+  characterization: string;
+  followers: number;
+  fortune: number;
+  barter: number;
+  surplusBarter: number;
+  surplus: string[];
+  wants: string[];
+  selectedStrengths: FollowersOption[];
+  selectedWeaknesses: FollowersOption[];
+}
+
+export interface Gang {
+  id: string;
+  size: GangSize;
+  harm: number;
+  armor: number;
+  strengths: GangOption[];
+  weaknesses: GangOption[];
+  tags: string[];
 }
 
 export interface Holding {
@@ -167,36 +210,18 @@ export interface Holding {
   selectedWeaknesses: HoldingOption[];
 }
 
-export interface Followers {
-  id: string;
-  description: string;
-  travelOption: string;
-  characterization: string;
-  followers: number;
-  fortune: number;
-  barter: number;
-  surplusBarter: number;
-  surplus: string[];
-  wants: string[];
-  selectedStrengths: FollowersOption[];
-  selectedWeaknesses: FollowersOption[];
-}
-
 export interface SkinnerGear {
   id: string;
   graciousWeapon: SkinnerGearItem;
   luxeGear: SkinnerGearItem[];
 }
 
-export interface Gang {
+export interface Weapons {
   id: string;
-  size: GangSize;
-  harm: number;
-  armor: number;
-  strengths: GangOption[];
-  weaknesses: GangOption[];
-  tags: string[];
+  weapons: string[];
 }
+
+// --------------------------------------------------- Vehicle interfaces --------------------------------------------------- //
 
 export interface Vehicle {
   id: string;

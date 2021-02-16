@@ -147,35 +147,18 @@ export interface PlaybookUniqueCreator {
   holdingCreator?: HoldingCreator;
   followersCreator?: FollowersCreator;
   skinnerGearCreator?: SkinnerGearCreator;
-}
-
-export interface WeaponsCreator {
-  id: string;
-  bfoGunOptionCount: number;
-  seriousGunOptionCount: number;
-  backupWeaponsOptionCount: number;
-  bigFuckOffGuns: string[];
-  seriousGuns: string[];
-  backupWeapons: string[];
-}
-
-export interface GangCreator {
-  id: string;
-  intro: string;
-  defaultSize: GangSize;
-  defaultHarm: number;
-  defaultArmor: number;
-  strengthChoiceCount: number;
-  weaknessChoiceCount: number;
-  defaultTags: string[];
-  strengths: GangOption[];
-  weaknesses: GangOption[];
+  establishmentCreator?: EstablishmentCreator;
 }
 
 export interface AngelKitCreator {
   id: string;
   angelKitInstructions: string;
   startingStock: number;
+}
+
+export interface BrainerGearCreator {
+  id: string;
+  gear: string[];
 }
 
 export interface CustomWeaponsCreator {
@@ -192,9 +175,102 @@ export interface CustomWeaponsCreator {
   handOptionsOptions: ItemCharacteristic[];
 }
 
-export interface BrainerGearCreator {
+export interface SecurityOption {
   id: string;
-  gear: string[];
+  description: string;
+  value: number;
+}
+
+export interface EstablishmentCreator {
+  id: string;
+  mainAttractionCount: number;
+  sideAttractionCount: number;
+  attractions: string[];
+  atmospheres: string[];
+  atmosphereCount: number[];
+  regularsNames: string[];
+  regularsQuestions: string[];
+  interestedPartyNames: string[];
+  interestedPartyQuestions: string[];
+  securityOptions: SecurityOption[];
+}
+
+export interface FollowersOption {
+  id: string;
+  description: string;
+
+  //  -1 represents null
+  newNumberOfFollowers: number;
+
+  // Ranges from -1 to 1, with -2 representing null
+  surplusBarterChange: number;
+
+  // Ranges from 0 to 1, with -1 representing null
+  fortuneChange: number;
+  surplusChange?: string;
+  wantChange?: string[];
+}
+
+export interface FollowersCreator {
+  id: string;
+  instructions: string;
+  defaultNumberOfFollowers: number;
+  defaultSurplusBarter: number;
+  defaultFortune: number;
+  strengthCount: number;
+  weaknessCount: number;
+  travelOptions: string[];
+  characterizationOptions: string[];
+  defaultWants: string[];
+  strengthOptions: FollowersOption[];
+  weaknessOptions: FollowersOption[];
+}
+
+export interface GangOption {
+  id: string;
+  description: string;
+  modifier?: string;
+  // For example, +rich, -savage, +Vulnerable: disease
+  tag?: string;
+}
+
+export interface GangCreator {
+  id: string;
+  intro: string;
+  defaultSize: GangSize;
+  defaultHarm: number;
+  defaultArmor: number;
+  strengthChoiceCount: number;
+  weaknessChoiceCount: number;
+  defaultTags: string[];
+  strengths: GangOption[];
+  weaknesses: GangOption[];
+}
+
+export interface HoldingOption {
+  id: string;
+  description: string;
+
+  // Ranges from -1 to 1, with -2 representing null
+  surplusChange: number;
+
+  wantChange?: string[];
+  newHoldingSize?: HoldingSize;
+  gigChange?: string;
+  newGangSize?: GangSize;
+  gangTagChange?: string;
+
+  // Ranges from -1 to 1, with -2 representing null
+  gangHarmChange: number;
+
+  // Ranges from 2 to 6, with - 1 representing null
+  newVehicleCount: number;
+
+  // Ranges from 2 to 7, with - 1 representing null
+  newBattleVehicleCount: number;
+
+  // Ranges from 0 - 2, with -1 representing null
+  newArmorBonus: number;
 }
 
 export interface HoldingCreator {
@@ -217,21 +293,6 @@ export interface HoldingCreator {
   weaknessOptions: HoldingOption[];
 }
 
-export interface FollowersCreator {
-  id: string;
-  instructions: string;
-  defaultNumberOfFollowers: number;
-  defaultSurplusBarter: number;
-  defaultFortune: number;
-  strengthCount: number;
-  weaknessCount: number;
-  travelOptions: string[];
-  characterizationOptions: string[];
-  defaultWants: string[];
-  strengthOptions: FollowersOption[];
-  weaknessOptions: FollowersOption[];
-}
-
 export interface SkinnerGearItem {
   id: string;
   item: string;
@@ -246,11 +307,32 @@ export interface SkinnerGearCreator {
   luxeGearChoices: SkinnerGearItem[];
 }
 
-export interface VehicleCreator {
+export interface WeaponsCreator {
   id: string;
-  carCreator: CarCreator;
-  bikeCreator: BikeCreator;
-  battleVehicleCreator: BattleVehicleCreator;
+  bfoGunOptionCount: number;
+  seriousGunOptionCount: number;
+  backupWeaponsOptionCount: number;
+  bigFuckOffGuns: string[];
+  seriousGuns: string[];
+  backupWeapons: string[];
+}
+
+// --------------------------------------------- Vehicle interfaces --------------------------------------------- //
+
+export interface VehicleFrame {
+  id: string;
+  frameType: VehicleFrameType;
+  massive: number;
+  examples: string;
+  battleOptionCount: number;
+  __typename?: 'VehicleFrame';
+}
+
+export interface VehicleBattleOption {
+  id: string;
+  battleOptionType: BattleOptionType;
+  name: string;
+  __typename?: 'VehicleBattleOption';
 }
 
 export interface CarCreator {
@@ -281,71 +363,14 @@ export interface BikeCreator {
   battleOptions: VehicleBattleOption[];
 }
 
-export interface VehicleFrame {
+export interface VehicleCreator {
   id: string;
-  frameType: VehicleFrameType;
-  massive: number;
-  examples: string;
-  battleOptionCount: number;
-  __typename?: 'VehicleFrame';
+  carCreator: CarCreator;
+  bikeCreator: BikeCreator;
+  battleVehicleCreator: BattleVehicleCreator;
 }
 
-export interface FollowersOption {
-  id: string;
-  description: string;
-
-  //  -1 represents null
-  newNumberOfFollowers: number;
-
-  // Ranges from -1 to 1, with -2 representing null
-  surplusBarterChange: number;
-
-  // Ranges from 0 to 1, with -1 representing null
-  fortuneChange: number;
-  surplusChange?: string;
-  wantChange?: string[];
-}
-
-export interface HoldingOption {
-  id: string;
-  description: string;
-
-  // Ranges from -1 to 1, with -2 representing null
-  surplusChange: number;
-
-  wantChange?: string[];
-  newHoldingSize?: HoldingSize;
-  gigChange?: string;
-  newGangSize?: GangSize;
-  gangTagChange?: string;
-
-  // Ranges from -1 to 1, with -2 representing null
-  gangHarmChange: number;
-
-  // Ranges from 2 to 6, with - 1 representing null
-  newVehicleCount: number;
-
-  // Ranges from 2 to 7, with - 1 representing null
-  newBattleVehicleCount: number;
-
-  // Ranges from 0 - 2, with -1 representing null
-  newArmorBonus: number;
-}
-
-export interface VehicleBattleOption {
-  id: string;
-  battleOptionType: BattleOptionType;
-  name: string;
-  __typename?: 'VehicleBattleOption';
-}
-
-export interface GangOption {
-  id: string;
-  description: string;
-  modifier?: string;
-  // For example, +rich, -savage, +Vulnerable: disease
-  tag?: string;
-}
+// --------------------------------------------- Threat interfaces --------------------------------------------- //
 
 export interface ThreatCreatorContent {
   id: string;
