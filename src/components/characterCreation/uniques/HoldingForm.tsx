@@ -20,10 +20,6 @@ import { useGame } from '../../../contexts/gameContext';
 import { Holding } from '../../../@types/dataInterfaces';
 import { updateTags, unUpdateTags } from '../../../helpers/updateTags';
 
-interface HoldingFormProps {
-  existingHolding?: Holding;
-}
-
 interface HoldingFormState {
   holdingSize: HoldingSize;
   gangSize: GangSize;
@@ -79,7 +75,7 @@ const holdingFormReducer = (state: HoldingFormState, action: Action) => {
   }
 };
 
-const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
+const HoldingForm: FC = () => {
   const initialState: HoldingFormState = {
     holdingSize: HoldingSize.medium,
     gangSize: GangSize.medium,
@@ -157,7 +153,13 @@ const HoldingForm: FC<HoldingFormProps> = ({ existingHolding }) => {
 
       try {
         await setHolding({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, holding: holdingInput, vehicleCount },
+          variables: {
+            gameRoleId: userGameRole.id,
+            characterId: character.id,
+            holding: holdingInput,
+            vehicleCount,
+            battleVehicleCount,
+          },
         });
 
         if (!character.hasCompletedCharacterCreation) {

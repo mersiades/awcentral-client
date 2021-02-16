@@ -2,17 +2,17 @@ import React, { FC } from 'react';
 import { Box } from 'grommet';
 
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
-import { Vehicle } from '../../@types/dataInterfaces';
+import { BattleVehicle } from '../../@types/dataInterfaces';
 import { HeadingWS, TextWS } from '../../config/grommetConfig';
 import SingleRedBox from '../SingleRedBox';
 
-interface VehiclesBoxProps {
-  vehicles: Vehicle[];
+interface BattleVehiclesBoxProps {
+  vehicles: BattleVehicle[];
   navigateToCharacterCreation: (step: string) => void;
 }
 
-const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreation }) => {
-  const renderVehicle = (vehicle: Vehicle) => {
+const BattleVehiclesBox: FC<BattleVehiclesBoxProps> = ({ vehicles, navigateToCharacterCreation }) => {
+  const renderVehicle = (vehicle: BattleVehicle) => {
     return (
       <Box
         key={vehicle.id}
@@ -25,10 +25,10 @@ const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreati
       >
         <Box style={{ minWidth: '250px', maxWidth: 'calc(100% - 350px)' }} pad="12px">
           <HeadingWS level={5} margin={{ vertical: '3px' }}>
-            {vehicle.name}
+            {vehicle.name} ({vehicle.vehicleFrame.frameType.toLowerCase()})
           </HeadingWS>
-          <TextWS>Frame: {vehicle.vehicleFrame.frameType.toLowerCase()}</TextWS>
           <TextWS>Tags: {vehicle.strengths.concat(vehicle.weaknesses).concat(vehicle.looks).join(', ')}</TextWS>
+          <TextWS>Weapons: {vehicle.weapons.join(', ')}</TextWS>
         </Box>
         <Box direction="row" align="center" justify="around" gap="6px" pad="12px" width="350px">
           <SingleRedBox value={vehicle.speed.toString()} label="Speed" width="80px" />
@@ -43,9 +43,9 @@ const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreati
   return (
     <CollapsiblePanelBox
       open
-      title="Vehicles"
+      title="Battle vehicles"
       navigateToCharacterCreation={navigateToCharacterCreation}
-      targetCreationStep="8"
+      targetCreationStep="9"
     >
       <>
         {vehicles.length > 0 && (
@@ -58,4 +58,4 @@ const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreati
   );
 };
 
-export default VehiclesBox;
+export default BattleVehiclesBox;

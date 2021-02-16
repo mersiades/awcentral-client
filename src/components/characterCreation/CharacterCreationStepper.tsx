@@ -429,6 +429,42 @@ const CharacterCreationStepper: FC = () => {
 
   const box7Step9 = (
     <Box
+      data-testid="battle-vehicles-box"
+      margin={{ left: 'xsmall', right: 'xsmall' }}
+      justify="start"
+      width="11rem"
+      height="10rem"
+      gap="small"
+      align="center"
+      pad="small"
+      border
+      background={{ color: 'neutral-1', opacity: CharacterCreationSteps.setBattleVehicle === currentStep ? 1 : 0.5 }}
+      onClick={(e: any) => {
+        e.currentTarget.blur();
+        !!character?.name && !!character?.playbook && changeStep(CharacterCreationSteps.setBattleVehicle);
+      }}
+    >
+      <Text color="white" weight="bold" alignSelf="center">
+        Battle Vehicles
+      </Text>
+      {!!character && !!character.battleVehicles && character.battleVehicles.length > 0 ? (
+        <CustomUL>
+          {character.battleVehicles.map((vehicle) => {
+            return (
+              <li key={vehicle.id} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {vehicle.name}
+              </li>
+            );
+          })}
+        </CustomUL>
+      ) : (
+        <Text>...</Text>
+      )}
+    </Box>
+  );
+
+  const box8Step10 = (
+    <Box
       margin={{ left: 'xsmall', right: 'xsmall' }}
       justify="start"
       width="11rem"
@@ -465,8 +501,8 @@ const CharacterCreationStepper: FC = () => {
   // Omit box for PlayBookUniques for Driver
   const boxesArray =
     character?.playbook !== PlaybookType.driver
-      ? [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8, box7Step9]
-      : [box0Step1, box1Step3, box2Step4, box3Step5, box5Step7, box6Step8, box7Step9];
+      ? [box0Step1, box1Step3, box2Step4, box3Step5, box4Step6, box5Step7, box6Step8, box7Step9, box8Step10]
+      : [box0Step1, box1Step3, box2Step4, box3Step5, box5Step7, box6Step8, box7Step9, box8Step10];
 
   const renderBoxesSmall = () => {
     if (currentStep !== undefined) {
@@ -486,9 +522,9 @@ const CharacterCreationStepper: FC = () => {
         case 8:
           return (
             <>
-              {boxesArray[4]}
               {boxesArray[5]}
               {boxesArray[6]}
+              {boxesArray[7]}
             </>
           );
         default:
@@ -541,10 +577,10 @@ const CharacterCreationStepper: FC = () => {
         case 9:
           return (
             <>
-              {boxesArray[4]}
               {boxesArray[5]}
               {boxesArray[6]}
               {boxesArray[7]}
+              {boxesArray[8]}
             </>
           );
 

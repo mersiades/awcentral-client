@@ -8,7 +8,8 @@ export enum CharacterCreationSteps {
   setUnique = 6,
   selectMoves = 7,
   setVehicle = 8,
-  setHx = 9,
+  setBattleVehicle = 9,
+  setHx = 10,
 }
 
 export enum RoleType {
@@ -125,12 +126,13 @@ export enum BattleOptionType {
   handling = 'HANDLING',
   massive = 'MASSIVE',
   armor = 'ARMOR',
+  weapon = 'WEAPON',
 }
 
 export enum VehicleType {
   bike = 'BIKE',
   car = 'CAR',
-  combat = 'COMBAT',
+  battle = 'BATTLE',
 }
 
 export enum GangSize {

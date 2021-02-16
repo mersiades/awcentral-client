@@ -51,6 +51,15 @@ const VEHICLE_CREATOR = gql`
           name
         }
       }
+      battleVehicleCreator {
+        id
+        vehicleType
+        battleVehicleOptions {
+          id
+          battleOptionType
+          name
+        }
+      }
     }
   }
 `;

@@ -9,6 +9,7 @@ import {
 } from '../@types';
 import {
   AngelKit,
+  BattleVehicle,
   BrainerGear,
   CharacterHarm,
   CharacterStat,
@@ -42,6 +43,7 @@ import {
 } from '../@types/enums';
 import {
   AngelKitCreator,
+  BattleVehicleCreator,
   BikeCreator,
   BrainerGearCreator,
   CarCreator,
@@ -84,13 +86,15 @@ interface MockCharacter {
   barter: number;
   playbook: PlaybookType;
   harm: CharacterHarm;
-  vehicleCount: 0;
+  vehicleCount: number;
+  battleVehicleCount: number;
   hasCompletedCharacterCreation: boolean;
   hasPlusOneForward: boolean;
   holds: number;
   playbookUnique: PlaybookUnique;
   characterMoves: CharacterMove[];
   vehicles: Vehicle[];
+  battleVehicles: BattleVehicle[];
 }
 
 export const mockNewGameName = 'My new mock game';
@@ -620,6 +624,7 @@ export const mockCustomWeapons: CustomWeapons = {
 
 export const mockVehicle1: Vehicle = {
   id: 'mock-vehicle-id-1',
+  vehicleType: VehicleType.car,
   name: 'Mock Vehicle 1',
   vehicleFrame: {
     id: 'mock-vehicle-frame-id-1',
@@ -706,6 +711,7 @@ export const mockCharacter1: MockCharacter = {
   gear: ['leather jacket', 'Timberland boots'],
   barter: 2,
   vehicleCount: 0,
+  battleVehicleCount: 0,
   harm: mockCharacterHarm,
   statsBlock: mockStatsBlock1,
   hxBlock: [],
@@ -717,6 +723,7 @@ export const mockCharacter1: MockCharacter = {
   ], // TODO: change to battlebabe moves
   playbookUnique: mockPlaybookUniqueBattlebabe,
   vehicles: [],
+  battleVehicles: [],
 };
 
 export const mockCharacter2: MockCharacter = {
@@ -745,7 +752,9 @@ export const mockCharacter2: MockCharacter = {
   ],
   playbookUnique: mockPlaybookUniqueAngel,
   vehicleCount: 0,
+  battleVehicleCount: 0,
   vehicles: [],
+  battleVehicles: [],
 };
 
 export const mockGame1: Game = {
@@ -1367,6 +1376,18 @@ export const mockBattleOption4: VehicleBattleOption = {
   name: '+1armor',
 };
 
+export const mockBattleOption5: VehicleBattleOption = {
+  id: 'mock-battle-option-id-5',
+  battleOptionType: BattleOptionType.weapon,
+  name: 'Mounted machine guns (3-harm close/far area messy)',
+};
+
+export const mockBattleOption6: VehicleBattleOption = {
+  id: 'mock-battle-option-id-6',
+  battleOptionType: BattleOptionType.weapon,
+  name: 'Mounted grenade launcher (4-harm close area messy)',
+};
+
 export const mockCarCreator: CarCreator = {
   id: 'car-creator-id',
   vehicleType: VehicleType.car,
@@ -1376,6 +1397,19 @@ export const mockCarCreator: CarCreator = {
   looks: ['sleek', 'antique'],
   weaknesses: ['guzzler', 'unreliable'],
   battleOptions: [mockBattleOption1, mockBattleOption2, mockBattleOption3, mockBattleOption4],
+};
+
+export const mockBattleVehicleCreator: BattleVehicleCreator = {
+  id: 'battle-vehicle-creator-id',
+  vehicleType: VehicleType.battle,
+  battleVehicleOptions: [
+    mockBattleOption1,
+    mockBattleOption2,
+    mockBattleOption3,
+    mockBattleOption4,
+    mockBattleOption5,
+    mockBattleOption6,
+  ],
 };
 
 export const mockBikeCreator: BikeCreator = {
@@ -1393,6 +1427,7 @@ export const mockVehicleCreator: VehicleCreator = {
   id: 'mock-vehicle=creator-id',
   carCreator: mockCarCreator,
   bikeCreator: mockBikeCreator,
+  battleVehicleCreator: mockBattleVehicleCreator,
 };
 
 export const mockFirearmBaseOption: TaggedItem = {

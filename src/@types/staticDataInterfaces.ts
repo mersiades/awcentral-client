@@ -250,6 +250,7 @@ export interface VehicleCreator {
   id: string;
   carCreator: CarCreator;
   bikeCreator: BikeCreator;
+  battleVehicleCreator: BattleVehicleCreator;
 }
 
 export interface CarCreator {
@@ -261,6 +262,12 @@ export interface CarCreator {
   looks: string[];
   weaknesses: string[];
   battleOptions: VehicleBattleOption[];
+}
+
+export interface BattleVehicleCreator {
+  id: string;
+  vehicleType: VehicleType;
+  battleVehicleOptions: VehicleBattleOption[];
 }
 
 export interface BikeCreator {
@@ -280,6 +287,7 @@ export interface VehicleFrame {
   massive: number;
   examples: string;
   battleOptionCount: number;
+  __typename?: 'VehicleFrame';
 }
 
 export interface FollowersOption {
@@ -328,6 +336,7 @@ export interface VehicleBattleOption {
   id: string;
   battleOptionType: BattleOptionType;
   name: string;
+  __typename?: 'VehicleBattleOption';
 }
 
 export interface GangOption {

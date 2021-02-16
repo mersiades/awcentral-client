@@ -103,9 +103,11 @@ const CharacterMovesForm: FC = () => {
           defaultMoves.map((move, index) => (
             <CheckBox key={move.id} checked label={<StyledMarkdown>{move.description}</StyledMarkdown>} />
           ))}
-        <Text size="large" weight="bold" margin={{ vertical: '12px' }}>
-          Select {moveChoiceCount}
-        </Text>
+        {!!moveChoiceCount && moveChoiceCount > 0 && (
+          <Text size="large" weight="bold" margin={{ vertical: '12px' }}>
+            Select {moveChoiceCount}
+          </Text>
+        )}
         <Box align="start" gap="12px">
           {!!playbookMoves &&
             playbookMoves.map((move) => {

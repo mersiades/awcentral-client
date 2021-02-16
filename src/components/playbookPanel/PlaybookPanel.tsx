@@ -22,6 +22,7 @@ import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
 import FollowersBox from './FollowersBox';
 import SkinnerGearBox from './SkinnerGearBox';
+import BattleVehiclesBox from './BattleVehiclesBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -139,9 +140,8 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
           navigateToCharacterCreation={navigateToCharacterCreation}
         />
       )}
-      {character.vehicles.length > 0 && (
-        <VehiclesBox vehicles={character.vehicles} navigateToCharacterCreation={navigateToCharacterCreation} />
-      )}
+      <VehiclesBox vehicles={character.vehicles} navigateToCharacterCreation={navigateToCharacterCreation} />
+      <BattleVehiclesBox vehicles={character.battleVehicles} navigateToCharacterCreation={navigateToCharacterCreation} />
     </Box>
   );
 };

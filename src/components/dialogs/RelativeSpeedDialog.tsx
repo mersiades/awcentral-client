@@ -16,6 +16,7 @@ import { useGame } from '../../contexts/gameContext';
 import { Vehicle } from '../../@types/dataInterfaces';
 import { dummyVehicleFrame } from '../../tests/mocks';
 import { OUTDISTANCE_VEHICLE_NAME } from '../../config/constants';
+import { VehicleType } from '../../@types/enums';
 
 interface RelativeSpeedDialogProps {
   move: Move | CharacterMove;
@@ -43,6 +44,7 @@ const RelativeSpeedDialog: FC<RelativeSpeedDialogProps> = ({ move, handleClose }
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const otherVehicle: Vehicle = {
     id: 'other-vehicle-id',
+    vehicleType: VehicleType.car,
     name: 'Other',
     vehicleFrame: dummyVehicleFrame,
     speed: 0,

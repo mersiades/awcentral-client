@@ -18,7 +18,8 @@ import CloseButton from '../components/CloseButton';
 import { CharacterCreationSteps } from '../@types/enums';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
 import { useGame } from '../contexts/gameContext';
-import VehiclesFormContainer from '../components/characterCreation/uniques/VehiclesFormContainer';
+import VehiclesFormContainer from '../components/characterCreation/VehiclesFormContainer';
+import BattleVehiclesFormContainer from '../components/characterCreation/BattleVehiclesFormContainer';
 
 export const background = {
   color: 'black',
@@ -168,6 +169,9 @@ const CharacterCreationPage: FC = () => {
         )}
         {creationStep === CharacterCreationSteps.setVehicle && character && character.name && character.playbook && (
           <VehiclesFormContainer />
+        )}
+        {creationStep === CharacterCreationSteps.setBattleVehicle && character && character.name && character.playbook && (
+          <BattleVehiclesFormContainer />
         )}
         {creationStep === CharacterCreationSteps.selectMoves && character && !!character.name && character.playbook && (
           <CharacterMovesForm />
