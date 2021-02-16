@@ -144,7 +144,7 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
 
   const battleVehicleOptionOptions: VehicleBattleOption[] | undefined = battleVehicleCreator?.battleVehicleOptions;
 
-  const increaseStats = (update: Partial<BattleVehicleInput>, option: VehicleBattleOption, isSelected: boolean) => {
+  const increaseStats = (update: Partial<BattleVehicleInput>, option: VehicleBattleOption) => {
     let newUpdate = update;
     switch (option.battleOptionType) {
       case BattleOptionType.speed:
@@ -168,7 +168,7 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
     return newUpdate;
   };
 
-  const decreaseStats = (update: Partial<BattleVehicleInput>, option: VehicleBattleOption, isSelected: boolean) => {
+  const decreaseStats = (update: Partial<BattleVehicleInput>, option: VehicleBattleOption) => {
     let newUpdate = update;
     switch (option.battleOptionType) {
       case BattleOptionType.speed:
@@ -229,13 +229,13 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
           ...update,
           battleOptions: battleOptions.filter((bo: VehicleBattleOption) => bo.id !== castOption.id),
         };
-        update = decreaseStats(update, castOption, isSelected);
+        update = decreaseStats(update, castOption);
       } else if (battleOptions.length < vehicleFrame.battleOptionCount) {
         update = {
           ...update,
           battleOptions: [...battleOptions, omit(castOption, ['__typename'])] as VehicleBattleOption[],
         };
-        update = increaseStats(update, castOption, isSelected);
+        update = increaseStats(update, castOption);
       }
     }
 
@@ -246,13 +246,13 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
           ...update,
           battleVehicleOptions: battleVehicleOptions.filter((bo: VehicleBattleOption) => bo.id !== castOption.id),
         };
-        update = decreaseStats(update, castOption, isSelected);
+        update = decreaseStats(update, castOption);
       } else if (battleVehicleOptions.length < 2) {
         update = {
           ...update,
           battleVehicleOptions: [...battleVehicleOptions, omit(castOption, ['__typename'])] as VehicleBattleOption[],
         };
-        update = increaseStats(update, castOption, isSelected);
+        update = increaseStats(update, castOption);
       }
     }
 
