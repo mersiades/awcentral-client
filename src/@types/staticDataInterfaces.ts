@@ -34,19 +34,19 @@ export interface Playbook {
 export interface PlaybookCreator {
   id: string;
   playbookType: PlaybookType;
-  gearInstructions: GearInstructions;
+  defaultMoveCount: number;
+  moveChoiceCount: number;
+  defaultVehicleCount: number;
   improvementInstructions: string;
   movesInstructions: string;
   hxInstructions: string;
   names: Name[];
   looks: Look[];
   statsOptions: StatsOption[];
-  playbookUniqueCreator?: PlaybookUniqueCreator; // Driver does not have a PlaybookUnique
   optionalMoves: Move[];
   defaultMoves: Move[];
-  defaultMoveCount: number;
-  moveChoiceCount: number;
-  defaultVehicleCount: number;
+  gearInstructions: GearInstructions;
+  playbookUniqueCreator?: PlaybookUniqueCreator; // Driver does not have a PlaybookUnique
 }
 
 export interface Name {
@@ -140,14 +140,14 @@ export interface PlaybookUniqueCreator {
   id: string;
   type: UniqueTypes;
   angelKitCreator?: AngelKitCreator;
-  customWeaponsCreator?: CustomWeaponsCreator;
   brainerGearCreator?: BrainerGearCreator;
-  gangCreator?: GangCreator;
-  weaponsCreator?: WeaponsCreator;
-  holdingCreator?: HoldingCreator;
-  followersCreator?: FollowersCreator;
-  skinnerGearCreator?: SkinnerGearCreator;
+  customWeaponsCreator?: CustomWeaponsCreator;
   establishmentCreator?: EstablishmentCreator;
+  followersCreator?: FollowersCreator;
+  gangCreator?: GangCreator;
+  holdingCreator?: HoldingCreator;
+  skinnerGearCreator?: SkinnerGearCreator;
+  weaponsCreator?: WeaponsCreator;
 }
 
 export interface AngelKitCreator {

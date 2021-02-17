@@ -13,6 +13,7 @@ import WeaponsForm from './uniques/WeaponsForm';
 import HoldingForm from './uniques/HoldingForm';
 import FollowersForm from './uniques/FollowersForm';
 import SkinnerGearForm from './uniques/SkinnerGearForm';
+import EstablishmentForm from './uniques/EstablishmentForm';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -50,6 +51,8 @@ const PlaybookUniqueRouter: FC = () => {
         return <HoldingForm />;
       case PlaybookType.hocus:
         return <FollowersForm />;
+      case PlaybookType.maestroD:
+        return <EstablishmentForm />;
       case PlaybookType.skinner:
         return <SkinnerGearForm />;
       default:
