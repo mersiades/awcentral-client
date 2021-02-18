@@ -158,12 +158,15 @@ export interface CastCrew {
 export interface Establishment {
   id: string;
   mainAttraction: string;
+  bestRegular: string;
+  worstRegular: string;
+  wantsInOnIt: string;
+  oweForIt: string;
+  wantsItGone: string;
   sideAttractions: string[];
   atmospheres: string[];
   regulars: string[];
-  highlightedRegulars: string[];
   interestedParties: string[];
-  highlightedInterestedParties: string[];
   securityOptions: SecurityOption[];
   castAndCrew: CastCrew[];
 }
