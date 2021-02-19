@@ -17,6 +17,8 @@ import { useGame } from '../../../contexts/gameContext';
 import { updateTags, unUpdateTags } from '../../../helpers/updateTags';
 import { getFollowersDescription } from '../../../helpers/getFollowersDescription';
 import { CastCrew } from '../../../@types/dataInterfaces';
+import SET_ESTABLISHMENT, { SetEstablishmentData, SetEstablishmentVars } from '../../../mutations/setEstablishment';
+import Spinner from '../../Spinner';
 
 const ATTRACTIONS_INSTRUCTIONS =
   'Your establishment features one main attraction supported by 2 side attractions (like a bar features drinks, supported by music and easy food). Choose one to be your main act and 2 for lube:';
@@ -201,42 +203,63 @@ const EstablishmentForm: FC = () => {
   });
 
   const establishmentCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator?.establishmentCreator;
-  // const [setFollowers, { loading: settingFollowers }] = useMutation<SetFollowersData, SetFollowersVars>(SET_FOLLOWERS);
+  const [setEstablishment, { loading: settingEstablishment }] = useMutation<SetEstablishmentData, SetEstablishmentVars>(
+    SET_ESTABLISHMENT
+  );
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
-  // const handleSubmitFollowers = async () => {
-  //   if (!!userGameRole && !!character && !!game) {
-  //     // @ts-ignore
-  //     const strengthsNoTypename = selectedStrengths.map((str: FollowersOption) => omit(str, ['__typename']));
-  //     // @ts-ignore
-  //     const weaknessesNoTypename = selectedWeaknesses.map((wk: FollowersOption) => omit(wk, ['__typename']));
-  //     const followersInput: FollowersInput = {
-  //       id: character?.playbookUnique?.followers ? character.playbookUnique.followers.id : undefined,
-  //       selectedStrengths: strengthsNoTypename,
-  //       selectedWeaknesses: weaknessesNoTypename,
-  //       description,
-  //       travelOption,
-  //       characterization,
-  //       followers,
-  //       fortune,
-  //       barter,
-  //       surplusBarter,
-  //       surplus,
-  //       wants,
-  //     };
-  //     try {
-  //       await setFollowers({
-  //         variables: { gameRoleId: userGameRole.id, characterId: character.id, followers: followersInput },
-  //       });
-  //       if (!character.hasCompletedCharacterCreation) {
-  //         history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
-  //         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // };
+  const securityValues = securityOptions.map((opt: SecurityOption) => opt.value);
+
+  const isEstablishmentComplete =
+    !!mainAttraction &&
+    !!bestRegular &&
+    !!worstRegular &&
+    !!wantsInOnIt &&
+    !!oweForIt &&
+    !!wantsItGone &&
+    sideAttractions.length === 2 &&
+    [3, 4].includes(atmospheres.length) &&
+    regulars.length >= 5 &&
+    interestedParties.length >= 3 &&
+    securityValues.length > 0 &&
+    securityValues.reduce((a: number, b: number) => a + b) === 2 &&
+    castAndCrew.length > 0;
+
+  const handleSubmitEstablishment = async () => {
+    if (!!userGameRole && !!character && !!game && isEstablishmentComplete) {
+      // @ts-ignore
+      const securityNoTypename = securityOptions.map((so: SecurityOption) => omit(so, ['__typename']));
+      // @ts-ignore
+      const crewNoTypename = castAndCrew.map((cc: CastCrew) => omit(cc, ['__typename']));
+      const establishmentInput: EstablishmentInput = {
+        id: character.playbookUnique?.establishment ? character.playbookUnique.establishment.id : undefined,
+        mainAttraction,
+        bestRegular,
+        worstRegular,
+        wantsInOnIt,
+        oweForIt,
+        wantsItGone,
+        sideAttractions,
+        atmospheres,
+        regulars,
+        interestedParties,
+        securityOptions: securityNoTypename,
+        castAndCrew: crewNoTypename,
+      };
+      try {
+        await setEstablishment({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, establishment: establishmentInput },
+        });
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   const handleMainAttractionSelect = (attraction: string) => {
     if (!!establishmentCreator) {
       setWorkingAttractions(() => establishmentCreator?.attractions.filter((attr) => attr !== attraction));
@@ -278,8 +301,6 @@ const EstablishmentForm: FC = () => {
   };
 
   const handleSelectSecurity = (option: SecurityOption) => {
-    const securityValues = securityOptions.map((opt: SecurityOption) => opt.value);
-
     if (securityOptions.includes(option)) {
       dispatch({ type: 'REMOVE_SECURITY_OPTION', payload: option });
     } else if (securityValues.length === 0 || securityValues.reduce((a: number, b: number) => a + b) + option.value <= 2) {
@@ -570,8 +591,30 @@ const EstablishmentForm: FC = () => {
           </Box>
         </Box>
       </Box>
+      <ButtonWS
+        primary
+        fill="horizontal"
+        label={settingEstablishment ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+        onClick={() => !settingEstablishment && handleSubmitEstablishment()}
+        disabled={settingEstablishment || !isEstablishmentComplete}
+      />
     </Box>
   );
 };
 
 export default EstablishmentForm;
+
+/**
+ * mainAttraction,
+        bestRegular,
+        worstRegular,
+        wantsInOnIt,
+        oweForIt,
+        wantsItGone,
+        sideAttractions,
+        atmospheres,
+        regulars,
+        interestedParties,
+        securityOptions: securityNoTypename,
+        castAndCrew: crewNoTypename,
+ */
