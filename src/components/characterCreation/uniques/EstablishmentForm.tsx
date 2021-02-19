@@ -9,7 +9,7 @@ import { StyledMarkdown } from '../../styledComponents';
 import { ButtonWS, HeadingWS, ParagraphWS, RedBox, TextInputWS, TextWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
 import SET_FOLLOWERS, { SetFollowersData, SetFollowersVars } from '../../../mutations/setFollowers';
-import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
+import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../../@types/enums';
 import { EstablishmentInput, FollowersInput } from '../../../@types';
 import { FollowersOption, SecurityOption } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
@@ -247,10 +247,24 @@ const EstablishmentForm: FC = () => {
         securityOptions: securityNoTypename,
         castAndCrew: crewNoTypename,
       };
+
+      const optimisticPlaybookUnique = {
+        id: 'temporary-id',
+        type: UniqueTypes.establishment,
+        establishment: { ...establishmentInput, id: !establishmentInput.id ? 'temporary-id' : establishmentInput.id },
+      };
+
       try {
         await setEstablishment({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, establishment: establishmentInput },
-          // TODO: add optimisticResponse
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setEstablishment: {
+              __typename: 'Character',
+              ...character,
+              playbookUnique: optimisticPlaybookUnique,
+            },
+          },
         });
         if (!character.hasCompletedCharacterCreation) {
           history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
@@ -600,7 +614,7 @@ const EstablishmentForm: FC = () => {
       <ButtonWS
         primary
         fill="horizontal"
-        label={settingEstablishment ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+        label={settingEstablishment ? <Spinner fillColor="#FFF" width="80vw" height="36px" /> : 'SET'}
         onClick={() => !settingEstablishment && handleSubmitEstablishment()}
         disabled={settingEstablishment || !isEstablishmentComplete}
       />
@@ -609,18 +623,3 @@ const EstablishmentForm: FC = () => {
 };
 
 export default EstablishmentForm;
-
-/**
- * mainAttraction,
-        bestRegular,
-        worstRegular,
-        wantsInOnIt,
-        oweForIt,
-        wantsItGone,
-        sideAttractions,
-        atmospheres,
-        regulars,
-        interestedParties,
-        securityOptions: securityNoTypename,
-        castAndCrew: crewNoTypename,
- */

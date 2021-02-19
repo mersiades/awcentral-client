@@ -1,9 +1,10 @@
 import { gql } from '@apollo/client';
-import { EstablishmentInput, GangInput } from '../@types';
+import { EstablishmentInput } from '../@types';
 import { Character } from '../@types/dataInterfaces';
 
 export interface SetEstablishmentData {
   setEstablishment: Character;
+  __typename?: 'Mutation';
 }
 
 export interface SetEstablishmentVars {
