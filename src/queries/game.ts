@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import { Game } from '../@types/dataInterfaces';
+import { playbookUniqueCreatorFragments } from './playbookCreator';
 
 export interface GameData {
   game: Game;
@@ -9,15 +10,420 @@ export interface GameVars {
   gameId: string;
 }
 
-const GAME = gql`
-  query Game($gameId: String!) {
-    game(gameId: $gameId) {
-      id
-      name
-      invitees
-      commsApp
-      commsUrl
-      hasFinishedPreGame
+export const playbookUniqueFragments = {
+  angelKit: gql`
+    fragment AngelKit on PlaybookUnique {
+      angelKit {
+        id
+        description
+        stock
+        angelKitMoves {
+          id
+          name
+          kind
+          description
+          playbook
+          stat
+          moveAction {
+            id
+            actionType
+            rollType
+            statToRollWith
+          }
+        }
+        hasSupplier
+        supplierText
+      }
+    }
+  `,
+  brainerGear: gql`
+    fragment BrainerGear on PlaybookUnique {
+      brainerGear {
+        id
+        brainerGear
+      }
+    }
+  `,
+
+  customWeapons: gql`
+    fragment CustomWeapons on PlaybookUnique {
+      customWeapons {
+        id
+        weapons
+      }
+    }
+  `,
+  establishment: gql`
+    fragment Establishment on PlaybookUnique {
+      establishment {
+        id
+        mainAttraction
+        bestRegular
+        worstRegular
+        wantsInOnIt
+        oweForIt
+        wantsItGone
+        sideAttractions
+        atmospheres
+        regulars
+        interestedParties
+        securityOptions {
+          id
+          description
+          value
+        }
+        castAndCrew {
+          id
+          name
+          description
+        }
+      }
+    }
+  `,
+  followers: gql`
+    fragment Followers on PlaybookUnique {
+      followers {
+        id
+        description
+        travelOption
+        characterization
+        followers
+        fortune
+        barter
+        surplusBarter
+        surplus
+        wants
+        selectedStrengths {
+          id
+          description
+          newNumberOfFollowers
+          surplusBarterChange
+          fortuneChange
+          surplusChange
+          wantChange
+        }
+        selectedWeaknesses {
+          id
+          description
+          newNumberOfFollowers
+          surplusBarterChange
+          fortuneChange
+          surplusChange
+          wantChange
+        }
+      }
+    }
+  `,
+  gang: gql`
+    fragment Gang on PlaybookUnique {
+      gang {
+        id
+        size
+        harm
+        armor
+        strengths {
+          id
+          description
+          modifier
+          tag
+        }
+        weaknesses {
+          id
+          description
+          modifier
+          tag
+        }
+        tags
+      }
+    }
+  `,
+  holding: gql`
+    fragment Holding on PlaybookUnique {
+      holding {
+        id
+        holdingSize
+        gangSize
+        souls
+        surplus
+        barter
+        gangHarm
+        gangArmor
+        gangDefenseArmorBonus
+        wants
+        gigs
+        gangTags
+        selectedStrengths {
+          id
+          description
+          surplusChange
+          wantChange
+          newHoldingSize
+          gigChange
+          newGangSize
+          gangTagChange
+          gangHarmChange
+          newVehicleCount
+          newBattleVehicleCount
+          newArmorBonus
+        }
+        selectedWeaknesses {
+          id
+          description
+          surplusChange
+          wantChange
+          newHoldingSize
+          gigChange
+          newGangSize
+          gangTagChange
+          gangHarmChange
+          newVehicleCount
+          newBattleVehicleCount
+          newArmorBonus
+        }
+      }
+    }
+  `,
+  skinnerGear: gql`
+    fragment SkinnerGear on PlaybookUnique {
+      skinnerGear {
+        id
+        graciousWeapon {
+          id
+          item
+          note
+        }
+        luxeGear {
+          id
+          item
+          note
+        }
+      }
+    }
+  `,
+  weapons: gql`
+    fragment Weapons on PlaybookUnique {
+      weapons {
+        id
+        weapons
+      }
+    }
+  `,
+};
+
+export const characterFragments = {
+  harm: gql`
+    fragment Harm on Character {
+      harm {
+        id
+        value
+        isStabilized
+        hasComeBackHard
+        hasComeBackWeird
+        hasChangedPlaybook
+        hasDied
+      }
+    }
+  `,
+  statsBlock: gql`
+    fragment StatsBlock on Character {
+      statsBlock {
+        id
+        statsOptionId
+        stats {
+          id
+          stat
+          value
+          isHighlighted
+        }
+      }
+    }
+  `,
+  hxBlock: gql`
+    fragment HxBlock on Character {
+      hxBlock {
+        id
+        characterId
+        characterName
+        hxValue
+      }
+    }
+  `,
+  looks: gql`
+    fragment Looks on Character {
+      looks {
+        look
+        category
+      }
+    }
+  `,
+  characterMoves: gql`
+    fragment CharacterMoves on Character {
+      characterMoves {
+        id
+        isSelected
+        name
+        kind
+        description
+        playbook
+        stat
+        moveAction {
+          id
+          actionType
+          rollType
+          statToRollWith
+        }
+      }
+    }
+  `,
+  vehicles: gql`
+    fragment Vehicles on Character {
+      vehicles {
+        id
+        name
+        vehicleType
+        vehicleFrame {
+          id
+          frameType
+          massive
+          examples
+          battleOptionCount
+        }
+        speed
+        handling
+        armor
+        massive
+        strengths
+        weaknesses
+        looks
+        battleOptions {
+          id
+          battleOptionType
+          name
+        }
+      }
+    }
+  `,
+  battleVehicles: gql`
+    fragment BattleVehicles on Character {
+      battleVehicles {
+        id
+        name
+        vehicleType
+        vehicleFrame {
+          id
+          frameType
+          massive
+          examples
+          battleOptionCount
+        }
+        speed
+        handling
+        armor
+        massive
+        strengths
+        weaknesses
+        looks
+        weapons
+        battleOptions {
+          id
+          battleOptionType
+          name
+        }
+        battleVehicleOptions {
+          id
+          battleOptionType
+          name
+        }
+      }
+    }
+  `,
+  playbookUnique: gql`
+    fragment PlaybookUnique on Character {
+      playbookUnique {
+        id
+        type
+        ...AngelKit
+        ...BrainerGear
+        ...CustomWeapons
+        ...Establishment
+        ...Followers
+        ...Gang
+        ...Holding
+        ...SkinnerGear
+        ...Weapons
+      }
+    }
+    ${playbookUniqueFragments.angelKit}
+    ${playbookUniqueFragments.brainerGear}
+    ${playbookUniqueFragments.customWeapons}
+    ${playbookUniqueFragments.establishment}
+    ${playbookUniqueFragments.followers}
+    ${playbookUniqueFragments.gang}
+    ${playbookUniqueFragments.weapons}
+    ${playbookUniqueFragments.holding}
+    ${playbookUniqueFragments.skinnerGear}
+  `,
+};
+
+export const gameRoleFragments = {
+  npcs: gql`
+    fragment Npcs on GameRole {
+      npcs {
+        id
+        name
+        description
+      }
+    }
+  `,
+  threats: gql`
+    fragment Threats on GameRole {
+      threats {
+        id
+        name
+        threatKind
+        impulse
+        description
+        stakes
+      }
+    }
+  `,
+  characters: gql`
+    fragment Characters on GameRole {
+      characters {
+        id
+        name
+        playbook
+        hasCompletedCharacterCreation
+        hasPlusOneForward
+        holds
+        gear
+        barter
+        vehicleCount
+        battleVehicleCount
+        ...Harm
+        ...StatsBlock
+        ...HxBlock
+        ...Looks
+        ...CharacterMoves
+        ...Vehicles
+        ...BattleVehicles
+        ...PlaybookUnique
+      }
+    }
+    ${characterFragments.harm}
+    ${characterFragments.statsBlock}
+    ${characterFragments.hxBlock}
+    ${characterFragments.looks}
+    ${characterFragments.characterMoves}
+    ${characterFragments.vehicles}
+    ${characterFragments.battleVehicles}
+    ${characterFragments.playbookUnique}
+  `,
+};
+
+export const gameFragments = {
+  gameMessages: gql`
+    fragment GameMessages on Game {
       gameMessages {
         id
         gameId
@@ -41,285 +447,60 @@ const GAME = gql`
         stockSpent
         currentStock
       }
+    }
+  `,
+  mc: gql`
+    fragment MC on Game {
       mc {
         id
         displayName
       }
+    }
+  `,
+  players: gql`
+    fragment Players on Game {
       players {
         id
         displayName
       }
+    }
+  `,
+  gameRoles: gql`
+    fragment GameRoles on Game {
       gameRoles {
         id
         role
         userId
-        npcs {
-          id
-          name
-          description
-        }
-        threats {
-          id
-          name
-          threatKind
-          impulse
-          description
-          stakes
-        }
-        characters {
-          id
-          name
-          playbook
-          hasCompletedCharacterCreation
-          hasPlusOneForward
-          holds
-          gear
-          barter
-          vehicleCount
-          battleVehicleCount
-          harm {
-            id
-            value
-            isStabilized
-            hasComeBackHard
-            hasComeBackWeird
-            hasChangedPlaybook
-            hasDied
-          }
-          statsBlock {
-            id
-            statsOptionId
-            stats {
-              id
-              stat
-              value
-              isHighlighted
-            }
-          }
-          hxBlock {
-            id
-            characterId
-            characterName
-            hxValue
-          }
-          looks {
-            look
-            category
-          }
-          characterMoves {
-            id
-            isSelected
-            name
-            kind
-            description
-            playbook
-            stat
-            moveAction {
-              id
-              actionType
-              rollType
-              statToRollWith
-            }
-          }
-          vehicles {
-            id
-            name
-            vehicleType
-            vehicleFrame {
-              id
-              frameType
-              massive
-              examples
-              battleOptionCount
-            }
-            speed
-            handling
-            armor
-            massive
-            strengths
-            weaknesses
-            looks
-            battleOptions {
-              id
-              battleOptionType
-              name
-            }
-          }
-          battleVehicles {
-            id
-            name
-            vehicleType
-            vehicleFrame {
-              id
-              frameType
-              massive
-              examples
-              battleOptionCount
-            }
-            speed
-            handling
-            armor
-            massive
-            strengths
-            weaknesses
-            looks
-            weapons
-            battleOptions {
-              id
-              battleOptionType
-              name
-            }
-            battleVehicleOptions {
-              id
-              battleOptionType
-              name
-            }
-          }
-          playbookUnique {
-            id
-            type
-            brainerGear {
-              id
-              brainerGear
-            }
-            angelKit {
-              id
-              description
-              stock
-              angelKitMoves {
-                id
-                name
-                kind
-                description
-                playbook
-                stat
-                moveAction {
-                  id
-                  actionType
-                  rollType
-                  statToRollWith
-                }
-              }
-              hasSupplier
-              supplierText
-            }
-            customWeapons {
-              id
-              weapons
-            }
-            weapons {
-              id
-              weapons
-            }
-            gang {
-              id
-              size
-              harm
-              armor
-              strengths {
-                id
-                description
-                modifier
-                tag
-              }
-              weaknesses {
-                id
-                description
-                modifier
-                tag
-              }
-              tags
-            }
-            skinnerGear {
-              id
-              graciousWeapon {
-                id
-                item
-                note
-              }
-              luxeGear {
-                id
-                item
-                note
-              }
-            }
-            holding {
-              id
-              holdingSize
-              gangSize
-              souls
-              surplus
-              barter
-              gangHarm
-              gangArmor
-              gangDefenseArmorBonus
-              wants
-              gigs
-              gangTags
-              selectedStrengths {
-                id
-                description
-                surplusChange
-                wantChange
-                newHoldingSize
-                gigChange
-                newGangSize
-                gangTagChange
-                gangHarmChange
-                newVehicleCount
-                newBattleVehicleCount
-                newArmorBonus
-              }
-              selectedWeaknesses {
-                id
-                description
-                surplusChange
-                wantChange
-                newHoldingSize
-                gigChange
-                newGangSize
-                gangTagChange
-                gangHarmChange
-                newVehicleCount
-                newBattleVehicleCount
-                newArmorBonus
-              }
-            }
-            followers {
-              id
-              description
-              travelOption
-              characterization
-              followers
-              fortune
-              barter
-              surplusBarter
-              surplus
-              wants
-              selectedStrengths {
-                id
-                description
-                newNumberOfFollowers
-                surplusBarterChange
-                fortuneChange
-                surplusChange
-                wantChange
-              }
-              selectedWeaknesses {
-                id
-                description
-                newNumberOfFollowers
-                surplusBarterChange
-                fortuneChange
-                surplusChange
-                wantChange
-              }
-            }
-          }
-        }
+        ...Npcs
+        ...Threats
+        ...Characters
       }
     }
+    ${gameRoleFragments.npcs}
+    ${gameRoleFragments.threats}
+    ${gameRoleFragments.characters}
+  `,
+};
+
+const GAME = gql`
+  query Game($gameId: String!) {
+    game(gameId: $gameId) {
+      id
+      name
+      invitees
+      commsApp
+      commsUrl
+      hasFinishedPreGame
+      ...GameMessages
+      ...MC
+      ...Players
+      ...GameRoles
+    }
   }
+  ${gameFragments.gameMessages}
+  ${gameFragments.mc}
+  ${gameFragments.players}
+  ${gameFragments.gameRoles}
 `;
 
 export default GAME;

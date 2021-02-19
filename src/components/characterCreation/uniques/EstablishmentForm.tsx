@@ -231,6 +231,7 @@ const EstablishmentForm: FC = () => {
       const securityNoTypename = securityOptions.map((so: SecurityOption) => omit(so, ['__typename']));
       // @ts-ignore
       const crewNoTypename = castAndCrew.map((cc: CastCrew) => omit(cc, ['__typename']));
+
       const establishmentInput: EstablishmentInput = {
         id: character.playbookUnique?.establishment ? character.playbookUnique.establishment.id : undefined,
         mainAttraction,
@@ -249,6 +250,7 @@ const EstablishmentForm: FC = () => {
       try {
         await setEstablishment({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, establishment: establishmentInput },
+          // TODO: add optimisticResponse
         });
         if (!character.hasCompletedCharacterCreation) {
           history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
@@ -327,9 +329,7 @@ const EstablishmentForm: FC = () => {
       setWorkingAttractions(establishmentCreator.attractions);
     } else if (!!establishmentCreator && !!character?.playbookUnique?.establishment) {
       const { mainAttraction, sideAttractions } = character.playbookUnique.establishment;
-      const filteredAttractions = establishmentCreator.attractions.filter(
-        (attr) => attr !== mainAttraction && !sideAttractions.includes(attr)
-      );
+      const filteredAttractions = establishmentCreator.attractions.filter((attr) => attr !== mainAttraction);
       setWorkingAttractions(filteredAttractions);
     }
   }, [character, establishmentCreator]);
@@ -384,6 +384,7 @@ const EstablishmentForm: FC = () => {
               id="main-attraction-input"
               aria-label="main-attraction-input"
               name="main-attraction"
+              value={mainAttraction}
               placeholder="Main attraction"
               options={establishmentCreator?.attractions || []}
               onChange={(e) => handleMainAttractionSelect(e.value)}
@@ -449,6 +450,7 @@ const EstablishmentForm: FC = () => {
               <Select
                 aria-label="best-regular-input"
                 placeholder="Select regular"
+                value={bestRegular}
                 options={regulars.filter((reg: string) => reg !== worstRegular)}
                 onChange={(e) => dispatch({ type: 'SET_BEST_REGULAR', payload: e.value })}
               />
@@ -458,6 +460,7 @@ const EstablishmentForm: FC = () => {
               <Select
                 aria-label="worst-regular-input"
                 placeholder="Select regular"
+                value={worstRegular}
                 options={regulars.filter((reg: string) => reg !== bestRegular)}
                 onChange={(e) => dispatch({ type: 'SET_WORST_REGULAR', payload: e.value })}
               />
@@ -497,6 +500,7 @@ const EstablishmentForm: FC = () => {
               <Select
                 aria-label="wants-in-on-it-input"
                 placeholder="Select NPC"
+                value={wantsInOnIt}
                 options={interestedParties.filter((npc: string) => npc !== oweForIt && npc !== wantsItGone)}
                 onChange={(e) => dispatch({ type: 'SET_WANTS_IN', payload: e.value })}
               />
@@ -506,6 +510,7 @@ const EstablishmentForm: FC = () => {
               <Select
                 aria-label="owes-for-it-input"
                 placeholder="Select NPC"
+                value={oweForIt}
                 options={interestedParties.filter((npc: string) => npc !== wantsInOnIt && npc !== wantsItGone)}
                 onChange={(e) => dispatch({ type: 'SET_OWES_FOR_IT', payload: e.value })}
               />
@@ -515,6 +520,7 @@ const EstablishmentForm: FC = () => {
               <Select
                 aria-label="wants-it-gone-input"
                 placeholder="Select NPC"
+                value={wantsItGone}
                 options={interestedParties.filter((npc: string) => npc !== wantsInOnIt && npc !== oweForIt)}
                 onChange={(e) => dispatch({ type: 'SET_WANTS_IT_GONE', payload: e.value })}
               />
@@ -538,7 +544,7 @@ const EstablishmentForm: FC = () => {
             {establishmentCreator?.securityOptions.map((option) => (
               <CheckBox
                 key={option.id}
-                checked={securityOptions.includes(option)}
+                checked={securityOptions.map((opt: SecurityOption) => opt.id).includes(option.id)}
                 label={
                   <TextWS>
                     {option.description}
