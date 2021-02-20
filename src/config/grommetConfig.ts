@@ -776,3 +776,9 @@ export const skinnerSpecialDialogBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-29.jpg)',
 };
+
+export const justGiveMotiveDialogBackground = {
+  ...backgroundBase,
+  size: 'contain',
+  image: 'url(/images/background-image-30.jpg)',
+};

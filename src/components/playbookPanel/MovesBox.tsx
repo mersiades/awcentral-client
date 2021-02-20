@@ -167,6 +167,8 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
       // deliberately falls through
       case RollType.handling:
       // deliberately falls through
+      case RollType.choice:
+      // deliberately falls through
       case RollType.hx:
         !!openDialog && openDialog(move);
         break;
