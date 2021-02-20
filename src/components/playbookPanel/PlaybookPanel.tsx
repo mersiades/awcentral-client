@@ -110,18 +110,10 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
           openDialog={openDialog}
         />
       )}
-      {!!character.playbookUnique?.gang && (
-        <GangBox navigateToCharacterCreation={navigateToCharacterCreation} openDialog={openDialog} />
-      )}
-      {!!character.playbookUnique?.holding && <HoldingBox navigateToCharacterCreation={navigateToCharacterCreation} />}
-      {!!character.playbookUnique?.followers && <FollowersBox navigateToCharacterCreation={navigateToCharacterCreation} />}
-      {!!character.playbookUnique?.skinnerGear && (
-        <SkinnerGearBox navigateToCharacterCreation={navigateToCharacterCreation} />
-      )}
-      {!!character.playbookUnique?.weapons && (
+      {!!character.playbookUnique?.brainerGear && (
         <UniqueItemsBox
-          title="Weapons"
-          items={character.playbookUnique.weapons.weapons}
+          title="Brainer gear"
+          items={character.playbookUnique.brainerGear.brainerGear.map((item) => item.substring(0, item.indexOf(')_') + 1))}
           navigateToCharacterCreation={navigateToCharacterCreation}
         />
       )}
@@ -133,13 +125,26 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
         />
       )}
 
-      {!!character.playbookUnique?.brainerGear && (
+      {!!character.playbookUnique?.establishment && (
+        <FollowersBox navigateToCharacterCreation={navigateToCharacterCreation} />
+      )}
+      {!!character.playbookUnique?.followers && <FollowersBox navigateToCharacterCreation={navigateToCharacterCreation} />}
+      {!!character.playbookUnique?.gang && (
+        <GangBox navigateToCharacterCreation={navigateToCharacterCreation} openDialog={openDialog} />
+      )}
+      {!!character.playbookUnique?.holding && <HoldingBox navigateToCharacterCreation={navigateToCharacterCreation} />}
+
+      {!!character.playbookUnique?.skinnerGear && (
+        <SkinnerGearBox navigateToCharacterCreation={navigateToCharacterCreation} />
+      )}
+      {!!character.playbookUnique?.weapons && (
         <UniqueItemsBox
-          title="Brainer gear"
-          items={character.playbookUnique.brainerGear.brainerGear.map((item) => item.substring(0, item.indexOf(')_') + 1))}
+          title="Weapons"
+          items={character.playbookUnique.weapons.weapons}
           navigateToCharacterCreation={navigateToCharacterCreation}
         />
       )}
+
       <VehiclesBox vehicles={character.vehicles} navigateToCharacterCreation={navigateToCharacterCreation} />
       <BattleVehiclesBox vehicles={character.battleVehicles} navigateToCharacterCreation={navigateToCharacterCreation} />
     </Box>

@@ -17,7 +17,6 @@ import { HoldingInput } from '../../../@types';
 import { GangOption, HoldingOption } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
-import { Holding } from '../../../@types/dataInterfaces';
 import { updateTags, unUpdateTags } from '../../../helpers/updateTags';
 
 interface HoldingFormState {
@@ -340,7 +339,7 @@ const HoldingForm: FC = () => {
                   key={option.id}
                   checked={selectedStrengths.map((str: HoldingOption) => str.id).includes(option.id)}
                   label={option.description}
-                  onChange={(event) => handleStrengthSelect(option)}
+                  onChange={() => handleStrengthSelect(option)}
                 />
               );
             })}
@@ -352,7 +351,7 @@ const HoldingForm: FC = () => {
                   key={option.id}
                   checked={selectedWeaknesses.map((wk: HoldingOption) => wk.id).includes(option.id)}
                   label={option.description}
-                  onChange={(event) => handleWeaknessSelect(option)}
+                  onChange={() => handleWeaknessSelect(option)}
                 />
               );
             })}

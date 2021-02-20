@@ -1,49 +1,49 @@
-import React from 'react';
+// import React from 'react';
 // import wait from 'waait';
-import { cleanup, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { cleanup /*screen*/ } from '@testing-library/react';
+// import userEvent from '@testing-library/user-event';
 
-import App from '../components/App';
-import { renderWithRouter } from './test-utils';
+// import App from '../components/App';
+// import { renderWithRouter } from './test-utils';
 import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
-import { mockCharacter1, mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from './mocks';
-import { mockPlaybookCreatorAngel } from './mockStaticData';
-import {
-  mockCreateCharacter,
-  mockfinishCharacterCreation,
-  mockGameForCharacterCreation1,
-  mockGameForCharacterCreation10,
-  mockGameForCharacterCreation11,
-  mockGameForCharacterCreation12,
-  mockGameForCharacterCreation13,
-  mockGameForCharacterCreation14,
-  mockGameForCharacterCreation15,
-  mockGameForCharacterCreation16,
-  mockGameForCharacterCreation2,
-  mockGameForCharacterCreation3,
-  mockGameForCharacterCreation4,
-  mockGameForCharacterCreation5,
-  mockGameForCharacterCreation6,
-  mockGameForCharacterCreation7,
-  mockGameForCharacterCreation8,
-  mockGameForCharacterCreation9,
-  mockPlaybookCreator,
-  mockPlaybooksQuery,
-  mockSetAngelKit,
-  mockSetCharacterBarter,
-  mockSetCharacterGear,
-  mockSetCharacterHx,
-  mockSetCharacterLook1,
-  mockSetCharacterLook2,
-  mockSetCharacterLook3,
-  mockSetCharacterLook4,
-  mockSetCharacterLook5,
-  mockSetCharacterMoves,
-  mockSetCharacterName,
-  mockSetCharacterPlaybook,
-  mockSetCharacterStats,
-  mockToggleStatHighlight,
-} from './mockQueries';
+import { /*mockCharacter1, mockCharacter2, mockGame5,*/ mockKeycloakUserInfo1 } from './mocks';
+// import { mockPlaybookCreatorAngel } from './mockStaticData';
+// import {
+//   mockCreateCharacter,
+//   mockfinishCharacterCreation,
+//   mockGameForCharacterCreation1,
+//   mockGameForCharacterCreation10,
+//   mockGameForCharacterCreation11,
+//   mockGameForCharacterCreation12,
+//   mockGameForCharacterCreation13,
+//   mockGameForCharacterCreation14,
+//   mockGameForCharacterCreation15,
+//   mockGameForCharacterCreation16,
+//   mockGameForCharacterCreation2,
+//   mockGameForCharacterCreation3,
+//   mockGameForCharacterCreation4,
+//   mockGameForCharacterCreation5,
+//   mockGameForCharacterCreation6,
+//   mockGameForCharacterCreation7,
+//   mockGameForCharacterCreation8,
+//   mockGameForCharacterCreation9,
+//   mockPlaybookCreator,
+//   mockPlaybooksQuery,
+//   mockSetAngelKit,
+//   mockSetCharacterBarter,
+//   mockSetCharacterGear,
+//   mockSetCharacterHx,
+//   mockSetCharacterLook1,
+//   mockSetCharacterLook2,
+//   mockSetCharacterLook3,
+//   mockSetCharacterLook4,
+//   mockSetCharacterLook5,
+//   mockSetCharacterMoves,
+//   mockSetCharacterName,
+//   mockSetCharacterPlaybook,
+//   mockSetCharacterStats,
+//   mockToggleStatHighlight,
+// } from './mockQueries';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');

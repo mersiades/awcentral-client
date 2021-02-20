@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { Box } from 'grommet';
-import { CaretUpFill, CaretDownFill, FormDown, FormUp } from 'grommet-icons';
+import { FormDown, FormUp } from 'grommet-icons';
 
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
-import { RedBox, HeadingWS, brandColor } from '../../config/grommetConfig';
+import { HeadingWS, brandColor } from '../../config/grommetConfig';
 import SET_ANGEL_KIT, { SetAngelKitData, SetAngelKitVars } from '../../mutations/setAngelKit';
 import { RoleType } from '../../@types/enums';
 import { AngelKit } from '../../@types/dataInterfaces';

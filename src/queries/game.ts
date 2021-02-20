@@ -1,6 +1,5 @@
 import { gql } from '@apollo/client';
 import { Game } from '../@types/dataInterfaces';
-import { playbookUniqueCreatorFragments } from './playbookCreator';
 
 export interface GameData {
   game: Game;

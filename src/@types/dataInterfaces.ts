@@ -1,5 +1,4 @@
 import {
-  BattleOptionType,
   GangSize,
   HoldingSize,
   MessageType,
@@ -8,7 +7,6 @@ import {
   StatType,
   ThreatType,
   UniqueTypes,
-  VehicleFrameType,
   VehicleType,
 } from './enums';
 import {

@@ -1,34 +1,34 @@
 import React from 'react';
 // import wait from 'waait';
-import { cleanup, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import CharacterCreationPage from '../CharacterCreationPage';
 import {
-  mockGameForCharacterCreation1,
+  // mockGameForCharacterCreation1,
   mockPlayBookCreatorQueryAngel,
-  mockVehicleCreatorQuery,
-  mockPlaybooksQuery,
+  // mockVehicleCreatorQuery,
+  // mockPlaybooksQuery,
   mockSetAngelKit,
-  mockSetVehicle,
+  // mockSetVehicle,
 } from '../../tests/mockQueries';
-import { customRenderForComponent, renderWithRouter } from '../../tests/test-utils';
+import { /*customRenderForComponent,*/ renderWithRouter } from '../../tests/test-utils';
 import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
 import {
   mockCharacter2,
   mockGame5,
-  mockGame7,
+  // mockGame7,
   mockKeycloakUserInfo1,
-  mockKeycloakUserInfo2,
-  mockVehicleInput,
-  mockBattleOption1,
-  mockBattleOption2,
-  mockBattleOption3,
-  mockBattleOption4,
-  mockVehicleFrame3,
+  // mockKeycloakUserInfo2,
+  // mockVehicleInput,
+  // mockBattleOption1,
+  // mockBattleOption2,
+  // mockBattleOption3,
+  // mockBattleOption4,
+  // mockVehicleFrame3,
 } from '../../tests/mocks';
 import { PlaybookType } from '../../@types/enums';
-import { mockPlayBookCreatorQueryBattlebabe } from '../../components/characterCreation/uniques/__tests__/CustomWeaponsForm.test';
+// import { mockPlayBookCreatorQueryBattlebabe } from '../../components/characterCreation/uniques/__tests__/CustomWeaponsForm.test';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
@@ -171,6 +171,10 @@ describe('Rendering CharacterCreationPage', () => {
       characterMoves: [],
       hxBlock: mockCharacter2.hxBlock,
       vehicles: [],
+      hasPlusOneForward: false,
+      holds: 0,
+      battleVehicleCount: 0,
+      battleVehicles: [],
     };
     const game = {
       ...mockGame5,

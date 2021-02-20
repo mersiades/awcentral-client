@@ -41,7 +41,7 @@ const ComponentProviders = ({
     <BrowserRouter>
       <MockedProvider mocks={apolloMocks} addTypename={false}>
         <FontsProvider isVtksReady={vtksReady} isCrustReady={crustReady}>
-          <Grommet theme={theme(vtksReady, crustReady)} full>
+          <Grommet theme={theme(vtksReady)} full>
             <ReactKeycloakProvider
               authClient={mockKeycloakStub(isAuthenticated)}
               initOptions={{
@@ -79,7 +79,7 @@ const AppProviders = ({
     <BrowserRouter>
       <MockedProvider mocks={apolloMocks} addTypename={false}>
         <FontsProvider isVtksReady={vtksReady} isCrustReady={crustReady}>
-          <Grommet theme={theme(vtksReady, crustReady)} full>
+          <Grommet theme={theme(vtksReady)} full>
             <ReactKeycloakProvider
               authClient={mockKeycloakStub(isAuthenticated)}
               initOptions={{

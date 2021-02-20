@@ -3,16 +3,11 @@ import { useMutation } from '@apollo/client';
 import { Box } from 'grommet';
 
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
-
-import { useFonts } from '../../contexts/fontContext';
-import { useGame } from '../../contexts/gameContext';
-
-import { useParams } from 'react-router-dom';
-
 import DoubleRedBox from '../DoubleRedBox';
 import SingleRedBox from '../SingleRedBox';
 import RedTagsBox from '../RedTagsBox';
 import UPDATE_FOLLOWERS, { UpdateFollowersData, UpdateFollowersVars } from '../../mutations/updateFollowers';
+import { useGame } from '../../contexts/gameContext';
 import { getFollowersDescription } from '../../helpers/getFollowersDescription';
 
 interface FollowersBoxProps {
@@ -22,9 +17,6 @@ interface FollowersBoxProps {
 const FollowersBox: FC<FollowersBoxProps> = ({ navigateToCharacterCreation }) => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { character, userGameRole } = useGame();
-
-  // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
-  const { gameId } = useParams<{ gameId: string }>();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
 

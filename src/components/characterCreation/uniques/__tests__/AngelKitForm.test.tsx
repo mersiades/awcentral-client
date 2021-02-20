@@ -1,14 +1,14 @@
 import React from 'react';
 // import wait from 'waait';
-import { cleanup, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 
 import { mockKeycloakStub } from '../../../../../__mocks__/@react-keycloak/web';
-import { mockAngelKitCreator, mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../../tests/mocks';
+import { mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../../tests/mocks';
 import { renderWithRouter } from '../../../../tests/test-utils';
 import { PlaybookType } from '../../../../@types/enums';
 import { mockPlayBookCreatorQueryAngel } from '../../../../tests/mockQueries';
 import AngelKitForm from '../AngelKitForm';
+import { Character } from '../../../../@types/dataInterfaces';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
@@ -20,7 +20,7 @@ jest.mock('@react-keycloak/web', () => {
 
 describe('Rendering AngelKitForm', () => {
   test('should load AngelKitForm with default values and submit', async () => {
-    const startCharacter = {
+    const startCharacter: Character = {
       id: mockCharacter2.id,
       hasCompletedCharacterCreation: mockCharacter2.hasCompletedCharacterCreation,
       harm: mockCharacter2.harm,
@@ -35,6 +35,10 @@ describe('Rendering AngelKitForm', () => {
       characterMoves: [],
       hxBlock: mockCharacter2.hxBlock,
       vehicles: [],
+      battleVehicles: [],
+      battleVehicleCount: 0,
+      hasPlusOneForward: false,
+      holds: 0,
     };
     const game = {
       ...mockGame5,

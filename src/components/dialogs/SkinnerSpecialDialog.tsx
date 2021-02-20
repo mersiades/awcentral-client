@@ -4,26 +4,14 @@ import { useMutation } from '@apollo/client';
 import { Box, RadioButtonGroup, Select } from 'grommet';
 
 import DialogWrapper from '../DialogWrapper';
-import { StyledMarkdown } from '../styledComponents';
-import {
-  HeadingWS,
-  ParagraphWS,
-  ButtonWS,
-  gunluggerSpecialDialogBackground,
-  TextWS,
-  skinnerSpecialDialogBackground,
-} from '../../config/grommetConfig';
-import PERFORM_GUNLUGGER_SPECIAL_MOVE, {
-  PerformGunluggerSpecialMoveData,
-  PerformGunluggerSpecialMoveVars,
-} from '../../mutations/performGunluggerSpecialMove';
-import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
-import { useFonts } from '../../contexts/fontContext';
-import { useGame } from '../../contexts/gameContext';
+import { HeadingWS, ParagraphWS, ButtonWS, TextWS, skinnerSpecialDialogBackground } from '../../config/grommetConfig';
 import PERFORM_SKINNER_SPECIAL_MOVE, {
   PerformSkinnerSpecialMoveData,
   PerformSkinnerSpecialMoveVars,
 } from '../../mutations/performSkinnerSpecialMove';
+import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 
 interface SkinnerSpecialDialogProps {
   move: Move | CharacterMove;

@@ -1,18 +1,9 @@
-import {
-  FollowersInput,
-  HxInput,
-  ItemCharacteristic,
-  KeycloakUser,
-  KeycloakUserInfo,
-  TaggedItem,
-  VehicleInput,
-} from '../@types';
+import { HxInput, ItemCharacteristic, KeycloakUser, KeycloakUserInfo, TaggedItem, VehicleInput } from '../@types';
 import {
   AngelKit,
   BattleVehicle,
   BrainerGear,
   CharacterHarm,
-  CharacterStat,
   CustomWeapons,
   Followers,
   Game,

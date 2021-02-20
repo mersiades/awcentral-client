@@ -67,7 +67,6 @@ import {
   mockPlaybookAngel,
   mockPlaybookCreatorAngel,
   mockPlaybooks,
-  mockPlaybookCreatorDriver,
   mockgearInstructionsAngel,
   mockStatsOptionsAngel1,
   mockStatsOptionsAngel2,

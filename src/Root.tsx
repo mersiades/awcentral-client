@@ -27,7 +27,7 @@ const Root: FC<RootProps> = ({ children }) => {
             {(context) => {
               // The Grommet theme needs the font values, so using the Consumer here immediately.
               return (
-                <Grommet theme={theme(context.vtksReady, context.crustReady)} full>
+                <Grommet theme={theme(context.vtksReady)} full>
                   <ReactKeycloakProvider
                     authClient={keycloak}
                     initOptions={{

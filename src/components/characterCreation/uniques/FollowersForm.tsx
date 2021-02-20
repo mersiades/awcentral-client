@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useReducer } from 'react';
-import { capitalize, omit } from 'lodash';
+import { omit } from 'lodash';
 import { useMutation, useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import { Box, CheckBox, Text } from 'grommet';
@@ -344,7 +344,7 @@ const FollowersForm: FC = () => {
                   key={option.id}
                   checked={selectedStrengths.map((str: FollowersOption) => str.id).includes(option.id)}
                   label={option.description}
-                  onChange={(event) => handleStrengthSelect(option)}
+                  onChange={() => handleStrengthSelect(option)}
                 />
               );
             })}
@@ -358,7 +358,7 @@ const FollowersForm: FC = () => {
                   key={option.id}
                   checked={selectedWeaknesses.map((wk: FollowersOption) => wk.id).includes(option.id)}
                   label={option.description}
-                  onChange={(event) => handleWeaknessSelect(option)}
+                  onChange={() => handleWeaknessSelect(option)}
                 />
               );
             })}

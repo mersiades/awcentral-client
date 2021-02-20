@@ -4,11 +4,8 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { customRenderForComponent } from '../../../tests/test-utils';
-import { mockCharacter2, mockGame7, mockPlaybookAngel } from '../../../tests/mocks';
-import { mockPlaybook } from '../../../tests/mockQueries';
-import { decapitalize } from '../../../helpers/decapitalize';
+import { mockGame7 } from '../../../tests/mocks';
 import GamePanel from '../GamePanel';
-import { MoveType } from '../../../@types/enums';
 
 describe('Rendering GamePanel', () => {
   test('should render GameBox with complete comms info', () => {

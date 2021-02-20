@@ -1,6 +1,6 @@
 import React from 'react';
-import wait from 'waait';
-import { act, screen } from '@testing-library/react';
+// import wait from 'waait';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import App from '../../components/App';
@@ -14,7 +14,7 @@ import {
   mockKeycloakUser2,
   mockKeycloakUserInfo2,
 } from '../../tests/mocks';
-import { mockFinishPreGame, mockGameForPreGame1, mockGameForPreGame2, mockGameForPreGame3 } from '../../tests/mockQueries';
+import { mockFinishPreGame, mockGameForPreGame1, mockGameForPreGame3 } from '../../tests/mockQueries';
 import { decapitalize } from '../../helpers/decapitalize';
 
 jest.mock('@react-keycloak/web', () => {

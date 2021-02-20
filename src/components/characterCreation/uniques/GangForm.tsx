@@ -256,7 +256,7 @@ const GangForm: FC<GangFormProps> = ({ existingGang }) => {
                   key={option.id}
                   checked={strengths.map((str: GangOption) => str.id).includes(option.id)}
                   label={option.description}
-                  onChange={(event) => handleStrengthSelect(option)}
+                  onChange={() => handleStrengthSelect(option)}
                 />
               );
             })}
@@ -268,7 +268,7 @@ const GangForm: FC<GangFormProps> = ({ existingGang }) => {
                   key={option.id}
                   checked={weaknesses.map((wk: GangOption) => wk.id).includes(option.id)}
                   label={option.description}
-                  onChange={(event) => handleWeaknessSelect(option)}
+                  onChange={() => handleWeaknessSelect(option)}
                 />
               );
             })}

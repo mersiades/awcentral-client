@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Box } from 'grommet';
-import { FormUp, FormDown, CaretUpFill, CaretDownFill } from 'grommet-icons';
+import { FormUp, FormDown } from 'grommet-icons';
 
 import { HeadingWS, RedBox } from '../../config/grommetConfig';
 import { StyledMarkdown } from '../styledComponents';

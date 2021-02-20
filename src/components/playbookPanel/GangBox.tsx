@@ -1,30 +1,30 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
+import { useParams } from 'react-router-dom';
 import { Box } from 'grommet';
 import { FormDown, FormUp } from 'grommet-icons';
 
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
 import { RedBox, HeadingWS, brandColor, TextWS } from '../../config/grommetConfig';
+import ALL_MOVES, { AllMovesData } from '../../queries/allMoves';
+import PERFORM_STAT_ROLL_MOVE, {
+  PerformStatRollMoveData,
+  PerformStatRollMoveVars,
+} from '../../mutations/performStatRollMove';
+import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
 import { MoveActionType, MoveType, RollType } from '../../@types/enums';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
-import ALL_MOVES, { AllMovesData } from '../../queries/allMoves';
 import { GO_AGGRO_NAME, SUCKER_SOMEONE_NAME } from '../../config/constants';
-import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
-import { useParams } from 'react-router-dom';
-import PERFORM_STAT_ROLL_MOVE, {
-  PerformStatRollMoveData,
-  PerformStatRollMoveVars,
-} from '../../mutations/performStatRollMove';
 
 interface GangBoxProps {
   navigateToCharacterCreation: (step: string) => void;
   openDialog: (move: Move | CharacterMove) => void;
 }
 
-const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation, openDialog }) => {
+const GangBox: FC<GangBoxProps> = ({ navigateToCharacterCreation }) => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
   const [showMoves, setShowMoves] = useState(false);
   const [gangMoves, setGangMoves] = useState<Move[]>([]);

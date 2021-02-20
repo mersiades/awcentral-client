@@ -1,5 +1,5 @@
 import React, { ChangeEvent, FC, useEffect, useReducer, useState } from 'react';
-import { capitalize, omit } from 'lodash';
+import { omit } from 'lodash';
 import { useMutation, useQuery } from '@apollo/client';
 import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
@@ -8,14 +8,11 @@ import { Box, CheckBox, Select, Text } from 'grommet';
 import { StyledMarkdown } from '../../styledComponents';
 import { ButtonWS, HeadingWS, ParagraphWS, RedBox, TextInputWS, TextWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import SET_FOLLOWERS, { SetFollowersData, SetFollowersVars } from '../../../mutations/setFollowers';
 import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../../@types/enums';
-import { EstablishmentInput, FollowersInput } from '../../../@types';
-import { FollowersOption, SecurityOption } from '../../../@types/staticDataInterfaces';
+import { EstablishmentInput } from '../../../@types';
+import { SecurityOption } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
-import { updateTags, unUpdateTags } from '../../../helpers/updateTags';
-import { getFollowersDescription } from '../../../helpers/getFollowersDescription';
 import { CastCrew } from '../../../@types/dataInterfaces';
 import SET_ESTABLISHMENT, { SetEstablishmentData, SetEstablishmentVars } from '../../../mutations/setEstablishment';
 import Spinner from '../../Spinner';
@@ -342,7 +339,7 @@ const EstablishmentForm: FC = () => {
     if (!!establishmentCreator && !character?.playbookUnique?.establishment) {
       setWorkingAttractions(establishmentCreator.attractions);
     } else if (!!establishmentCreator && !!character?.playbookUnique?.establishment) {
-      const { mainAttraction, sideAttractions } = character.playbookUnique.establishment;
+      const { mainAttraction } = character.playbookUnique.establishment;
       const filteredAttractions = establishmentCreator.attractions.filter((attr) => attr !== mainAttraction);
       setWorkingAttractions(filteredAttractions);
     }
@@ -385,9 +382,18 @@ const EstablishmentForm: FC = () => {
 
   return (
     <Box data-testid="followers-form" width="80vw" align="start" justify="between" overflow="auto" gap="18px">
-      <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
-        !!character?.name ? character.name?.toUpperCase() : '...'
-      }'S ESTABLISHMENT`}</HeadingWS>
+      <Box direction="row" fill="horizontal" align="center" justify="between">
+        <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
+          !!character?.name ? character.name?.toUpperCase() : '...'
+        }'S ESTABLISHMENT`}</HeadingWS>
+        <ButtonWS
+          primary
+          label={settingEstablishment ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+          onClick={() => !settingEstablishment && handleSubmitEstablishment()}
+          disabled={settingEstablishment || !isEstablishmentComplete}
+          style={{ height: '45px' }}
+        />
+      </Box>
       <Box fill="horizontal" direction="row" justify="between" gap="12px">
         <Box>
           <Box direction="row" gap="12px">
@@ -611,13 +617,6 @@ const EstablishmentForm: FC = () => {
           </Box>
         </Box>
       </Box>
-      <ButtonWS
-        primary
-        fill="horizontal"
-        label={settingEstablishment ? <Spinner fillColor="#FFF" width="80vw" height="36px" /> : 'SET'}
-        onClick={() => !settingEstablishment && handleSubmitEstablishment()}
-        disabled={settingEstablishment || !isEstablishmentComplete}
-      />
     </Box>
   );
 };

@@ -5,23 +5,23 @@ import { Box } from 'grommet';
 import { FormUp, FormDown, Edit } from 'grommet-icons';
 
 import { StyledMarkdown } from '../styledComponents';
+import { brandColor, HeadingWS } from '../../config/grommetConfig';
 import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
 import PERFORM_STAT_ROLL_MOVE, {
   PerformStatRollMoveData,
   PerformStatRollMoveVars,
 } from '../../mutations/performStatRollMove';
-import { MoveActionType, RoleType, RollType } from '../../@types/enums';
-import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
-import { useGame } from '../../contexts/gameContext';
-import { useFonts } from '../../contexts/fontContext';
-import { brandColor, HeadingWS } from '../../config/grommetConfig';
-import { decapitalize } from '../../helpers/decapitalize';
-import { FORTUNES_NAME, WEALTH_NAME } from '../../config/constants';
 import PERFORM_WEALTH_MOVE, { PerformWealthMoveData, PerformWealthMoveVars } from '../../mutations/performWealthMove';
 import PERFORM_FORTUNES_MOVE, {
   PerformFortunesMoveData,
   PerformFortunesMoveVars,
 } from '../../mutations/performFortunesMove';
+import { MoveActionType, RoleType, RollType } from '../../@types/enums';
+import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
+import { useGame } from '../../contexts/gameContext';
+import { useFonts } from '../../contexts/fontContext';
+import { decapitalize } from '../../helpers/decapitalize';
+import { WEALTH_NAME } from '../../config/constants';
 
 interface MovesBoxProps {
   moves: Array<CharacterMove | Move>;

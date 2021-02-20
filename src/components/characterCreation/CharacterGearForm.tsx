@@ -127,7 +127,7 @@ const CharacterGearForm: FC = () => {
               onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
               // @ts-ignore
               onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
-              onClick={(e: React.MouseEvent<HTMLLIElement>) => setValue(item)}
+              onClick={() => setValue(item)}
             >
               {item}
             </li>
@@ -157,7 +157,7 @@ const CharacterGearForm: FC = () => {
               onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
               // @ts-ignore
               onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
-              onClick={(e: React.MouseEvent<HTMLLIElement>) => setValue(item)}
+              onClick={() => setValue(item)}
             >
               {item}
             </li>
@@ -241,7 +241,7 @@ const CharacterGearForm: FC = () => {
                     onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
                     // @ts-ignore
                     onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
-                    onClick={(e: React.MouseEvent<HTMLLIElement>) => setValue(item)}
+                    onClick={() => setValue(item)}
                   >
                     {item}
                   </li>

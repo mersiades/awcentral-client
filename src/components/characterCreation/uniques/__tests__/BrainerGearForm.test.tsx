@@ -40,22 +40,23 @@ describe('Rendering BrainerGearForm', () => {
               playbookUnique: undefined,
               characterMoves: [],
               hxBlock: mockCharacter2.hxBlock,
+              hasPlusOneForward: false,
+              holds: 0,
+              battleVehicles: [],
+              battleVehicleCount: 0,
+              vehicles: [],
             },
           ],
         },
       ],
     };
 
-    renderWithRouter(
-      <BrainerGearForm existingBrainerGear={undefined} setCreationStep={jest.fn()} />,
-      `/character-creation/${mockGame5.id}`,
-      {
-        isAuthenticated: true,
-        apolloMocks: [mockPlayBookCreatorQueryBrainer],
-        injectedGame: game,
-        injectedUserId: mockKeycloakUserInfo1.sub,
-      }
-    );
+    renderWithRouter(<BrainerGearForm />, `/character-creation/${mockGame5.id}`, {
+      isAuthenticated: true,
+      apolloMocks: [mockPlayBookCreatorQueryBrainer],
+      injectedGame: game,
+      injectedUserId: mockKeycloakUserInfo1.sub,
+    });
 
     await screen.findByTestId('brainer-gear-form');
     screen.getByRole('heading', { name: `WHAT SPECIAL BRAINER GEAR DOES ${mockCharacter2.name.toUpperCase()} HAVE?` });

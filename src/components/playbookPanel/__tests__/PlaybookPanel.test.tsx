@@ -4,7 +4,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { customRenderForComponent } from '../../../tests/test-utils';
-import { mockCharacter2, mockPlaybookAngel } from '../../../tests/mocks';
+import { mockCharacter2 } from '../../../tests/mocks';
 import { mockPlaybook } from '../../../tests/mockQueries';
 import { decapitalize } from '../../../helpers/decapitalize';
 import PlaybookPanel from '../PlaybookPanel';
