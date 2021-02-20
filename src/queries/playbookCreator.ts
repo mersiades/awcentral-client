@@ -241,7 +241,7 @@ export const playbookCreatorFragments = {
     }
   `,
   looks: gql`
-    fragment Looks on PlaybookCreator {
+    fragment CreatorLooks on PlaybookCreator {
       looks {
         id
         look
@@ -362,7 +362,7 @@ const PLAYBOOK_CREATOR = gql`
       movesInstructions
       hxInstructions
       ...Names
-      ...Looks
+      ...CreatorLooks
       ...StatsOptions
       ...OptionalMoves
       ...DefaultMoves

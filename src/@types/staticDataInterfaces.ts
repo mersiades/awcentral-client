@@ -58,6 +58,7 @@ export interface Look {
   id: string;
   look: string;
   category: LookType;
+  __typename?: 'Look';
 }
 
 export interface GearInstructions {

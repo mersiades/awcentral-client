@@ -58,6 +58,7 @@ export interface GameRole {
   npcs: Npc[];
   threats: Threat[];
   game?: Game;
+  __typename?: 'GameRole';
 }
 // ------------------------------------------------- Player interfaces ------------------------------------------------- //
 
@@ -297,4 +298,5 @@ export interface GameMessage {
   currentHarm: number;
   stockSpent: number;
   currentStock: number;
+  __typename?: 'GameMessage';
 }

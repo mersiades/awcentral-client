@@ -1965,16 +1965,8 @@ export const mockGameForPreGame1: MockedResponse = {
     return {
       data: {
         game: {
-          id: mockGame5.id,
-          name: mockGame5.name,
-          invitees: [],
-          commsApp: mockGame5.commsApp,
-          commsUrl: mockGame5.commsUrl,
-          hasFinishedPreGame: mockGame5.hasFinishedPreGame,
-          gameMessages: mockGame5.gameMessages,
-          mc: mockGame5.mc,
-          players: mockGame5.players,
-          gameRoles: mockGame5.gameRoles,
+          ...mockGame5,
+          __typename: 'Game',
         },
       },
     };
@@ -2003,6 +1995,7 @@ export const mockGameForPreGame2: MockedResponse = {
               threats: mockGame5.gameRoles[2].threats,
               characters: [
                 {
+                  __typename: 'Character',
                   id: mockCharacter2.id,
                   playbook: mockCharacter2.playbook,
                   name: '',
