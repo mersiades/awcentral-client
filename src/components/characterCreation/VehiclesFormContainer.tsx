@@ -1,17 +1,16 @@
 import React, { FC, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useMutation } from '@apollo/client';
 import { Box, Tab, Tabs, Tip } from 'grommet';
+import { AddCircle } from 'grommet-icons';
 
 import VehicleForm from './VehicleForm';
 import Spinner from '../Spinner';
-import { brandColor, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../../config/grommetConfig';
+import { ButtonWS, ParagraphWS } from '../../config/grommetConfig';
+import SET_VEHICLE_COUNT, { SetVehicleCountData, SetVehicleCountVars } from '../../mutations/setVehicleCount';
 import { CharacterCreationSteps } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
-import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
-import { Add, AddCircle } from 'grommet-icons';
-import SET_VEHICLE_COUNT, { SetVehicleCountData, SetVehicleCountVars } from '../../mutations/setVehicleCount';
-import { useMutation } from '@apollo/client';
 
 const VehiclesFormContainer: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -20,13 +19,12 @@ const VehiclesFormContainer: FC = () => {
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, character, userGameRole } = useGame();
-  const { crustReady } = useFonts();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
 
   // --------------------------------------------------- Graphql hooks ----------------------------------------------------- //
-  const [setVehicleCount, { loading: settingMoves }] = useMutation<SetVehicleCountData, SetVehicleCountVars>(
+  const [setVehicleCount, { loading: settingVehicleCount }] = useMutation<SetVehicleCountData, SetVehicleCountVars>(
     SET_VEHICLE_COUNT
   );
 
@@ -121,7 +119,11 @@ const VehiclesFormContainer: FC = () => {
           {character.vehicleCount === character.vehicles.length && (
             <Tip content="Add another vehicle">
               <Box margin={{ horizontal: '24px' }} justify="center" align="center">
-                <AddCircle color="brand" style={{ cursor: 'pointer' }} onClick={() => handleAddVehicle()} />
+                <AddCircle
+                  color="brand"
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => !settingVehicleCount && handleAddVehicle()}
+                />
               </Box>
             </Tip>
           )}

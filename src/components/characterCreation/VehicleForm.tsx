@@ -1,20 +1,21 @@
-import { useMutation, useQuery } from '@apollo/client';
-import { Box, TextInput, Text, Tip } from 'grommet';
-import { omit } from 'lodash';
 import React, { FC, useEffect, useReducer } from 'react';
-import { VehicleInput } from '../../@types';
-import { Vehicle } from '../../@types/dataInterfaces';
-import { BattleOptionType, PlaybookType, VehicleFrameType, VehicleType } from '../../@types/enums';
-import { VehicleBattleOption, VehicleFrame } from '../../@types/staticDataInterfaces';
-import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../config/grommetConfig';
-import { useFonts } from '../../contexts/fontContext';
-import { useGame } from '../../contexts/gameContext';
-import SET_VEHICLE, { SetVehicleData, SetVehicleVars } from '../../mutations/setVehicle';
-import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../queries/vehicleCreator';
+import { useMutation, useQuery } from '@apollo/client';
+import { omit } from 'lodash';
+import { Box, TextInput, Text, Tip } from 'grommet';
+
 import DoubleRedBox from '../DoubleRedBox';
 import RedTagsBox from '../RedTagsBox';
 import SingleRedBox from '../SingleRedBox';
 import Spinner from '../Spinner';
+import { accentColors, ButtonWS, HeadingWS, neutralColors, TextWS } from '../../config/grommetConfig';
+import VEHICLE_CREATOR, { VehicleCreatorData, VehicleCreatorVars } from '../../queries/vehicleCreator';
+import SET_VEHICLE, { SetVehicleData, SetVehicleVars } from '../../mutations/setVehicle';
+import { BattleOptionType, PlaybookType, VehicleFrameType, VehicleType } from '../../@types/enums';
+import { VehicleInput } from '../../@types';
+import { Vehicle } from '../../@types/dataInterfaces';
+import { VehicleBattleOption, VehicleFrame } from '../../@types/staticDataInterfaces';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 
 interface VehicleFormProps {
   navigateOnSet: (numVehicles: number) => void;
@@ -22,40 +23,21 @@ interface VehicleFormProps {
 }
 
 interface VehicleFormState {
-  name: string;
   vehicleType: VehicleType;
+  name: string;
   frame?: VehicleFrame;
-  strengths: string[];
-  looks: string[];
-  weaknesses: string[];
   speed: number;
   handling: number;
   massive: number;
   armor: number;
+  strengths: string[];
+  looks: string[];
+  weaknesses: string[];
   battleOptions: VehicleBattleOption[];
 }
 
 interface Action {
-  type:
-    | 'REPLACE_VEHICLE'
-    | 'SET_FRAME'
-    | 'SET_NAME'
-    | 'ADD_STRENGTH'
-    | 'REMOVE_STRENGTH'
-    | 'ADD_WEAKNESS'
-    | 'REMOVE_WEAKNESS'
-    | 'ADD_LOOK'
-    | 'REMOVE_LOOK'
-    | 'REMOVE_BATTLE_OPTION'
-    | 'ADD_BATTLE_OPTION'
-    | 'INCREASE_SPEED'
-    | 'REDUCE_SPEED'
-    | 'INCREASE_HANDLING'
-    | 'REDUCE_HANDLING'
-    | 'INCREASE_MASSIVE'
-    | 'REDUCE_MASSIVE'
-    | 'INCREASE_ARMOR'
-    | 'REDUCE_ARMOR';
+  type: 'REPLACE_VEHICLE' | 'UPDATE_VEHICLE' | 'SET_FRAME' | 'SET_NAME';
   payload?: any;
 }
 
@@ -63,6 +45,11 @@ const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
   switch (action.type) {
     case 'REPLACE_VEHICLE':
       return action.payload;
+    case 'UPDATE_VEHICLE':
+      return {
+        ...state,
+        ...action.payload,
+      };
     case 'SET_FRAME':
       return {
         ...state,
@@ -79,87 +66,6 @@ const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
       };
     case 'SET_NAME':
       return { ...state, name: action.payload };
-    case 'ADD_STRENGTH':
-      return {
-        ...state,
-        strengths: [...state.strengths, action.payload],
-      };
-    case 'REMOVE_STRENGTH':
-      return {
-        ...state,
-        strengths: state.strengths.filter((str) => str !== action.payload),
-      };
-    case 'ADD_WEAKNESS':
-      return {
-        ...state,
-        weaknesses: [...state.weaknesses, action.payload],
-      };
-    case 'REMOVE_WEAKNESS':
-      return {
-        ...state,
-        weaknesses: state.weaknesses.filter((str) => str !== action.payload),
-      };
-    case 'ADD_LOOK':
-      return {
-        ...state,
-        looks: [...state.looks, action.payload],
-      };
-    case 'REMOVE_LOOK':
-      return {
-        ...state,
-        looks: state.looks.filter((str) => str !== action.payload),
-      };
-
-    case 'ADD_BATTLE_OPTION':
-      return {
-        ...state,
-        battleOptions: [...state.battleOptions, omit(action.payload, ['__typename'])] as VehicleBattleOption[],
-      };
-    case 'REMOVE_BATTLE_OPTION':
-      return {
-        ...state,
-        battleOptions: state.battleOptions.filter((bo) => bo.id !== action.payload.id),
-      };
-    case 'INCREASE_SPEED':
-      return {
-        ...state,
-        speed: 1,
-      };
-    case 'REDUCE_SPEED':
-      return {
-        ...state,
-        speed: 0,
-      };
-    case 'INCREASE_HANDLING':
-      return {
-        ...state,
-        handling: 1,
-      };
-    case 'REDUCE_HANDLING':
-      return {
-        ...state,
-        handling: 0,
-      };
-    case 'INCREASE_MASSIVE':
-      return {
-        ...state,
-        massive: !!state.frame ? state.frame.massive + 1 : 1,
-      };
-    case 'REDUCE_MASSIVE':
-      return {
-        ...state,
-        massive: !!state.frame ? state.frame.massive : 0,
-      };
-    case 'INCREASE_ARMOR':
-      return {
-        ...state,
-        armor: 1,
-      };
-    case 'REDUCE_ARMOR':
-      return {
-        ...state,
-        armor: 0,
-      };
     default:
       return state;
   }
@@ -167,16 +73,16 @@ const vehicleFormReducer = (state: VehicleFormState, action: Action) => {
 
 const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) => {
   const initialState: VehicleFormState = {
-    name: !!existingVehicle ? existingVehicle.name : 'Unnamed vehicle',
     vehicleType: !!existingVehicle ? existingVehicle.vehicleType : VehicleType.car,
+    name: !!existingVehicle ? existingVehicle.name : 'Unnamed vehicle',
     frame: !!existingVehicle ? omit(existingVehicle.vehicleFrame, ['__typename']) : undefined,
-    strengths: !!existingVehicle ? existingVehicle.strengths : [],
-    weaknesses: !!existingVehicle ? existingVehicle.weaknesses : [],
-    looks: !!existingVehicle ? existingVehicle.looks : [],
     speed: !!existingVehicle ? existingVehicle.speed : 0,
     handling: !!existingVehicle ? existingVehicle.handling : 0,
     massive: !!existingVehicle ? existingVehicle.massive : 0,
     armor: !!existingVehicle ? existingVehicle.armor : 0,
+    strengths: !!existingVehicle ? existingVehicle.strengths : [],
+    weaknesses: !!existingVehicle ? existingVehicle.weaknesses : [],
+    looks: !!existingVehicle ? existingVehicle.looks : [],
     battleOptions: !!existingVehicle
       ? (existingVehicle.battleOptions.map((bo) => omit(bo, ['__typename'])) as VehicleBattleOption[])
       : [],
@@ -212,68 +118,96 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
   const battleOptionOptions: VehicleBattleOption[] | undefined =
     frame?.frameType === VehicleFrameType.bike ? bikeCreator?.battleOptions : carCreator?.battleOptions;
 
-  const handleClickStrength = (strength: string) => {
-    if (strengths.includes(strength)) {
-      dispatch({ type: 'REMOVE_STRENGTH', payload: strength });
-    } else if (strengths.length < 2) {
-      dispatch({ type: 'ADD_STRENGTH', payload: strength });
+  const increaseStats = (update: Partial<VehicleInput>, option: VehicleBattleOption) => {
+    let newUpdate = update;
+    switch (option.battleOptionType) {
+      case BattleOptionType.speed:
+        newUpdate = { ...newUpdate, speed: speed + 1 };
+        break;
+      case BattleOptionType.handling:
+        newUpdate = { ...newUpdate, handling: handling + 1 };
+        break;
+      case BattleOptionType.massive:
+        newUpdate = { ...newUpdate, massive: massive + 1 };
+        break;
+      case BattleOptionType.armor:
+        newUpdate = { ...newUpdate, armor: armor + 1 };
+        break;
+      default:
     }
+
+    return newUpdate;
   };
 
-  const handleClickLook = (look: string) => {
-    if (looks.includes(look)) {
-      dispatch({ type: 'REMOVE_LOOK', payload: look });
-    } else if (looks.length < 2) {
-      dispatch({ type: 'ADD_LOOK', payload: look });
+  const decreaseStats = (update: Partial<VehicleInput>, option: VehicleBattleOption) => {
+    let newUpdate = update;
+    switch (option.battleOptionType) {
+      case BattleOptionType.speed:
+        newUpdate = { ...newUpdate, speed: speed - 1 };
+        break;
+      case BattleOptionType.handling:
+        newUpdate = { ...newUpdate, handling: handling - 1 };
+        break;
+      case BattleOptionType.massive:
+        newUpdate = { ...newUpdate, massive: massive - 1 };
+        break;
+      case BattleOptionType.armor:
+        newUpdate = { ...newUpdate, armor: armor - 1 };
+        break;
+      default:
     }
+
+    return newUpdate;
   };
 
-  const handleClickWeakness = (weakness: string) => {
-    if (weaknesses.includes(weakness)) {
-      dispatch({ type: 'REMOVE_WEAKNESS', payload: weakness });
-    } else if (weaknesses.length < 2) {
-      dispatch({ type: 'ADD_WEAKNESS', payload: weakness });
-    }
-  };
+  const handleOptionSelect = (
+    option: string | VehicleBattleOption,
+    type: 'strength' | 'weakness' | 'look' | 'battleOption',
+    isSelected: boolean
+  ) => {
+    let update: Partial<VehicleInput> = {};
 
-  const handleClickBattleOption = (battleOption: VehicleBattleOption, isSelected: boolean) => {
-    if (!!frame) {
+    if (type === 'strength') {
       if (isSelected) {
-        dispatch({ type: 'REMOVE_BATTLE_OPTION', payload: battleOption });
-        switch (battleOption.battleOptionType) {
-          case BattleOptionType.speed:
-            dispatch({ type: 'REDUCE_SPEED' });
-            break;
-          case BattleOptionType.handling:
-            dispatch({ type: 'REDUCE_HANDLING' });
-            break;
-          case BattleOptionType.massive:
-            dispatch({ type: 'REDUCE_MASSIVE' });
-            break;
-          case BattleOptionType.armor:
-            dispatch({ type: 'REDUCE_ARMOR' });
-            break;
-          default:
-        }
-      } else if (battleOptions.length < frame.battleOptionCount) {
-        dispatch({ type: 'ADD_BATTLE_OPTION', payload: battleOption });
-        switch (battleOption.battleOptionType) {
-          case BattleOptionType.speed:
-            dispatch({ type: 'INCREASE_SPEED' });
-            break;
-          case BattleOptionType.handling:
-            dispatch({ type: 'INCREASE_HANDLING' });
-            break;
-          case BattleOptionType.massive:
-            dispatch({ type: 'INCREASE_MASSIVE' });
-            break;
-          case BattleOptionType.armor:
-            dispatch({ type: 'INCREASE_ARMOR' });
-            break;
-          default:
-        }
+        update = { ...update, strengths: strengths.filter((str: string) => str !== option) };
+      } else if (strengths.length < 2) {
+        update = { ...update, strengths: [...strengths, option] };
       }
     }
+
+    if (type === 'weakness') {
+      if (isSelected) {
+        update = { ...update, weaknesses: weaknesses.filter((wk: string) => wk !== option) };
+      } else if (weaknesses.length < 2) {
+        update = { ...update, weaknesses: [...weaknesses, option] };
+      }
+    }
+    if (type === 'look') {
+      if (isSelected) {
+        update = { ...update, looks: looks.filter((lk: string) => lk !== option) };
+      } else if (looks.length < 2) {
+        update = { ...update, looks: [...looks, option] };
+      }
+    }
+
+    if (type === 'battleOption') {
+      const castOption = option as VehicleBattleOption; // Because the option parameter could also be a string
+      if (isSelected) {
+        update = {
+          ...update,
+          battleOptions: battleOptions.filter((bo: VehicleBattleOption) => bo.id !== castOption.id),
+        };
+        update = decreaseStats(update, castOption);
+      } else if (battleOptions.length < frame.battleOptionCount) {
+        update = {
+          ...update,
+          battleOptions: [...battleOptions, omit(castOption, ['__typename'])] as VehicleBattleOption[],
+        };
+        update = increaseStats(update, castOption);
+      }
+    }
+
+    dispatch({ type: 'UPDATE_VEHICLE', payload: update });
   };
 
   const handleSetVehicle = async () => {
@@ -384,7 +318,7 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
           pad={{ top: '3px', bottom: '1px', horizontal: '12px' }}
           margin={{ vertical: '3px', horizontal: '3px' }}
           justify="center"
-          onClick={() => handleClickBattleOption(battleOption, isSelected)}
+          onClick={() => handleOptionSelect(battleOption, 'battleOption', isSelected)}
           hoverIndicator={{ color: '#698D70', dark: true }}
         >
           <Text weight="bold" size="medium">
@@ -423,104 +357,100 @@ const VehicleForm: FC<VehicleFormProps> = ({ navigateOnSet, existingVehicle }) =
   }
 
   return (
-    <Box
-      data-testid="vehicle-form"
-      direction="column"
-      width="80vw"
-      align="start"
-      justify="start"
-      overflow="auto"
-      flex="grow"
-    >
-      <Box direction="row">
-        <Box direction="column" fill="horizontal" pad="12px" gap="12px">
-          <TextWS>{introText}</TextWS>
-          <Box>
-            <TextWS>
-              <strong>Give your vehicle a name</strong> (make/model, nickname, whatever):
-            </TextWS>
-            <TextInput
-              aria-label="name-input"
-              name="name"
-              value={name}
-              onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
-            />
-          </Box>
-          <Box>
-            <TextWS>Choose its frame (resets other settings):</TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {carCreator.frames.map((frame) => renderFramePill(frame))}
-            </Box>
-          </Box>
-          <Box>
-            <TextWS>
-              <strong>Strengths</strong> (choose 1 or 2):
-            </TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {strengthOptions?.map((strength) => {
-                const isSelected = strengths.includes(strength);
-                return renderPill(strength, isSelected, handleClickStrength);
-              })}
-            </Box>
-          </Box>
-          <Box>
-            <TextWS>
-              <strong>Looks</strong> (choose 1 or 2):
-            </TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {lookOptions?.map((look) => {
-                const isSelected = looks.includes(look);
-                return renderPill(look, isSelected, handleClickLook);
-              })}
-            </Box>
-          </Box>
-          <Box>
-            <TextWS>
-              <strong>Weaknesses</strong> (choose 1 or 2):
-            </TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {weaknessOptions?.map((weakness) => {
-                const isSelected = weaknesses.includes(weakness);
-                return renderPill(weakness, isSelected, handleClickWeakness);
-              })}
-            </Box>
-          </Box>
-          <Box>
-            <TextWS>
-              <strong>Battle options</strong> (choose {frame.battleOptionCount})
-            </TextWS>
-            <Box direction="row" margin={{ top: '3px' }} wrap>
-              {battleOptionOptions?.map((battleOption) => renderBattleOptionPill(battleOption))}
-            </Box>
-          </Box>
-        </Box>
-        <Box margin="12px" flex="grow" style={{ maxWidth: '200px' }} width="200px">
-          <Box fill="horizontal" align="center" justify="center">
-            <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ vertical: '3px' }}>
-              {name}
-            </HeadingWS>
-            <DoubleRedBox value={frame?.frameType} label="Frame" />
-          </Box>
-          <Box fill="horizontal" direction="row" align="center" justify="between">
-            <SingleRedBox value={speed} label="Speed" width="80px" />
-            <SingleRedBox value={handling} label="Handling" width="80px" />
-          </Box>
-          <Box fill="horizontal" direction="row" align="center" justify="between">
-            <SingleRedBox value={armor} label="Armor" width="80px" />
-            <SingleRedBox value={massive} label="Massive" width="80px" />
-          </Box>
-          {strengths.concat(looks).concat(weaknesses).length > 0 && (
-            <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="132px" />
-          )}
+    <Box data-testid="vehicle-form" width="80vw" align="start" justify="start" flex="grow">
+      <Box
+        direction="row"
+        fill="horizontal"
+        flex="grow"
+        align="center"
+        gap="12px"
+        wrap
+        margin={{ bottom: '12px' }}
+        border={{ side: 'bottom' }}
+      >
+        <Box direction="column" align="start" height="96px" justify="between">
           <ButtonWS
             primary
-            alignSelf="center"
+            alignSelf="start"
             fill="horizontal"
             style={{ width: '100px' }}
             label={settingVehicle ? <Spinner fillColor="#FFF" width="56px" height="36px" /> : 'SET'}
             onClick={() => !settingVehicle && handleSetVehicle()}
             disabled={settingVehicle || battleOptions.length < frame.battleOptionCount}
           />
+          <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ top: '0px', bottom: '3px' }}>
+            {name}
+          </HeadingWS>
+        </Box>
+
+        <DoubleRedBox value={frame?.frameType} label="Frame" />
+        <SingleRedBox value={speed} label="Speed" width="80px" />
+        <SingleRedBox value={handling} label="Handling" width="80px" />
+        <SingleRedBox value={armor} label="Armor" width="80px" />
+        <SingleRedBox value={massive} label="Massive" width="80px" />
+        {strengths.concat(looks).concat(weaknesses).length > 0 && (
+          <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="90px" maxWidth="350px" />
+        )}
+      </Box>
+      <Box fill="horizontal" gap="12px" overflow="auto" height="calc(100vh - 340px)">
+        <TextWS>{introText}</TextWS>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Give your vehicle a name</strong> (make/model, nickname, whatever):
+          </TextWS>
+          <TextInput
+            aria-label="name-input"
+            name="name"
+            value={name}
+            onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
+          />
+        </Box>
+        <Box flex="grow">
+          <TextWS>Choose its frame (resets other settings):</TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {carCreator.frames.map((frame) => renderFramePill(frame))}
+          </Box>
+        </Box>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Strengths</strong> (choose 1 or 2):
+          </TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {strengthOptions?.map((strength) => {
+              const isSelected = strengths.includes(strength);
+              return renderPill(strength, isSelected, () => handleOptionSelect(strength, 'strength', isSelected));
+            })}
+          </Box>
+        </Box>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Looks</strong> (choose 1 or 2):
+          </TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {lookOptions?.map((look) => {
+              const isSelected = looks.includes(look);
+              return renderPill(look, isSelected, () => handleOptionSelect(look, 'look', isSelected));
+            })}
+          </Box>
+        </Box>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Weaknesses</strong> (choose 1 or 2):
+          </TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {weaknessOptions?.map((weakness) => {
+              const isSelected = weaknesses.includes(weakness);
+              return renderPill(weakness, isSelected, () => handleOptionSelect(weakness, 'weakness', isSelected));
+            })}
+          </Box>
+        </Box>
+        <Box flex="grow">
+          <TextWS>
+            <strong>Battle options</strong> (choose {frame.battleOptionCount})
+          </TextWS>
+          <Box direction="row" margin={{ top: '3px' }} wrap>
+            {battleOptionOptions?.map((battleOption) => renderBattleOptionPill(battleOption))}
+          </Box>
         </Box>
       </Box>
     </Box>

@@ -28,6 +28,7 @@ export const DEAL_WITH_TERRAIN_NAME = 'DEAL WITH BAD TERRAIN';
 export const LEADERSHIP_NAME = 'LEADERSHIPO';
 export const WEALTH_NAME = 'WEALTH';
 export const FORTUNES_NAME = 'FORTUNES';
+export const JUST_GIVE_MOTIVE_NAME = 'JUST GIVE ME A MOTIVE';
 
 export const gamePageTopNavbarHeight = 30;
 export const gamePageBottomNavbarHeight = 80;

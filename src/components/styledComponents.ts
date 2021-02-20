@@ -35,6 +35,7 @@ interface SidePanelProps {
 }
 
 export const SidePanel = styled(Box as React.FC<SidePanelProps & BoxProps & JSX.IntrinsicElements['div']>)(
+  // @ts-ignore
   ({ sidePanel, growWidth }) => {
     return css`
       border-right: 1px solid ${accentColors[0]};

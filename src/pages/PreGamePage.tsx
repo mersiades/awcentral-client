@@ -114,7 +114,7 @@ const PreGamePage = () => {
   // Send User to MenuPage if not a member of this game
   useEffect(() => {
     if (!!game && !!userId) {
-      const memberIds = game?.gameRoles.map((gameRole) => gameRole.userId);
+      const memberIds = game.gameRoles.map((gameRole) => gameRole.userId);
       if (!memberIds.includes(userId)) {
         history.push('/menu');
       }

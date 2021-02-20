@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { FollowersInput, HoldingInput } from '../@types';
+import { FollowersInput } from '../@types';
 import { Character } from '../@types/dataInterfaces';
 
 export interface SetFollowersData {

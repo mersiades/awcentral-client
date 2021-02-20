@@ -2,11 +2,11 @@ import React, { FC, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import ReactMarkdown from 'react-markdown';
 import { useHistory } from 'react-router-dom';
-import styled, { css } from 'styled-components';
-import { Box, CheckBox, CheckBoxProps, Text } from 'grommet';
+import styled from 'styled-components';
+import { Box, CheckBox, Text } from 'grommet';
 
 import Spinner from '../Spinner';
-import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
+import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
 import SET_CHARACTER_MOVES, { SetCharacterMovesData, SetCharacterMovesVars } from '../../mutations/setCharacterMoves';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import { CharacterCreationSteps } from '../../@types/enums';
@@ -100,7 +100,7 @@ const CharacterMovesForm: FC = () => {
           Default moves
         </Text>
         {!!defaultMoves &&
-          defaultMoves.map((move, index) => (
+          defaultMoves.map((move) => (
             <CheckBox key={move.id} checked label={<StyledMarkdown>{move.description}</StyledMarkdown>} />
           ))}
         {!!moveChoiceCount && moveChoiceCount > 0 && (

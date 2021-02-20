@@ -1,27 +1,27 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
+import { useParams } from 'react-router-dom';
 import { Box } from 'grommet';
 import { FormDown, FormUp } from 'grommet-icons';
 
+import DoubleRedBox from '../DoubleRedBox';
+import SingleRedBox from '../SingleRedBox';
+import RedTagsBox from '../RedTagsBox';
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
-import { RedBox, HeadingWS, brandColor, TextWS } from '../../config/grommetConfig';
+import { HeadingWS, brandColor } from '../../config/grommetConfig';
+import ALL_MOVES, { AllMovesData } from '../../queries/allMoves';
+import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
+import PERFORM_STAT_ROLL_MOVE, {
+  PerformStatRollMoveData,
+  PerformStatRollMoveVars,
+} from '../../mutations/performStatRollMove';
 import { MoveActionType, MoveType, RollType } from '../../@types/enums';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
-import ALL_MOVES, { AllMovesData } from '../../queries/allMoves';
 import { GO_AGGRO_NAME, SUCKER_SOMEONE_NAME } from '../../config/constants';
-import PERFORM_PRINT_MOVE, { PerformPrintMoveData, PerformPrintMoveVars } from '../../mutations/performPrintMove';
-import { useParams } from 'react-router-dom';
-import PERFORM_STAT_ROLL_MOVE, {
-  PerformStatRollMoveData,
-  PerformStatRollMoveVars,
-} from '../../mutations/performStatRollMove';
-import DoubleRedBox from '../DoubleRedBox';
-import SingleRedBox from '../SingleRedBox';
-import RedTagsBox from '../RedTagsBox';
-import IncreaseDecreaseButtons from '../IncreaseDecreaseButtons';
+
 import SET_HOLDING_BARTER, { SetHoldingBarterData, SetHoldingBarterVars } from '../../mutations/setHoldingBarter';
 
 interface HoldingBoxProps {

@@ -127,7 +127,7 @@ const fontSizing = (factor: number) => {
   };
 };
 
-export const theme = (vtksReady: boolean, crustReady: boolean) => {
+export const theme = (vtksReady: boolean) => {
   return deepMerge(grommet, {
     global: {
       font: {
@@ -618,7 +618,7 @@ export const TextInputWS = styled(
 });
 
 // Renders Grommet Button with black box shadow
-export const ButtonWS = styled(Button as FC<ButtonProps & JSX.IntrinsicElements['button']>)(({ primary, secondary }) => {
+export const ButtonWS = styled(Button as FC<ButtonProps & JSX.IntrinsicElements['button']>)(({ primary }) => {
   return css`
     box-shadow: 0 0 5px 1px #000 ${!primary ? ', 0 0 5px 1px #000 inset' : ''};
     text-shadow: ${!primary ? '0 0 2px #000, 0 0 4px #000' : ''};
@@ -775,4 +775,10 @@ export const hocusSpecialDialogBackground = {
 export const skinnerSpecialDialogBackground = {
   ...backgroundBase,
   image: 'url(/images/background-image-29.jpg)',
+};
+
+export const justGiveMotiveDialogBackground = {
+  ...backgroundBase,
+  size: 'contain',
+  image: 'url(/images/background-image-30.jpg)',
 };

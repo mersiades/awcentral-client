@@ -42,6 +42,7 @@ import {
   HEAL_HARM_NAME,
   HELP_OR_INTERFERE_NAME,
   INFLICT_HARM_NAME,
+  JUST_GIVE_MOTIVE_NAME,
   MAKE_WANT_KNOWN_NAME,
   OUTDISTANCE_VEHICLE_NAME,
   OVERTAKE_VEHICLE_NAME,
@@ -60,6 +61,7 @@ import DealTerrainDialog from '../components/dialogs/DealTerrainDialog';
 import Holds from '../components/Holds';
 import HocusSpecialDialog from '../components/dialogs/HocusSpecialDialog';
 import SkinnerSpecialDialog from '../components/dialogs/SkinnerSpecialDialog';
+import JustGiveMotiveDialog from '../components/dialogs/JustGiveMotiveDialog';
 
 interface AllMovesData {
   allMoves: Move[];
@@ -241,6 +243,9 @@ const PlayerPage: FC = () => {
       {dialog?.name === BOARD_VEHICLE_NAME && <BoardVehicleDialog move={dialog} handleClose={() => setDialog(undefined)} />}
       {dialog?.name === DEAL_WITH_TERRAIN_NAME && (
         <DealTerrainDialog move={dialog} handleClose={() => setDialog(undefined)} />
+      )}
+      {dialog?.name === JUST_GIVE_MOTIVE_NAME && (
+        <JustGiveMotiveDialog move={dialog} handleClose={() => setDialog(undefined)} />
       )}
       <div
         data-testid="player-page"

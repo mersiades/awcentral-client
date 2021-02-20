@@ -235,6 +235,20 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
+        case UniqueTypes.brainerGear:
+          if (!!character.playbookUnique.brainerGear) {
+            const concatGear = character.playbookUnique.brainerGear.brainerGear.map((gear) => gear.split('('));
+            return (
+              <CustomUL>
+                {concatGear.map((item, index) => (
+                  <li key={index} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {item[0]}
+                  </li>
+                ))}
+              </CustomUL>
+            );
+          }
+          return null;
         case UniqueTypes.customWeapons:
           if (!!character.playbookUnique.customWeapons) {
             const { weapons } = character.playbookUnique.customWeapons;
@@ -249,16 +263,14 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
-        case UniqueTypes.brainerGear:
-          if (!!character.playbookUnique.brainerGear) {
-            const concatGear = character.playbookUnique.brainerGear.brainerGear.map((gear) => gear.split('('));
+        case UniqueTypes.establishment:
+          if (!!character.playbookUnique.establishment) {
+            const { mainAttraction, sideAttractions, atmospheres } = character.playbookUnique.establishment;
             return (
               <CustomUL>
-                {concatGear.map((item, index) => (
-                  <li key={index} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {item[0]}
-                  </li>
-                ))}
+                <li>Main: {mainAttraction}</li>
+                <li>Sides: {sideAttractions.join(', ')}</li>
+                <li>Atmosphere: {atmospheres.join(', ')}</li>
               </CustomUL>
             );
           }

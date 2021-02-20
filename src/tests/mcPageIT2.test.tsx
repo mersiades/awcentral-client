@@ -6,16 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { renderWithRouter } from './test-utils';
 import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
 import { mockGame7, mockKeycloakUser2, mockKeycloakUserInfo2 } from './mocks';
-import {
-  mockAddInvitee3,
-  mockAllMoves,
-  mockAppCommsApp,
-  mockAppCommsUrl,
-  mockDeleteGame,
-  mockGameRolesByUserId2,
-  mockRemoveInvitee,
-  mockSetGameName,
-} from './mockQueries';
+import { mockAddInvitee3, mockAllMoves, mockAppCommsApp, mockAppCommsUrl, mockSetGameName } from './mockQueries';
 import App from '../components/App';
 
 jest.mock('@react-keycloak/web', () => {

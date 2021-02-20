@@ -38,7 +38,7 @@ const HarmDialog: FC<HarmDialogProps> = ({ move, handleClose }) => {
   // ------------------------------------------------- Component functions -------------------------------------------------- //
   const currentHarm = userGameRole?.characters[0].harm;
 
-  const handleSufferHarmMove = (move: Move | CharacterMove, barter: number) => {
+  const handleSufferHarmMove = (move: Move | CharacterMove) => {
     if ((currentHarm?.value || 0) + harm >= 6) {
       console.warn("You're dead");
       return;
@@ -108,7 +108,7 @@ const HarmDialog: FC<HarmDialogProps> = ({ move, handleClose }) => {
           <ButtonWS
             label="ROLL"
             primary
-            onClick={() => !!harm && !performingSufferHarmMove && handleSufferHarmMove(move, harm)}
+            onClick={() => !!harm && !performingSufferHarmMove && handleSufferHarmMove(move)}
             disabled={!harm || performingSufferHarmMove}
           />
         </Box>

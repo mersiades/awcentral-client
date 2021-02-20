@@ -10,17 +10,224 @@ export interface PlaybookCreatorVars {
   playbookType: PlaybookType;
 }
 
-const PLAYBOOK_CREATOR = gql`
-  query PlaybookCreator($playbookType: PlaybookType!) {
-    playbookCreator(playbookType: $playbookType) {
-      id
-      playbookType
-      improvementInstructions
-      movesInstructions
-      hxInstructions
-      defaultMoveCount
-      moveChoiceCount
-      defaultVehicleCount
+export const playbookUniqueCreatorFragments = {
+  angelKitCreator: gql`
+    fragment AngelKitCreator on PlaybookUniqueCreator {
+      angelKitCreator {
+        id
+        angelKitInstructions
+        startingStock
+      }
+    }
+  `,
+  brainerGearCreator: gql`
+    fragment BrainerGearCreator on PlaybookUniqueCreator {
+      brainerGearCreator {
+        id
+        gear
+      }
+    }
+  `,
+  customWeaponsCreator: gql`
+    fragment CustomWeaponsCreator on PlaybookUniqueCreator {
+      customWeaponsCreator {
+        id
+        firearmsTitle
+        firearmsBaseInstructions
+        firearmsBaseOptions {
+          id
+          description
+          tags
+        }
+        firearmsOptionsInstructions
+        firearmsOptionsOptions {
+          id
+          description
+          tag
+        }
+        handTitle
+        handBaseInstructions
+        handBaseOptions {
+          id
+          description
+          tags
+        }
+        handOptionsInstructions
+        handOptionsOptions {
+          id
+          description
+          tag
+        }
+      }
+    }
+  `,
+  establishmentCreator: gql`
+    fragment EstablishmentCreator on PlaybookUniqueCreator {
+      establishmentCreator {
+        id
+        mainAttractionCount
+        sideAttractionCount
+        attractions
+        atmospheres
+        atmosphereCount
+        regularsNames
+        regularsQuestions
+        interestedPartyNames
+        interestedPartyQuestions
+        securityOptions {
+          id
+          description
+          value
+        }
+      }
+    }
+  `,
+  followersCreator: gql`
+    fragment FollowersCreator on PlaybookUniqueCreator {
+      followersCreator {
+        id
+        instructions
+        defaultNumberOfFollowers
+        defaultSurplusBarter
+        defaultFortune
+        strengthCount
+        weaknessCount
+        travelOptions
+        characterizationOptions
+        defaultWants
+        strengthOptions {
+          id
+          description
+          newNumberOfFollowers
+          surplusBarterChange
+          fortuneChange
+          surplusChange
+          wantChange
+        }
+        weaknessOptions {
+          id
+          description
+          newNumberOfFollowers
+          surplusBarterChange
+          fortuneChange
+          surplusChange
+          wantChange
+        }
+      }
+    }
+  `,
+  gangCreator: gql`
+    fragment GangCreator on PlaybookUniqueCreator {
+      gangCreator {
+        id
+        intro
+        defaultSize
+        defaultHarm
+        defaultArmor
+        strengthChoiceCount
+        weaknessChoiceCount
+        defaultTags
+        strengths {
+          id
+          description
+          modifier
+          tag
+        }
+        weaknesses {
+          id
+          description
+          modifier
+          tag
+        }
+      }
+    }
+  `,
+  holdingCreator: gql`
+    fragment HoldingCreator on PlaybookUniqueCreator {
+      holdingCreator {
+        id
+        defaultHoldingSize
+        instructions
+        defaultSurplus
+        defaultGigs
+        defaultWant
+        defaultArmorBonus
+        defaultVehiclesCount
+        defaultBattleVehicleCount
+        defaultGangSize
+        defaultGangHarm
+        defaultGangArmor
+        defaultGangTag
+        strengthCount
+        weaknessCount
+        strengthOptions {
+          id
+          description
+          surplusChange
+          wantChange
+          newHoldingSize
+          gigChange
+          newGangSize
+          gangTagChange
+          gangHarmChange
+          newVehicleCount
+          newBattleVehicleCount
+          newArmorBonus
+        }
+        weaknessOptions {
+          id
+          description
+          surplusChange
+          wantChange
+          newHoldingSize
+          gigChange
+          newGangSize
+          gangTagChange
+          gangHarmChange
+          newVehicleCount
+          newBattleVehicleCount
+          newArmorBonus
+        }
+      }
+    }
+  `,
+  skinnerGearCreator: gql`
+    fragment SkinnerGearCreator on PlaybookUniqueCreator {
+      skinnerGearCreator {
+        id
+        graciousWeaponCount
+        luxeGearCount
+        graciousWeaponChoices {
+          id
+          item
+          note
+        }
+        luxeGearChoices {
+          id
+          item
+          note
+        }
+      }
+    }
+  `,
+  weaponsCreator: gql`
+    fragment WeaponsCreator on PlaybookUniqueCreator {
+      weaponsCreator {
+        id
+        bfoGunOptionCount
+        seriousGunOptionCount
+        backupWeaponsOptionCount
+        bigFuckOffGuns
+        seriousGuns
+        backupWeapons
+      }
+    }
+  `,
+};
+
+export const playbookCreatorFragments = {
+  gearInstructions: gql`
+    fragment GearInstructions on PlaybookCreator {
       gearInstructions {
         id
         gearIntro
@@ -31,15 +238,53 @@ const PLAYBOOK_CREATOR = gql`
         withMC
         startingBarter
       }
+    }
+  `,
+  looks: gql`
+    fragment CreatorLooks on PlaybookCreator {
       looks {
         id
         look
         category
       }
+    }
+  `,
+  playbookUniqueCreator: gql`
+    fragment PlaybookUniqueCreator on PlaybookCreator {
+      playbookUniqueCreator {
+        id
+        type
+        ...AngelKitCreator
+        ...BrainerGearCreator
+        ...CustomWeaponsCreator
+        ...EstablishmentCreator
+        ...FollowersCreator
+        ...GangCreator
+        ...HoldingCreator
+        ...SkinnerGearCreator
+        ...WeaponsCreator
+      }
+    }
+    ${playbookUniqueCreatorFragments.angelKitCreator}
+    ${playbookUniqueCreatorFragments.brainerGearCreator}
+    ${playbookUniqueCreatorFragments.customWeaponsCreator}
+    ${playbookUniqueCreatorFragments.establishmentCreator}
+    ${playbookUniqueCreatorFragments.followersCreator}
+    ${playbookUniqueCreatorFragments.gangCreator}
+    ${playbookUniqueCreatorFragments.holdingCreator}
+    ${playbookUniqueCreatorFragments.skinnerGearCreator}
+    ${playbookUniqueCreatorFragments.weaponsCreator}
+  `,
+  names: gql`
+    fragment Names on PlaybookCreator {
       names {
         id
         name
       }
+    }
+  `,
+  statsOptions: gql`
+    fragment StatsOptions on PlaybookCreator {
       statsOptions {
         id
         COOL
@@ -48,6 +293,10 @@ const PLAYBOOK_CREATOR = gql`
         SHARP
         WEIRD
       }
+    }
+  `,
+  optionalMoves: gql`
+    fragment OptionalMoves on PlaybookCreator {
       optionalMoves {
         id
         name
@@ -67,6 +316,10 @@ const PLAYBOOK_CREATOR = gql`
           statToRollWith
         }
       }
+    }
+  `,
+  defaultMoves: gql`
+    fragment DefaultMoves on PlaybookCreator {
       defaultMoves {
         id
         name
@@ -93,171 +346,37 @@ const PLAYBOOK_CREATOR = gql`
           statToRollWith
         }
       }
-      playbookUniqueCreator {
-        id
-        type
-        angelKitCreator {
-          id
-          angelKitInstructions
-          startingStock
-        }
-        customWeaponsCreator {
-          id
-          firearmsTitle
-          firearmsBaseInstructions
-          firearmsBaseOptions {
-            id
-            description
-            tags
-          }
-          firearmsOptionsInstructions
-          firearmsOptionsOptions {
-            id
-            description
-            tag
-          }
-          handTitle
-          handBaseInstructions
-          handBaseOptions {
-            id
-            description
-            tags
-          }
-          handOptionsInstructions
-          handOptionsOptions {
-            id
-            description
-            tag
-          }
-        }
-        brainerGearCreator {
-          id
-          gear
-        }
-        gangCreator {
-          id
-          intro
-          defaultSize
-          defaultHarm
-          defaultArmor
-          strengthChoiceCount
-          weaknessChoiceCount
-          defaultTags
-          strengths {
-            id
-            description
-            modifier
-            tag
-          }
-          weaknesses {
-            id
-            description
-            modifier
-            tag
-          }
-        }
-        weaponsCreator {
-          id
-          bfoGunOptionCount
-          seriousGunOptionCount
-          backupWeaponsOptionCount
-          bigFuckOffGuns
-          seriousGuns
-          backupWeapons
-        }
-        followersCreator {
-          id
-          instructions
-          defaultNumberOfFollowers
-          defaultSurplusBarter
-          defaultFortune
-          strengthCount
-          weaknessCount
-          travelOptions
-          characterizationOptions
-          defaultWants
-          strengthOptions {
-            id
-            description
-            newNumberOfFollowers
-            surplusBarterChange
-            fortuneChange
-            surplusChange
-            wantChange
-          }
-          weaknessOptions {
-            id
-            description
-            newNumberOfFollowers
-            surplusBarterChange
-            fortuneChange
-            surplusChange
-            wantChange
-          }
-        }
-        skinnerGearCreator {
-          id
-          graciousWeaponCount
-          luxeGearCount
-          graciousWeaponChoices {
-            id
-            item
-            note
-          }
-          luxeGearChoices {
-            id
-            item
-            note
-          }
-        }
-        holdingCreator {
-          id
-          defaultHoldingSize
-          instructions
-          defaultSurplus
-          defaultGigs
-          defaultWant
-          defaultArmorBonus
-          defaultVehiclesCount
-          defaultBattleVehicleCount
-          defaultGangSize
-          defaultGangHarm
-          defaultGangArmor
-          defaultGangTag
-          strengthCount
-          weaknessCount
-          strengthOptions {
-            id
-            description
-            surplusChange
-            wantChange
-            newHoldingSize
-            gigChange
-            newGangSize
-            gangTagChange
-            gangHarmChange
-            newVehicleCount
-            newBattleVehicleCount
-            newArmorBonus
-          }
-          weaknessOptions {
-            id
-            description
-            surplusChange
-            wantChange
-            newHoldingSize
-            gigChange
-            newGangSize
-            gangTagChange
-            gangHarmChange
-            newVehicleCount
-            newBattleVehicleCount
-            newArmorBonus
-          }
-        }
-      }
+    }
+  `,
+};
+
+const PLAYBOOK_CREATOR = gql`
+  query PlaybookCreator($playbookType: PlaybookType!) {
+    playbookCreator(playbookType: $playbookType) {
+      id
+      playbookType
+      defaultMoveCount
+      moveChoiceCount
+      defaultVehicleCount
+      improvementInstructions
+      movesInstructions
+      hxInstructions
+      ...Names
+      ...CreatorLooks
+      ...StatsOptions
+      ...OptionalMoves
+      ...DefaultMoves
+      ...GearInstructions
+      ...PlaybookUniqueCreator
     }
   }
+  ${playbookCreatorFragments.names}
+  ${playbookCreatorFragments.looks}
+  ${playbookCreatorFragments.statsOptions}
+  ${playbookCreatorFragments.optionalMoves}
+  ${playbookCreatorFragments.defaultMoves}
+  ${playbookCreatorFragments.gearInstructions}
+  ${playbookCreatorFragments.playbookUniqueCreator}
 `;
 
 export default PLAYBOOK_CREATOR;

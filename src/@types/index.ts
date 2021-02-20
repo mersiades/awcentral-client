@@ -1,3 +1,4 @@
+import { CastCrew } from './dataInterfaces';
 import { GangSize, HoldingSize, ThreatType, VehicleType } from './enums';
 import {
   VehicleFrame,
@@ -6,6 +7,7 @@ import {
   HoldingOption,
   FollowersOption,
   SkinnerGearItem,
+  SecurityOption,
 } from './staticDataInterfaces';
 
 export interface KeycloakUser {
@@ -124,6 +126,22 @@ export interface HoldingInput {
   gangTags: string[];
   selectedStrengths: HoldingOption[];
   selectedWeaknesses: HoldingOption[];
+}
+
+export interface EstablishmentInput {
+  id?: string;
+  mainAttraction: string;
+  bestRegular: string;
+  worstRegular: string;
+  wantsInOnIt: string;
+  oweForIt: string;
+  wantsItGone: string;
+  sideAttractions: string[];
+  atmospheres: string[];
+  regulars: string[];
+  interestedParties: string[];
+  securityOptions: SecurityOption[];
+  castAndCrew: CastCrew[];
 }
 
 export interface FollowersInput {

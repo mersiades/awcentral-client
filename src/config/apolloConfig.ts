@@ -7,11 +7,12 @@ const httpLink = new HttpLink({
 });
 
 const authLink = new ApolloLink((operation, forward) => {
-  let token = keycloak.token
-  keycloak.updateToken(5)
-    .then((isRefreshed) => token = keycloak.token)
-    .catch(() => keycloak.logout())
-    
+  let token = keycloak.token;
+  keycloak
+    .updateToken(5)
+    .then(() => (token = keycloak.token))
+    .catch(() => keycloak.logout());
+
   operation.setContext(({ headers }: Record<string, any>) => ({
     headers: {
       ...headers,
@@ -22,7 +23,7 @@ const authLink = new ApolloLink((operation, forward) => {
 });
 
 // @ts-ignore
-const apolloLink = from([authLink, httpLink])
+const apolloLink = from([authLink, httpLink]);
 
 export const apolloClient = new ApolloClient({
   // @ts-ignore

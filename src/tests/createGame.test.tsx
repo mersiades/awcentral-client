@@ -1,24 +1,24 @@
-import React from 'react';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+// import React from 'react';
+// import { screen } from '@testing-library/react';
+// import userEvent from '@testing-library/user-event';
 
-import App from '../components/App';
-import { renderWithRouter } from './test-utils';
+// import App from '../components/App';
+// import { renderWithRouter } from './test-utils';
 import { mockKeycloakStub } from '../../__mocks__/@react-keycloak/web';
-import { mockKeycloakUser1, mockKeycloakUserInfo1, mockNewGameName } from './mocks';
-import {
-  mockAddCommsApp,
-  mockAddCommsUrl,
-  mockAddInvitee1,
-  mockAddInvitee2,
-  mockCreateGame,
-  mockGameAfterAddCommsApp,
-  mockGameAfterAddCommsUrl,
-  mockGameAfterAddInvitee1,
-  mockGameAfterAddInvitee2,
-  mockGameForNewGame,
-  mockGameRolesByUserId,
-} from './mockQueries';
+import { mockKeycloakUserInfo1 /*mockKeycloakUser1,  mockNewGameName*/ } from './mocks';
+// import {
+//   mockAddCommsApp,
+//   mockAddCommsUrl,
+//   mockAddInvitee1,
+//   mockAddInvitee2,
+//   mockCreateGame,
+//   mockGameAfterAddCommsApp,
+//   mockGameAfterAddCommsUrl,
+//   mockGameAfterAddInvitee1,
+//   mockGameAfterAddInvitee2,
+//   mockGameForNewGame,
+//   mockGameRolesByUserId,
+// } from './mockQueries';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');

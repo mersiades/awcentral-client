@@ -25,9 +25,8 @@ const VehiclesBox: FC<VehiclesBoxProps> = ({ vehicles, navigateToCharacterCreati
       >
         <Box style={{ minWidth: '250px', maxWidth: 'calc(100% - 350px)' }} pad="12px">
           <HeadingWS level={5} margin={{ vertical: '3px' }}>
-            {vehicle.name}
+            {vehicle.name} ({vehicle.vehicleFrame.frameType.toLowerCase()})
           </HeadingWS>
-          <TextWS>Frame: {vehicle.vehicleFrame.frameType.toLowerCase()}</TextWS>
           <TextWS>Tags: {vehicle.strengths.concat(vehicle.weaknesses).concat(vehicle.looks).join(', ')}</TextWS>
         </Box>
         <Box direction="row" align="center" justify="around" gap="6px" pad="12px" width="350px">

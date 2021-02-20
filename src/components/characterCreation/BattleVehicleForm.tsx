@@ -144,7 +144,7 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
 
   const battleVehicleOptionOptions: VehicleBattleOption[] | undefined = battleVehicleCreator?.battleVehicleOptions;
 
-  const increaseStats = (update: Partial<BattleVehicleInput>, option: VehicleBattleOption, isSelected: boolean) => {
+  const increaseStats = (update: Partial<BattleVehicleInput>, option: VehicleBattleOption) => {
     let newUpdate = update;
     switch (option.battleOptionType) {
       case BattleOptionType.speed:
@@ -168,7 +168,7 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
     return newUpdate;
   };
 
-  const decreaseStats = (update: Partial<BattleVehicleInput>, option: VehicleBattleOption, isSelected: boolean) => {
+  const decreaseStats = (update: Partial<BattleVehicleInput>, option: VehicleBattleOption) => {
     let newUpdate = update;
     switch (option.battleOptionType) {
       case BattleOptionType.speed:
@@ -229,13 +229,13 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
           ...update,
           battleOptions: battleOptions.filter((bo: VehicleBattleOption) => bo.id !== castOption.id),
         };
-        update = decreaseStats(update, castOption, isSelected);
+        update = decreaseStats(update, castOption);
       } else if (battleOptions.length < vehicleFrame.battleOptionCount) {
         update = {
           ...update,
           battleOptions: [...battleOptions, omit(castOption, ['__typename'])] as VehicleBattleOption[],
         };
-        update = increaseStats(update, castOption, isSelected);
+        update = increaseStats(update, castOption);
       }
     }
 
@@ -246,13 +246,13 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
           ...update,
           battleVehicleOptions: battleVehicleOptions.filter((bo: VehicleBattleOption) => bo.id !== castOption.id),
         };
-        update = decreaseStats(update, castOption, isSelected);
+        update = decreaseStats(update, castOption);
       } else if (battleVehicleOptions.length < 2) {
         update = {
           ...update,
           battleVehicleOptions: [...battleVehicleOptions, omit(castOption, ['__typename'])] as VehicleBattleOption[],
         };
-        update = increaseStats(update, castOption, isSelected);
+        update = increaseStats(update, castOption);
       }
     }
 
@@ -412,8 +412,17 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   }
 
   return (
-    <Box data-testid="battle-vehicle-form" direction="column" width="80vw" align="start" justify="start" flex="grow">
-      <Box direction="row" fill="horizontal" flex="grow" align="center" gap="12px" wrap>
+    <Box data-testid="battle-vehicle-form" width="80vw" align="start" justify="start" flex="grow">
+      <Box
+        direction="row"
+        fill="horizontal"
+        flex="grow"
+        align="center"
+        gap="12px"
+        wrap
+        margin={{ bottom: '12px' }}
+        border={{ side: 'bottom' }}
+      >
         <Box direction="column" align="start" height="96px" justify="between">
           <ButtonWS
             primary
@@ -428,7 +437,7 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
               battleVehicleOptions.length < 2
             }
           />
-          <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ vertical: '0px' }}>
+          <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ top: '0px', bottom: '3px' }}>
             {name}
           </HeadingWS>
         </Box>
@@ -443,7 +452,7 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
         )}
         {weapons.length > 0 && <RedTagsBox tags={weapons} label="Weapons" height="90px" maxWidth="650px" />}
       </Box>
-      <Box direction="column" fill="horizontal" pad="12px" gap="12px" overflow="auto" height="50vh">
+      <Box fill="horizontal" gap="12px" overflow="auto" height="calc(100vh - 340px)">
         <TextWS>{introText}</TextWS>
         <Box flex="grow">
           <TextWS>

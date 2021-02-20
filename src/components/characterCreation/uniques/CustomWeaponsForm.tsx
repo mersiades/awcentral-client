@@ -95,7 +95,7 @@ const CustomWeaponsForm: FC = () => {
     }
 
     if (characteristics.length > 0) {
-      characteristics.forEach((char, index) => {
+      characteristics.forEach((char) => {
         // To deal with any simple tag addition
         if (startsWith(char.tag, '+') && !char.tag.match(addHarmRegex)) {
           const strippedTag = char.tag.substr(1);
@@ -310,14 +310,14 @@ const CustomWeaponsForm: FC = () => {
         <Box height="152px" justify="between" width="40%" pad={{ horizontal: '12px' }} gap="12px">
           <RedBox fill="vertical">
             <WeaponsUL>
-              {weapons.map((weapon, index) => (
+              {weapons.map((weapon) => (
                 <li
                   key={weapon}
                   // @ts-ignore
                   onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
                   // @ts-ignore
                   onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
-                  onClick={(e: React.MouseEvent<HTMLLIElement>) => setValue(weapon)}
+                  onClick={() => setValue(weapon)}
                 >
                   {weapon}
                 </li>

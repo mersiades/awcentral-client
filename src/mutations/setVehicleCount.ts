@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { VehicleInput } from '../@types';
 import { Character } from '../@types/dataInterfaces';
 
 export interface SetVehicleCountData {

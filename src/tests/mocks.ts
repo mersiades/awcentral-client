@@ -1,18 +1,9 @@
-import {
-  FollowersInput,
-  HxInput,
-  ItemCharacteristic,
-  KeycloakUser,
-  KeycloakUserInfo,
-  TaggedItem,
-  VehicleInput,
-} from '../@types';
+import { HxInput, ItemCharacteristic, KeycloakUser, KeycloakUserInfo, TaggedItem, VehicleInput } from '../@types';
 import {
   AngelKit,
   BattleVehicle,
   BrainerGear,
   CharacterHarm,
-  CharacterStat,
   CustomWeapons,
   Followers,
   Game,
@@ -95,6 +86,7 @@ interface MockCharacter {
   characterMoves: CharacterMove[];
   vehicles: Vehicle[];
   battleVehicles: BattleVehicle[];
+  __typename?: 'Character';
 }
 
 export const mockNewGameName = 'My new mock game';
@@ -609,12 +601,14 @@ export const mockLookBettleBabe1: Look = {
   id: 'mock-battlebabe-look-id-1',
   look: 'woman',
   category: LookType.gender,
+  __typename: 'Look',
 };
 
 export const mockLookBattlebabe2: Look = {
   id: 'mock-battlebabe-look-id-2',
   look: 'formal wear',
   category: LookType.clothes,
+  __typename: 'Look',
 };
 
 export const mockCustomWeapons: CustomWeapons = {
@@ -702,6 +696,7 @@ export const mockCharacterHarm: CharacterHarm = {
 };
 
 export const mockCharacter1: MockCharacter = {
+  __typename: 'Character',
   id: 'mock-character-id-1',
   name: 'Mock Character 1',
   playbook: PlaybookType.battlebabe,
@@ -727,6 +722,7 @@ export const mockCharacter1: MockCharacter = {
 };
 
 export const mockCharacter2: MockCharacter = {
+  __typename: 'Character',
   id: 'mock-character-id-2',
   name: 'Mock Character 2',
   playbook: PlaybookType.angel,
@@ -874,9 +870,11 @@ export const mockGame4: Game = {
 export const mockGame5: Game = {
   id: 'mock-game-id-5',
   name: 'Mock Game 5',
+  invitees: [],
   commsApp: 'Discord',
   commsUrl: 'https://discord.com/urltodiscordchannel',
   hasFinishedPreGame: false,
+  gameMessages: [],
   mc: { displayName: 'mock-user-2', id: 'mock-keycloak-id-2' },
   players: [
     { id: 'mock-keycloak-id-3', displayName: 'mock-user-3' },
@@ -884,6 +882,7 @@ export const mockGame5: Game = {
   ],
   gameRoles: [
     {
+      __typename: 'GameRole',
       id: 'mock-gamerole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
@@ -892,6 +891,7 @@ export const mockGame5: Game = {
       characters: [],
     },
     {
+      __typename: 'GameRole',
       id: 'mock-gamerole-id-7',
       role: RoleType.player,
       userId: 'mock-keycloak-id-3',
@@ -900,6 +900,7 @@ export const mockGame5: Game = {
       characters: [mockCharacter1],
     },
     {
+      __typename: 'GameRole',
       id: 'mock-gamerole-id-8',
       role: RoleType.player,
       userId: 'mock-keycloak-id-1',
@@ -908,8 +909,6 @@ export const mockGame5: Game = {
       characters: [],
     },
   ],
-  invitees: [],
-  gameMessages: [],
 };
 
 // Used for testing starting a game from the PreGamePage
@@ -933,22 +932,22 @@ export const mockGame6: Game = {
       threats: [],
       characters: [],
     },
-    {
-      id: 'mock-gamerole-id-7',
-      role: RoleType.player,
-      userId: 'mock-keycloak-id-3',
-      npcs: [],
-      threats: [],
-      characters: [{ ...mockCharacter1, hasCompletedCharacterCreation: true }],
-    },
-    {
-      id: 'mock-gamerole-id-8',
-      role: RoleType.player,
-      userId: 'mock-keycloak-id-1',
-      npcs: [],
-      threats: [],
-      characters: [{ ...mockCharacter2, hasCompletedCharacterCreation: true, hxBlock: [] }],
-    },
+    // {
+    //   id: 'mock-gamerole-id-7',
+    //   role: RoleType.player,
+    //   userId: 'mock-keycloak-id-3',
+    //   npcs: [],
+    //   threats: [],
+    //   characters: [{ ...mockCharacter1, hasCompletedCharacterCreation: true }],
+    // },
+    // {
+    //   id: 'mock-gamerole-id-8',
+    //   role: RoleType.player,
+    //   userId: 'mock-keycloak-id-1',
+    //   npcs: [],
+    //   threats: [],
+    //   characters: [{ ...mockCharacter2, hasCompletedCharacterCreation: true, hxBlock: [] }],
+    // },
   ],
   invitees: [],
   gameMessages: [],

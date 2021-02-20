@@ -1,7 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import {
-  CustomWeaponsCreator,
   GearInstructions,
   Look,
   Name,
@@ -14,7 +13,6 @@ import {
   mockCharacterMoveAngel1,
   mockCharacterMoveAngel2,
   mockCharacterMoveAngel3,
-  mockCustomWeaponsCreator as customWeaponsCreator,
   mockKeycloakUserInfo1,
   mockLookBattlebabe2,
   mockPlaybookUniqueBattlebabe,
@@ -36,8 +34,6 @@ jest.mock('@react-keycloak/web', () => {
     useKeycloak: () => ({ keycloak: mockKeycloakStub(true, mockKeycloakUserInfo1), initialized: true }),
   };
 });
-
-const mockCustomWeaponsCreator: CustomWeaponsCreator = customWeaponsCreator;
 
 const mockBattlebabeUniqueCreator: PlaybookUniqueCreator = {
   id: 'mock-battlebae-unique-creator',
@@ -89,6 +85,7 @@ const mockBattlebabeCreator: PlaybookCreator = {
   defaultMoveCount: 1,
   moveChoiceCount: 2,
   playbookUniqueCreator: mockBattlebabeUniqueCreator,
+  defaultVehicleCount: 0,
 };
 
 const mockBattleBabe: Character = {
@@ -109,6 +106,11 @@ const mockBattleBabe: Character = {
   ], // TODO: change to battlebabe moves
   playbookUnique: mockPlaybookUniqueBattlebabe,
   vehicleCount: 0,
+  battleVehicleCount: 0,
+  battleVehicles: [],
+  hasPlusOneForward: false,
+  holds: 0,
+  vehicles: [],
 };
 
 const mockGame: Game = {
@@ -161,16 +163,12 @@ export const mockPlayBookCreatorQueryBattlebabe: MockedResponse = {
 
 describe('Rendering CustomWeaponsForm', () => {
   test('should render CustomWeaponsForm in default start state', async () => {
-    renderWithRouter(
-      <CustomWeaponsForm existingCustomWeapons={undefined} setCreationStep={jest.fn()} />,
-      `/character-creation/${mockGame.id}`,
-      {
-        isAuthenticated: true,
-        apolloMocks: [mockPlayBookCreatorQueryBattlebabe],
-        injectedGame: mockGame,
-        injectedUserId: mockKeycloakUserInfo1.sub,
-      }
-    );
+    renderWithRouter(<CustomWeaponsForm />, `/character-creation/${mockGame.id}`, {
+      isAuthenticated: true,
+      apolloMocks: [mockPlayBookCreatorQueryBattlebabe],
+      injectedGame: mockGame,
+      injectedUserId: mockKeycloakUserInfo1.sub,
+    });
 
     await screen.findByTestId('custom-weapons-form');
     await screen.findByTestId('custom-weapons-form');

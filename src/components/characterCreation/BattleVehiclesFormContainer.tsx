@@ -13,7 +13,6 @@ import SET_BATTLE_VEHICLE_COUNT, {
 } from '../../mutations/setBattleVehicleCount';
 import { CharacterCreationSteps } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
-import { useFonts } from '../../contexts/fontContext';
 import { decapitalize } from '../../helpers/decapitalize';
 
 const BattleVehiclesFormContainer: FC = () => {
@@ -23,7 +22,6 @@ const BattleVehiclesFormContainer: FC = () => {
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, character, userGameRole } = useGame();
-  const { crustReady } = useFonts();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();

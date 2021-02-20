@@ -1,5 +1,5 @@
+import { FC } from 'react';
 import { List } from 'grommet';
-import React, { FC } from 'react';
 import { useHistory } from 'react-router-dom';
 import { GameRole } from '../@types/dataInterfaces';
 import { RoleType } from '../@types/enums';
