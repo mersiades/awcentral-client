@@ -23,6 +23,7 @@ import { decapitalize } from '../../helpers/decapitalize';
 import FollowersBox from './FollowersBox';
 import SkinnerGearBox from './SkinnerGearBox';
 import BattleVehiclesBox from './BattleVehiclesBox';
+import EstablishmentBox from './EstablishmentBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -126,7 +127,7 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
       )}
 
       {!!character.playbookUnique?.establishment && (
-        <FollowersBox navigateToCharacterCreation={navigateToCharacterCreation} />
+        <EstablishmentBox navigateToCharacterCreation={navigateToCharacterCreation} />
       )}
       {!!character.playbookUnique?.followers && <FollowersBox navigateToCharacterCreation={navigateToCharacterCreation} />}
       {!!character.playbookUnique?.gang && (

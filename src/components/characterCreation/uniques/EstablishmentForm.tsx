@@ -32,6 +32,113 @@ const INTERESTED_NPCS_INSTRUCTIONS =
 
 const SECURITY_INSTRUCTIONS = '_**For security, choose 2**_';
 
+interface EstablishmentBoxWrapperProps {
+  children: JSX.Element;
+  title: string;
+  width?: string;
+}
+
+export const EstablishmentBoxWrapper: FC<EstablishmentBoxWrapperProps> = ({ children, title, width = '200px' }) => (
+  <Box align="center" width={width} flex="grow" fill="vertical" style={{ maxWidth: width }}>
+    <RedBox fill justify="center" pad="12px" gap="12px">
+      {children}
+    </RedBox>
+    <TextWS weight={600}>{title}</TextWS>
+  </Box>
+);
+
+interface AttractionsBoxProps {
+  mainAttraction: string;
+  sideAttractions: string[];
+  width?: string;
+}
+
+export const AttractionsBox: FC<AttractionsBoxProps> = ({ mainAttraction, sideAttractions, width }) => (
+  <EstablishmentBoxWrapper title="Attractions" width={width}>
+    <>
+      {!!mainAttraction && <TextWS>Main: {mainAttraction}</TextWS>}
+      {sideAttractions.length > 0 && <TextWS>Side: {sideAttractions.join(', ')}</TextWS>}
+    </>
+  </EstablishmentBoxWrapper>
+);
+
+interface AtmosphereBoxProps {
+  atmospheres: string[];
+  width?: string;
+}
+
+export const AtmosphereBox: FC<AtmosphereBoxProps> = ({ atmospheres, width }) => (
+  <EstablishmentBoxWrapper title="Atmosphere" width={width}>
+    <>{atmospheres.length > 0 && <TextWS>{atmospheres.join(', ')}</TextWS>}</>
+  </EstablishmentBoxWrapper>
+);
+
+interface RegularsBoxProps {
+  regulars: string[];
+  bestRegular: string;
+  worstRegular: string;
+  width?: string;
+}
+
+export const RegularsBox: FC<RegularsBoxProps> = ({ regulars, bestRegular, worstRegular, width }) => (
+  <EstablishmentBoxWrapper title="Regulars" width={width}>
+    <>
+      {regulars.length > 0 && <TextWS>{regulars.join(', ')}</TextWS>}
+      {!!bestRegular && <TextWS>{bestRegular} is your best regular</TextWS>}
+      {!!worstRegular && <TextWS>{worstRegular} is your worst regular</TextWS>}
+    </>
+  </EstablishmentBoxWrapper>
+);
+
+interface InterestedPartiesBoxProps {
+  interestedParties: string[];
+  wantsInOnIt: string;
+  oweForIt: string;
+  wantsItGone: string;
+  width?: string;
+}
+
+export const InterestedPartiesBox: FC<InterestedPartiesBoxProps> = ({
+  interestedParties,
+  wantsInOnIt,
+  oweForIt,
+  wantsItGone,
+  width,
+}) => (
+  <EstablishmentBoxWrapper title="Interested NPCs" width={width}>
+    <>
+      {interestedParties.length > 0 && <TextWS>{interestedParties.join(', ')}</TextWS>}
+      {!!wantsInOnIt && <TextWS>{wantsInOnIt} wants in on it</TextWS>}
+      {!!oweForIt && <TextWS>You owe {oweForIt} for it</TextWS>}
+      {!!wantsItGone && <TextWS>{wantsItGone} wants it gone</TextWS>}
+    </>
+  </EstablishmentBoxWrapper>
+);
+
+interface SecurityBoxProps {
+  securityOptions: SecurityOption[];
+  width?: string;
+}
+
+export const SecurityBox: FC<SecurityBoxProps> = ({ securityOptions, width }) => (
+  <EstablishmentBoxWrapper title="Security" width={width}>
+    <>
+      {securityOptions.length > 0 &&
+        securityOptions.map((opt: SecurityOption) => <TextWS key={opt.id}>{opt.description}</TextWS>)}
+    </>
+  </EstablishmentBoxWrapper>
+);
+
+interface CastCrewBoxProps {
+  castAndCrew: CastCrew[];
+}
+
+export const CastCrewBox: FC<CastCrewBoxProps> = ({ castAndCrew }) => (
+  <EstablishmentBoxWrapper title="Cast & Crew">
+    <>{castAndCrew.length > 0 && <TextWS>{castAndCrew.map((cc: CastCrew) => cc.name).join(', ')}</TextWS>}</>
+  </EstablishmentBoxWrapper>
+);
+
 interface Action {
   type:
     | 'SET_EXISTING_ESTABLISHMENT'
@@ -424,13 +531,7 @@ const EstablishmentForm: FC = () => {
             ))}
           </Box>
         </Box>
-        <Box align="center" width="200px" flex="grow" fill="vertical">
-          <RedBox fill justify="center" pad="12px" gap="12px">
-            {!!mainAttraction && <TextWS>Main: {mainAttraction}</TextWS>}
-            {sideAttractions.length > 0 && <TextWS>Side: {sideAttractions.join(', ')}</TextWS>}
-          </RedBox>
-          <TextWS weight={600}>Attractions</TextWS>
-        </Box>
+        <AttractionsBox mainAttraction={mainAttraction} sideAttractions={sideAttractions} />
       </Box>
       <Box fill="horizontal" justify="between" gap="12px" margin={{ top: '6px' }}>
         <StyledMarkdown>{ATMOSPHERE_INSTRUCTIONS}</StyledMarkdown>
@@ -438,12 +539,7 @@ const EstablishmentForm: FC = () => {
           <Box direction="row" wrap>
             {establishmentCreator?.atmospheres.map((atmosphere) => renderPills(atmosphere))}
           </Box>
-          <Box align="center" width="200px" flex="grow" fill="vertical">
-            <RedBox fill justify="center" pad="12px" gap="12px">
-              {atmospheres.length > 0 && <TextWS>{atmospheres.join(', ')}</TextWS>}
-            </RedBox>
-            <TextWS weight={600}>Atmosphere</TextWS>
-          </Box>
+          <AtmosphereBox atmospheres={atmospheres} />
         </Box>
       </Box>
       <Box fill="horizontal" justify="between" gap="12px" margin={{ top: '6px' }}>
@@ -486,14 +582,7 @@ const EstablishmentForm: FC = () => {
               />
             </Box>
           </Box>
-          <Box align="center" width="200px" fill="vertical">
-            <RedBox fill justify="center" pad="12px" gap="12px">
-              {regulars.length > 0 && <TextWS>{regulars.join(', ')}</TextWS>}
-              {!!bestRegular && <TextWS>{bestRegular} is your best regular</TextWS>}
-              {!!worstRegular && <TextWS>{worstRegular} is your worst regular</TextWS>}
-            </RedBox>
-            <TextWS weight={600}>Regulars</TextWS>
-          </Box>
+          <RegularsBox regulars={regulars} bestRegular={bestRegular} worstRegular={worstRegular} />
         </Box>
       </Box>
       <Box fill="horizontal" justify="between" gap="12px" margin={{ top: '6px' }}>
@@ -546,15 +635,12 @@ const EstablishmentForm: FC = () => {
               />
             </Box>
           </Box>
-          <Box align="center" width="200px" fill="vertical">
-            <RedBox fill justify="center" pad="12px" gap="12px">
-              {interestedParties.length > 0 && <TextWS>{interestedParties.join(', ')}</TextWS>}
-              {!!wantsInOnIt && <TextWS>{wantsInOnIt} wants in on it</TextWS>}
-              {!!oweForIt && <TextWS>You owe {oweForIt} for it</TextWS>}
-              {!!wantsItGone && <TextWS>{wantsItGone} wants it gone</TextWS>}
-            </RedBox>
-            <TextWS weight={600}>Interested NPCs</TextWS>
-          </Box>
+          <InterestedPartiesBox
+            interestedParties={interestedParties}
+            wantsInOnIt={wantsInOnIt}
+            oweForIt={oweForIt}
+            wantsItGone={wantsItGone}
+          />
         </Box>
       </Box>
       <Box fill="horizontal" justify="between" gap="12px" margin={{ top: '6px' }}>
@@ -575,13 +661,7 @@ const EstablishmentForm: FC = () => {
               />
             ))}
           </Box>
-          <Box align="center" width="200px" fill="vertical">
-            <RedBox fill justify="center" pad="12px" gap="12px">
-              {securityOptions.length > 0 &&
-                securityOptions.map((opt: SecurityOption) => <TextWS key={opt.id}>{opt.description}</TextWS>)}
-            </RedBox>
-            <TextWS weight={600}>Security</TextWS>
-          </Box>
+          <SecurityBox securityOptions={securityOptions} />
         </Box>
       </Box>
       <Box fill="horizontal" justify="between" gap="12px" margin={{ top: '6px' }}>
@@ -609,12 +689,7 @@ const EstablishmentForm: FC = () => {
               onChange={(e: ChangeEvent<HTMLInputElement>) => setCrewDesc(e.target.value)}
             />
           </Box>
-          <Box align="center" width="200px" fill="vertical">
-            <RedBox fill justify="center" pad="12px" gap="12px">
-              {castAndCrew.length > 0 && <TextWS>{castAndCrew.map((cc: CastCrew) => cc.name).join(', ')}</TextWS>}
-            </RedBox>
-            <TextWS weight={600}>Cast & Crew</TextWS>
-          </Box>
+          <CastCrewBox castAndCrew={castAndCrew} />
         </Box>
       </Box>
     </Box>
