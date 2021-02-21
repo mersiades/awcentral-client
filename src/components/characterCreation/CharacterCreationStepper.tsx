@@ -275,6 +275,15 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
+        case UniqueTypes.followers:
+          if (!!character.playbookUnique.followers) {
+            return (
+              <CustomUL>
+                <li>{character.playbookUnique.followers.description}</li>
+              </CustomUL>
+            );
+          }
+          return null;
         case UniqueTypes.gang:
           if (!!character.playbookUnique.gang) {
             const { size, harm, armor, tags } = character.playbookUnique.gang;
@@ -284,18 +293,6 @@ const CharacterCreationStepper: FC = () => {
                 <li>Harm: {harm}</li>
                 <li>Armor: {armor}</li>
                 <li>Tags: {tags.join(', ')}</li>
-              </CustomUL>
-            );
-          }
-          return null;
-        case UniqueTypes.weapons:
-          if (!!character.playbookUnique.weapons) {
-            return (
-              <CustomUL>
-                {character.playbookUnique.weapons.weapons.map((weapon) => {
-                  const weaponName = weapon.substring(0, weapon.indexOf(' ('));
-                  return <li key={weapon}>{weaponName}</li>;
-                })}
               </CustomUL>
             );
           }
@@ -313,15 +310,6 @@ const CharacterCreationStepper: FC = () => {
             );
           }
           return null;
-        case UniqueTypes.followers:
-          if (!!character.playbookUnique.followers) {
-            return (
-              <CustomUL>
-                <li>{character.playbookUnique.followers.description}</li>
-              </CustomUL>
-            );
-          }
-          return null;
         case UniqueTypes.skinnerGear:
           if (!!character.playbookUnique.skinnerGear) {
             const splitItem = (item: string) => item.substring(0, item.indexOf(' ('));
@@ -331,6 +319,29 @@ const CharacterCreationStepper: FC = () => {
                 {character.playbookUnique.skinnerGear.luxeGear.map((item) => (
                   <li key={item.id}>{splitItem(item.item)}</li>
                 ))}
+              </CustomUL>
+            );
+          }
+          return null;
+        case UniqueTypes.weapons:
+          if (!!character.playbookUnique.weapons) {
+            return (
+              <CustomUL>
+                {character.playbookUnique.weapons.weapons.map((weapon) => {
+                  const weaponName = weapon.substring(0, weapon.indexOf(' ('));
+                  return <li key={weapon}>{weaponName}</li>;
+                })}
+              </CustomUL>
+            );
+          }
+          return null;
+        case UniqueTypes.workspace:
+          if (!!character.playbookUnique.workspace) {
+            return (
+              <CustomUL>
+                {character.playbookUnique.workspace.workspaceItems.map((item) => {
+                  return <li key={item}>{item}</li>;
+                })}
               </CustomUL>
             );
           }
