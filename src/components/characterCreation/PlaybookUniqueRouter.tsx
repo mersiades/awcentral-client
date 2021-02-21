@@ -14,6 +14,7 @@ import HoldingForm from './uniques/HoldingForm';
 import FollowersForm from './uniques/FollowersForm';
 import SkinnerGearForm from './uniques/SkinnerGearForm';
 import EstablishmentForm from './uniques/EstablishmentForm';
+import WorkspaceForm from './uniques/WorkspaceForm';
 
 /**
  * This component acts as a router/switcher, to render the correct
@@ -53,6 +54,8 @@ const PlaybookUniqueRouter: FC = () => {
         return <FollowersForm />;
       case PlaybookType.maestroD:
         return <EstablishmentForm />;
+      case PlaybookType.savvyhead:
+        return <WorkspaceForm />;
       case PlaybookType.skinner:
         return <SkinnerGearForm />;
       default:
