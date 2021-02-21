@@ -207,6 +207,21 @@ export const playbookUniqueFragments = {
       }
     }
   `,
+  workspace: gql`
+    fragment Workspace on PlaybookUnique {
+      workspace {
+        id
+        workspaceInstructions
+        projectInstructions
+        workspaceItems
+        projects {
+          id
+          name
+          notes
+        }
+      }
+    }
+  `,
 };
 
 export const characterFragments = {
@@ -350,6 +365,7 @@ export const characterFragments = {
         ...Holding
         ...SkinnerGear
         ...Weapons
+        ...Workspace
       }
     }
     ${playbookUniqueFragments.angelKit}
@@ -358,9 +374,10 @@ export const characterFragments = {
     ${playbookUniqueFragments.establishment}
     ${playbookUniqueFragments.followers}
     ${playbookUniqueFragments.gang}
-    ${playbookUniqueFragments.weapons}
     ${playbookUniqueFragments.holding}
     ${playbookUniqueFragments.skinnerGear}
+    ${playbookUniqueFragments.weapons}
+    ${playbookUniqueFragments.workspace}
   `,
 };
 

@@ -1,4 +1,4 @@
-import { CastCrew } from './dataInterfaces';
+import { CastCrew, Project } from './dataInterfaces';
 import { GangSize, HoldingSize, ThreatType, VehicleType } from './enums';
 import {
   VehicleFrame,
@@ -38,6 +38,8 @@ export interface ItemCharacteristic {
   tag: string;
 }
 
+// ----------------------------------------------------- Inputs --------------------------------------------------------- //
+
 export interface HxInput {
   characterId: string;
   characterName: string;
@@ -53,6 +55,8 @@ export interface HarmInput {
   hasChangedPlaybook: boolean;
   hasDied: boolean;
 }
+
+//// ------------------------------------------------- Vehicle Inputs ----------------------------------------------- ////
 
 export interface VehicleInput {
   id?: string;
@@ -86,15 +90,7 @@ export interface BattleVehicleInput {
   battleVehicleOptions: VehicleBattleOption[];
 }
 
-export interface GangInput {
-  id?: string;
-  size: GangSize;
-  harm: number;
-  armor: number;
-  strengths: GangOption[];
-  weaknesses: GangOption[];
-  tags: string[];
-}
+//// --------------------------------------------------- MC Inputs -------------------------------------------------- ////
 
 export interface ThreatInput {
   id?: string;
@@ -111,22 +107,7 @@ export interface NpcInput {
   description?: string;
 }
 
-export interface HoldingInput {
-  id?: string;
-  holdingSize: HoldingSize;
-  gangSize: GangSize;
-  souls: string;
-  surplus: number;
-  barter: number;
-  gangHarm: number;
-  gangArmor: number;
-  gangDefenseArmorBonus: number;
-  wants: string[];
-  gigs: string[];
-  gangTags: string[];
-  selectedStrengths: HoldingOption[];
-  selectedWeaknesses: HoldingOption[];
-}
+//// ----------------------------------------------- Playbook Unique Inputs --------------------------------------------- ////
 
 export interface EstablishmentInput {
   id?: string;
@@ -159,8 +140,43 @@ export interface FollowersInput {
   selectedWeaknesses: FollowersOption[];
 }
 
+export interface GangInput {
+  id?: string;
+  size: GangSize;
+  harm: number;
+  armor: number;
+  strengths: GangOption[];
+  weaknesses: GangOption[];
+  tags: string[];
+}
+
+export interface HoldingInput {
+  id?: string;
+  holdingSize: HoldingSize;
+  gangSize: GangSize;
+  souls: string;
+  surplus: number;
+  barter: number;
+  gangHarm: number;
+  gangArmor: number;
+  gangDefenseArmorBonus: number;
+  wants: string[];
+  gigs: string[];
+  gangTags: string[];
+  selectedStrengths: HoldingOption[];
+  selectedWeaknesses: HoldingOption[];
+}
+
 export interface SkinnerGearInput {
   id?: string;
   graciousWeapon: SkinnerGearItem;
   luxeGear: SkinnerGearItem[];
+}
+
+export interface WorkspaceInput {
+  id?: string;
+  workspaceInstructions: string;
+  projectInstructions: string;
+  workspaceItems: string[];
+  projects: Project[];
 }
