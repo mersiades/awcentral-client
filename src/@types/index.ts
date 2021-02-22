@@ -173,6 +173,12 @@ export interface SkinnerGearInput {
   luxeGear: SkinnerGearItem[];
 }
 
+export interface ProjectInput {
+  id?: string;
+  name: string;
+  notes?: string;
+}
+
 export interface WorkspaceInput {
   id?: string;
   workspaceInstructions: string;
