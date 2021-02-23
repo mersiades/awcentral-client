@@ -24,6 +24,7 @@ import FollowersBox from './FollowersBox';
 import SkinnerGearBox from './SkinnerGearBox';
 import BattleVehiclesBox from './BattleVehiclesBox';
 import EstablishmentBox from './EstablishmentBox';
+import WorkshopBox from './WorkshopBox';
 
 interface PlaybookPanelProps {
   character: Character;
@@ -145,6 +146,7 @@ const PlaybookPanel: FC<PlaybookPanelProps> = ({
           navigateToCharacterCreation={navigateToCharacterCreation}
         />
       )}
+      {!!character.playbookUnique?.workspace && <WorkshopBox navigateToCharacterCreation={navigateToCharacterCreation} />}
 
       <VehiclesBox vehicles={character.vehicles} navigateToCharacterCreation={navigateToCharacterCreation} />
       <BattleVehiclesBox vehicles={character.battleVehicles} navigateToCharacterCreation={navigateToCharacterCreation} />

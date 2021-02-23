@@ -176,35 +176,22 @@ const CharacterPlaybookForm: FC = () => {
               </em>
             </Box>
 
-            {[
-              PlaybookType.angel,
-              PlaybookType.battlebabe,
-              PlaybookType.brainer,
-              PlaybookType.driver,
-              PlaybookType.chopper,
-              PlaybookType.gunlugger,
-              PlaybookType.hardholder,
-              PlaybookType.hocus,
-              PlaybookType.skinner,
-              PlaybookType.maestroD,
-            ].includes(selectedPlaybook.playbookType) && (
-              <ButtonWS
-                label={
-                  settingPlaybook || creatingCharacter ? (
-                    <Spinner fillColor="#FFF" width="200px" height="36px" />
-                  ) : (
-                    `SELECT ${decapitalize(selectedPlaybook.playbookType)}`
-                  )
-                }
-                primary
-                size="large"
-                onClick={() => {
-                  setStartFadeOut(true);
-                  checkPlaybookReset(selectedPlaybook.playbookType);
-                }}
-                margin="12px"
-              />
-            )}
+            <ButtonWS
+              label={
+                settingPlaybook || creatingCharacter ? (
+                  <Spinner fillColor="#FFF" width="200px" height="36px" />
+                ) : (
+                  `SELECT ${decapitalize(selectedPlaybook.playbookType)}`
+                )
+              }
+              primary
+              size="large"
+              onClick={() => {
+                setStartFadeOut(true);
+                checkPlaybookReset(selectedPlaybook.playbookType);
+              }}
+              margin="12px"
+            />
           </Box>
         </Box>
       )}

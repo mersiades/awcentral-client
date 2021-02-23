@@ -93,6 +93,18 @@ export const mockNewGameName = 'My new mock game';
 
 // ---------------------------------------------------- Dummy objects ---------------------------------------------------- //
 
+export const dummyTaggedItem: TaggedItem = {
+  id: 'dummy',
+  description: 'dummy',
+  tags: ['dummy'],
+};
+
+export const dummyItemCharacteristic: ItemCharacteristic = {
+  id: 'dummy',
+  description: 'dummy',
+  tag: 'dummy',
+};
+
 export const dummyRollModifier: RollModifier = {
   id: 'dummy',
   movesToModify: [
@@ -113,32 +125,17 @@ export const dummyStatModifier: StatModifier = {
   modification: 0,
 };
 
+//// ----------------------------------------------Dummy playbook creators ---------------------------------- ////
+
 export const dummyAngelKitCreator: AngelKitCreator = {
   id: 'dummy',
   angelKitInstructions: 'dummy',
   startingStock: 0,
 };
 
-export const dummyWeaponsCreator: WeaponsCreator = {
+export const dummyBrainerGearCreator: BrainerGearCreator = {
   id: 'dummy',
-  bfoGunOptionCount: 1,
-  seriousGunOptionCount: 2,
-  backupWeaponsOptionCount: 1,
-  bigFuckOffGuns: ['dummy'],
-  seriousGuns: ['dummy'],
-  backupWeapons: ['dummy'],
-};
-
-export const dummyTaggedItem: TaggedItem = {
-  id: 'dummy',
-  description: 'dummy',
-  tags: ['dummy'],
-};
-
-export const dummyItemCharacteristic: ItemCharacteristic = {
-  id: 'dummy',
-  description: 'dummy',
-  tag: 'dummy',
+  gear: ['dummy'],
 };
 
 export const dummyCustomWeaponsCreator: CustomWeaponsCreator = {
@@ -155,10 +152,21 @@ export const dummyCustomWeaponsCreator: CustomWeaponsCreator = {
   handOptionsOptions: [dummyItemCharacteristic],
 };
 
-export const dummyBrainerGearCreator: BrainerGearCreator = {
+// TODO: dummySecurityOption
+
+// TODO: dummyEstablishmentCreator
+
+export const dummyFollowersOption: FollowersOption = {
   id: 'dummy',
-  gear: ['dummy'],
+  description: 'dummy',
+  newNumberOfFollowers: 0,
+  surplusBarterChange: 0,
+  fortuneChange: 0,
+  surplusChange: 'dummy',
+  wantChange: ['dummy'],
 };
+
+// TODO: dummyFollowersCreator
 
 export const dummyGangOption: GangOption = {
   id: 'dummy',
@@ -180,16 +188,6 @@ export const dummyGangCreator: GangCreator = {
   weaknesses: [dummyGangOption],
 };
 
-export const dummyGang: Gang = {
-  id: 'dummy',
-  size: GangSize.small,
-  harm: 2,
-  armor: 1,
-  strengths: [dummyGangOption],
-  weaknesses: [dummyGangOption],
-  tags: ['dummy'],
-};
-
 export const dummyHoldingOption: HoldingOption = {
   id: 'dummy',
   description: 'dummy',
@@ -204,6 +202,34 @@ export const dummyHoldingOption: HoldingOption = {
   newBattleVehicleCount: 0,
   newArmorBonus: 0,
 };
+
+// TODO: dummyHoldingCreator
+
+export const dummySkinnerGearItem: SkinnerGearItem = {
+  id: 'dummy',
+  item: 'dummy',
+  note: 'dummy',
+};
+
+export const dummySkinnerGearCreator: SkinnerGearCreator = {
+  id: 'dummy',
+  graciousWeaponCount: 0,
+  luxeGearCount: 0,
+  graciousWeaponChoices: [dummySkinnerGearItem],
+  luxeGearChoices: [dummySkinnerGearItem],
+};
+
+export const dummyWeaponsCreator: WeaponsCreator = {
+  id: 'dummy',
+  bfoGunOptionCount: 1,
+  seriousGunOptionCount: 2,
+  backupWeaponsOptionCount: 1,
+  bigFuckOffGuns: ['dummy'],
+  seriousGuns: ['dummy'],
+  backupWeapons: ['dummy'],
+};
+
+// TODO: dummyWord=kspaceCreator
 
 export const dummyHolding: Holding = {
   id: 'dummy',
@@ -220,6 +246,16 @@ export const dummyHolding: Holding = {
   gangTags: ['dummy'],
   selectedStrengths: [dummyHoldingOption],
   selectedWeaknesses: [dummyHoldingOption],
+};
+
+export const dummyGang: Gang = {
+  id: 'dummy',
+  size: GangSize.small,
+  harm: 2,
+  armor: 1,
+  strengths: [dummyGangOption],
+  weaknesses: [dummyGangOption],
+  tags: ['dummy'],
 };
 
 export const dummyHoldConditions: HoldConditions = {
@@ -261,20 +297,6 @@ export const dummyBrainerGear: BrainerGear = {
   brainerGear: ['dummy'],
 };
 
-export const dummySkinnerGearItem: SkinnerGearItem = {
-  id: 'dummy',
-  item: 'dummy',
-  note: 'dummy',
-};
-
-export const dummySkinnerGearCreator: SkinnerGearCreator = {
-  id: 'dummy',
-  graciousWeaponCount: 0,
-  luxeGearCount: 0,
-  graciousWeaponChoices: [dummySkinnerGearItem],
-  luxeGearChoices: [dummySkinnerGearItem],
-};
-
 export const dummySkinnerGear: SkinnerGear = {
   id: 'dummy',
   graciousWeapon: dummySkinnerGearItem,
@@ -300,16 +322,6 @@ export const dummyAngelKit: AngelKit = {
   hasSupplier: false,
   supplierText: 'dummy',
   angelKitMoves: [dummyAngelKitMove],
-};
-
-export const dummyFollowersOption: FollowersOption = {
-  id: 'dummy',
-  description: 'dummy',
-  newNumberOfFollowers: 0,
-  surplusBarterChange: 0,
-  fortuneChange: 0,
-  surplusChange: 'dummy',
-  wantChange: ['dummy'],
 };
 
 export const dummyFollowers: Followers = {

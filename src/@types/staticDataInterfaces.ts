@@ -149,6 +149,7 @@ export interface PlaybookUniqueCreator {
   holdingCreator?: HoldingCreator;
   skinnerGearCreator?: SkinnerGearCreator;
   weaponsCreator?: WeaponsCreator;
+  workspaceCreator?: WorkspaceCreator;
 }
 
 export interface AngelKitCreator {
@@ -316,6 +317,14 @@ export interface WeaponsCreator {
   bigFuckOffGuns: string[];
   seriousGuns: string[];
   backupWeapons: string[];
+}
+
+export interface WorkspaceCreator {
+  id: string;
+  itemsCount: number;
+  workspaceInstructions: string;
+  projectInstructions: string;
+  workspaceItems: string[];
 }
 
 // --------------------------------------------- Vehicle interfaces --------------------------------------------- //

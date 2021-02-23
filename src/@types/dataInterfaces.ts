@@ -127,6 +127,7 @@ export interface PlaybookUnique {
   followers?: Followers;
   skinnerGear?: SkinnerGear;
   establishment?: Establishment;
+  workspace?: Workspace;
 }
 
 export interface AngelKit {
@@ -221,6 +222,20 @@ export interface SkinnerGear {
 export interface Weapons {
   id: string;
   weapons: string[];
+}
+
+export interface Project {
+  id: string;
+  name: string;
+  notes?: string;
+}
+
+export interface Workspace {
+  id: string;
+  workspaceInstructions: string;
+  projectInstructions: string;
+  workspaceItems: string[];
+  projects: Project[];
 }
 
 // --------------------------------------------------- Vehicle interfaces --------------------------------------------------- //

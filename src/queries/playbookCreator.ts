@@ -223,6 +223,17 @@ export const playbookUniqueCreatorFragments = {
       }
     }
   `,
+  workspaceCreator: gql`
+    fragment WorkspaceCreator on PlaybookUniqueCreator {
+      workspaceCreator {
+        id
+        itemsCount
+        workspaceInstructions
+        projectInstructions
+        workspaceItems
+      }
+    }
+  `,
 };
 
 export const playbookCreatorFragments = {
@@ -263,6 +274,7 @@ export const playbookCreatorFragments = {
         ...HoldingCreator
         ...SkinnerGearCreator
         ...WeaponsCreator
+        ...WorkspaceCreator
       }
     }
     ${playbookUniqueCreatorFragments.angelKitCreator}
@@ -274,6 +286,7 @@ export const playbookCreatorFragments = {
     ${playbookUniqueCreatorFragments.holdingCreator}
     ${playbookUniqueCreatorFragments.skinnerGearCreator}
     ${playbookUniqueCreatorFragments.weaponsCreator}
+    ${playbookUniqueCreatorFragments.workspaceCreator}
   `,
   names: gql`
     fragment Names on PlaybookCreator {
