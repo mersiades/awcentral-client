@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client';
+import { HoldInput } from '../@types';
 import { Game } from '../@types/dataInterfaces';
+import { characterFragments } from '../queries/game';
 
 export interface SpendHoldData {
   spendHold: Game;
@@ -9,11 +11,12 @@ export interface SpendHoldVars {
   gameId: string;
   gameroleId: string;
   characterId: string;
+  hold: HoldInput;
 }
 
 const SPEND_HOLD = gql`
-  mutation SpendHold($gameId: String!, $gameroleId: String!, $characterId: String!) {
-    spendHold(gameId: $gameId, gameroleId: $gameroleId, characterId: $characterId) {
+  mutation SpendHold($gameId: String!, $gameroleId: String!, $characterId: String!, $hold: HoldInput!) {
+    spendHold(gameId: $gameId, gameroleId: $gameroleId, characterId: $characterId, hold: $hold) {
       id
       gameMessages {
         id
@@ -30,11 +33,12 @@ const SPEND_HOLD = gql`
         userId
         characters {
           id
-          holds
+          ...Holds
         }
       }
     }
   }
+  ${characterFragments.holds}
 `;
 
 export default SPEND_HOLD;

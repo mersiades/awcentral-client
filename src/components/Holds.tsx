@@ -1,18 +1,21 @@
 import { useMutation } from '@apollo/client';
-import { Box } from 'grommet';
+import { Box, Heading, Markdown, Text, Tip } from 'grommet';
+import { omit } from 'lodash';
 import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { HoldInput } from '../@types';
+import { Hold } from '../@types/dataInterfaces';
 import { accentColors, HeadingWS } from '../config/grommetConfig';
 import { useFonts } from '../contexts/fontContext';
 import { useGame } from '../contexts/gameContext';
 import SPEND_HOLD, { SpendHoldData, SpendHoldVars } from '../mutations/spendHold';
 
 interface HoldsProps {
-  holds: number;
+  holds: Hold[];
 }
 
-const Hold = styled.div`
+const StyledHold = styled.div`
   width: 25px;
   height: 25px;
   border-radius: 15px;
@@ -32,28 +35,40 @@ const Holds: FC<HoldsProps> = ({ holds }) => {
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const [spendHold, { loading: spendingHold }] = useMutation<SpendHoldData, SpendHoldVars>(SPEND_HOLD);
 
-  // ------------------------------------------------- Component functions -------------------------------------------------- //
-  const holdsArray = Array.from(Array(holds).keys());
+  // ------------------------------------------------- Component functions -------------------------------------------------- /
 
-  const handleHoldClick = () => {
+  const handleHoldClick = (hold: Hold) => {
     if (!!gameId && !!userGameRole && !!character) {
+      const holdNoTypename = omit(hold, ['__typename']) as HoldInput;
       try {
-        spendHold({ variables: { gameId, gameroleId: userGameRole.id, characterId: character.id } });
+        spendHold({ variables: { gameId, gameroleId: userGameRole.id, characterId: character.id, hold: holdNoTypename } });
       } catch (error) {
         console.error(error);
       }
     }
   };
 
+  const renderTipContent = (hold: Hold) => (
+    <Box>
+      <Markdown>{hold.moveDescription}</Markdown>
+      <Box direction="row" justify="between">
+        <Text weight="bold">Left click: spend</Text>
+        <Text weight="bold">Right click: delete</Text>
+      </Box>
+    </Box>
+  );
+
   return (
     <Box direction="row" pad={{ horizontal: '24px' }} gap="12px" align="center" justify="start">
       <HeadingWS crustReady={crustReady} level={2} margin={{ vertical: '3px' }}>
         Holds
       </HeadingWS>
-      {holdsArray.map((index) => (
-        <Box key={index} animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
-          <Hold onClick={() => !spendingHold && handleHoldClick()} />
-        </Box>
+      {holds.map((hold, index) => (
+        <Tip key={hold.id + index} content={renderTipContent(hold)}>
+          <Box animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
+            <StyledHold onClick={() => !spendingHold && handleHoldClick(hold)} />
+          </Box>
+        </Tip>
       ))}
     </Box>
   );

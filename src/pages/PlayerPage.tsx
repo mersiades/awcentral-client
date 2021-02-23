@@ -298,7 +298,7 @@ const PlayerPage: FC = () => {
           </Tabs>
         </ThemeContext.Extend>
         {character?.hasPlusOneForward && <Plus1ForwardPill />}
-        {!!character && character.holds > 0 && <Holds holds={character.holds} />}
+        {!!character && character.holds.length > 0 && <Holds holds={character.holds} />}
       </Footer>
     </Box>
   );

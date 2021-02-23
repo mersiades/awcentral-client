@@ -9,6 +9,7 @@ import {
   Game,
   GameRole,
   Gang,
+  Hold,
   Holding,
   HxStat,
   PlaybookUnique,
@@ -81,7 +82,7 @@ interface MockCharacter {
   battleVehicleCount: number;
   hasCompletedCharacterCreation: boolean;
   hasPlusOneForward: boolean;
-  holds: number;
+  holds: Hold[];
   playbookUnique: PlaybookUnique;
   characterMoves: CharacterMove[];
   vehicles: Vehicle[];
@@ -714,7 +715,7 @@ export const mockCharacter1: MockCharacter = {
   playbook: PlaybookType.battlebabe,
   hasCompletedCharacterCreation: false,
   hasPlusOneForward: false,
-  holds: 0,
+  holds: [],
   gear: ['leather jacket', 'Timberland boots'],
   barter: 2,
   vehicleCount: 0,
@@ -740,7 +741,7 @@ export const mockCharacter2: MockCharacter = {
   playbook: PlaybookType.angel,
   hasCompletedCharacterCreation: false,
   hasPlusOneForward: false,
-  holds: 0,
+  holds: [],
   gear: ['Grimey green raincoat', '9mm (2-harm close loud)'],
   statsBlock: mockStatsBlock1,
   barter: 2,
