@@ -56,6 +56,13 @@ export interface HarmInput {
   hasDied: boolean;
 }
 
+export interface HoldInput {
+  id: string;
+  moveName: string;
+  moveDescription: string;
+  rollResult: number;
+}
+
 //// ------------------------------------------------- Vehicle Inputs ----------------------------------------------- ////
 
 export interface VehicleInput {

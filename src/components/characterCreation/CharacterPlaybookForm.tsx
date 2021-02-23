@@ -126,6 +126,8 @@ const CharacterPlaybookForm: FC = () => {
     }
   }, [character, playbooks]);
 
+  // -------------------------------------------------- Render component  ---------------------------------------------------- //
+
   return (
     <Box
       fill

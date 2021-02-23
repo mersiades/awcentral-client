@@ -67,7 +67,7 @@ export interface Character {
   playbook: PlaybookType;
   hasCompletedCharacterCreation: boolean;
   hasPlusOneForward: boolean;
-  holds: number;
+  holds: Hold[];
   statsBlock: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
@@ -111,6 +111,13 @@ export interface HxStat {
   characterId: string;
   characterName: string;
   hxValue: number;
+}
+
+export interface Hold {
+  id: string;
+  moveName: string;
+  moveDescription: string;
+  rollResult: number;
 }
 
 // ------------------------------------------------- Playbook Unique interfaces ------------------------------------------------- //

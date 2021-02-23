@@ -225,6 +225,16 @@ export const playbookUniqueFragments = {
 };
 
 export const characterFragments = {
+  holds: gql`
+    fragment Holds on Character {
+      holds {
+        id
+        moveName
+        moveDescription
+        rollResult
+      }
+    }
+  `,
   harm: gql`
     fragment Harm on Character {
       harm {
@@ -411,11 +421,11 @@ export const gameRoleFragments = {
         playbook
         hasCompletedCharacterCreation
         hasPlusOneForward
-        holds
         gear
         barter
         vehicleCount
         battleVehicleCount
+        ...Holds
         ...Harm
         ...StatsBlock
         ...HxBlock
@@ -426,6 +436,7 @@ export const gameRoleFragments = {
         ...PlaybookUnique
       }
     }
+    ${characterFragments.holds}
     ${characterFragments.harm}
     ${characterFragments.statsBlock}
     ${characterFragments.hxBlock}
