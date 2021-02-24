@@ -1330,6 +1330,15 @@ export const mockPlaybookAngel: Playbook = {
   playbookImageUrl: 'https://awc-images.s3-ap-southeast-2.amazonaws.com/angel-white-transparent.png',
 };
 
+export const mockPlaybookBattlbabe: Playbook = {
+  id: 'mock-playbook-battlebabe-id',
+  playbookType: PlaybookType.battlebabe,
+  barterInstructions: 'At the beginning of the session, spend 1- or 2-barter for your lifestyle.',
+  intro: 'Even in a place as dangerous as Apocalypse World, battlebabes are, well.',
+  introComment: 'Battlebabes are good in battle, of course, but they’re wicked social too.',
+  playbookImageUrl: 'https://awc-images.s3-ap-southeast-2.amazonaws.com/battlebabe-white-transparent.png',
+};
+
 // ------------------------------------------------------- Mock Driver playbook --------------------------------------------------- //
 
 export const mockVehicleFrame1: VehicleFrame = {
@@ -1508,7 +1517,7 @@ export const mockPlaybookCreatorDriver: PlaybookCreator = {
   defaultVehicleCount: 1,
 };
 
-export const mockPlaybooks: Playbook[] = [mockPlaybookAngel];
+export const mockPlaybooks: Playbook[] = [mockPlaybookAngel, mockPlaybookBattlbabe];
 
 export const mockBrainerGearCreator: BrainerGearCreator = {
   id: 'mock-brainer-gear-creator-id',
