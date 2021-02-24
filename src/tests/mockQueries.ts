@@ -617,57 +617,22 @@ export const mockPlaybookCreator: MockedResponse = {
     // console.log('mockPlaybookCreator');
     return {
       data: {
+        __typename: 'PlaybookCreator',
         playbookCreator: {
           id: mockPlaybookCreatorAngel.id,
           playbookType: mockPlaybookCreatorAngel.playbookType,
-          gearInstructions: mockPlaybookCreatorAngel.gearInstructions,
+          defaultMoveCount: mockPlaybookCreatorAngel.defaultMoveCount,
+          moveChoiceCount: mockPlaybookCreatorAngel.moveChoiceCount,
+          defaultVehicleCount: 0,
           improvementInstructions: mockPlaybookCreatorAngel.improvementInstructions,
           movesInstructions: mockPlaybookCreatorAngel.movesInstructions,
           hxInstructions: mockPlaybookCreatorAngel.hxInstructions,
-          looks: mockPlaybookCreatorAngel.looks,
           names: mockPlaybookCreatorAngel.names,
+          looks: mockPlaybookCreatorAngel.looks,
           statsOptions: mockPlaybookCreatorAngel.statsOptions,
-          defaultMoveCount: mockPlaybookCreatorAngel.defaultMoveCount,
-          moveChoiceCount: mockPlaybookCreatorAngel.moveChoiceCount,
           playbookMoves: mockPlaybookCreatorAngel.optionalMoves,
-          playbookUniqueCreator: {
-            id: mockPlaybookCreatorAngel.playbookUniqueCreator?.id,
-            type: mockPlaybookCreatorAngel.playbookUniqueCreator?.type,
-            angelKitCreator: mockPlaybookCreatorAngel.playbookUniqueCreator?.angelKitCreator,
-            customWeaponsCreator: {
-              id: 'dummy',
-              firearmsTitle: 'dummy',
-              firearmsBaseInstructions: 'dummy',
-              firearmsBaseOptions: {
-                id: 'dummy',
-                description: 'dummy',
-                tags: ['dummy'],
-              },
-              firearmsOptionsInstructions: 'dummy',
-              firearmsOptionsOptions: {
-                id: 'dummy',
-                description: 'dummy',
-                tag: 'dummy',
-              },
-              handTitle: 'dummy',
-              handBaseInstructions: 'dummy',
-              handBaseOptions: {
-                id: 'dummy',
-                description: 'dummy',
-                tags: 'dummy',
-              },
-              handOptionsInstructions: 'dummy',
-              handOptionsOptions: {
-                id: 'dummy',
-                description: 'dummy',
-                tag: 'dummy',
-              },
-            },
-            brainerGearCreator: {
-              id: 'dummy',
-              gear: ['dummy'],
-            },
-          },
+          gearInstructions: mockPlaybookCreatorAngel.gearInstructions,
+          playbookUniqueCreator: mockUniqueCreatorAngel,
         },
       },
     };

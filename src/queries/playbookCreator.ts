@@ -374,7 +374,10 @@ const PLAYBOOK_CREATOR = gql`
       improvementInstructions
       movesInstructions
       hxInstructions
-      ...Names
+      names {
+        id
+        name
+      }
       ...CreatorLooks
       ...StatsOptions
       ...OptionalMoves
@@ -383,7 +386,6 @@ const PLAYBOOK_CREATOR = gql`
       ...PlaybookUniqueCreator
     }
   }
-  ${playbookCreatorFragments.names}
   ${playbookCreatorFragments.looks}
   ${playbookCreatorFragments.statsOptions}
   ${playbookCreatorFragments.optionalMoves}

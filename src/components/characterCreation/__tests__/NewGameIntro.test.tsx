@@ -1,12 +1,11 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
+import NewGameIntro from '../NewGameIntro';
 import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
 import { mockGame1, mockKeycloakUserInfo1 } from '../../../tests/mocks';
 import { renderWithRouter } from '../../../tests/test-utils';
-import NewGameIntro from '../NewGameIntro';
-import wait from 'waait';
-import userEvent from '@testing-library/user-event';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');

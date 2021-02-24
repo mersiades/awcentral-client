@@ -47,11 +47,13 @@ export interface PlaybookCreator {
   defaultMoves: Move[];
   gearInstructions: GearInstructions;
   playbookUniqueCreator?: PlaybookUniqueCreator; // Driver does not have a PlaybookUnique
+  __typename?: 'PlaybookCreator';
 }
 
 export interface Name {
   id: string;
   name: string;
+  __typename?: 'Name';
 }
 
 export interface Look {
@@ -70,6 +72,7 @@ export interface GearInstructions {
   chooseableGear: string[];
   withMC: string;
   startingBarter: number;
+  __typename?: 'GearInstructions';
 }
 
 export interface StatsOption {
@@ -79,6 +82,7 @@ export interface StatsOption {
   HOT: number;
   SHARP: number;
   WEIRD: number;
+  __typename?: 'StatsOption';
 }
 
 // -------------------------------------------------- Move interfaces -------------------------------------------------- //
@@ -105,6 +109,7 @@ export interface MoveAction {
   statToRollWith?: StatType;
   holdConditions?: HoldConditions;
   plusOneForwardConditions?: PlusOneForwardConditions;
+  __typename?: 'MoveAction';
 }
 
 export interface Move {
@@ -117,6 +122,7 @@ export interface Move {
   statModifier?: StatModifier;
   rollModifier?: RollModifier;
   moveAction?: MoveAction;
+  __typename?: 'Move';
 }
 
 export interface CharacterMove extends Move {
@@ -150,12 +156,14 @@ export interface PlaybookUniqueCreator {
   skinnerGearCreator?: SkinnerGearCreator;
   weaponsCreator?: WeaponsCreator;
   workspaceCreator?: WorkspaceCreator;
+  __typename?: 'PlaybookUniqueCreator';
 }
 
 export interface AngelKitCreator {
   id: string;
   angelKitInstructions: string;
   startingStock: number;
+  __typename?: 'AngelKitCreator';
 }
 
 export interface BrainerGearCreator {

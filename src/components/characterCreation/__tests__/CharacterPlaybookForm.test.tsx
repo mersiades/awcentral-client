@@ -1,22 +1,14 @@
 import React from 'react';
 import { act, screen } from '@testing-library/react';
-
-import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
-import {
-  dummyAngelKitMove,
-  mockCharacter1,
-  mockCharacter2,
-  mockGame1,
-  mockGame5,
-  mockKeycloakUserInfo1,
-} from '../../../tests/mocks';
-import { renderWithRouter } from '../../../tests/test-utils';
-import NewGameIntro from '../NewGameIntro';
-import wait from 'waait';
 import userEvent from '@testing-library/user-event';
+import wait from 'waait';
+
 import CharacterPlaybookForm from '../CharacterPlaybookForm';
+import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
+import { mockCharacter2, mockGame1, mockGame5, mockKeycloakUserInfo1 } from '../../../tests/mocks';
+import { renderWithRouter } from '../../../tests/test-utils';
 import { mockPlaybooksQuery } from '../../../tests/mockQueries';
-import { PlaybookType, UniqueTypes } from '../../../@types/enums';
+import { PlaybookType } from '../../../@types/enums';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');

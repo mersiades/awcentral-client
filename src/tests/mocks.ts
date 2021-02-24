@@ -41,11 +41,14 @@ import {
   CarCreator,
   CharacterMove,
   CustomWeaponsCreator,
+  EstablishmentCreator,
+  FollowersCreator,
   FollowersOption,
   GangCreator,
   GangOption,
   GearInstructions,
   HoldConditions,
+  HoldingCreator,
   HoldingOption,
   Look,
   Move,
@@ -64,6 +67,7 @@ import {
   VehicleCreator,
   VehicleFrame,
   WeaponsCreator,
+  WorkspaceCreator,
 } from '../@types/staticDataInterfaces';
 import { ANGEL_SPECIAL_NAME, UNDER_FIRE_NAME } from '../config/constants';
 
@@ -155,7 +159,19 @@ export const dummyCustomWeaponsCreator: CustomWeaponsCreator = {
 
 // TODO: dummySecurityOption
 
-// TODO: dummyEstablishmentCreator
+export const dummyEstablishmentCreator: EstablishmentCreator = {
+  id: 'dummy',
+  mainAttractionCount: 1,
+  sideAttractionCount: 2,
+  attractions: [],
+  atmospheres: [],
+  atmosphereCount: [],
+  regularsNames: [],
+  regularsQuestions: [],
+  interestedPartyNames: [],
+  interestedPartyQuestions: [],
+  securityOptions: [],
+};
 
 export const dummyFollowersOption: FollowersOption = {
   id: 'dummy',
@@ -167,7 +183,20 @@ export const dummyFollowersOption: FollowersOption = {
   wantChange: ['dummy'],
 };
 
-// TODO: dummyFollowersCreator
+export const dummyFollowerCreator: FollowersCreator = {
+  id: 'dummy',
+  instructions: 'dummy',
+  defaultNumberOfFollowers: 0,
+  defaultSurplusBarter: 0,
+  defaultFortune: 0,
+  strengthCount: 0,
+  weaknessCount: 0,
+  travelOptions: [],
+  characterizationOptions: [],
+  defaultWants: [],
+  strengthOptions: [],
+  weaknessOptions: [],
+};
 
 export const dummyGangOption: GangOption = {
   id: 'dummy',
@@ -204,7 +233,25 @@ export const dummyHoldingOption: HoldingOption = {
   newArmorBonus: 0,
 };
 
-// TODO: dummyHoldingCreator
+export const dummyHoldingCreator: HoldingCreator = {
+  id: 'dummy',
+  defaultHoldingSize: HoldingSize.medium,
+  instructions: 'dummy',
+  defaultSurplus: 0,
+  defaultWant: 'dummy',
+  defaultGigs: [],
+  defaultArmorBonus: 0,
+  defaultVehiclesCount: 0,
+  defaultBattleVehicleCount: 0,
+  defaultGangSize: GangSize.medium,
+  defaultGangHarm: 0,
+  defaultGangArmor: 0,
+  defaultGangTag: 'dummy',
+  strengthCount: 0,
+  weaknessCount: 0,
+  strengthOptions: [],
+  weaknessOptions: [],
+};
 
 export const dummySkinnerGearItem: SkinnerGearItem = {
   id: 'dummy',
@@ -230,7 +277,13 @@ export const dummyWeaponsCreator: WeaponsCreator = {
   backupWeapons: ['dummy'],
 };
 
-// TODO: dummyWord=kspaceCreator
+export const dummyWorkspaceCreator: WorkspaceCreator = {
+  id: 'dummy',
+  itemsCount: 0,
+  workspaceInstructions: 'dummy',
+  projectInstructions: 'dummy',
+  workspaceItems: [],
+};
 
 export const dummyHolding: Holding = {
   id: 'dummy',
@@ -499,6 +552,7 @@ export const mockCharacterMoveAngel1: CharacterMove = {
   statModifier: dummyStatModifier,
   moveAction: dummyMoveAction,
   isSelected: true,
+  __typename: 'Move',
 };
 
 export const mockCharacterMoveAngel2: CharacterMove = {
@@ -512,6 +566,7 @@ export const mockCharacterMoveAngel2: CharacterMove = {
   statModifier: dummyStatModifier,
   moveAction: dummyMoveAction,
   isSelected: false,
+  __typename: 'Move',
 };
 
 export const mockCharacterMoveAngel3: CharacterMove = {
@@ -525,6 +580,7 @@ export const mockCharacterMoveAngel3: CharacterMove = {
   statModifier: dummyStatModifier,
   moveAction: dummyMoveAction,
   isSelected: false,
+  __typename: 'Move',
 };
 
 export const mockCharacterMoveAngel4: CharacterMove = {
@@ -538,76 +594,89 @@ export const mockCharacterMoveAngel4: CharacterMove = {
   statModifier: dummyStatModifier,
   moveAction: dummyMoveAction,
   isSelected: false,
+  __typename: 'Move',
 };
 
 export const mockNameAngel1: Name = {
   id: 'mock-angel-name-id-1',
   name: 'Jay',
+  __typename: 'Name',
 };
 
 export const mockNameAngel2: Name = {
   id: 'mock-angel-name-id-2',
   name: 'Boo',
+  __typename: 'Name',
 };
 
 export const mockLookAngel1: Look = {
   id: 'mock-angel-look-id-1',
   look: 'man',
   category: LookType.gender,
+  __typename: 'Look',
 };
 
 export const mockLookAngel2: Look = {
   id: 'mock-angel-look-id-2',
   look: 'woman',
   category: LookType.gender,
+  __typename: 'Look',
 };
 
 export const mockLookAngel3: Look = {
   id: 'mock-angel-look-id-3',
   look: 'utility wear',
   category: LookType.clothes,
+  __typename: 'Look',
 };
 
 export const mockLookAngel4: Look = {
   id: 'mock-angel-look-id-4',
   look: 'casual wear plus utility',
   category: LookType.clothes,
+  __typename: 'Look',
 };
 
 export const mockLookAngel5: Look = {
   id: 'mock-angel-look-id-5',
   look: 'kind face',
   category: LookType.face,
+  __typename: 'Look',
 };
 
 export const mockLookAngel6: Look = {
   id: 'mock-angel-look-id-6',
   look: 'strong face',
   category: LookType.face,
+  __typename: 'Look',
 };
 
 export const mockLookAngel7: Look = {
   id: 'mock-angel-look-id-7',
   look: 'hard eyes',
   category: LookType.eyes,
+  __typename: 'Look',
 };
 
 export const mockLookAngel8: Look = {
   id: 'mock-angel-look-id-8',
   look: 'quick eyes',
   category: LookType.eyes,
+  __typename: 'Look',
 };
 
 export const mockLookAngel9: Look = {
   id: 'mock-angel-look-id-9',
   look: 'compact body',
   category: LookType.body,
+  __typename: 'Look',
 };
 
 export const mockLookAngel10: Look = {
   id: 'mock-angel-look-id-10',
   look: 'stout body',
   category: LookType.body,
+  __typename: 'Look',
 };
 
 export const mockLookBettleBabe1: Look = {
@@ -1280,16 +1349,23 @@ export const mockAngelKitCreator: AngelKitCreator = {
   id: 'angel-kit-creator-id',
   angelKitInstructions: 'Your angel kit has all kinds of crap in it...',
   startingStock: 6,
+  __typename: 'AngelKitCreator',
 };
 
 export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
   id: 'angel-playbook-unique-creator-id',
   type: UniqueTypes.angelKit,
   angelKitCreator: mockAngelKitCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: dummyBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: dummyEstablishmentCreator,
+  followersCreator: dummyFollowerCreator,
   gangCreator: dummyGangCreator,
+  holdingCreator: dummyHoldingCreator,
+  skinnerGearCreator: dummySkinnerGearCreator,
   weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
 };
 
 export const mockPlaybookCreatorAngel: PlaybookCreator = {
@@ -1319,6 +1395,7 @@ export const mockPlaybookCreatorAngel: PlaybookCreator = {
   defaultMoveCount: 1,
   moveChoiceCount: 2,
   defaultVehicleCount: 0,
+  __typename: 'PlaybookCreator',
 };
 
 export const mockPlaybookAngel: Playbook = {
