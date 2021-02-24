@@ -43,7 +43,7 @@ describe('Rendering VehicleForm', () => {
               hxBlock: mockCharacter2.hxBlock,
               vehicles: [],
               battleVehicles: [],
-              holds: 0,
+              holds: [],
               battleVehicleCount: 0,
             },
           ],

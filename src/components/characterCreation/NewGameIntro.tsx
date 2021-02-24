@@ -13,6 +13,7 @@ const NewGameIntro: FC<NewGameIntroProps> = ({ closeNewGameIntro }) => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game } = useGame();
   const { crustReady } = useFonts();
+  // console.log('game', game);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
   const renderComms = () => {
