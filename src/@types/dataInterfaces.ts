@@ -98,6 +98,7 @@ export interface StatsBlock {
   id: string;
   statsOptionId: string;
   stats: CharacterStat[];
+  __typename?: 'StatsBlock';
 }
 
 export interface CharacterStat {
@@ -105,6 +106,7 @@ export interface CharacterStat {
   stat: StatType;
   value: number;
   isHighlighted: boolean;
+  __typename?: 'CharacterStat';
 }
 
 export interface HxStat {

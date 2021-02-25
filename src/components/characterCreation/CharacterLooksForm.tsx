@@ -177,8 +177,8 @@ const CharacterLooksForm: FC = () => {
 
   return (
     <Box
-      fill
       data-testid="character-looks-form"
+      fill
       pad="24px"
       align="center"
       justify="start"

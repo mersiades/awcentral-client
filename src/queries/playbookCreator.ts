@@ -384,14 +384,20 @@ const PLAYBOOK_CREATOR = gql`
         category
         playbookType
       }
-      ...StatsOptions
+      statsOptions {
+        id
+        COOL
+        HARD
+        HOT
+        SHARP
+        WEIRD
+      }
       ...OptionalMoves
       ...DefaultMoves
       ...GearInstructions
       ...PlaybookUniqueCreator
     }
   }
-  ${playbookCreatorFragments.statsOptions}
   ${playbookCreatorFragments.optionalMoves}
   ${playbookCreatorFragments.defaultMoves}
   ${playbookCreatorFragments.gearInstructions}

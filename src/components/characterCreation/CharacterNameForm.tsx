@@ -40,6 +40,14 @@ const CharacterNameForm: FC = () => {
       try {
         await setCharacterName({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, name: selectedName },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setCharacterName: {
+              ...character,
+              name: selectedName,
+              __typename: 'Character',
+            },
+          },
         });
         history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectLooks}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });

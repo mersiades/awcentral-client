@@ -3,6 +3,7 @@ import { Character } from '../@types/dataInterfaces';
 
 export interface SetCharacterStatsData {
   setCharacterStats: Character;
+  __typename?: 'Mutation';
 }
 
 export interface SetCharacterStatsVars {

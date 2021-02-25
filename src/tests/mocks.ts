@@ -1320,6 +1320,7 @@ export const mockStatsOptionsAngel1: StatsOption = {
   HOT: 1,
   SHARP: 2,
   WEIRD: -1,
+  __typename: 'StatsOption',
 };
 
 export const mockStatsOptionsAngel2: StatsOption = {
@@ -1329,6 +1330,7 @@ export const mockStatsOptionsAngel2: StatsOption = {
   HOT: 0,
   SHARP: 2,
   WEIRD: -1,
+  __typename: 'StatsOption',
 };
 
 export const mockStatsOptionsAngel3: StatsOption = {
@@ -1338,6 +1340,7 @@ export const mockStatsOptionsAngel3: StatsOption = {
   HOT: 0,
   SHARP: 2,
   WEIRD: 1,
+  __typename: 'StatsOption',
 };
 
 export const mockgearInstructionsAngel: GearInstructions = {

@@ -7,10 +7,11 @@ import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import SET_CHARACTER_STATS, { SetCharacterStatsData, SetCharacterStatsVars } from '../../mutations/setCharacterStats';
-import { CharacterCreationSteps } from '../../@types/enums';
+import { CharacterCreationSteps, StatType } from '../../@types/enums';
 import { StatsOption } from '../../@types/staticDataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
+import { StatsBlock } from '../../@types/dataInterfaces';
 
 const CharacterStatsForm: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
@@ -30,18 +31,64 @@ const CharacterStatsForm: FC = () => {
     // @ts-ignore
     { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
   );
+
   const statsOptions = pbCreatorData?.playbookCreator.statsOptions;
+
   const [setCharacterStats, { loading: settingStats }] = useMutation<SetCharacterStatsData, SetCharacterStatsVars>(
     SET_CHARACTER_STATS
   );
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
-  const handleSubmitStats = async (statsOptionId: string) => {
+  const handleSubmitStats = async (statsOption: StatsOption) => {
     if (!!userGameRole && !!character && !!game) {
+      // Optimistic response is not working
+      const optimisticStatsBlock: StatsBlock = {
+        id: 'temp-id',
+        statsOptionId: statsOption.id,
+        stats: [
+          {
+            id: 'temp-id-1',
+            stat: StatType.cool,
+            value: statsOption.COOL,
+            isHighlighted: false,
+            __typename: 'CharacterStat',
+          },
+          {
+            id: 'temp-id-1',
+            stat: StatType.hard,
+            value: statsOption.HARD,
+            isHighlighted: false,
+            __typename: 'CharacterStat',
+          },
+          { id: 'temp-id-1', stat: StatType.hot, value: statsOption.HOT, isHighlighted: false, __typename: 'CharacterStat' },
+          {
+            id: 'temp-id-1',
+            stat: StatType.sharp,
+            value: statsOption.SHARP,
+            isHighlighted: false,
+            __typename: 'CharacterStat',
+          },
+          {
+            id: 'temp-id-1',
+            stat: StatType.weird,
+            value: statsOption.WEIRD,
+            isHighlighted: false,
+            __typename: 'CharacterStat',
+          },
+        ],
+        __typename: 'StatsBlock',
+      };
       try {
         await setCharacterStats({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, statsOptionId },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, statsOptionId: statsOption.id },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setCharacterStats: {
+              ...character,
+              statsBlock: optimisticStatsBlock,
+              __typename: 'Character',
+            },
+          },
         });
         history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectGear}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -54,30 +101,30 @@ const CharacterStatsForm: FC = () => {
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
   return (
     <Box
+      data-testid="character-stats-form"
       fill
-      direction="column"
-      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       pad="24px"
       align="center"
       justify="start"
+      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box width="50vw" flex="grow">
-        <HeadingWS level={2} crustReady={crustReady} textAlign="center">{`WHAT ARE ${
-          !!character?.name ? character.name.toUpperCase() : '...'
-        }'S STRENGTHS AND WEAKNESSES?`}</HeadingWS>
-        <Box direction="row" align="center" justify="between" fill="horizontal" margin={{ vertical: '6px' }}>
-          <HeadingWS level={4} textAlign="start">
-            Choose a set:
-          </HeadingWS>
+      <Box width="85vw" align="start" style={{ maxWidth: '763px' }}>
+        <Box direction="row" fill="horizontal" justify="between" align="center">
+          <HeadingWS level={2} crustReady={crustReady} textAlign="center">{`WHAT ARE ${
+            !!character?.name ? character.name.toUpperCase() : '...'
+          }'S STRENGTHS AND WEAKNESSES?`}</HeadingWS>
           <ButtonWS
             primary
-            label={settingStats ? <Spinner fillColor="#FFF" /> : 'SET'}
-            onClick={() => !!selectedStatsOption && handleSubmitStats(selectedStatsOption.id)}
-            disabled={!selectedStatsOption}
+            label={settingStats ? <Spinner fillColor="#FFF" width="37px" /> : 'SET'}
+            onClick={() => !!selectedStatsOption && !settingStats && handleSubmitStats(selectedStatsOption)}
+            disabled={!selectedStatsOption || settingStats}
             style={{ minHeight: '52px' }}
           />
         </Box>
-        <Box fill margin={{ bottom: '48px' }}>
+        <HeadingWS level={4} textAlign="start" margin={{ vertical: '6px' }}>
+          Choose a set:
+        </HeadingWS>
+        <Box fill="horizontal" margin={{ bottom: '12px' }} gap="6px">
           {!!statsOptions &&
             statsOptions.map((opt) => (
               <Box
@@ -94,32 +141,42 @@ const CharacterStatsForm: FC = () => {
                 style={{ minHeight: '52px' }}
               >
                 <Box direction="row" align="center" gap="12px">
-                  <HeadingWS level={4}>COOL:</HeadingWS>
-                  <HeadingWS crustReady={crustReady} color="brand" level={3}>
+                  <HeadingWS level={4} margin={{ vertical: '6px' }}>
+                    COOL:
+                  </HeadingWS>
+                  <HeadingWS crustReady={crustReady} color="brand" level={3} margin={{ vertical: '6px' }}>
                     {opt.COOL}
                   </HeadingWS>
                 </Box>
                 <Box direction="row" align="center" gap="12px">
-                  <HeadingWS level={4}>HARD:</HeadingWS>
-                  <HeadingWS crustReady={crustReady} color="brand" level={3}>
+                  <HeadingWS level={4} margin={{ vertical: '6px' }}>
+                    HARD:
+                  </HeadingWS>
+                  <HeadingWS crustReady={crustReady} color="brand" level={3} margin={{ vertical: '6px' }}>
                     {opt.HARD}
                   </HeadingWS>
                 </Box>
                 <Box direction="row" align="center" gap="12px">
-                  <HeadingWS level={4}>HOT:</HeadingWS>
-                  <HeadingWS crustReady={crustReady} color="brand" level={3}>
+                  <HeadingWS level={4} margin={{ vertical: '6px' }}>
+                    HOT:
+                  </HeadingWS>
+                  <HeadingWS crustReady={crustReady} color="brand" level={3} margin={{ vertical: '6px' }}>
                     {opt.HOT}
                   </HeadingWS>
                 </Box>
                 <Box direction="row" align="center" gap="12px">
-                  <HeadingWS level={4}>SHARP:</HeadingWS>
-                  <HeadingWS crustReady={crustReady} color="brand" level={3}>
+                  <HeadingWS level={4} margin={{ vertical: '6px' }}>
+                    SHARP:
+                  </HeadingWS>
+                  <HeadingWS crustReady={crustReady} color="brand" level={3} margin={{ vertical: '6px' }}>
                     {opt.SHARP}
                   </HeadingWS>
                 </Box>
                 <Box direction="row" align="center" gap="12px">
-                  <HeadingWS level={4}>WEIRD:</HeadingWS>
-                  <HeadingWS crustReady={crustReady} color="brand" level={3}>
+                  <HeadingWS level={4} margin={{ vertical: '6px' }}>
+                    WEIRD:
+                  </HeadingWS>
+                  <HeadingWS crustReady={crustReady} color="brand" level={3} margin={{ vertical: '6px' }}>
                     {opt.WEIRD}
                   </HeadingWS>
                 </Box>
