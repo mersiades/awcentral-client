@@ -555,8 +555,58 @@ const PLAYBOOK_CREATOR = gql`
         SHARP
         WEIRD
       }
-      ...OptionalMoves
-      ...DefaultMoves
+      optionalMoves {
+        id
+        name
+        kind
+        description
+        playbook
+        stat
+        statModifier {
+          id
+          statToModify
+          modification
+        }
+        rollModifier {
+          id
+          movesToModify {
+            id
+          }
+          statToRollWith
+        }
+        moveAction {
+          id
+          actionType
+          rollType
+          statToRollWith
+        }
+      }
+      defaultMoves {
+        id
+        name
+        kind
+        description
+        playbook
+        stat
+        statModifier {
+          id
+          statToModify
+          modification
+        }
+        rollModifier {
+          id
+          movesToModify {
+            id
+          }
+          statToRollWith
+        }
+        moveAction {
+          id
+          actionType
+          rollType
+          statToRollWith
+        }
+      }
       gearInstructions {
         id
         gearIntro
@@ -756,8 +806,6 @@ const PLAYBOOK_CREATOR = gql`
       }
     }
   }
-  ${playbookCreatorFragments.optionalMoves}
-  ${playbookCreatorFragments.defaultMoves}
 `;
 
 export default PLAYBOOK_CREATOR;

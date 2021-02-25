@@ -10,7 +10,7 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../.
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 import { useHistory } from 'react-router-dom';
-import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
+import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../../@types/enums';
 
 const AngelKitForm: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
@@ -35,6 +35,7 @@ const AngelKitForm: FC = () => {
       try {
         await setAngelKit({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, stock, hasSupplier },
+          // Can't do optimistic response for setAngelKit because frontend doesn't have all the info, such as the AngelKit moves
         });
 
         if (!character.hasCompletedCharacterCreation) {

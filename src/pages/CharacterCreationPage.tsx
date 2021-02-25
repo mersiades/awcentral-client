@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { Box } from 'grommet';
 
@@ -98,9 +98,14 @@ const CharacterCreationPage: FC = () => {
   }, [game, userId, history]);
 
   // Set a scroll event listener for ScrollableIndicator
-  useEffect(() => {
+  useLayoutEffect(() => {
+    console.log('!!containerRef.current', !!containerRef.current);
     if (!!containerRef.current) {
+      // Set listener for future scrolls
       containerRef.current.addEventListener('scroll', (e) => handleScroll(e));
+
+      // Set showScrollable on component mount
+      // There's a bug here, because on initial mount, scrollHeight is always the same as offsetHeight
       if (containerRef.current.scrollHeight > containerRef.current.offsetHeight) {
         setShowScrollable(true);
       } else {

@@ -137,6 +137,7 @@ export interface PlaybookUnique {
   skinnerGear?: SkinnerGear;
   establishment?: Establishment;
   workspace?: Workspace;
+  __typename?: 'PlaybookUnique';
 }
 
 export interface AngelKit {

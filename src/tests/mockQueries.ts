@@ -74,6 +74,7 @@ import {
   mockUniqueCreatorAngel,
   mockUniqueCreatorBrainer,
   mockVehicleCreator,
+  mockPlaybookCreatorMoveAngel1,
 } from './mocks';
 
 export const mockGameRolesByUserId: MockedResponse = {
@@ -2284,7 +2285,6 @@ export const mockPlayBookCreatorQueryAngel: MockedResponse = {
           defaultMoveCount: 1,
           moveChoiceCount: 2,
           defaultVehicleCount: 0,
-          gearInstructions: mockgearInstructionsAngel,
           improvementInstructions: 'Whenever you roll a highlighted stat...',
           movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
           hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
@@ -2303,8 +2303,8 @@ export const mockPlayBookCreatorQueryAngel: MockedResponse = {
           ],
           statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
           optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel1, mockCharacterMoveAngel4],
-          defaultMoves: [mockCharacterMoveAngel1],
-
+          defaultMoves: [mockPlaybookCreatorMoveAngel1],
+          gearInstructions: mockgearInstructionsAngel,
           playbookUniqueCreator: mockUniqueCreatorAngel,
         },
       },

@@ -116,9 +116,36 @@ export const dummyRollModifier: RollModifier = {
     {
       id: 'dummy',
       name: 'dummy',
-      description: 'dummy',
       kind: MoveType.basic,
+      description: 'dummy',
       playbook: PlaybookType.angel,
+      stat: StatType.hx,
+      statModifier: {
+        id: 'dummy',
+        statToModify: StatType.sharp,
+        modification: 0,
+      },
+      // rollModifier: {}, // Can't include RollModifier because recursive
+      moveAction: {
+        id: 'dummy',
+        actionType: MoveActionType.roll,
+        rollType: RollType.stat,
+        statToRollWith: StatType.hard,
+        holdConditions: {
+          id: 'dummy',
+          onTenPlus: 3,
+          onSevenToNine: 1,
+          onMiss: 0,
+        },
+        plusOneForwardConditions: {
+          id: 'dummy',
+          isManualGrant: false,
+          onTenPlus: false,
+          onSevenToNine: false,
+          onMiss: false,
+        },
+      },
+      __typename: 'Move',
     },
   ],
   statToRollWith: StatType.sharp,
@@ -541,15 +568,28 @@ export const mockStatsBlockWithHighlight: StatsBlock = {
   ],
 };
 
+export const mockPlaybookCreatorMoveAngel1: Move = {
+  id: 'angel-move-id-1',
+  name: ANGEL_SPECIAL_NAME,
+  kind: MoveType.default,
+  description: 'If you and another character have sex,',
+  playbook: PlaybookType.angel,
+  stat: StatType.hx,
+  statModifier: dummyStatModifier,
+  rollModifier: dummyRollModifier,
+  moveAction: dummyMoveAction,
+  __typename: 'Move',
+};
+
 export const mockCharacterMoveAngel1: CharacterMove = {
   id: 'angel-move-id-1',
   name: ANGEL_SPECIAL_NAME,
-  description: 'If you and another character have sex,',
   kind: MoveType.default,
+  description: 'If you and another character have sex,',
   playbook: PlaybookType.angel,
   stat: StatType.hx,
-  rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  rollModifier: dummyRollModifier,
   moveAction: dummyMoveAction,
   isSelected: true,
   __typename: 'Move',
