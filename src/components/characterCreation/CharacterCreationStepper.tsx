@@ -176,11 +176,15 @@ const CharacterCreationStepper: FC = () => {
         Stats
       </Text>
       {!!character && !!character.statsBlock && character.statsBlock.stats.length > 0 ? (
-        <CustomUL>
+        <>
           {character.statsBlock.stats.map((stat) => (
-            <li key={stat.id}>{`${stat.stat} ${'--'.repeat(8 - stat.stat.length)} ${stat.value}`}</li>
+            <Box key={stat.id} direction="row" fill="horizontal" justify="between" align="center">
+              <Text>{stat.stat}</Text>
+              <Text>{`${'--'.repeat(9 - stat.stat.length)}`}</Text>
+              <Text>{stat.value}</Text>
+            </Box>
           ))}
-        </CustomUL>
+        </>
       ) : (
         <Text>...</Text>
       )}

@@ -394,13 +394,21 @@ const PLAYBOOK_CREATOR = gql`
       }
       ...OptionalMoves
       ...DefaultMoves
-      ...GearInstructions
+      gearInstructions {
+        id
+        gearIntro
+        youGetItems
+        introduceChoice
+        numberCanChoose
+        chooseableGear
+        withMC
+        startingBarter
+      }
       ...PlaybookUniqueCreator
     }
   }
   ${playbookCreatorFragments.optionalMoves}
   ${playbookCreatorFragments.defaultMoves}
-  ${playbookCreatorFragments.gearInstructions}
   ${playbookCreatorFragments.playbookUniqueCreator}
 `;
 

@@ -1,35 +1,20 @@
 import React from 'react';
-import wait from 'waait';
+// import wait from 'waait';
 import userEvent from '@testing-library/user-event';
 import { InMemoryCache } from '@apollo/client';
-import { act, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
-import CharacterLooksForm from '../CharacterLooksForm';
+import CharacterStatsForm from '../CharacterStatsForm';
 import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
 import {
   blankCharacter,
   mockCharacter2,
   mockGame5,
   mockKeycloakUserInfo1,
-  mockLookAngel1,
-  mockLookAngel3,
-  mockLookAngel5,
-  mockLookAngel7,
-  mockLookAngel9,
   mockPlaybookCreatorAngel,
 } from '../../../tests/mocks';
 import { renderWithRouter } from '../../../tests/test-utils';
-import {
-  mockPlaybookCreator,
-  mockSetCharacterLook1,
-  mockSetCharacterLook2,
-  mockSetCharacterLook3,
-  mockSetCharacterLook4,
-  mockSetCharacterLook5,
-  mockSetCharacterLook6,
-} from '../../../tests/mockQueries';
-import CharacterStatsForm from '../CharacterStatsForm';
-import { scryRenderedDOMComponentsWithTag } from 'react-dom/test-utils';
+import { mockPlaybookCreator } from '../../../tests/mockQueries';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
