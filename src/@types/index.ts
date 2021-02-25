@@ -1,5 +1,5 @@
 import { CastCrew, Project } from './dataInterfaces';
-import { GangSize, HoldingSize, ThreatType, VehicleType } from './enums';
+import { GangSize, HoldingSize, LookType, PlaybookType, ThreatType, VehicleType } from './enums';
 import {
   VehicleFrame,
   VehicleBattleOption,
@@ -61,6 +61,13 @@ export interface HoldInput {
   moveName: string;
   moveDescription: string;
   rollResult: number;
+}
+
+export interface LookInput {
+  id?: string;
+  look: string;
+  category: LookType;
+  playbookType: PlaybookType;
 }
 
 //// ------------------------------------------------- Vehicle Inputs ----------------------------------------------- ////

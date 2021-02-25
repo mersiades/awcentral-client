@@ -727,14 +727,20 @@ export const mockGameForCharacterCreation3: MockedResponse = {
   },
 };
 
+// ----------------------------- CharacterLooksForm -------------------------------- //
+
 export const mockSetCharacterLook1: MockedResponse = {
   request: {
     query: SET_CHARACTER_LOOK,
     variables: {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
-      look: mockCharacter2.looks[0].look,
-      category: mockCharacter2.looks[0].category,
+      look: {
+        id: 'mock-angel-look-id-1',
+        look: 'man',
+        category: 'GENDER',
+        playbookType: 'ANGEL',
+      },
     },
   },
   result: () => {
@@ -825,8 +831,12 @@ export const mockSetCharacterLook2: MockedResponse = {
     variables: {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
-      look: mockCharacter2.looks[1].look,
-      category: mockCharacter2.looks[1].category,
+      look: {
+        id: 'mock-angel-look-id-3',
+        look: 'utility wear',
+        category: 'CLOTHES',
+        playbookType: 'ANGEL',
+      },
     },
   },
   result: () => {
@@ -917,8 +927,12 @@ export const mockSetCharacterLook3: MockedResponse = {
     variables: {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
-      look: mockCharacter2.looks[2].look,
-      category: mockCharacter2.looks[2].category,
+      look: {
+        id: 'mock-angel-look-id-5',
+        look: 'kind face',
+        category: 'FACE',
+        playbookType: 'ANGEL',
+      },
     },
   },
   result: () => {
@@ -1009,8 +1023,12 @@ export const mockSetCharacterLook4: MockedResponse = {
     variables: {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
-      look: mockCharacter2.looks[3].look,
-      category: mockCharacter2.looks[3].category,
+      look: {
+        id: 'mock-angel-look-id-7',
+        look: 'hard eyes',
+        category: 'EYES',
+        playbookType: 'ANGEL',
+      },
     },
   },
   result: () => {
@@ -1106,8 +1124,12 @@ export const mockSetCharacterLook5: MockedResponse = {
     variables: {
       gameRoleId: mockGame5.gameRoles[2].id,
       characterId: mockCharacter2.id,
-      look: mockCharacter2.looks[4].look,
-      category: mockCharacter2.looks[4].category,
+      look: {
+        id: 'mock-angel-look-id-9',
+        look: 'compact body',
+        category: 'BODY',
+        playbookType: 'ANGEL',
+      },
     },
   },
   result: () => {
@@ -1125,6 +1147,35 @@ export const mockSetCharacterLook5: MockedResponse = {
             mockCharacter2.looks[3],
             mockCharacter2.looks[4],
           ],
+        },
+      },
+    };
+  },
+};
+
+export const mockSetCharacterLook6: MockedResponse = {
+  request: {
+    query: SET_CHARACTER_LOOK,
+    variables: {
+      gameRoleId: mockGame5.gameRoles[2].id,
+      characterId: mockCharacter2.id,
+      look: {
+        // No id for a custom Look
+        look: 'man',
+        category: 'GENDER',
+        playbookType: 'ANGEL',
+      },
+    },
+  },
+  result: () => {
+    // console.log('mockSetCharacterLook6');
+    return {
+      data: {
+        setCharacterLook: {
+          id: mockCharacter2.id,
+          playbook: mockCharacter2.playbook,
+          name: mockCharacter2.name,
+          looks: [mockCharacter2.looks[0]],
         },
       },
     };
@@ -2313,3 +2364,5 @@ export const mockVehicleCreatorQuery: MockedResponse = {
     };
   },
 };
+
+// ----------------------------- CharacterLooksForm -------------------------------- //

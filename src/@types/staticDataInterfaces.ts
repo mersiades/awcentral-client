@@ -60,6 +60,7 @@ export interface Look {
   id: string;
   look: string;
   category: LookType;
+  playbookType: PlaybookType;
   __typename?: 'Look';
 }
 

@@ -11,7 +11,7 @@ interface CharacterPreviewProps {
 }
 
 const CharacterPreview: FC<CharacterPreviewProps> = ({ character, isMc }) => {
-  const highlightedStats = character.statsBlock.stats
+  const highlightedStats = character.statsBlock?.stats
     .filter((stat) => stat.isHighlighted === true)
     .map((stat) => stat.stat)
     .join(', ');

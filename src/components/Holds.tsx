@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { Box, Heading, Markdown, Text, Tip } from 'grommet';
+import { Box, Markdown, Text, Tip } from 'grommet';
 import { omit } from 'lodash';
 import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
@@ -84,7 +84,7 @@ const Holds: FC<HoldsProps> = ({ holds }) => {
               onClick={() => !spendingHold && handleHoldLeftClick(hold)}
               onContextMenu={(e) => {
                 e.preventDefault();
-                handleHoldRightClick(hold);
+                !removingHold && handleHoldRightClick(hold);
                 return false;
               }}
             />

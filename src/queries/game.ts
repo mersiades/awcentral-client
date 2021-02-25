@@ -275,8 +275,10 @@ export const characterFragments = {
   looks: gql`
     fragment Looks on Character {
       looks {
+        id
         look
         category
+        playbookType
       }
     }
   `,

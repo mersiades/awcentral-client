@@ -4,7 +4,14 @@ import { act, screen } from '@testing-library/react';
 
 import CharacterNameForm from '../CharacterNameForm';
 import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
-import { dummyAngelKitMove, mockCharacter2, mockGame5, mockKeycloakUserInfo1, mockNameAngel1 } from '../../../tests/mocks';
+import {
+  blankCharacter,
+  dummyAngelKitMove,
+  mockCharacter2,
+  mockGame5,
+  mockKeycloakUserInfo1,
+  mockNameAngel1,
+} from '../../../tests/mocks';
 import { renderWithRouter } from '../../../tests/test-utils';
 import { mockPlaybookCreator } from '../../../tests/mockQueries';
 import { UniqueTypes } from '../../../@types/enums';
@@ -32,47 +39,9 @@ describe('Rendering CharacterNameForm', () => {
           threats: mockGame5.gameRoles[2].threats,
           characters: [
             {
+              ...blankCharacter,
               id: mockCharacter2.id,
               playbook: mockCharacter2.playbook,
-              name: '',
-              gear: [],
-              statsBlock: {
-                id: '',
-                statsOptionId: '',
-                stats: [],
-              },
-              hxBlock: [],
-              looks: [],
-              hasCompletedCharacterCreation: false,
-              characterMoves: [],
-              barter: 0,
-              harm: mockCharacter2.harm,
-              hasPlusOneForward: false,
-              holds: [],
-              vehicleCount: 0,
-              battleVehicleCount: 0,
-              vehicles: [],
-              battleVehicles: [],
-              playbookUnique: {
-                id: 'dummy',
-                type: UniqueTypes.angelKit,
-                brainerGear: {
-                  id: 'dummy',
-                  brainerGear: [],
-                },
-                customWeapons: {
-                  id: 'dummy',
-                  weapons: [],
-                },
-                angelKit: {
-                  id: 'dummy',
-                  description: 'dummy',
-                  stock: 0,
-                  hasSupplier: false,
-                  supplierText: 'dummy',
-                  angelKitMoves: [dummyAngelKitMove],
-                },
-              },
             },
           ],
         },

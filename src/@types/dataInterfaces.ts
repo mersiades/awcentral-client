@@ -68,7 +68,7 @@ export interface Character {
   hasCompletedCharacterCreation: boolean;
   hasPlusOneForward: boolean;
   holds: Hold[];
-  statsBlock: StatsBlock;
+  statsBlock?: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
   looks: Look[];

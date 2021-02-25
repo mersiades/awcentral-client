@@ -378,7 +378,12 @@ const PLAYBOOK_CREATOR = gql`
         id
         name
       }
-      ...CreatorLooks
+      looks {
+        id
+        look
+        category
+        playbookType
+      }
       ...StatsOptions
       ...OptionalMoves
       ...DefaultMoves
@@ -386,7 +391,6 @@ const PLAYBOOK_CREATOR = gql`
       ...PlaybookUniqueCreator
     }
   }
-  ${playbookCreatorFragments.looks}
   ${playbookCreatorFragments.statsOptions}
   ${playbookCreatorFragments.optionalMoves}
   ${playbookCreatorFragments.defaultMoves}
