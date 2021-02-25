@@ -79,9 +79,25 @@ const CharacterGearForm: FC = () => {
       try {
         await setCharacterGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, gear },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setCharacterGear: {
+              ...character,
+              gear,
+              __typename: 'Character',
+            },
+          },
         });
         await setCharacterBarter({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setCharacterBarter: {
+              ...character,
+              barter: amount,
+              __typename: 'Character',
+            },
+          },
         });
         // Skip playbookUnique form if Driver
         const nextStep =
