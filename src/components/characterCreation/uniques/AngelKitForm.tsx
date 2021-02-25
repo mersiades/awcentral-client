@@ -52,19 +52,27 @@ const AngelKitForm: FC = () => {
   return (
     <Box
       data-testid="angel-kit-form"
-      width="60vw"
-      direction="column"
+      // width="60vw"
+      justify="start"
+      width="85vw"
       align="start"
-      justify="between"
-      overflow="auto"
-      flex="grow"
+      pad="24px"
+      style={{ maxWidth: '763px' }}
     >
-      <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
-        !!character?.name ? character.name?.toUpperCase() : '...'
-      }'S ANGEL KIT`}</HeadingWS>
+      {' '}
+      <Box direction="row" fill="horizontal" justify="between" align="center">
+        <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
+          !!character?.name ? character.name?.toUpperCase() : '...'
+        }'S ANGEL KIT`}</HeadingWS>
+        <ButtonWS
+          label={settingAngelKit ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+          primary
+          onClick={() => !settingAngelKit && !!startingStock && handleSubmitAngelKit(startingStock, false)}
+        />
+      </Box>
       <Box flex="grow" direction="row" align="start">
         <Box fill="horizontal">{!!angelKitInstructions && <ReactMarkdown>{angelKitInstructions}</ReactMarkdown>}</Box>
-        <Box gap="12px" width="150px" margin={{ left: '24px', right: '5px', top: '18px' }} align="center">
+        <Box gap="12px" width="150px" margin={{ left: '24px', top: '18px' }} align="center">
           <RedBox align="center" justify="between" pad="24px" fill="horizontal">
             <HeadingWS crustReady={crustReady} level={3} margin="6px">
               Stock
@@ -73,13 +81,6 @@ const AngelKitForm: FC = () => {
               {startingStock}
             </HeadingWS>
           </RedBox>
-          <Box fill style={{ minHeight: 52 }}>
-            <ButtonWS
-              label={settingAngelKit ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-              primary
-              onClick={() => !settingAngelKit && !!startingStock && handleSubmitAngelKit(startingStock, false)}
-            />
-          </Box>
         </Box>
       </Box>
     </Box>

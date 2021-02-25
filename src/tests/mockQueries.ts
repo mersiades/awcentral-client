@@ -2281,6 +2281,9 @@ export const mockPlayBookCreatorQueryAngel: MockedResponse = {
         playbookCreator: {
           id: 'driver-playbook-creator-id',
           playbookType: PlaybookType.angel,
+          defaultMoveCount: 1,
+          moveChoiceCount: 2,
+          defaultVehicleCount: 0,
           gearInstructions: mockgearInstructionsAngel,
           improvementInstructions: 'Whenever you roll a highlighted stat...',
           movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
@@ -2301,8 +2304,7 @@ export const mockPlayBookCreatorQueryAngel: MockedResponse = {
           statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
           optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel1, mockCharacterMoveAngel4],
           defaultMoves: [mockCharacterMoveAngel1],
-          defaultMoveCount: 1,
-          moveChoiceCount: 2,
+
           playbookUniqueCreator: mockUniqueCreatorAngel,
         },
       },
