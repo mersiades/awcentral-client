@@ -11,6 +11,7 @@ import FINISH_CHARACTER_CREATION from '../mutations/finishCharacterCreation';
 import FINISH_PRE_GAME from '../mutations/finishPreGame';
 import REMOVE_INVITEE from '../mutations/removeInvitee';
 import SET_ANGEL_KIT from '../mutations/setAngelKit';
+import SET_BATTLE_VEHICLE_COUNT from '../mutations/setBattleVehicleCount';
 import SET_CHARACTER_BARTER from '../mutations/setCharacterBarter';
 import SET_CHARACTER_GEAR from '../mutations/setCharacterGear';
 import SET_CHARACTER_HX from '../mutations/setCharacterHx';
@@ -2383,6 +2384,26 @@ export const mockSetVehicleCount: MockedResponse = {
         setVehicleCount: {
           id: mockCharacter2.id,
           vehicleCount: 1,
+          __typename: 'Character',
+        },
+      },
+    };
+  },
+};
+
+export const mockSetBattleVehicleCount: MockedResponse = {
+  request: {
+    query: SET_BATTLE_VEHICLE_COUNT,
+    variables: { gameRoleId: 'mock-gameRole-id-8', characterId: 'mock-character-id-2', battleVehicleCount: 1 },
+  },
+  result: () => {
+    // console.log('mockSetBattleVehicleCount');
+    return {
+      data: {
+        __typename: 'Mutation',
+        setVehicleCount: {
+          id: mockCharacter2.id,
+          battleVehicleCount: 1,
           __typename: 'Character',
         },
       },
