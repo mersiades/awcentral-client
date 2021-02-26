@@ -37,7 +37,7 @@ const CharacterMovesForm: FC = () => {
     { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
   );
 
-  const playbookMoves = pbCreatorData?.playbookCreator.optionalMoves;
+  const optionalMoves = pbCreatorData?.playbookCreator.optionalMoves;
   const defaultMoves = pbCreatorData?.playbookCreator.defaultMoves;
   const moveChoiceCount = pbCreatorData?.playbookCreator.moveChoiceCount;
   const defaultMoveIds = defaultMoves?.map((move) => move.id) as string[]; // This will never be undefined; playbooks have at least one default move
@@ -107,8 +107,8 @@ const CharacterMovesForm: FC = () => {
           </Text>
         )}
         <Box align="start" gap="12px">
-          {!!playbookMoves &&
-            playbookMoves.map((move) => {
+          {!!optionalMoves &&
+            optionalMoves.map((move) => {
               return (
                 <CheckBox
                   key={move.id}

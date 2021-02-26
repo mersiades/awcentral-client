@@ -6,10 +6,17 @@ import { screen } from '@testing-library/react';
 
 import CharacterGearForm from '../CharacterGearForm';
 import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
-import { blankCharacter, mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../tests/mocks';
+import {
+  blankCharacter,
+  mockCharacter2,
+  mockGame5,
+  mockKeycloakUserInfo1,
+  mockPlaybookCreatorAngel,
+} from '../../../tests/mocks';
 import { renderWithRouter } from '../../../tests/test-utils';
 import { mockPlaybookCreator } from '../../../tests/mockQueries';
 import CharacterMovesForm from '../CharacterMovesForm';
+import { Move } from '../../../@types/staticDataInterfaces';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
@@ -63,7 +70,43 @@ describe('Rendering CharacterMovesForm', () => {
 
     await screen.findByTestId('character-moves-form');
     await screen.findByRole('heading', { name: `WHAT ARE ${mockCharacter2.name?.toUpperCase()}'S MOVES?` });
+    const setButton = screen.getByRole('button', { name: 'SET' }) as HTMLButtonElement;
+    expect(setButton.disabled).toEqual(true);
+    const defaultMoveCheckbox = screen.getByRole('checkbox', {
+      name: mockPlaybookCreatorAngel.defaultMoves[0].description,
+    }) as HTMLInputElement;
+    expect(defaultMoveCheckbox.checked).toEqual(true);
+    mockPlaybookCreatorAngel.optionalMoves.forEach((move) => {
+      const checkbox = screen.getByRole('checkbox', { name: move.description }) as HTMLInputElement;
+      expect(checkbox.checked).toEqual(false);
+    });
+  });
 
-    // Unable to load PlaybookCreator into component via MockedProvider
+  test('should select 2 moves and enable SET button', async () => {
+    renderWithRouter(<CharacterMovesForm />, `/character-creation/${mockGame5.id}?step=7`, {
+      isAuthenticated: true,
+      injectedGame: mockGame,
+      apolloMocks: [mockPlaybookCreator],
+      injectedUserId: mockKeycloakUserInfo1.sub,
+      cache,
+    });
+
+    await screen.findByTestId('character-moves-form');
+    const setButton = screen.getByRole('button', { name: 'SET' }) as HTMLButtonElement;
+    expect(setButton.disabled).toEqual(true);
+    const checkbox1 = screen.getByRole('checkbox', {
+      name: mockPlaybookCreatorAngel.optionalMoves[0].description,
+    }) as HTMLInputElement;
+    const checkbox2 = screen.getByRole('checkbox', {
+      name: mockPlaybookCreatorAngel.optionalMoves[1].description,
+    }) as HTMLInputElement;
+
+    userEvent.click(checkbox1);
+    expect(checkbox1.checked).toEqual(true);
+
+    userEvent.click(checkbox2);
+    expect(checkbox2.checked).toEqual(true);
+
+    expect(setButton.disabled).toEqual(false);
   });
 });
