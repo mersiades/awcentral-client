@@ -897,7 +897,7 @@ export const mockGame1: Game = {
   players: [{ displayName: 'mock-user-2', id: 'mock-keycloak-id-2' }],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-1',
+      id: 'mock-gameRole-id-1',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-1',
       characters: [],
@@ -905,7 +905,7 @@ export const mockGame1: Game = {
       threats: [],
     },
     {
-      id: 'mock-gamerole-id-3',
+      id: 'mock-gameRole-id-3',
       role: RoleType.player,
       userId: 'mock-keycloak-id-2',
       characters: [],
@@ -927,7 +927,7 @@ export const mockGame2: Game = {
   players: [{ displayName: 'mock-user-1', id: 'mock-keycloak-id-1' }],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-2',
+      id: 'mock-gameRole-id-2',
       role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       characters: [],
@@ -935,7 +935,7 @@ export const mockGame2: Game = {
       threats: [],
     },
     {
-      id: 'mock-gamerole-id-4',
+      id: 'mock-gameRole-id-4',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       characters: [],
@@ -957,7 +957,7 @@ export const mockGame3: Game = {
   players: [],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-5',
+      id: 'mock-gameRole-id-5',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-1',
       characters: [],
@@ -980,7 +980,7 @@ export const mockGame4: Game = {
   players: [{ id: 'mock-keycloak-id-3', displayName: 'mock-user-3' }],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-6',
+      id: 'mock-gameRole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       characters: [],
@@ -988,7 +988,7 @@ export const mockGame4: Game = {
       threats: [],
     },
     {
-      id: 'mock-gamerole-id-7',
+      id: 'mock-gameRole-id-7',
       role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       characters: [],
@@ -1017,7 +1017,7 @@ export const mockGame5: Game = {
   gameRoles: [
     {
       __typename: 'GameRole',
-      id: 'mock-gamerole-id-6',
+      id: 'mock-gameRole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
@@ -1026,7 +1026,7 @@ export const mockGame5: Game = {
     },
     {
       __typename: 'GameRole',
-      id: 'mock-gamerole-id-7',
+      id: 'mock-gameRole-id-7',
       role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       npcs: [],
@@ -1035,7 +1035,7 @@ export const mockGame5: Game = {
     },
     {
       __typename: 'GameRole',
-      id: 'mock-gamerole-id-8',
+      id: 'mock-gameRole-id-8',
       role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       npcs: [],
@@ -1059,7 +1059,7 @@ export const mockGame6: Game = {
   ],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-6',
+      id: 'mock-gameRole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
@@ -1067,7 +1067,7 @@ export const mockGame6: Game = {
       characters: [],
     },
     // {
-    //   id: 'mock-gamerole-id-7',
+    //   id: 'mock-gameRole-id-7',
     //   role: RoleType.player,
     //   userId: 'mock-keycloak-id-3',
     //   npcs: [],
@@ -1075,7 +1075,7 @@ export const mockGame6: Game = {
     //   characters: [{ ...mockCharacter1, hasCompletedCharacterCreation: true }],
     // },
     // {
-    //   id: 'mock-gamerole-id-8',
+    //   id: 'mock-gameRole-id-8',
     //   role: RoleType.player,
     //   userId: 'mock-keycloak-id-1',
     //   npcs: [],
@@ -1103,7 +1103,7 @@ export const mockGame7: Game = {
   ],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-6',
+      id: 'mock-gameRole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
@@ -1111,7 +1111,7 @@ export const mockGame7: Game = {
       characters: [],
     },
     {
-      id: 'mock-gamerole-id-7',
+      id: 'mock-gameRole-id-7',
       role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       npcs: [],
@@ -1119,7 +1119,7 @@ export const mockGame7: Game = {
       characters: [{ ...mockCharacter1, hasCompletedCharacterCreation: true }],
     },
     {
-      id: 'mock-gamerole-id-8',
+      id: 'mock-gameRole-id-8',
       role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       npcs: [],
@@ -1130,7 +1130,7 @@ export const mockGame7: Game = {
 };
 
 export const mockGameRole1: GameRole = {
-  id: 'mock-gamerole-id-1',
+  id: 'mock-gameRole-id-1',
   role: RoleType.mc,
   userId: 'mock-keycloak-id-1',
   game: mockGame1,
@@ -1140,7 +1140,7 @@ export const mockGameRole1: GameRole = {
 };
 
 export const mockGameRole2: GameRole = {
-  id: 'mock-gamerole-id-2',
+  id: 'mock-gameRole-id-2',
   role: RoleType.player,
   userId: 'mock-keycloak-id-1',
   game: mockGame2,
@@ -1150,7 +1150,7 @@ export const mockGameRole2: GameRole = {
 };
 
 export const mockGameRole3: GameRole = {
-  id: 'mock-gamerole-id-3',
+  id: 'mock-gameRole-id-3',
   role: RoleType.player,
   userId: 'mock-keycloak-id-2',
   game: mockGame1,
@@ -1160,7 +1160,7 @@ export const mockGameRole3: GameRole = {
 };
 
 export const mockGameRole4: GameRole = {
-  id: 'mock-gamerole-id-4',
+  id: 'mock-gameRole-id-4',
   role: RoleType.mc,
   userId: 'mock-keycloak-id-2',
   game: mockGame2,

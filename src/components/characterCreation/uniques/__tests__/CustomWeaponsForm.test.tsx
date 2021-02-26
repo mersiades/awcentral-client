@@ -68,6 +68,7 @@ const mockBattlebabeLook: Look = {
   id: 'mock-battlebabe-look-id-2',
   look: 'woman',
   category: LookType.gender,
+  playbookType: PlaybookType.battlebabe,
 };
 
 const mockBattlebabeCreator: PlaybookCreator = {
@@ -109,7 +110,7 @@ const mockBattleBabe: Character = {
   battleVehicleCount: 0,
   battleVehicles: [],
   hasPlusOneForward: false,
-  holds: 0,
+  holds: [],
   vehicles: [],
 };
 
@@ -126,7 +127,7 @@ const mockGame: Game = {
   ],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-6',
+      id: 'mock-gameRole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
@@ -134,7 +135,7 @@ const mockGame: Game = {
       characters: [],
     },
     {
-      id: 'mock-gamerole-id-8',
+      id: 'mock-gameRole-id-8',
       role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       npcs: [],

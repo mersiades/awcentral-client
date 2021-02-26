@@ -21,6 +21,7 @@ import SET_CHARACTER_PLAYBOOK from '../mutations/setCharacterPlaybook';
 import SET_CHARACTER_STATS from '../mutations/setCharacterStats';
 import SET_GAME_NAME from '../mutations/setGameName';
 import SET_VEHICLE from '../mutations/setVehicle';
+import SET_VEHICLE_COUNT from '../mutations/setVehicleCount';
 import TOGGLE_STAT_HIGHLIGHT from '../mutations/toggleStatHighlight';
 import ALL_MOVES from '../queries/allMoves';
 import GAME from '../queries/game';
@@ -454,7 +455,7 @@ export const mockAddUserToGame: MockedResponse = {
           gameRoles: [
             ...mockGame4.gameRoles,
             {
-              id: 'mock-gamerole-id-8',
+              id: 'mock-gameRole-id-8',
               role: RoleType.player,
               userId: 'mock-keycloak-id-1',
             },
@@ -631,7 +632,8 @@ export const mockPlaybookCreator: MockedResponse = {
           names: mockPlaybookCreatorAngel.names,
           looks: mockPlaybookCreatorAngel.looks,
           statsOptions: mockPlaybookCreatorAngel.statsOptions,
-          playbookMoves: mockPlaybookCreatorAngel.optionalMoves,
+          optionalMoves: mockPlaybookCreatorAngel.optionalMoves,
+          defaultMoves: mockPlaybookCreatorAngel.defaultMoves,
           gearInstructions: mockPlaybookCreatorAngel.gearInstructions,
           playbookUniqueCreator: mockUniqueCreatorAngel,
         },
@@ -2253,10 +2255,10 @@ export const mockAddInvitee3: MockedResponse = {
 export const mockSetVehicle: MockedResponse = {
   request: {
     query: SET_VEHICLE,
-    variables: { gameroleId: 'mock-gamerole-id-8', characterId: mockCharacter2.id, vehicleInput: mockVehicleInput },
+    variables: { gameRoleId: 'mock-gameRole-id-8', characterId: mockCharacter2.id, vehicleInput: mockVehicleInput },
   },
   result: () => {
-    console.log('mockSetVehicle');
+    // console.log('mockSetVehicle');
     return {
       data: {
         setVehicle: {
@@ -2361,7 +2363,28 @@ export const mockVehicleCreatorQuery: MockedResponse = {
     // console.log('mockVehicleCreator');
     return {
       data: {
-        vehicleCreator: mockVehicleCreator,
+        __typename: 'Query',
+        vehicleCreator: { ...mockVehicleCreator, __typename: 'VehicleCreator' },
+      },
+    };
+  },
+};
+
+export const mockSetVehicleCount: MockedResponse = {
+  request: {
+    query: SET_VEHICLE_COUNT,
+    variables: { gameRoleId: 'mock-gameRole-id-8', characterId: 'mock-character-id-2', vehicleCount: 1 },
+  },
+  result: () => {
+    // console.log('mockSetVehicleCount');
+    return {
+      data: {
+        __typename: 'Mutation',
+        setVehicleCount: {
+          id: mockCharacter2.id,
+          vehicleCount: 1,
+          __typename: 'Character',
+        },
       },
     };
   },

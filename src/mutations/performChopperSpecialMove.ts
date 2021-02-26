@@ -7,7 +7,7 @@ export interface PerformChopperSpecialMoveData {
 
 export interface PerformChopperSpecialMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   otherGameroleId: string;
   characterId: string;
   otherCharacterId: string;
@@ -17,7 +17,7 @@ export interface PerformChopperSpecialMoveVars {
 const PERFORM_CHOPPER_SPECIAL_MOVE = gql`
   mutation PerformChopperSpecialMove(
     $gameId: String!
-    $gameroleId: String!
+    $gameRoleId: String!
     $otherGameroleId: String!
     $characterId: String!
     $otherCharacterId: String!
@@ -25,7 +25,7 @@ const PERFORM_CHOPPER_SPECIAL_MOVE = gql`
   ) {
     performChopperSpecialMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       otherGameroleId: $otherGameroleId
       characterId: $characterId
       otherCharacterId: $otherCharacterId
@@ -35,7 +35,7 @@ const PERFORM_CHOPPER_SPECIAL_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

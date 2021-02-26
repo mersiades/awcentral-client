@@ -7,7 +7,7 @@ export interface PerformHelpOrInterfereMoveData {
 
 export interface PerformHelpOrInterfereMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
   moveId: string;
   targetId: string;
@@ -16,14 +16,14 @@ export interface PerformHelpOrInterfereMoveVars {
 const PERFORM_HELP_OR_INTERFERE_MOVE = gql`
   mutation PerformHelpOrInterfereMove(
     $gameId: String!
-    $gameroleId: String!
+    $gameRoleId: String!
     $characterId: String!
     $moveId: String!
     $targetId: String!
   ) {
     performHelpOrInterfereMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       characterId: $characterId
       moveId: $moveId
       targetId: $targetId
@@ -32,7 +32,7 @@ const PERFORM_HELP_OR_INTERFERE_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

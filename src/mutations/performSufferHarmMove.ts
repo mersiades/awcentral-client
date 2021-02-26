@@ -7,7 +7,7 @@ export interface PerformSufferHarmMoveData {
 
 export interface PerformSufferHarmMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
   moveId: string;
   harm: number;
@@ -16,14 +16,14 @@ export interface PerformSufferHarmMoveVars {
 const PERFORM_SUFFER_HARM_MOVE = gql`
   mutation PerformSufferHarmMove(
     $gameId: String!
-    $gameroleId: String!
+    $gameRoleId: String!
     $characterId: String!
     $moveId: String!
     $harm: Int!
   ) {
     performSufferHarmMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       characterId: $characterId
       moveId: $moveId
       harm: $harm
@@ -32,7 +32,7 @@ const PERFORM_SUFFER_HARM_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

@@ -53,7 +53,7 @@ const AngelSpecialDialog: FC<AngelSpecialDialogProps> = ({ move, handleClose }) 
         performAngelSpecialMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             otherGameroleId,
             characterId: userGameRole.characters[0].id,
             otherCharacterId,

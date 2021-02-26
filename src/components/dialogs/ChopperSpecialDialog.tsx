@@ -60,7 +60,7 @@ const ChopperSpecialDialog: FC<ChopperSpecialDialogProps> = ({ move, handleClose
         performChopperSpecialMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             otherGameroleId,
             characterId: userGameRole.characters[0].id,
             otherCharacterId,

@@ -7,7 +7,7 @@ export interface PerformMakeWantKnownMoveData {
 
 export interface PerformMakeWantKnownMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
   moveId: string;
   barter: number;
@@ -16,14 +16,14 @@ export interface PerformMakeWantKnownMoveVars {
 const PERFORM_MAKE_WANT_KNOWN_MOVE = gql`
   mutation PerformMakeWantKnownMove(
     $gameId: String!
-    $gameroleId: String!
+    $gameRoleId: String!
     $characterId: String!
     $moveId: String!
     $barter: Int!
   ) {
     performMakeWantKnownMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       characterId: $characterId
       moveId: $moveId
       barter: $barter
@@ -32,7 +32,7 @@ const PERFORM_MAKE_WANT_KNOWN_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

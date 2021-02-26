@@ -6,12 +6,13 @@ import { useFonts } from '../contexts/fontContext';
 interface DoubleRedBoxProps {
   value: string;
   label: string;
+  width?: string;
 }
 
-const DoubleRedBox: FC<DoubleRedBoxProps> = ({ value, label }) => {
+const DoubleRedBox: FC<DoubleRedBoxProps> = ({ value, label, width }) => {
   const { crustReady } = useFonts();
   return (
-    <Box align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
+    <Box align="center" justify="between" height="90px" width={width} gap="6px" margin={{ bottom: '6px' }}>
       <RedBox pad="12px" align="center" fill justify="center">
         <HeadingWS crustReady={crustReady} level={3} margin={{ horizontal: '9px', bottom: '-3px', top: '3px' }}>
           {value}

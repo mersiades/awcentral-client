@@ -44,7 +44,7 @@ const HelpOrInterfereDialog: FC<HelpOrInterfereDialogProps> = ({ move, buttonTit
         performHelpOrInterfereMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             characterId: userGameRole.characters[0].id,
             moveId: move.id,
             targetId,

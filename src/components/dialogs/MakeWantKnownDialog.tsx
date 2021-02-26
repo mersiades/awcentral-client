@@ -47,7 +47,7 @@ const MakeWantKnownDialog: FC<MakeWantKnownDialogProps> = ({ move, handleClose }
         performMakeWantKnownMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             characterId: userGameRole.characters[0].id,
             moveId: move.id,
             barter,

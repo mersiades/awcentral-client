@@ -387,6 +387,7 @@ export interface VehicleCreator {
   carCreator: CarCreator;
   bikeCreator: BikeCreator;
   battleVehicleCreator: BattleVehicleCreator;
+  __typename?: 'VehicleCreator';
 }
 
 // --------------------------------------------- Threat interfaces --------------------------------------------- //

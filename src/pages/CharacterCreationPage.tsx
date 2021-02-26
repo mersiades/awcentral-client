@@ -99,7 +99,6 @@ const CharacterCreationPage: FC = () => {
 
   // Set a scroll event listener for ScrollableIndicator
   useLayoutEffect(() => {
-    console.log('!!containerRef.current', !!containerRef.current);
     if (!!containerRef.current) {
       // Set listener for future scrolls
       containerRef.current.addEventListener('scroll', (e) => handleScroll(e));

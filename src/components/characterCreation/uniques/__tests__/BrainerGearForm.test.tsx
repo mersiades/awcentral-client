@@ -41,7 +41,7 @@ describe('Rendering BrainerGearForm', () => {
               characterMoves: [],
               hxBlock: mockCharacter2.hxBlock,
               hasPlusOneForward: false,
-              holds: 0,
+              holds: [],
               battleVehicles: [],
               battleVehicleCount: 0,
               vehicles: [],
@@ -59,7 +59,7 @@ describe('Rendering BrainerGearForm', () => {
     });
 
     await screen.findByTestId('brainer-gear-form');
-    screen.getByRole('heading', { name: `WHAT SPECIAL BRAINER GEAR DOES ${mockCharacter2.name.toUpperCase()} HAVE?` });
+    screen.getByRole('heading', { name: `WHAT SPECIAL BRAINER GEAR DOES ${mockCharacter2.name?.toUpperCase()} HAVE?` });
 
     // FAILING: the mock query isn't being hit / registered
   });

@@ -80,7 +80,7 @@ const AppProviders = ({
 }: any) => {
   return (
     <BrowserRouter>
-      <MockedProvider mocks={apolloMocks} addTypename={false}>
+      <MockedProvider mocks={apolloMocks}>
         <FontsProvider isVtksReady={vtksReady} isCrustReady={crustReady}>
           <Grommet theme={theme(vtksReady)} full>
             <ReactKeycloakProvider

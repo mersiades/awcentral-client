@@ -43,7 +43,7 @@ const Holds: FC<HoldsProps> = ({ holds }) => {
     if (!!gameId && !!userGameRole && !!character) {
       const holdNoTypename = omit(hold, ['__typename']) as HoldInput;
       try {
-        spendHold({ variables: { gameId, gameroleId: userGameRole.id, characterId: character.id, hold: holdNoTypename } });
+        spendHold({ variables: { gameId, gameRoleId: userGameRole.id, characterId: character.id, hold: holdNoTypename } });
       } catch (error) {
         console.error(error);
       }
@@ -54,7 +54,7 @@ const Holds: FC<HoldsProps> = ({ holds }) => {
     if (!!userGameRole && !!character) {
       const holdNoTypename = omit(hold, ['__typename']) as HoldInput;
       try {
-        removeHold({ variables: { gameroleId: userGameRole.id, characterId: character.id, hold: holdNoTypename } });
+        removeHold({ variables: { gameRoleId: userGameRole.id, characterId: character.id, hold: holdNoTypename } });
       } catch (error) {
         console.error(error);
       }

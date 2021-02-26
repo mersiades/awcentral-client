@@ -3,10 +3,12 @@ import { screen } from '@testing-library/react';
 
 import VehicleForm from '../VehicleForm';
 import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
-import { mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../tests/mocks';
+import { blankCharacter, mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../tests/mocks';
 import { renderWithRouter } from '../../../tests/test-utils';
 import { PlaybookType } from '../../../@types/enums';
 import { mockVehicleCreatorQuery } from '../../../tests/mockQueries';
+import { InMemoryCache } from '@apollo/client';
+import { Game } from '../../../@types/dataInterfaces';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
@@ -17,6 +19,42 @@ jest.mock('@react-keycloak/web', () => {
 });
 
 describe('Rendering VehicleForm', () => {
+  const mockNavigationOnSet = jest.fn();
+
+  let cache = new InMemoryCache();
+
+  const mockGame: Game = {
+    ...mockGame5,
+    gameRoles: [
+      mockGame5.gameRoles[0],
+      mockGame5.gameRoles[1],
+      {
+        id: mockGame5.gameRoles[2].id,
+        role: mockGame5.gameRoles[2].role,
+        userId: mockGame5.gameRoles[2].userId,
+        npcs: mockGame5.gameRoles[2].npcs,
+        threats: mockGame5.gameRoles[2].threats,
+        characters: [
+          {
+            ...blankCharacter,
+            id: mockCharacter2.id,
+            playbook: mockCharacter2.playbook,
+            name: mockCharacter2.name,
+            looks: mockCharacter2.looks,
+            statsBlock: mockCharacter2.statsBlock,
+            gear: mockCharacter2.gear,
+            playbookUnique: mockCharacter2.playbookUnique,
+            characterMoves: mockCharacter2.characterMoves,
+          },
+        ],
+      },
+    ],
+  };
+
+  beforeEach(() => {
+    cache = new InMemoryCache();
+  });
+
   test('should load an empty vehicle into the form', async () => {
     const game = {
       ...mockGame5,
@@ -51,8 +89,6 @@ describe('Rendering VehicleForm', () => {
       ],
     };
 
-    const mockNavigationOnSet = jest.fn();
-
     renderWithRouter(
       <VehicleForm existingVehicle={undefined} navigateOnSet={mockNavigationOnSet} />,
       `/character-creation/${mockGame5.id}?step=8`,
@@ -67,7 +103,6 @@ describe('Rendering VehicleForm', () => {
     await screen.findByTestId('vehicle-form');
     // @ts-ignore
     expect(screen.getByRole('textbox', { name: 'name-input' }).value).toEqual('Unnamed vehicle');
-    expect(screen.getByRole('heading', { name: 'vehicle-name' }).textContent).toEqual('Unnamed vehicle');
     screen.getByRole('heading', { name: 'MEDIUM' });
     expect(screen.getAllByRole('heading', { name: '0' }).length).toEqual(3);
     expect(screen.getAllByRole('heading', { name: '2' }).length).toEqual(1);

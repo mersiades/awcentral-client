@@ -456,7 +456,7 @@ export const gameFragments = {
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

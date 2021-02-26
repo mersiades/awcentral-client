@@ -48,6 +48,7 @@ export interface Game {
   gameRoles: GameRole[];
   invitees: string[];
   gameMessages: GameMessage[];
+  __typename?: 'Game';
 }
 
 export interface GameRole {
@@ -304,7 +305,7 @@ export interface Threat {
 export interface GameMessage {
   id: string;
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   messageType: MessageType;
   title: string;
   content: string;

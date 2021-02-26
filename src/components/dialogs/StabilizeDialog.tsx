@@ -48,7 +48,7 @@ const StabilizeDialog: FC<StabilizeDialogProps> = ({ move, handleClose }) => {
         performStabilizeAndHealMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             characterId: userGameRole.characters[0].id,
             stockSpent,
           },

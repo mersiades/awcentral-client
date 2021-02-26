@@ -90,7 +90,7 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
         performPrintMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             characterId: userGameRole.characters[0].id,
             moveId: move.id,
             isGangMove: false,
@@ -106,7 +106,7 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
     if (!!userGameRole && userGameRole.characters.length === 1) {
       const commonVariables = {
         gameId,
-        gameroleId: userGameRole.id,
+        gameRoleId: userGameRole.id,
         characterId: userGameRole.characters[0].id,
       };
       if (move.name === WEALTH_NAME) {
@@ -142,7 +142,7 @@ const MovesBox: FC<MovesBoxProps> = ({ moves, moveCategory, open, navigateToChar
       if (!performingFortunesMove) {
         try {
           performFortunesMove({
-            variables: { gameId, gameroleId: userGameRole.id, characterId: userGameRole.characters[0].id },
+            variables: { gameId, gameRoleId: userGameRole.id, characterId: userGameRole.characters[0].id },
           });
         } catch (error) {
           console.error(error);
