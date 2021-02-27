@@ -38,13 +38,14 @@ const IncreaseDecreaseButtons: FC<IncreaseDecreaseButtonsProps> = ({ loading, on
 
   useEffect(() => {
     let timeout: number;
+
     if (!loading) {
       setShowUp(true);
       setShowDown(true);
     } else {
       timeout = window.setTimeout(() => {
-        setShowUp(true);
-        setShowDown(true);
+        !loading && setShowUp(true);
+        !loading && setShowDown(true);
       }, 250);
     }
     return () => window.clearTimeout(timeout);

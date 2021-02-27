@@ -10,12 +10,14 @@ import { ButtonWS, HeadingWS, RedBox, TextWS } from '../../config/grommetConfig'
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
 import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../../mutations/setCharacterHx';
 import TOGGLE_STAT_HIGHLIGHT, {
+  getToggleStatHighlightOR,
   ToggleStatHighlightData,
   ToggleStatHighlightVars,
 } from '../../mutations/toggleStatHighlight';
 import FINISH_CHARACTER_CREATION, {
   FinishCharacterCreationData,
   FinishCharacterCreationVars,
+  getFinishCharacterCreationOR,
 } from '../../mutations/finishCharacterCreation';
 import { StatType } from '../../@types/enums';
 import { HxInput } from '../../@types';
@@ -82,6 +84,7 @@ const CharacterHxForm: FC = () => {
       try {
         await toggleStatHighlight({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, stat },
+          optimisticResponse: getToggleStatHighlightOR(character, stat) as ToggleStatHighlightData,
         });
       } catch (error) {
         console.error(error);
@@ -105,9 +108,12 @@ const CharacterHxForm: FC = () => {
   const handleFinishCreation = async () => {
     if (!!userGameRole && !!character && !!game) {
       try {
-        await finishCharacterCreation({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id },
-        });
+        if (!character.hasCompletedCharacterCreation) {
+          await finishCharacterCreation({
+            variables: { gameRoleId: userGameRole.id, characterId: character.id },
+            optimisticResponse: getFinishCharacterCreationOR(character) as FinishCharacterCreationData,
+          });
+        }
         history.push(`/pre-game/${game.id}`);
       } catch (error) {
         console.error(error);
@@ -133,7 +139,7 @@ const CharacterHxForm: FC = () => {
           >{`WHAT HISTORY DOES ${!!character?.name ? character.name.toUpperCase() : '...'} HAVE?`}</HeadingWS>
           <ButtonWS
             primary
-            label={finishingCreation ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'GO TO GAME'}
+            label={finishingCreation ? <Spinner fillColor="#FFF" width="138px" height="36px" /> : 'GO TO GAME'}
             style={{ minHeight: '52px' }}
             disabled={
               character?.hxBlock.length !== otherPlayerGameRoles?.length ||
