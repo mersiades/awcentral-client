@@ -513,9 +513,11 @@ const CharacterCreationStepper: FC = () => {
         <CustomUL>
           {character.hxBlock.map((hxStat) => {
             return (
-              <li key={hxStat.characterId}>{`${hxStat.characterName} ${'--'.repeat(
-                hxStat.characterName.length > 9 ? 1 : 10 - hxStat.characterName.length
-              )} ${hxStat.hxValue}`}</li>
+              <Box key={hxStat.characterId} direction="row" fill="horizontal" justify="between" align="center">
+                <Text>{hxStat.characterName}</Text>
+                <Text>{`${'--'.repeat(hxStat.characterName.length > 9 ? 1 : 10 - hxStat.characterName.length)}`}</Text>
+                <Text>{hxStat.hxValue}</Text>
+              </Box>
             );
           })}
         </CustomUL>
