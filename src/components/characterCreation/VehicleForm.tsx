@@ -24,7 +24,14 @@ interface VehicleTagsBoxProps {
 }
 
 export const VehicleTagsBox: FC<VehicleTagsBoxProps> = ({ tags, title, width = '200px', minHeight }) => (
-  <Box align="center" width={width} flex="grow" fill="vertical" style={{ maxWidth: width }}>
+  <Box
+    data-testid={`${title}-tags-box`}
+    align="center"
+    width={width}
+    flex="grow"
+    fill="vertical"
+    style={{ maxWidth: width }}
+  >
     <RedBox fill justify="center" pad="12px" gap="12px" style={{ minHeight }}>
       {tags.join(', ')}
     </RedBox>

@@ -4,7 +4,6 @@ import { Box, TextInput, Text, Tip, CheckBox, FormField } from 'grommet';
 import { omit } from 'lodash';
 
 import DoubleRedBox from '../DoubleRedBox';
-import RedTagsBox from '../RedTagsBox';
 import SingleRedBox from '../SingleRedBox';
 import Spinner from '../Spinner';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, TextWS } from '../../config/grommetConfig';
@@ -14,7 +13,6 @@ import { BattleOptionType, VehicleFrameType, VehicleType } from '../../@types/en
 import { BattleVehicleInput } from '../../@types';
 import { BattleVehicle } from '../../@types/dataInterfaces';
 import { VehicleBattleOption, VehicleFrame } from '../../@types/staticDataInterfaces';
-import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
 import { VehicleTagsBox } from './VehicleForm';
 
@@ -117,7 +115,6 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   ] = useReducer(battleVehicleFormReducer, initialState);
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { character, userGameRole } = useGame();
-  const { crustReady } = useFonts();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: vehicleCreatorData, loading } = useQuery<VehicleCreatorData, VehicleCreatorVars>(VEHICLE_CREATOR);
@@ -413,7 +410,7 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   }
 
   return (
-    <Box data-testid="vehicle-form" width="80vw" align="start" justify="start" gap="12px" flex="grow">
+    <Box data-testid="battle-vehicle-form" width="80vw" align="start" justify="start" gap="12px" flex="grow">
       <Box fill="horizontal" justify="between" gap="12px">
         <Box direction="row" justify="between" align="center" gap="12px">
           <TextWS margin={{ bottom: '12px' }}>{introText}</TextWS>

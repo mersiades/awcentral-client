@@ -26,7 +26,12 @@ const SingleRedBox: FC<SingleRedBoxProps> = ({ value, label, loading, onIncrease
     <Box align="center" justify="between" height="90px" width={width} gap="6px" margin={{ bottom: '6px' }}>
       <Box direction="row">
         <RedBox align="center" width="50px" fill="vertical" justify="center">
-          <HeadingWS crustReady={crustReady} level="2" margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}>
+          <HeadingWS
+            aria-label={label}
+            crustReady={crustReady}
+            level="2"
+            margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}
+          >
             {value}
           </HeadingWS>
         </RedBox>
