@@ -122,7 +122,6 @@ const CustomWeaponsForm: FC = () => {
             const tagsToKeep = tags.filter((tag) => tag !== existingHarm);
             if (!!existingHarmStringValue) {
               const existingHarmValue = parseInt(existingHarmStringValue[0]);
-              console.log('add harm 4: ', existingHarmValue);
               const newHarmValue = existingHarmValue + modificationValue;
               const newTag = `${newHarmValue}-harm`;
               tags = [...tagsToKeep, newTag];
@@ -219,6 +218,7 @@ const CustomWeaponsForm: FC = () => {
     const selectedId = baseValue?.id;
     return (
       <Box
+        data-testid={`${option.description}-base-option-pill`}
         key={option.id}
         height="fit-content"
         background={selectedId === option.id ? { color: accentColors[0], dark: true } : neutralColors[0]}
@@ -241,6 +241,7 @@ const CustomWeaponsForm: FC = () => {
     return (
       <Tip key={option.id} content={option.tag}>
         <Box
+          data-testid={`${option.description}-option-pill`}
           height="fit-content"
           background={selectedIds.includes(option.id) ? { color: accentColors[0], dark: true } : neutralColors[0]}
           round="medium"
@@ -280,7 +281,7 @@ const CustomWeaponsForm: FC = () => {
       <TextWS alignSelf="center">Mix'n'match. Edit directly if necessary.</TextWS>
       <Box fill="horizontal" direction="row" justify="start" height="145px">
         <Box height="152px" gap="12px" align="center" justify="between" width="60%">
-          <TextArea size="large" value={value} onChange={(e) => setValue(e.target.value)} />
+          <TextArea aria-label="weapon-input" size="large" value={value} onChange={(e) => setValue(e.target.value)} />
           <Box direction="row" fill="horizontal" gap="12px">
             <ButtonWS
               fill="horizontal"
@@ -309,10 +310,11 @@ const CustomWeaponsForm: FC = () => {
         </Box>
         <Box height="152px" justify="between" width="40%" pad={{ horizontal: '12px' }} gap="12px">
           <RedBox fill="vertical">
-            <WeaponsUL>
-              {weapons.map((weapon) => (
+            <WeaponsUL aria-label="interim-weapons-list">
+              {weapons.map((weapon, index) => (
                 <li
                   key={weapon}
+                  aria-label={`interim-weapon-${index + 1}`}
                   // @ts-ignore
                   onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
                   // @ts-ignore

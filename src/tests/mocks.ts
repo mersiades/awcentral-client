@@ -1596,6 +1596,12 @@ export const mockFirearmOption: ItemCharacteristic = {
   tag: '+valuable',
 };
 
+export const mockFirearmOption2: ItemCharacteristic = {
+  id: 'mock-firearm-option-id-2',
+  description: 'semiautomatic',
+  tag: '-reload',
+};
+
 export const mockHandBaseOption: TaggedItem = {
   id: 'mock-hand-base-option-id',
   description: 'staff',
@@ -1608,18 +1614,24 @@ export const mockHandOption: ItemCharacteristic = {
   tag: '+valuable',
 };
 
+export const mockHandOption2: ItemCharacteristic = {
+  id: 'mock-hand-option-id-2',
+  description: 'head',
+  tag: '+1harm',
+};
+
 export const mockCustomWeaponsCreator: CustomWeaponsCreator = {
   id: 'mock-custom-weapons-creator-id',
   firearmsTitle: 'CUSTOM FIREARMS',
   firearmsBaseInstructions: 'Base (choose 1):',
   firearmsBaseOptions: [mockFirearmBaseOption],
   firearmsOptionsInstructions: 'Options (choose 2):',
-  firearmsOptionsOptions: [mockFirearmOption],
+  firearmsOptionsOptions: [mockFirearmOption, mockFirearmOption2],
   handTitle: 'CUSTOM HAND WEAPONS',
   handBaseInstructions: 'Base (choose 1):',
   handBaseOptions: [mockHandBaseOption],
   handOptionsInstructions: 'Options (choose 2, * counts as 2 options):',
-  handOptionsOptions: [mockHandOption],
+  handOptionsOptions: [mockHandOption, mockHandOption2],
 };
 
 export const mockPlaybookCreatorDriver: PlaybookCreator = {
