@@ -37,7 +37,7 @@ const BarterRollMessage: FC<BarterRollMessageProps> = ({ message, messagesLength
                 crustReady={crustReady}
                 level={2}
                 color="brand"
-                margin={{ top: '32px', bottom: '0px', horizontal: '3px' }}
+                margin={{ top: '32px', bottom: '3px', horizontal: '3px' }}
               >
                 {message.barterSpent}
               </HeadingWS>

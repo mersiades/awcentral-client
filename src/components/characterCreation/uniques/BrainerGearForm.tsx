@@ -10,7 +10,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
 import SET_BRAINER_GEAR, { SetBrainerGearData, SetBrainerGearVars } from '../../../mutations/setBrainerGear';
 import { useHistory } from 'react-router-dom';
-import { CharacterCreationSteps } from '../../../@types/enums';
+import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
 
 const BrainerGearForm: FC = () => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
@@ -27,8 +27,7 @@ const BrainerGearForm: FC = () => {
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
-    // @ts-ignore
-    variables: { playbookType: character?.playbook },
+    variables: { playbookType: PlaybookType.brainer },
     skip: !character,
   });
   const playbookUniqueCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator;
@@ -62,10 +61,18 @@ const BrainerGearForm: FC = () => {
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
   return (
-    <Box data-testid="brainer-gear-form" width="70vw" flex="grow" direction="column" align="center" justify="between">
-      <HeadingWS crustReady={crustReady} level={2}>
-        {!!character && !!character.name ? `WHAT SPECIAL BRAINER GEAR DOES ${character.name.toUpperCase()} HAVE?` : '...'}
-      </HeadingWS>
+    <Box data-testid="brainer-gear-form" justify="start" width="85vw" align="start" pad="24px" style={{ maxWidth: '763px' }}>
+      <Box direction="row" fill="horizontal" justify="between" align="center">
+        <HeadingWS crustReady={crustReady} level={2} style={{ lineHeight: '44px' }}>
+          {!!character && !!character.name ? `WHAT SPECIAL BRAINER GEAR DOES ${character.name.toUpperCase()} HAVE?` : '...'}
+        </HeadingWS>
+        <ButtonWS
+          label={settingBrainerGear ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+          primary
+          disabled={selectedGear.length !== 2}
+          onClick={() => !settingBrainerGear && handleSubmitBrainerGear(selectedGear)}
+        />
+      </Box>
       <ParagraphWS size="large">Choose two</ParagraphWS>
       <Box align="start" gap="12px">
         {!!playbookUniqueCreator &&
@@ -85,14 +92,6 @@ const BrainerGearForm: FC = () => {
               />
             );
           })}
-      </Box>
-      <Box fill="horizontal" direction="row" justify="end">
-        <ButtonWS
-          label={settingBrainerGear ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-          primary
-          disabled={selectedGear.length !== 2}
-          onClick={() => !settingBrainerGear && handleSubmitBrainerGear(selectedGear)}
-        />
       </Box>
     </Box>
   );

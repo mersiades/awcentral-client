@@ -51,15 +51,7 @@ const AngelKitForm: FC = () => {
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <Box
-      data-testid="angel-kit-form"
-      // width="60vw"
-      justify="start"
-      width="85vw"
-      align="start"
-      pad="24px"
-      style={{ maxWidth: '763px' }}
-    >
+    <Box data-testid="angel-kit-form" justify="start" width="85vw" align="start" pad="24px" style={{ maxWidth: '763px' }}>
       {' '}
       <Box direction="row" fill="horizontal" justify="between" align="center">
         <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${

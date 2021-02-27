@@ -1664,10 +1664,16 @@ export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
   id: 'brainer-playbook-unique-creator-id',
   type: UniqueTypes.brainerGear,
   angelKitCreator: dummyAngelKitCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: mockBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: dummyEstablishmentCreator,
+  followersCreator: dummyFollowerCreator,
   gangCreator: dummyGangCreator,
+  holdingCreator: dummyHoldingCreator,
+  skinnerGearCreator: dummySkinnerGearCreator,
   weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
 };
 
 // ---------------------------------------------- Mock user-generated data --------------------------------------------- //

@@ -4,6 +4,7 @@ import ADD_COMMS_APP from '../mutations/addCommsApp';
 import ADD_COMMS_URL from '../mutations/addCommsUrl';
 import ADD_INVITEE from '../mutations/addInvitee';
 import ADD_USER_TO_GAME from '../mutations/addUserToGame';
+import ADJUST_CHARACTER_HX, { getAdjustCharacterHxOR } from '../mutations/adjustCharacterHx';
 import CREATE_CHARACTER from '../mutations/createCharacter';
 import CREATE_GAME from '../mutations/createGame';
 import DELETE_GAME from '../mutations/deleteGame';
@@ -2283,7 +2284,7 @@ export const mockPlayBookCreatorQueryAngel: MockedResponse = {
     return {
       data: {
         playbookCreator: {
-          id: 'driver-playbook-creator-id',
+          id: 'angel-playbook-creator-id',
           playbookType: PlaybookType.angel,
           defaultMoveCount: 1,
           moveChoiceCount: 2,
@@ -2321,16 +2322,20 @@ export const mockPlayBookCreatorQueryBrainer: MockedResponse = {
     variables: { playbookType: PlaybookType.brainer },
   },
   result: () => {
-    console.log('mockPlayBookCreatorQueryBrainer');
+    // console.log('mockPlayBookCreatorQueryBrainer');
     return {
       data: {
         playbookCreator: {
           id: 'brainer-playbook-creator-id',
           playbookType: PlaybookType.brainer,
+          defaultMoveCount: 1,
+          moveChoiceCount: 2,
+          defaultVehicleCount: 0,
           gearInstructions: mockgearInstructionsAngel,
           improvementInstructions: 'Whenever you roll a highlighted stat...',
-          movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
+          movesInstructions: 'You get all the basic moves. Choose 2 brainer moves.',
           hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+          names: [mockNameAngel1, mockNameAngel2],
           looks: [
             mockLookAngel1,
             mockLookAngel2,
@@ -2343,10 +2348,7 @@ export const mockPlayBookCreatorQueryBrainer: MockedResponse = {
             mockLookAngel9,
             mockLookAngel10,
           ],
-          names: [mockNameAngel1, mockNameAngel2],
           statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
-          defaultMoveCount: 1,
-          moveChoiceCount: 2,
           optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel1, mockCharacterMoveAngel4],
           defaultMoves: [mockCharacterMoveAngel1],
           playbookUniqueCreator: mockUniqueCreatorBrainer,
@@ -2406,6 +2408,30 @@ export const mockSetBattleVehicleCount: MockedResponse = {
           battleVehicleCount: 1,
           __typename: 'Character',
         },
+      },
+    };
+  },
+};
+
+export const mockAdjustCharacterHx: MockedResponse = {
+  request: {
+    query: ADJUST_CHARACTER_HX,
+    variables: {
+      gameRoleId: 'mock-gameRole-id-8',
+      characterId: 'mock-character-id-2',
+      hxStat: { characterId: 'mock-character-id-1', characterName: 'Mock Character 1', hxValue: 1 },
+    },
+  },
+  result: () => {
+    // console.log('mockAdjustCharacterHx');
+    return {
+      data: {
+        __typename: 'Mutation',
+        adjustCharacterHx: getAdjustCharacterHxOR(mockCharacter2, {
+          characterId: 'mock-character-id-1',
+          characterName: 'Mock Character 1',
+          hxValue: 1,
+        }),
       },
     };
   },
