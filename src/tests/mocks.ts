@@ -868,6 +868,7 @@ export const mockCharacter2: MockCharacter = {
   barter: 2,
   hxBlock: [
     {
+      id: 'hx-stat-id-1',
       characterId: mockCharacter1.id,
       characterName: mockCharacter1.name as string,
       hxValue: 1,

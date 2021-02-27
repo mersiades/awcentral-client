@@ -41,6 +41,7 @@ export interface ItemCharacteristic {
 // ----------------------------------------------------- Inputs --------------------------------------------------------- //
 
 export interface HxInput {
+  id?: string;
   characterId: string;
   characterName: string;
   hxValue: number;

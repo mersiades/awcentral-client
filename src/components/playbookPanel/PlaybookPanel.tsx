@@ -16,7 +16,7 @@ import UniqueItemsBox from './UniqueItemsBox';
 import HoldingBox from './HoldingBox';
 import PLAYBOOK, { PlaybookData, PlaybookVars } from '../../queries/playbook';
 import { MoveType, StatType } from '../../@types/enums';
-import { HarmInput } from '../../@types';
+import { HarmInput, HxInput } from '../../@types';
 import { Character } from '../../@types/dataInterfaces';
 import { CharacterMove, Move } from '../../@types/staticDataInterfaces';
 import { decapitalize } from '../../helpers/decapitalize';
@@ -33,7 +33,7 @@ interface PlaybookPanelProps {
   settingHarm: boolean;
   togglingHighlight: boolean;
   handleSetBarter: (amount: number) => void;
-  handleAdjustHx: (hxId: string, value: number) => void;
+  handleAdjustHx: (hxStat: HxInput) => void;
   handleSetHarm: (harm: HarmInput) => void;
   handleToggleHighlight: (stat: StatType) => void;
   navigateToCharacterCreation: (step: string) => void;

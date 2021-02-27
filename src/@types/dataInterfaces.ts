@@ -111,6 +111,7 @@ export interface CharacterStat {
 }
 
 export interface HxStat {
+  id: string;
   characterId: string;
   characterName: string;
   hxValue: number;

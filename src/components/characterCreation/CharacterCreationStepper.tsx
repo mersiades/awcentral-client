@@ -610,6 +610,15 @@ const CharacterCreationStepper: FC = () => {
               {boxesArray[8]}
             </>
           );
+        case 10:
+          return (
+            <>
+              {boxesArray[5]}
+              {boxesArray[6]}
+              {boxesArray[7]}
+              {boxesArray[8]}
+            </>
+          );
 
         default:
           return (
