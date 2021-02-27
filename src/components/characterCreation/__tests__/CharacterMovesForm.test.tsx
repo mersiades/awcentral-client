@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { InMemoryCache } from '@apollo/client';
 import { screen } from '@testing-library/react';
 
-import CharacterGearForm from '../CharacterGearForm';
+import CharacterMovesForm from '../CharacterMovesForm';
 import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
 import {
   blankCharacter,
@@ -15,8 +15,6 @@ import {
 } from '../../../tests/mocks';
 import { renderWithRouter } from '../../../tests/test-utils';
 import { mockPlaybookCreator } from '../../../tests/mockQueries';
-import CharacterMovesForm from '../CharacterMovesForm';
-import { Move } from '../../../@types/staticDataInterfaces';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');

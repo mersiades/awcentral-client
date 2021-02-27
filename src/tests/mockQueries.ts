@@ -1703,7 +1703,7 @@ export const mockToggleStatHighlight: MockedResponse = {
     // console.log('mockToggleStatHighlight');
     return {
       data: {
-        setCharacterHx: {
+        toggleStatHighlight: {
           id: mockCharacter2.id,
           name: mockCharacter2.name,
           playbook: mockCharacter2.playbook,
@@ -2410,5 +2410,3 @@ export const mockSetBattleVehicleCount: MockedResponse = {
     };
   },
 };
-
-// ----------------------------- CharacterLooksForm -------------------------------- //

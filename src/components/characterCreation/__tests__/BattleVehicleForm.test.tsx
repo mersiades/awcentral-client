@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { InMemoryCache } from '@apollo/client';
 import { screen } from '@testing-library/react';
 
-import CharacterStatsForm from '../CharacterStatsForm';
+import BattleVehicleForm from '../BattleVehicleForm';
 import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
 import {
   blankCharacter,
@@ -13,13 +13,10 @@ import {
   mockCharacter2,
   mockGame5,
   mockKeycloakUserInfo1,
-  mockPlaybookCreatorAngel,
   mockVehicleCreator,
 } from '../../../tests/mocks';
 import { renderWithRouter } from '../../../tests/test-utils';
-import { mockPlaybookCreator, mockVehicleCreatorQuery } from '../../../tests/mockQueries';
-import BattleVehicleForm from '../BattleVehicleForm';
-import { scryRenderedDOMComponentsWithTag } from 'react-dom/test-utils';
+import { mockVehicleCreatorQuery } from '../../../tests/mockQueries';
 import { VehicleFrameType } from '../../../@types/enums';
 import { DEFAULT_VEHICLE_NAME } from '../../../config/constants';
 

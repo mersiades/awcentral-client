@@ -119,7 +119,11 @@ const CharacterHxForm: FC = () => {
     setHasSet(true);
   };
 
+  console.log('value', value);
+  console.log('character?.statsBlock', character?.statsBlock);
+
   // Loads any existing HxStats into component state
+  // Bug: initialValue is being reset to `[]` when the toggleHighlight mutation returns
   useEffect(() => {
     let initialValue: HxInput[] = [];
     !!character?.hxBlock &&
@@ -131,6 +135,7 @@ const CharacterHxForm: FC = () => {
 
   return (
     <Box
+      data-testid="character-hx-form"
       fill
       direction="column"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
