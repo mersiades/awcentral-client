@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
+import { omit } from 'lodash';
 import { useMutation, useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -6,9 +7,9 @@ import styled from 'styled-components';
 import { Box, FormField, TextInput } from 'grommet';
 
 import Spinner from '../Spinner';
+import StatsBox from '../playbookPanel/StatsBox';
 import { ButtonWS, HeadingWS, RedBox, TextWS } from '../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
-import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../../mutations/setCharacterHx';
 import TOGGLE_STAT_HIGHLIGHT, {
   getToggleStatHighlightOR,
   ToggleStatHighlightData,
@@ -19,21 +20,17 @@ import FINISH_CHARACTER_CREATION, {
   FinishCharacterCreationVars,
   getFinishCharacterCreationOR,
 } from '../../mutations/finishCharacterCreation';
-import { StatType } from '../../@types/enums';
-import { HxInput } from '../../@types';
-import { Character, HxStat } from '../../@types/dataInterfaces';
-import { useFonts } from '../../contexts/fontContext';
-import { useGame } from '../../contexts/gameContext';
-import StatsBox from '../playbookPanel/StatsBox';
-import { decapitalize } from '../../helpers/decapitalize';
 import ADJUST_CHARACTER_HX, {
   AdjustCharacterHxData,
   AdjustCharacterHxVars,
   getAdjustCharacterHxOR,
 } from '../../mutations/adjustCharacterHx';
-import setCharacterHx from '../../mutations/setCharacterHx';
-import SingleRedBox from '../SingleRedBox';
-import { omit } from 'lodash';
+import { StatType } from '../../@types/enums';
+import { HxInput } from '../../@types';
+import { Character } from '../../@types/dataInterfaces';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
+import { decapitalize } from '../../helpers/decapitalize';
 
 const StyledMarkdown = styled(ReactMarkdown)`
   & p {
@@ -45,6 +42,8 @@ const StyledMarkdown = styled(ReactMarkdown)`
 `;
 
 const CharacterHxForm: FC = () => {
+  // ------------------------------------------------------- State --------------------------------------------------------- //]
+  const [errorIds, setErrorIds] = useState<string[]>([]);
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, character, userGameRole, otherPlayerGameRoles } = useGame();
   const { crustReady } = useFonts();
@@ -173,21 +172,46 @@ const CharacterHxForm: FC = () => {
                   width="350px"
                   margin={{ right: '12px', bottom: '12px' }}
                 >
+                  <Box pad="12px" fill="vertical" justify="center" width="100px" align="center">
+                    <HeadingWS level={4} style={{ marginTop: '6px', marginBottom: '6px' }}>
+                      {char.name}
+                    </HeadingWS>
+                    <FormField name={char.id}>
+                      <TextInput
+                        name={char.id}
+                        aria-label={`${char.name}-hx-input`}
+                        size="xlarge"
+                        textAlign="center"
+                        type="text"
+                        maxLength={2}
+                        defaultValue={existingHxStat?.hxValue.toString() || '0'}
+                        onChange={(e) => {
+                          const match = e.target.value.match(/^-?[1-3]$/gm);
+                          if (!!match) {
+                            setErrorIds(errorIds.filter((id) => id !== char.id));
+                            match.length == 1 && !adjustingHx && handleAdjustHx({ ...hxStat, hxValue: parseInt(match[0]) });
+                          } else {
+                            e.preventDefault();
+                            if (!['', '-'].includes(e.target.value)) {
+                              setErrorIds([...errorIds, char.id]);
+                            } else {
+                              setErrorIds(errorIds.filter((id) => id !== char.id));
+                            }
+                          }
+                        }}
+                      />
+                    </FormField>
+                  </Box>
                   <Box width="250px" pad="12px">
                     <HeadingWS level={4} style={{ marginTop: '6px', marginBottom: '6px' }}>
-                      {!!char.playbook && 'The ' + decapitalize(char.playbook)}
+                      {!!char.playbook && 'the ' + decapitalize(char.playbook)}
                     </HeadingWS>
                     {!!looks && <TextWS size="small">{looks.join(', ')}</TextWS>}
-                  </Box>
-                  <Box pad="12px" fill="vertical" justify="center" width="100px">
-                    <SingleRedBox
-                      key={char.id}
-                      value={existingHxStat?.hxValue.toString() || '0'}
-                      label={char.name}
-                      loading={adjustingHx}
-                      onIncrease={() => !adjustingHx && handleAdjustHx({ ...hxStat, hxValue: hxStat.hxValue + 1 })}
-                      onDecrease={() => !adjustingHx && handleAdjustHx({ ...hxStat, hxValue: hxStat.hxValue - 1 })}
-                    />
+                    {errorIds.includes(char.id) && (
+                      <TextWS color="accent-3" size="small">
+                        Enter digits from -3 to 3
+                      </TextWS>
+                    )}
                   </Box>
                 </RedBox>
               )

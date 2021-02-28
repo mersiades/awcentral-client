@@ -24,7 +24,7 @@ const SingleRedBox: FC<SingleRedBoxProps> = ({ value, label, loading, onIncrease
   const { crustReady } = useFonts();
   return (
     <Box align="center" justify="between" height="90px" width={width} gap="6px" margin={{ bottom: '6px' }}>
-      <Box direction="row">
+      <Box aria-label={`${label}-hx`} direction="row">
         <RedBox align="center" width="50px" fill="vertical" justify="center">
           <HeadingWS
             aria-label={label}
