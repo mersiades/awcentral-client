@@ -8,7 +8,11 @@ import { Box, Text, TextArea, Tip } from 'grommet';
 import Spinner from '../../Spinner';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../../../mutations/setCustomWeapons';
+import SET_CUSTOM_WEAPONS, {
+  getSetCustomWeaponsOR,
+  SetCustomWeaponsData,
+  SetCustomWeaponsVars,
+} from '../../../mutations/setCustomWeapons';
 import { CharacterCreationSteps } from '../../../@types/enums';
 import { ItemCharacteristic, TaggedItem } from '../../../@types';
 import { useFonts } from '../../../contexts/fontContext';
@@ -199,9 +203,9 @@ const CustomWeaponsForm: FC = () => {
   const handleSubmitCustomWeapons = async (weapons: string[]) => {
     if (!!userGameRole && !!character && !!game) {
       try {
-        await setCustomWeapons({
+        setCustomWeapons({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, weapons },
-          // refetchQueries: [{ query: GAME, variables: { gameId } }],
+          optimisticResponse: getSetCustomWeaponsOR(character, weapons) as SetCustomWeaponsData,
         });
         history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -291,7 +295,7 @@ const CustomWeaponsForm: FC = () => {
           label={settingCustomWeapons ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
           primary
           onClick={() => !settingCustomWeapons && handleSubmitCustomWeapons(weapons)}
-          disabled={weapons.length === 0}
+          disabled={weapons.length !== 2}
         />
       </Box>
 

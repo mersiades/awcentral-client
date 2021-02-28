@@ -159,6 +159,7 @@ export interface BrainerGear {
 export interface CustomWeapons {
   id: string;
   weapons: string[];
+  __typename?: 'CustomWeapons';
 }
 
 export interface CastCrew {

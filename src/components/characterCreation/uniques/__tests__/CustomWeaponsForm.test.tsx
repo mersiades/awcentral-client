@@ -265,8 +265,8 @@ describe('Rendering CustomWeaponsForm', () => {
     expect(interimList.textContent).toContain(mockFirearmOption2.description);
     expect(weaponInput.value).toEqual('');
 
-    // TODO: Change form to only allow SET when there are two weapons in interim list
-    // expect(setButton.disabled).toEqual(true);
+    // SET button should still be disabled because only one interim weapon
+    expect(setButton.disabled).toEqual(true);
 
     // Remove the weapon from interim list
     const interimWeapon1 = screen.getByRole('listitem', { name: 'interim-weapon-1' });

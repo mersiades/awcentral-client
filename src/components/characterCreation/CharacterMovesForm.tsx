@@ -81,9 +81,12 @@ const CharacterMovesForm: FC = () => {
     >
       <Box width="85vw" align="start" style={{ maxWidth: '763px' }} margin={{ bottom: '24px' }}>
         <Box direction="row" fill="horizontal" justify="between" align="center">
-          <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT ARE ${
-            !!character?.name ? character.name.toUpperCase() : '...'
-          }'S MOVES?`}</HeadingWS>
+          <HeadingWS
+            level={2}
+            crustReady={crustReady}
+            textAlign="center"
+            style={{ maxWidth: 'unset', height: '34px' }}
+          >{`WHAT ARE ${!!character?.name ? character.name.toUpperCase() : '...'}'S MOVES?`}</HeadingWS>
           <ButtonWS
             primary
             label={settingMoves ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
