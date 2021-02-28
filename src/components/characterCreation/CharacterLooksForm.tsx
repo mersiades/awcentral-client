@@ -98,7 +98,8 @@ const CharacterLooksForm: FC = () => {
             },
           },
         });
-        if (data.data?.setCharacterLook.looks?.length === 5) {
+
+        if (data.data?.setCharacterLook.looks?.length === 5 && !character.hasCompletedCharacterCreation) {
           history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectStats}`);
         }
       } catch (error) {

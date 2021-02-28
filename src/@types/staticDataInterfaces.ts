@@ -190,6 +190,7 @@ export interface SecurityOption {
   id: string;
   description: string;
   value: number;
+  __typename?: 'SecurityOption';
 }
 
 export interface EstablishmentCreator {
@@ -204,6 +205,7 @@ export interface EstablishmentCreator {
   interestedPartyNames: string[];
   interestedPartyQuestions: string[];
   securityOptions: SecurityOption[];
+  __typename?: 'EstablishmentCreator';
 }
 
 export interface FollowersOption {

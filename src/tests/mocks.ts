@@ -59,6 +59,7 @@ import {
   PlaybookUniqueCreator,
   PlusOneForwardConditions,
   RollModifier,
+  SecurityOption,
   SkinnerGearCreator,
   SkinnerGearItem,
   StatModifier,
@@ -1590,6 +1591,8 @@ export const mockFirearmBaseOption: TaggedItem = {
   tags: ['2-harm', 'close', 'reload', 'loud'],
 };
 
+// ------------------------------------------------------- Mock PlaybookCreators --------------------------------------------------- //
+
 export const mockFirearmOption: ItemCharacteristic = {
   id: 'mock-firearm-option-id',
   description: 'antique',
@@ -1662,8 +1665,6 @@ export const mockPlaybookCreatorDriver: PlaybookCreator = {
   defaultVehicleCount: 1,
 };
 
-export const mockPlaybooks: Playbook[] = [mockPlaybookAngel, mockPlaybookBattlbabe];
-
 export const mockBrainerGearCreator: BrainerGearCreator = {
   id: 'mock-brainer-gear-creator-id',
   gear: [
@@ -1687,6 +1688,92 @@ export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
   workspaceCreator: dummyWorkspaceCreator,
   __typename: 'PlaybookUniqueCreator',
 };
+
+export const mockSecurityOption1: SecurityOption = {
+  id: 'security-option-id-1',
+  description: 'a convenient shotgun',
+  value: 1,
+  __typename: 'SecurityOption',
+};
+
+export const mockSecurityOption2: SecurityOption = {
+  id: 'security-option-id-2',
+  description: 'a bouncer who knows his biz',
+  value: 1,
+  __typename: 'SecurityOption',
+};
+
+export const mockSecurityOption3: SecurityOption = {
+  id: 'security-option-id-3',
+  description: 'plywood & chickenwire',
+  value: 1,
+  __typename: 'SecurityOption',
+};
+
+export const mockEstablishmentCreator: EstablishmentCreator = {
+  id: 'mock-establishment-creator-id',
+  mainAttractionCount: 1,
+  sideAttractionCount: 2,
+  attractions: ['luxury food', 'music', 'fashion', 'lots of food', 'games'],
+  atmospheres: ['bustle', 'intimacy', 'smoke', 'shadows', 'slime'],
+  atmosphereCount: [3, 4],
+  regularsNames: ['Lamprey', 'Ba', 'Camo', 'Toyota', 'Lits'],
+  regularsQuestions: ["Who's your worst regular?", "Who's your best regular?"],
+  interestedPartyNames: ['Been', 'Rolfball', 'Gams'],
+  interestedPartyQuestions: ['Who wants in on it?', 'Who do you owe for it?', 'Who wants it gone?'],
+  securityOptions: [mockSecurityOption1, mockSecurityOption2, mockSecurityOption3],
+  __typename: 'EstablishmentCreator',
+};
+
+export const mockUniqueCreatorMaestroD: PlaybookUniqueCreator = {
+  id: 'maestro-d-playbook-unique-creator-id',
+  type: UniqueTypes.establishment,
+  angelKitCreator: dummyAngelKitCreator,
+  brainerGearCreator: dummyBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: mockEstablishmentCreator,
+  followersCreator: dummyFollowerCreator,
+  gangCreator: dummyGangCreator,
+  holdingCreator: dummyHoldingCreator,
+  skinnerGearCreator: dummySkinnerGearCreator,
+  weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
+};
+
+export const mockPlaybookCreatorMaestroD: PlaybookCreator = {
+  id: 'maestro-d-playbook-creator-id',
+  playbookType: PlaybookType.maestroD,
+  gearInstructions: mockgearInstructionsAngel,
+  improvementInstructions: 'Whenever you roll a highlighted stat...',
+  movesInstructions: "You get all the basic moves. Choose 2 maestro d' moves. ",
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  names: [mockNameAngel1, mockNameAngel2],
+  looks: [
+    mockLookAngel1,
+    mockLookAngel2,
+    mockLookAngel3,
+    mockLookAngel4,
+    mockLookAngel5,
+    mockLookAngel6,
+    mockLookAngel7,
+    mockLookAngel8,
+    mockLookAngel9,
+    mockLookAngel10,
+  ],
+  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+  playbookUniqueCreator: mockUniqueCreatorMaestroD,
+  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  defaultMoves: [mockCharacterMoveAngel1],
+  defaultMoveCount: 1,
+  moveChoiceCount: 2,
+  defaultVehicleCount: 0,
+  __typename: 'PlaybookCreator',
+};
+
+// ------------------------------------------------------- Mock Playbooks --------------------------------------------------- //
+
+export const mockPlaybooks: Playbook[] = [mockPlaybookAngel, mockPlaybookBattlbabe];
 
 // ---------------------------------------------- Mock user-generated data --------------------------------------------- //
 

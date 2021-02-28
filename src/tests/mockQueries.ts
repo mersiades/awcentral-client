@@ -78,6 +78,7 @@ import {
   mockUniqueCreatorBrainer,
   mockVehicleCreator,
   mockPlaybookCreatorMoveAngel1,
+  mockPlaybookCreatorMaestroD,
 } from './mocks';
 
 export const mockGameRolesByUserId: MockedResponse = {
@@ -2432,6 +2433,22 @@ export const mockAdjustCharacterHx: MockedResponse = {
           characterName: 'Mock Character 1',
           hxValue: 1,
         }),
+      },
+    };
+  },
+};
+
+export const mockPlayBookCreatorQueryMaestroD: MockedResponse = {
+  request: {
+    query: PLAYBOOK_CREATOR,
+    variables: { playbookType: PlaybookType.maestroD },
+  },
+  result: () => {
+    // console.log('mockPlayBookCreatorQueryMaestroD');
+    return {
+      data: {
+        __typename: 'Mutation',
+        playbookCreator: mockPlaybookCreatorMaestroD,
       },
     };
   },

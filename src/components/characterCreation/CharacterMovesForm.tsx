@@ -62,7 +62,9 @@ const CharacterMovesForm: FC = () => {
         await setCharacterMoves({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, moveIds },
         });
-        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setVehicle}`);
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setVehicle}`);
+        }
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
@@ -85,7 +87,7 @@ const CharacterMovesForm: FC = () => {
             level={2}
             crustReady={crustReady}
             textAlign="center"
-            style={{ maxWidth: 'unset', height: '34px' }}
+            style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
           >{`WHAT ARE ${!!character?.name ? character.name.toUpperCase() : '...'}'S MOVES?`}</HeadingWS>
           <ButtonWS
             primary

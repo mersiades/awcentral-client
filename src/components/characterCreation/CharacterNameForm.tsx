@@ -49,7 +49,9 @@ const CharacterNameForm: FC = () => {
             },
           },
         });
-        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectLooks}`);
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectLooks}`);
+        }
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
@@ -82,7 +84,11 @@ const CharacterNameForm: FC = () => {
     >
       <Box width="85vw" align="center" style={{ maxWidth: '763px' }}>
         <Box direction="row" fill="horizontal" justify="between" align="center">
-          <HeadingWS crustReady={crustReady} level={2}>{`WHAT IS THE ${
+          <HeadingWS
+            crustReady={crustReady}
+            level={2}
+            style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+          >{`WHAT IS THE ${
             !!character?.playbook ? decapitalize(character?.playbook).toUpperCase() : '...'
           } CALLED?`}</HeadingWS>
           <ButtonWS

@@ -287,7 +287,7 @@ const CustomWeaponsForm: FC = () => {
           crustReady={crustReady}
           level={2}
           alignSelf="center"
-          style={{ maxWidth: 'unset', height: '34px' }}
+          style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
         >{`WHAT ARE ${
           !!character && !!character.name ? character.name.toUpperCase() : ' ...'
         }'S TWO CUSTOM WEAPONS?`}</HeadingWS>

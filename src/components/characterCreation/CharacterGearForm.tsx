@@ -77,7 +77,7 @@ const CharacterGearForm: FC = () => {
   const handleSubmitGear = async (gear: string[], amount: number) => {
     if (!!userGameRole && !!character && !!game) {
       try {
-        await setCharacterGear({
+        setCharacterGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, gear },
           optimisticResponse: {
             __typename: 'Mutation',
@@ -88,7 +88,7 @@ const CharacterGearForm: FC = () => {
             },
           },
         });
-        await setCharacterBarter({
+        setCharacterBarter({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
           optimisticResponse: {
             __typename: 'Mutation',
@@ -102,7 +102,11 @@ const CharacterGearForm: FC = () => {
         // Skip playbookUnique form if Driver
         const nextStep =
           character.playbook === PlaybookType.driver ? CharacterCreationSteps.selectMoves : CharacterCreationSteps.setUnique;
-        history.push(`/character-creation/${game.id}?step=${nextStep}`);
+
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${nextStep}`);
+        }
+
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
@@ -204,9 +208,12 @@ const CharacterGearForm: FC = () => {
     >
       <Box width="85vw" align="start" style={{ maxWidth: '763px' }}>
         <Box direction="row" fill="horizontal" justify="between" align="center">
-          <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT IS ${
-            !!character?.name ? character.name.toUpperCase() : '...'
-          }'S GEAR?`}</HeadingWS>
+          <HeadingWS
+            level={2}
+            crustReady={crustReady}
+            textAlign="center"
+            style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+          >{`WHAT IS ${!!character?.name ? character.name.toUpperCase() : '...'}'S GEAR?`}</HeadingWS>
           <ButtonWS
             primary
             label={settingGear || settingBarter ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}

@@ -82,7 +82,12 @@ const VehiclesFormContainer: FC = () => {
       >
         <Box width="85vw" align="center" style={{ maxWidth: '742px' }}>
           <Box direction="row" fill="horizontal" justify="between" align="center">
-            <HeadingWS level={2} crustReady={crustReady} textAlign="center">
+            <HeadingWS
+              level={2}
+              crustReady={crustReady}
+              textAlign="center"
+              style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+            >
               VEHICLES
             </HeadingWS>
             <ButtonWS

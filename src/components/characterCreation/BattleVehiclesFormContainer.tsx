@@ -86,8 +86,13 @@ const BattleVehiclesFormContainer: FC = () => {
       >
         <Box width="85vw" align="center" style={{ maxWidth: '742px' }}>
           <Box direction="row" fill="horizontal" justify="between" align="center">
-            <HeadingWS level={2} crustReady={crustReady} textAlign="center">
-              VEHICLES
+            <HeadingWS
+              level={2}
+              crustReady={crustReady}
+              textAlign="center"
+              style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+            >
+              BATTLE VEHICLES
             </HeadingWS>
             <ButtonWS
               primary
@@ -123,7 +128,11 @@ const BattleVehiclesFormContainer: FC = () => {
             {character.battleVehicleCount === character.battleVehicles.length && (
               <Tip content="Add another vehicle">
                 <Box margin={{ horizontal: '24px' }} justify="center" align="center">
-                  <AddCircle color="brand" style={{ cursor: 'pointer' }} onClick={() => handleAddVehicle()} />
+                  <AddCircle
+                    color="brand"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => !settingBattleVehicleCount && handleAddVehicle()}
+                  />
                 </Box>
               </Tip>
             )}

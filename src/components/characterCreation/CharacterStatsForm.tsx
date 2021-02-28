@@ -110,9 +110,12 @@ const CharacterStatsForm: FC = () => {
     >
       <Box width="85vw" align="start" style={{ maxWidth: '763px' }}>
         <Box direction="row" fill="horizontal" justify="between" align="center">
-          <HeadingWS level={2} crustReady={crustReady} textAlign="center">{`WHAT ARE ${
-            !!character?.name ? character.name.toUpperCase() : '...'
-          }'S STRENGTHS AND WEAKNESSES?`}</HeadingWS>
+          <HeadingWS
+            level={2}
+            crustReady={crustReady}
+            textAlign="center"
+            style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+          >{`WHAT ARE ${!!character?.name ? character.name.toUpperCase() : '...'}'S STRENGTHS AND WEAKNESSES?`}</HeadingWS>
           <ButtonWS
             primary
             label={settingStats ? <Spinner fillColor="#FFF" width="37px" /> : 'SET'}

@@ -134,7 +134,7 @@ const CharacterHxForm: FC = () => {
             level={2}
             crustReady={crustReady}
             textAlign="center"
-            style={{ maxWidth: 'unset', height: '34px' }}
+            style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
           >{`WHAT HISTORY DOES ${!!character?.name ? character.name.toUpperCase() : '...'} HAVE?`}</HeadingWS>
           <ButtonWS
             primary
