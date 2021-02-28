@@ -52,7 +52,6 @@ const AngelKitForm: FC = () => {
 
   return (
     <Box data-testid="angel-kit-form" justify="start" width="85vw" align="start" pad="24px" style={{ maxWidth: '763px' }}>
-      {' '}
       <Box direction="row" fill="horizontal" justify="between" align="center">
         <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
           !!character?.name ? character.name?.toUpperCase() : '...'

@@ -1,18 +1,18 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useMutation, useQuery } from '@apollo/client';
 import { startsWith } from 'lodash';
 import styled from 'styled-components';
 import { Box, Text, TextArea, Tip } from 'grommet';
 
 import Spinner from '../../Spinner';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, RedBox, TextWS } from '../../../config/grommetConfig';
+import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
+import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../../../mutations/setCustomWeapons';
+import { CharacterCreationSteps } from '../../../@types/enums';
 import { ItemCharacteristic, TaggedItem } from '../../../@types';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
-import { useMutation, useQuery } from '@apollo/client';
-import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import SET_CUSTOM_WEAPONS, { SetCustomWeaponsData, SetCustomWeaponsVars } from '../../../mutations/setCustomWeapons';
-import { useHistory } from 'react-router-dom';
-import { CharacterCreationSteps } from '../../../@types/enums';
 
 const WeaponsUL = styled.ul`
   margin: 0;
@@ -21,6 +21,10 @@ const WeaponsUL = styled.ul`
   width: -webkit-fill-available;
   align-self: center;
   cursor: default;
+  & li {
+    text-shadow: 0 0 1px #000, 0 0 3px #000;
+    cursor: pointer;
+  }
 `;
 
 const CustomWeaponsForm: FC = () => {
@@ -268,76 +272,78 @@ const CustomWeaponsForm: FC = () => {
   return (
     <Box
       data-testid="custom-weapons-form"
-      width="70vw"
-      direction="column"
+      justify="start"
+      width="85vw"
       align="start"
-      justify="between"
-      flex="grow"
-      style={{ minHeight: '625px' }}
+      pad="24px"
+      style={{ maxWidth: '763px' }}
     >
-      <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`WHAT ARE ${
-        !!character && !!character.name ? character.name.toUpperCase() : ' ...'
-      }'S TWO CUSTOM WEAPONS?`}</HeadingWS>
-      <TextWS alignSelf="center">Mix'n'match. Edit directly if necessary.</TextWS>
-      <Box fill="horizontal" direction="row" justify="start" height="145px">
-        <Box height="152px" gap="12px" align="center" justify="between" width="60%">
-          <TextArea aria-label="weapon-input" size="large" value={value} onChange={(e) => setValue(e.target.value)} />
-          <Box direction="row" fill="horizontal" gap="12px">
-            <ButtonWS
-              fill="horizontal"
-              label="RESET"
-              disabled={!value}
-              onClick={() => {
-                setBaseValue(undefined);
-                setValue('');
-                setCharacteristics([]);
-              }}
-            />
-            <ButtonWS fill="horizontal" label="REMOVE" disabled={!weapons.includes(value)} onClick={() => removeWeapon()} />
-            <ButtonWS
-              fill="horizontal"
-              secondary
-              label="ADD"
-              disabled={!value || !baseValue || characteristics.length === 0 || characteristics.length > 2}
-              onClick={() => {
-                setWeapons([...weapons, value]);
-                setBaseValue(undefined);
-                setValue('');
-                setCharacteristics([]);
-              }}
-            />
-          </Box>
-        </Box>
-        <Box height="152px" justify="between" width="40%" pad={{ horizontal: '12px' }} gap="12px">
-          <RedBox fill="vertical">
-            <WeaponsUL aria-label="interim-weapons-list">
-              {weapons.map((weapon, index) => (
-                <li
-                  key={weapon}
-                  aria-label={`interim-weapon-${index + 1}`}
-                  // @ts-ignore
-                  onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
-                  // @ts-ignore
-                  onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
-                  onClick={() => setValue(weapon)}
-                >
-                  {weapon}
-                </li>
-              ))}
-            </WeaponsUL>
-          </RedBox>
-          <ButtonWS
-            label={settingCustomWeapons ? <Spinner fillColor="#FFF" fillHorizontal height="36px" /> : 'SET'}
-            primary
-            onClick={() => !settingCustomWeapons && handleSubmitCustomWeapons(weapons)}
-            disabled={weapons.length === 0}
-            // Flex required for Safari
-            style={{ flex: '1 0 auto' }}
-          />
-        </Box>
+      <Box direction="row" fill="horizontal" justify="between" align="center">
+        <HeadingWS
+          crustReady={crustReady}
+          level={2}
+          alignSelf="center"
+          style={{ maxWidth: 'unset', height: '34px' }}
+        >{`WHAT ARE ${
+          !!character && !!character.name ? character.name.toUpperCase() : ' ...'
+        }'S TWO CUSTOM WEAPONS?`}</HeadingWS>
+        <ButtonWS
+          label={settingCustomWeapons ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+          primary
+          onClick={() => !settingCustomWeapons && handleSubmitCustomWeapons(weapons)}
+          disabled={weapons.length === 0}
+        />
       </Box>
-      <Box direction="row" height="300px" overflow={{ vertical: 'auto' }}>
-        <Box height="300px" width="50%" pad="6px">
+
+      <RedBox fill="horizontal" height="55px">
+        <WeaponsUL aria-label="interim-weapons-list">
+          {weapons.map((weapon, index) => (
+            <li
+              key={weapon}
+              aria-label={`interim-weapon-${index + 1}`}
+              // @ts-ignore
+              onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
+              // @ts-ignore
+              onMouseOut={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#FFF')}
+              onClick={() => setValue(weapon)}
+            >
+              {weapon}
+            </li>
+          ))}
+        </WeaponsUL>
+      </RedBox>
+
+      <TextWS margin={{ top: '12px' }}>Mix'n'match. Edit directly if necessary.</TextWS>
+
+      <TextArea aria-label="weapon-input" size="large" value={value} onChange={(e) => setValue(e.target.value)} />
+      <Box direction="row" fill="horizontal" gap="12px" margin={{ top: '12px' }}>
+        <ButtonWS
+          fill="horizontal"
+          label="RESET"
+          disabled={!value}
+          onClick={() => {
+            setBaseValue(undefined);
+            setValue('');
+            setCharacteristics([]);
+          }}
+        />
+        <ButtonWS fill="horizontal" label="REMOVE" disabled={!weapons.includes(value)} onClick={() => removeWeapon()} />
+        <ButtonWS
+          fill="horizontal"
+          secondary
+          label="ADD"
+          disabled={!value || !baseValue || characteristics.length === 0 || characteristics.length > 2}
+          onClick={() => {
+            setWeapons([...weapons, value]);
+            setBaseValue(undefined);
+            setValue('');
+            setCharacteristics([]);
+          }}
+        />
+      </Box>
+
+      <Box direction="row">
+        <Box width="50%" pad="6px">
           <HeadingWS alignSelf="center" level={4}>
             {firearmsTitle}
           </HeadingWS>
@@ -352,7 +358,7 @@ const CustomWeaponsForm: FC = () => {
             {firearmsOptionsOptions?.map((option) => renderOptionPill(option))}
           </Box>
         </Box>
-        <Box height="300px" width="50%" pad="6px">
+        <Box width="50%" pad="6px">
           <HeadingWS alignSelf="center" level={4}>
             {handTitle}
           </HeadingWS>
