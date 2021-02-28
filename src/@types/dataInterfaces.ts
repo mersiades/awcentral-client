@@ -197,6 +197,7 @@ export interface Followers {
   wants: string[];
   selectedStrengths: FollowersOption[];
   selectedWeaknesses: FollowersOption[];
+  __typename?: 'Followers';
 }
 
 export interface Gang {

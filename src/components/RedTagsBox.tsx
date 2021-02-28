@@ -14,6 +14,7 @@ interface RedTagsBoxProps {
 const RedTagsBox: FC<RedTagsBoxProps> = ({ tags, label, height, maxWidth = '320px', width }) => {
   return (
     <Box
+      data-testid={`${label.toLowerCase()}-tags-box`}
       align="center"
       justify="between"
       height={height}

@@ -222,6 +222,7 @@ export interface FollowersOption {
   fortuneChange: number;
   surplusChange?: string;
   wantChange?: string[];
+  __typename?: 'FollowersOption';
 }
 
 export interface FollowersCreator {
@@ -237,6 +238,7 @@ export interface FollowersCreator {
   defaultWants: string[];
   strengthOptions: FollowersOption[];
   weaknessOptions: FollowersOption[];
+  __typename?: 'FollowersCreator';
 }
 
 export interface GangOption {

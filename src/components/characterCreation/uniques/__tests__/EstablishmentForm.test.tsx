@@ -1,51 +1,14 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import {
-  GearInstructions,
-  Look,
-  Name,
-  PlaybookCreator,
-  PlaybookUniqueCreator,
-} from '../../../../@types/staticDataInterfaces';
-import { Character, Game } from '../../../../@types/dataInterfaces';
-import {
   blankCharacter,
-  dummyAngelKitCreator,
-  dummyEstablishmentCreator,
-  dummyFollowerCreator,
-  dummyGangCreator,
-  dummyHoldingCreator,
-  dummySkinnerGearCreator,
-  dummyWeaponsCreator,
-  dummyWorkspaceCreator,
-  mockBrainerGearCreator,
   mockCharacter2,
-  mockCharacterHarm,
-  mockCharacterMoveAngel1,
-  mockCharacterMoveAngel2,
-  mockCharacterMoveAngel3,
-  mockCustomWeaponsCreator,
   mockEstablishmentCreator,
-  mockFirearmBaseOption,
-  mockFirearmOption,
-  mockFirearmOption2,
   mockGame5,
-  mockHandBaseOption,
-  mockHandOption,
-  mockHandOption2,
   mockKeycloakUserInfo1,
-  mockLookBattlebabe2,
-  mockPlaybookUniqueBattlebabe,
-  mockStatsBlock1,
-  mockStatsOptionsAngel1,
-  mockStatsOptionsAngel2,
 } from '../../../../tests/mocks';
-import { LookType, PlaybookType, RoleType, UniqueTypes } from '../../../../@types/enums';
 import { mockKeycloakStub } from '../../../../../__mocks__/@react-keycloak/web';
-import CustomWeaponsForm from '../CustomWeaponsForm';
 import { renderWithRouter } from '../../../../tests/test-utils';
-import { MockedResponse } from '@apollo/client/testing';
-import PLAYBOOK_CREATOR from '../../../../queries/playbookCreator';
 import { InMemoryCache } from '@apollo/client';
 import userEvent from '@testing-library/user-event';
 import EstablishmentForm from '../EstablishmentForm';
@@ -59,7 +22,7 @@ jest.mock('@react-keycloak/web', () => {
   };
 });
 
-describe('Rendering EestablishmentForm', () => {
+describe('Rendering EstablishmentForm', () => {
   let cache = new InMemoryCache();
   const mockGame = {
     ...mockGame5,

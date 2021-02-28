@@ -1771,6 +1771,112 @@ export const mockPlaybookCreatorMaestroD: PlaybookCreator = {
   __typename: 'PlaybookCreator',
 };
 
+export const strengthOption1: FollowersOption = {
+  id: 'strength-option-id-1',
+  description: 'Your followers are dedicated to you. Surplus: +1barter, and replace want: desertion with want: hungry.',
+  newNumberOfFollowers: -1,
+  surplusBarterChange: 1,
+  fortuneChange: -1,
+  surplusChange: '',
+  wantChange: ['+hungry', '-desertion'],
+  __typename: 'FollowersOption',
+};
+
+export const strengthOption2: FollowersOption = {
+  id: 'strength-option-id-2',
+  description: 'Your followers are rigorous and argumentative. Surplus: +insight.',
+  newNumberOfFollowers: -1,
+  surplusBarterChange: -2,
+  fortuneChange: -1,
+  surplusChange: '+insight',
+  wantChange: [],
+  __typename: 'FollowersOption',
+};
+
+export const weaknessOption1: FollowersOption = {
+  id: 'weakness-option-id-1',
+  description: 'Your followers disdain law, peace, reason and society. Surplus: +violence.',
+  newNumberOfFollowers: -1,
+  surplusBarterChange: -2,
+  fortuneChange: -1,
+  surplusChange: '+violence',
+  wantChange: [],
+  __typename: 'FollowersOption',
+};
+
+export const weaknessOption2: FollowersOption = {
+  id: 'weakness-option-id-2',
+  description: 'You have few followers, 10 or fewer. Surplus: -1barter.',
+  newNumberOfFollowers: 10,
+  surplusBarterChange: -1,
+  fortuneChange: -1,
+  wantChange: [],
+  surplusChange: '',
+  __typename: 'FollowersOption',
+};
+
+export const mockFollowersCreator: FollowersCreator = {
+  id: 'followers-creator-id',
+  instructions: 'By default you have around 20 followers, loyal to you but not fanatical.',
+  defaultNumberOfFollowers: 20,
+  defaultSurplusBarter: 1,
+  defaultFortune: 1,
+  strengthCount: 2,
+  weaknessCount: 2,
+  travelOptions: ['travel with you', 'congregate'],
+  characterizationOptions: ['your cult', 'your scene', 'your family', 'your staff'],
+  defaultWants: ['desertion'],
+  strengthOptions: [strengthOption1, strengthOption2],
+  weaknessOptions: [weaknessOption1, weaknessOption2],
+  __typename: 'FollowersCreator',
+};
+
+export const mockUniqueCreatorHocus: PlaybookUniqueCreator = {
+  id: 'hocus-playbook-unique-creator-id',
+  type: UniqueTypes.followers,
+  angelKitCreator: dummyAngelKitCreator,
+  brainerGearCreator: dummyBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: dummyEstablishmentCreator,
+  followersCreator: mockFollowersCreator,
+  gangCreator: dummyGangCreator,
+  holdingCreator: dummyHoldingCreator,
+  skinnerGearCreator: dummySkinnerGearCreator,
+  weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
+};
+
+export const mockPlaybookCreatorHocus: PlaybookCreator = {
+  id: 'hocus-playbook-creator-id',
+  playbookType: PlaybookType.hocus,
+  gearInstructions: mockgearInstructionsAngel,
+  improvementInstructions: 'Whenever you roll a highlighted stat...',
+  movesInstructions: 'You get all the basic moves. You get fortunes, and the choose 2 more hocus moves.',
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  names: [mockNameAngel1, mockNameAngel2],
+  looks: [
+    mockLookAngel1,
+    mockLookAngel2,
+    mockLookAngel3,
+    mockLookAngel4,
+    mockLookAngel5,
+    mockLookAngel6,
+    mockLookAngel7,
+    mockLookAngel8,
+    mockLookAngel9,
+    mockLookAngel10,
+  ],
+  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+  playbookUniqueCreator: mockUniqueCreatorHocus,
+  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  defaultMoves: [mockCharacterMoveAngel1],
+  defaultMoveCount: 1,
+  moveChoiceCount: 2,
+  defaultVehicleCount: 0,
+  __typename: 'PlaybookCreator',
+};
+
 // ------------------------------------------------------- Mock Playbooks --------------------------------------------------- //
 
 export const mockPlaybooks: Playbook[] = [mockPlaybookAngel, mockPlaybookBattlbabe];

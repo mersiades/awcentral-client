@@ -79,7 +79,7 @@ describe('Rendering BattleVehicleForm', () => {
     expect(setButton.disabled).toEqual(true);
     const nameInput = screen.getByRole('textbox', { name: 'name-input' }) as HTMLInputElement;
     expect(nameInput.value).toEqual(DEFAULT_VEHICLE_NAME);
-    const frame = screen.getByRole('heading', { name: 'Frame' }) as HTMLHeadingElement;
+    const frame = screen.getByRole('heading', { name: 'frame-value' }) as HTMLHeadingElement;
     expect(frame.textContent).toEqual(VehicleFrameType.medium);
     const speed = screen.getByRole('heading', { name: 'Speed' }) as HTMLHeadingElement;
     expect(speed.textContent).toEqual('0');
@@ -119,7 +119,7 @@ describe('Rendering BattleVehicleForm', () => {
     // Choose vehicle frame
     const largeFramePill = screen.getByTestId(`${VehicleFrameType.large.toLowerCase()}-bo-pill`);
     userEvent.click(largeFramePill);
-    const frame = screen.getByRole('heading', { name: 'Frame' }) as HTMLHeadingElement;
+    const frame = screen.getByRole('heading', { name: 'frame-value' }) as HTMLHeadingElement;
     expect(frame.textContent).toEqual(VehicleFrameType.large);
 
     // Select a strength
