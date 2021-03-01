@@ -50,6 +50,7 @@ export const getSetGangOR = (character: Character, gangInput: GangInput) => {
       playbookUnique: optimisticPlaybookUnique,
       __typename: 'Character',
     },
+    __typename: 'Mutation',
   };
 };
 

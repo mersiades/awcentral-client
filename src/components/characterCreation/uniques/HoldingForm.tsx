@@ -11,7 +11,7 @@ import SingleRedBox from '../../SingleRedBox';
 import { StyledMarkdown } from '../../styledComponents';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import SET_HOLDING, { SetHoldingData, SetHoldingVars } from '../../../mutations/setHolding';
+import SET_HOLDING, { getSetHoldingOR, SetHoldingData, SetHoldingVars } from '../../../mutations/setHolding';
 import { CharacterCreationSteps, GangSize, HoldingSize, PlaybookType } from '../../../@types/enums';
 import { HoldingInput } from '../../../@types';
 import { GangOption, HoldingOption } from '../../../@types/staticDataInterfaces';
@@ -151,7 +151,7 @@ const HoldingForm: FC = () => {
       };
 
       try {
-        await setHolding({
+        setHolding({
           variables: {
             gameRoleId: userGameRole.id,
             characterId: character.id,
@@ -159,6 +159,7 @@ const HoldingForm: FC = () => {
             vehicleCount,
             battleVehicleCount,
           },
+          optimisticResponse: getSetHoldingOR(character, holdingInput) as SetHoldingData,
         });
 
         if (!character.hasCompletedCharacterCreation) {

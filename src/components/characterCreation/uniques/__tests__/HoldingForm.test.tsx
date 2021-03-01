@@ -9,15 +9,13 @@ import { mockKeycloakStub } from '../../../../../__mocks__/@react-keycloak/web';
 import {
   blankCharacter,
   holdingOption1,
-  holdingOption2,
   mockCharacter2,
   mockGame5,
-  mockGangCreator,
   mockHoldingCreator,
   mockKeycloakUserInfo1,
 } from '../../../../tests/mocks';
 import { renderWithRouter } from '../../../../tests/test-utils';
-import { mockPlayBookCreatorQueryChopper, mockPlayBookCreatorQueryHardHolder } from '../../../../tests/mockQueries';
+import { mockPlayBookCreatorQueryHardHolder } from '../../../../tests/mockQueries';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
@@ -132,7 +130,6 @@ describe('Rendering HoldingForm', () => {
 
     // Select first weakness
     userEvent.click(weakness1);
-    // const surplusValue = screen.getByRole('heading', { name: 'surplus-value' });
     expect(surplusValue.textContent).toContain('2');
     expect(wantsBox.textContent).toContain('savagery');
 
