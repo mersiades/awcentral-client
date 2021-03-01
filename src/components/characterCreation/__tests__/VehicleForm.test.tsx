@@ -1,14 +1,14 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { InMemoryCache } from '@apollo/client';
 
 import VehicleForm from '../VehicleForm';
 import { mockKeycloakStub } from '../../../../__mocks__/@react-keycloak/web';
-import { blankCharacter, mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../tests/mocks';
+import { blankCharacter, mockCarCreator, mockCharacter2, mockGame5, mockKeycloakUserInfo1 } from '../../../tests/mocks';
 import { renderWithRouter } from '../../../tests/test-utils';
-import { PlaybookType, VehicleFrameType } from '../../../@types/enums';
+import { VehicleFrameType } from '../../../@types/enums';
 import { mockVehicleCreatorQuery } from '../../../tests/mockQueries';
-import { InMemoryCache } from '@apollo/client';
-import { Game } from '../../../@types/dataInterfaces';
 import { DEFAULT_VEHICLE_NAME } from '../../../config/constants';
 
 jest.mock('@react-keycloak/web', () => {
@@ -20,11 +20,11 @@ jest.mock('@react-keycloak/web', () => {
 });
 
 describe('Rendering VehicleForm', () => {
-  const mockNavigationOnSet = jest.fn();
-
   let cache = new InMemoryCache();
 
-  const mockGame: Game = {
+  const mockNavigationOnSet = jest.fn();
+
+  const mockGame = {
     ...mockGame5,
     gameRoles: [
       mockGame5.gameRoles[0],
@@ -42,10 +42,6 @@ describe('Rendering VehicleForm', () => {
             playbook: mockCharacter2.playbook,
             name: mockCharacter2.name,
             looks: mockCharacter2.looks,
-            statsBlock: mockCharacter2.statsBlock,
-            gear: mockCharacter2.gear,
-            playbookUnique: mockCharacter2.playbookUnique,
-            characterMoves: mockCharacter2.characterMoves,
           },
         ],
       },
@@ -56,48 +52,16 @@ describe('Rendering VehicleForm', () => {
     cache = new InMemoryCache();
   });
 
-  test('should load an empty vehicle into the form', async () => {
-    const game = {
-      ...mockGame5,
-      gameRoles: [
-        mockGame5.gameRoles[0],
-        mockGame5.gameRoles[1],
-        {
-          ...mockGame5.gameRoles[2],
-          characters: [
-            {
-              id: mockCharacter2.id,
-              hasCompletedCharacterCreation: mockCharacter2.hasCompletedCharacterCreation,
-              hasPlusOneForward: false,
-              harm: mockCharacter2.harm,
-              name: mockCharacter2.name,
-              playbook: PlaybookType.driver,
-              looks: mockCharacter2.looks,
-              statsBlock: mockCharacter2.statsBlock,
-              gear: mockCharacter2.gear,
-              barter: mockCharacter2.barter,
-              vehicleCount: 0,
-              playbookUnique: undefined,
-              characterMoves: [],
-              hxBlock: mockCharacter2.hxBlock,
-              vehicles: [],
-              battleVehicles: [],
-              holds: [],
-              battleVehicleCount: 0,
-            },
-          ],
-        },
-      ],
-    };
-
+  test('should render VehicleForm with blank vehicle', async () => {
     renderWithRouter(
       <VehicleForm existingVehicle={undefined} navigateOnSet={mockNavigationOnSet} />,
       `/character-creation/${mockGame5.id}?step=8`,
       {
         isAuthenticated: true,
         apolloMocks: [mockVehicleCreatorQuery],
-        injectedGame: game,
+        injectedGame: mockGame,
         injectedUserId: mockKeycloakUserInfo1.sub,
+        cache,
       }
     );
 
@@ -116,5 +80,60 @@ describe('Rendering VehicleForm', () => {
     expect(armor.textContent).toEqual('0');
     const massive = screen.getByRole('heading', { name: 'Massive' }) as HTMLHeadingElement;
     expect(massive.textContent).toEqual('2');
+  });
+
+  test('should enable SET button once form is filled in', async () => {
+    const vehicleName = 'my-vehicle';
+    renderWithRouter(
+      <VehicleForm existingVehicle={undefined} navigateOnSet={mockNavigationOnSet} />,
+      `/character-creation/${mockGame5.id}?step=9`,
+      {
+        isAuthenticated: true,
+        injectedGame: mockGame,
+        apolloMocks: [mockVehicleCreatorQuery],
+        injectedUserId: mockKeycloakUserInfo1.sub,
+        cache,
+      }
+    );
+
+    await screen.findByTestId('vehicle-form');
+
+    // Enter name for battle vehicle
+    const nameInput = screen.getByRole('textbox', { name: 'name-input' }) as HTMLInputElement;
+    nameInput.setSelectionRange(0, DEFAULT_VEHICLE_NAME.length);
+    userEvent.type(nameInput, vehicleName);
+    expect(nameInput.value).toEqual(vehicleName);
+
+    // Choose vehicle frame
+    const largeFramePill = screen.getByTestId(`${VehicleFrameType.large.toLowerCase()}-bo-pill`);
+    userEvent.click(largeFramePill);
+    const frame = screen.getByRole('heading', { name: 'frame-value' }) as HTMLHeadingElement;
+    expect(frame.textContent).toEqual(VehicleFrameType.large);
+
+    // Select a strength
+    const strengthPill = screen.getByTestId(`${mockCarCreator.strengths[0]}-option-pill`);
+    userEvent.click(strengthPill);
+
+    // Select a weakness
+    const weaknessPill = screen.getByTestId(`${mockCarCreator.weaknesses[0]}-option-pill`);
+    userEvent.click(weaknessPill);
+
+    // Select a look
+    const lookPill = screen.getByTestId(`${mockCarCreator.looks[0]}-option-pill`);
+    userEvent.click(lookPill);
+
+    // Select two battle options
+    const speedOption = screen.getByTestId(`${mockCarCreator.battleOptions[0].name}-pill`);
+    userEvent.click(speedOption);
+    const speed = screen.getByRole('heading', { name: 'Speed' }) as HTMLHeadingElement;
+    expect(speed.textContent).toEqual('1');
+    const armorOption = screen.getByTestId(`${mockCarCreator.battleOptions[3].name}-pill`);
+    userEvent.click(armorOption);
+    const armor = screen.getByRole('heading', { name: 'Armor' }) as HTMLHeadingElement;
+    expect(armor.textContent).toEqual('1');
+
+    // Check SET enabled
+    const setButton = screen.getByRole('button', { name: 'SET' }) as HTMLButtonElement;
+    expect(setButton.disabled).toEqual(false);
   });
 });
