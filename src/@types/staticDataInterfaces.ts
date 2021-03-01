@@ -247,6 +247,7 @@ export interface GangOption {
   modifier?: string;
   // For example, +rich, -savage, +Vulnerable: disease
   tag?: string;
+  __typename?: 'GangOption';
 }
 
 export interface GangCreator {
@@ -260,6 +261,7 @@ export interface GangCreator {
   defaultTags: string[];
   strengths: GangOption[];
   weaknesses: GangOption[];
+  __typename?: 'GangCreator';
 }
 
 export interface HoldingOption {

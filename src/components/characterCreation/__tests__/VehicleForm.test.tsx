@@ -72,13 +72,13 @@ describe('Rendering VehicleForm', () => {
     expect(nameInput.value).toEqual(DEFAULT_VEHICLE_NAME);
     const frame = screen.getByRole('heading', { name: 'frame-value' }) as HTMLHeadingElement;
     expect(frame.textContent).toEqual(VehicleFrameType.medium);
-    const speed = screen.getByRole('heading', { name: 'Speed' }) as HTMLHeadingElement;
+    const speed = screen.getByRole('heading', { name: 'speed-value' }) as HTMLHeadingElement;
     expect(speed.textContent).toEqual('0');
-    const handling = screen.getByRole('heading', { name: 'Handling' }) as HTMLHeadingElement;
+    const handling = screen.getByRole('heading', { name: 'handling-value' }) as HTMLHeadingElement;
     expect(handling.textContent).toEqual('0');
-    const armor = screen.getByRole('heading', { name: 'Armor' }) as HTMLHeadingElement;
+    const armor = screen.getByRole('heading', { name: 'armor-value' }) as HTMLHeadingElement;
     expect(armor.textContent).toEqual('0');
-    const massive = screen.getByRole('heading', { name: 'Massive' }) as HTMLHeadingElement;
+    const massive = screen.getByRole('heading', { name: 'massive-value' }) as HTMLHeadingElement;
     expect(massive.textContent).toEqual('2');
   });
 
@@ -125,11 +125,11 @@ describe('Rendering VehicleForm', () => {
     // Select two battle options
     const speedOption = screen.getByTestId(`${mockCarCreator.battleOptions[0].name}-pill`);
     userEvent.click(speedOption);
-    const speed = screen.getByRole('heading', { name: 'Speed' }) as HTMLHeadingElement;
+    const speed = screen.getByRole('heading', { name: 'speed-value' }) as HTMLHeadingElement;
     expect(speed.textContent).toEqual('1');
     const armorOption = screen.getByTestId(`${mockCarCreator.battleOptions[3].name}-pill`);
     userEvent.click(armorOption);
-    const armor = screen.getByRole('heading', { name: 'Armor' }) as HTMLHeadingElement;
+    const armor = screen.getByRole('heading', { name: 'armor-value' }) as HTMLHeadingElement;
     expect(armor.textContent).toEqual('1');
 
     // Check SET enabled

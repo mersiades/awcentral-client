@@ -80,6 +80,7 @@ import {
   mockPlaybookCreatorMoveAngel1,
   mockPlaybookCreatorMaestroD,
   mockPlaybookCreatorHocus,
+  mockPlaybookCreatorChopper,
 } from './mocks';
 
 export const mockGameRolesByUserId: MockedResponse = {
@@ -2466,6 +2467,22 @@ export const mockPlayBookCreatorQueryHocus: MockedResponse = {
       data: {
         __typename: 'Mutation',
         playbookCreator: mockPlaybookCreatorHocus,
+      },
+    };
+  },
+};
+
+export const mockPlayBookCreatorQueryChopper: MockedResponse = {
+  request: {
+    query: PLAYBOOK_CREATOR,
+    variables: { playbookType: PlaybookType.chopper },
+  },
+  result: () => {
+    // console.log('mockPlayBookCreatorQueryChopper');
+    return {
+      data: {
+        __typename: 'Mutation',
+        playbookCreator: mockPlaybookCreatorChopper,
       },
     };
   },

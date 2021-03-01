@@ -14,6 +14,9 @@ import { Gang } from '../../../@types/dataInterfaces';
 import SET_GANG, { SetGangData, SetGangVars } from '../../../mutations/setGang';
 import { GangInput } from '../../../@types';
 import { omit } from 'lodash';
+import DoubleRedBox from '../../DoubleRedBox';
+import SingleRedBox from '../../SingleRedBox';
+import RedTagsBox from '../../RedTagsBox';
 
 interface GangFormProps {
   existingGang?: Gang;
@@ -168,7 +171,6 @@ const GangForm: FC<GangFormProps> = ({ existingGang }) => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType: PlaybookType.chopper },
   });
-
   const gangCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator?.gangCreator;
   const [setGang, { loading: settingGang }] = useMutation<SetGangData, SetGangVars>(SET_GANG);
 
@@ -235,20 +237,36 @@ const GangForm: FC<GangFormProps> = ({ existingGang }) => {
   return (
     <Box
       data-testid="gang-form"
-      width="60vw"
-      direction="column"
+      justify="start"
+      width="85vw"
       align="start"
-      justify="between"
-      overflow="auto"
-      // flex="grow"
+      style={{ maxWidth: '742px' }}
+      margin={{ bottom: '24px' }}
     >
-      <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
-        !!character?.name ? character.name?.toUpperCase() : '...'
-      }'S GANG`}</HeadingWS>
-      <Box fill="horizontal" direction="row" align="start" justify="between">
-        <Box fill="horizontal" pad="12px" gap="6px">
-          {!!gangCreator && <ParagraphWS style={{ maxWidth: 'unset' }}>{gangCreator.intro}</ParagraphWS>}
-          <ParagraphWS>Then, choose {!!gangCreator ? gangCreator?.strengthChoiceCount : 2}:</ParagraphWS>
+      <Box direction="row" fill="horizontal" align="center" justify="between">
+        <HeadingWS crustReady={crustReady} level={2} style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}>{`${
+          !!character?.name ? character.name?.toUpperCase() : '...'
+        }'S GANG`}</HeadingWS>
+        <ButtonWS
+          primary
+          label={settingGang ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+          onClick={() => !settingGang && handleSubmitGang()}
+          disabled={
+            settingGang ||
+            (!!gangCreator && strengths.length < gangCreator.strengthChoiceCount) ||
+            (!!gangCreator && weaknesses.length < gangCreator.weaknessChoiceCount)
+          }
+        />
+      </Box>
+      {!!gangCreator && (
+        <ParagraphWS style={{ maxWidth: 'unset' }} margin={{ top: '0px' }}>
+          {gangCreator.intro}
+        </ParagraphWS>
+      )}
+      <ParagraphWS>Then, choose {!!gangCreator ? gangCreator?.strengthChoiceCount : 2}:</ParagraphWS>
+
+      <Box direction="row" fill="horizontal" gap="12px">
+        <Box>
           {!!gangCreator &&
             gangCreator.strengths.map((option) => {
               return (
@@ -257,6 +275,7 @@ const GangForm: FC<GangFormProps> = ({ existingGang }) => {
                   checked={strengths.map((str: GangOption) => str.id).includes(option.id)}
                   label={option.description}
                   onChange={() => handleStrengthSelect(option)}
+                  style={{ marginBottom: '3px' }}
                 />
               );
             })}
@@ -269,62 +288,18 @@ const GangForm: FC<GangFormProps> = ({ existingGang }) => {
                   checked={weaknesses.map((wk: GangOption) => wk.id).includes(option.id)}
                   label={option.description}
                   onChange={() => handleWeaknessSelect(option)}
+                  style={{ marginBottom: '3px' }}
                 />
               );
             })}
         </Box>
-        <Box flex="grow" width="150px" pad="12px" gap="12px">
-          <Box fill="horizontal" align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
-            <RedBox pad="12px" align="center" fill justify="center">
-              <HeadingWS crustReady={crustReady} level={3} margin={{ horizontal: '9px', bottom: '-3px', top: '3px' }}>
-                {size}
-              </HeadingWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Size</TextWS>
+        <Box align="center" width="150px" flex="grow" fill="vertical" style={{ maxWidth: '150px' }}>
+          <DoubleRedBox value={size} label="Size" width="150px" height="100%" />
+          <Box fill="horizontal" direction="row" justify="between" flex="grow">
+            <SingleRedBox value={harm} label="Harm" />
+            <SingleRedBox value={armor} label="Armor" />
           </Box>
-          <Box fill="horizontal" direction="row" justify="between">
-            <Box align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
-              <RedBox align="center" width="50px" fill="vertical" justify="center">
-                <HeadingWS
-                  crustReady={crustReady}
-                  level="2"
-                  margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}
-                >
-                  {harm}
-                </HeadingWS>
-              </RedBox>
-              <TextWS style={{ fontWeight: 600 }}>Harm</TextWS>
-            </Box>
-            <Box align="center" justify="between" height="90px" gap="6px" margin={{ bottom: '6px' }}>
-              <RedBox align="center" width="50px" fill="vertical" justify="center">
-                <HeadingWS
-                  crustReady={crustReady}
-                  level="2"
-                  margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}
-                >
-                  {armor}
-                </HeadingWS>
-              </RedBox>
-              <TextWS style={{ fontWeight: 600 }}>Armor</TextWS>
-            </Box>
-          </Box>
-          <Box align="center" justify="between" height="180px" gap="6px" margin={{ bottom: '6px' }}>
-            <RedBox pad="12px" fill justify="center">
-              <TextWS>{tags.join(', ')}</TextWS>
-            </RedBox>
-            <TextWS style={{ fontWeight: 600 }}>Tags</TextWS>
-          </Box>
-          <ButtonWS
-            primary
-            fill="horizontal"
-            label={settingGang ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
-            onClick={() => !settingGang && handleSubmitGang()}
-            disabled={
-              settingGang ||
-              (!!gangCreator && strengths.length < gangCreator.strengthChoiceCount) ||
-              (!!gangCreator && weaknesses.length < gangCreator.weaknessChoiceCount)
-            }
-          />
+          <RedTagsBox tags={tags} label="Tags" height="100%" width="150px" />
         </Box>
       </Box>
     </Box>

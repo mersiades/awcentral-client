@@ -27,7 +27,7 @@ const SingleRedBox: FC<SingleRedBoxProps> = ({ value, label, loading, onIncrease
       <Box aria-label={`${label}-hx`} direction="row">
         <RedBox align="center" width="50px" fill="vertical" justify="center">
           <HeadingWS
-            aria-label={label}
+            aria-label={`${label.toLowerCase()}-value`}
             crustReady={crustReady}
             level="2"
             margin={{ left: '9px', right: '9px', bottom: '3px', top: '9px' }}

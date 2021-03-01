@@ -1665,6 +1665,8 @@ export const mockPlaybookCreatorDriver: PlaybookCreator = {
   defaultVehicleCount: 1,
 };
 
+// ##### -------------------------------------------------- Brainer/Brainer Gear ----------------------------------------------##### //
+
 export const mockBrainerGearCreator: BrainerGearCreator = {
   id: 'mock-brainer-gear-creator-id',
   gear: [
@@ -1688,6 +1690,8 @@ export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
   workspaceCreator: dummyWorkspaceCreator,
   __typename: 'PlaybookUniqueCreator',
 };
+
+// ##### -------------------------------------------------- Maestro D/Establishment ----------------------------------------------##### //
 
 export const mockSecurityOption1: SecurityOption = {
   id: 'security-option-id-1',
@@ -1770,6 +1774,8 @@ export const mockPlaybookCreatorMaestroD: PlaybookCreator = {
   defaultVehicleCount: 0,
   __typename: 'PlaybookCreator',
 };
+
+// ##### -------------------------------------------------- Hocus/Followers ----------------------------------------------##### //
 
 export const strengthOption1: FollowersOption = {
   id: 'strength-option-id-1',
@@ -1869,6 +1875,100 @@ export const mockPlaybookCreatorHocus: PlaybookCreator = {
   ],
   statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
   playbookUniqueCreator: mockUniqueCreatorHocus,
+  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  defaultMoves: [mockCharacterMoveAngel1],
+  defaultMoveCount: 1,
+  moveChoiceCount: 2,
+  defaultVehicleCount: 0,
+  __typename: 'PlaybookCreator',
+};
+
+// ##### -------------------------------------------------- Chopper/Gang ----------------------------------------------##### //
+
+export const mockGangOption1: GangOption = {
+  id: 'mock-gang-option-id-1',
+  description: "your gang's well-armed. +1harm",
+  modifier: '+1harm',
+  tag: '',
+  __typename: 'GangOption',
+};
+
+export const mockGangOption2: GangOption = {
+  id: 'mock-gang-option-id-2',
+  description: "your gang's well-disciplined. Drop savage.",
+  modifier: '',
+  tag: '-savage',
+  __typename: 'GangOption',
+};
+
+export const mockGangOption3: GangOption = {
+  id: 'mock-gang-option-id-3',
+  description: 'your gang is in significant debt to someone powerful. Vulnerable: obligation.',
+  modifier: '',
+  tag: '+vulnerable: obligation',
+  __typename: 'GangOption',
+};
+
+export const mockGangOption4: GangOption = {
+  id: 'mock-gang-option-id-4',
+  description: 'your gang consists of 30 or so violent bastards. Medium instead of small.',
+  modifier: 'MEDIUM',
+  tag: '',
+  __typename: 'GangOption',
+};
+
+export const mockGangCreator: GangCreator = {
+  id: '',
+  intro: '',
+  defaultSize: GangSize.small,
+  defaultHarm: 2,
+  defaultArmor: 1,
+  strengthChoiceCount: 2,
+  weaknessChoiceCount: 1,
+  defaultTags: ['+savage'],
+  strengths: [mockGangOption1, mockGangOption2],
+  weaknesses: [mockGangOption3, mockGangOption4],
+  __typename: 'GangCreator',
+};
+
+export const mockUniqueCreatorChopper: PlaybookUniqueCreator = {
+  id: 'chopper-playbook-unique-creator-id',
+  type: UniqueTypes.gang,
+  angelKitCreator: dummyAngelKitCreator,
+  brainerGearCreator: dummyBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: dummyEstablishmentCreator,
+  followersCreator: dummyFollowerCreator,
+  gangCreator: mockGangCreator,
+  holdingCreator: dummyHoldingCreator,
+  skinnerGearCreator: dummySkinnerGearCreator,
+  weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
+};
+
+export const mockPlaybookCreatorChopper: PlaybookCreator = {
+  id: 'chopper-playbook-creator-id',
+  playbookType: PlaybookType.chopper,
+  gearInstructions: mockgearInstructionsAngel,
+  improvementInstructions: 'Whenever you roll a highlighted stat...',
+  movesInstructions: 'You get all the basic moves. You get both chopper moves. ',
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  names: [mockNameAngel1, mockNameAngel2],
+  looks: [
+    mockLookAngel1,
+    mockLookAngel2,
+    mockLookAngel3,
+    mockLookAngel4,
+    mockLookAngel5,
+    mockLookAngel6,
+    mockLookAngel7,
+    mockLookAngel8,
+    mockLookAngel9,
+    mockLookAngel10,
+  ],
+  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+  playbookUniqueCreator: mockUniqueCreatorChopper,
   optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
   defaultMoves: [mockCharacterMoveAngel1],
   defaultMoveCount: 1,
