@@ -1977,6 +1977,172 @@ export const mockPlaybookCreatorChopper: PlaybookCreator = {
   __typename: 'PlaybookCreator',
 };
 
+// ##### -------------------------------------------------- Hardholder/Holding ----------------------------------------------##### //
+
+export const holdingOption1: HoldingOption = {
+  id: 'holding-option-id-1',
+  description: 'your population in large, 200-300 souls. Surplus: +1barter, want: +disease',
+  surplusChange: 1,
+  wantChange: ['+disease'],
+  newHoldingSize: HoldingSize.large,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: -2,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption2: HoldingOption = {
+  id: 'holding-option-id-2',
+  description: 'for gigs, add a bustling, widely-known market commons. Surplus: +1barter, want: +strangers',
+  surplusChange: 1,
+  wantChange: ['+strangers'],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '+market commons',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: -2,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption3: HoldingOption = {
+  id: 'holding-option-id-3',
+  description: 'your gang is well-disciplined. Drop unruly.',
+  surplusChange: -2,
+  wantChange: [],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '-unruly',
+  gangHarmChange: -2,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption4: HoldingOption = {
+  id: 'holding-option-id-4',
+  description: 'your armory is sophisticated and extensive. Your gang gets +1harm.',
+  surplusChange: -2,
+  wantChange: [],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: 1,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption5: HoldingOption = {
+  id: 'holding-option-id-5',
+  description: 'your population is decadent and perverse. Surplus: -1barter, want: +savagery.',
+  surplusChange: -1,
+  wantChange: ['+savagery'],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: -2,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption6: HoldingOption = {
+  id: 'holding-option-id-6',
+  description: 'your garage is for shit. It has only 4 vehicles, and only 2 of them are suitable for battle.',
+  surplusChange: -2,
+  wantChange: [],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: -2,
+  newVehicleCount: 2,
+  newBattleVehicleCount: 2,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const mockHoldingCreator: HoldingCreator = {
+  id: 'holding-creator-id',
+  defaultHoldingSize: HoldingSize.medium,
+  instructions:
+    'By default, your holding has:\n\n- 75-150 souls.\n- for gigs, a mix of hunting, crude farming, and scavenging.',
+  defaultSurplus: 1,
+  defaultWant: 'hungry',
+  defaultGigs: ['hunting', 'crude farming', 'scavenging'],
+  defaultArmorBonus: 1,
+  defaultVehiclesCount: 4,
+  defaultBattleVehicleCount: 4,
+  defaultGangSize: GangSize.medium,
+  defaultGangHarm: 2,
+  defaultGangArmor: 1,
+  defaultGangTag: 'unruly',
+  strengthCount: 4,
+  weaknessCount: 2,
+  strengthOptions: [holdingOption1, holdingOption2, holdingOption3, holdingOption4],
+  weaknessOptions: [holdingOption5, holdingOption6],
+  __typename: 'HoldingCreator',
+};
+
+export const mockUniqueCreatorHardHolder: PlaybookUniqueCreator = {
+  id: 'chopper-playbook-unique-creator-id',
+  type: UniqueTypes.holding,
+  angelKitCreator: dummyAngelKitCreator,
+  brainerGearCreator: dummyBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: dummyEstablishmentCreator,
+  followersCreator: dummyFollowerCreator,
+  gangCreator: dummyGangCreator,
+  holdingCreator: mockHoldingCreator,
+  skinnerGearCreator: dummySkinnerGearCreator,
+  weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
+};
+
+export const mockPlaybookCreatorHardHolder: PlaybookCreator = {
+  id: 'hardholder-playbook-creator-id',
+  playbookType: PlaybookType.hardholder,
+  gearInstructions: mockgearInstructionsAngel,
+  improvementInstructions: 'Whenever you roll a highlighted stat...',
+  movesInstructions: 'You get all the basic moves. You get both hardholder moves.  ',
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  names: [mockNameAngel1, mockNameAngel2],
+  looks: [
+    mockLookAngel1,
+    mockLookAngel2,
+    mockLookAngel3,
+    mockLookAngel4,
+    mockLookAngel5,
+    mockLookAngel6,
+    mockLookAngel7,
+    mockLookAngel8,
+    mockLookAngel9,
+    mockLookAngel10,
+  ],
+  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+  playbookUniqueCreator: mockUniqueCreatorHardHolder,
+  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  defaultMoves: [mockCharacterMoveAngel1],
+  defaultMoveCount: 1,
+  moveChoiceCount: 2,
+  defaultVehicleCount: 0,
+  __typename: 'PlaybookCreator',
+};
+
 // ------------------------------------------------------- Mock Playbooks --------------------------------------------------- //
 
 export const mockPlaybooks: Playbook[] = [mockPlaybookAngel, mockPlaybookBattlbabe];

@@ -288,6 +288,7 @@ export interface HoldingOption {
 
   // Ranges from 0 - 2, with -1 representing null
   newArmorBonus: number;
+  __typename?: 'HoldingOption';
 }
 
 export interface HoldingCreator {
@@ -308,6 +309,7 @@ export interface HoldingCreator {
   weaknessCount: number;
   strengthOptions: HoldingOption[];
   weaknessOptions: HoldingOption[];
+  __typename?: 'HoldingCreator';
 }
 
 export interface SkinnerGearItem {
