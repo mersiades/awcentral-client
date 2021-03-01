@@ -208,6 +208,7 @@ export interface Gang {
   strengths: GangOption[];
   weaknesses: GangOption[];
   tags: string[];
+  __typename?: 'Gang';
 }
 
 export interface Holding {

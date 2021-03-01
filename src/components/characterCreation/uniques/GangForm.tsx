@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 import { CharacterCreationSteps, GangSize, PlaybookType } from '../../../@types/enums';
 import { GangOption } from '../../../@types/staticDataInterfaces';
 import { Gang } from '../../../@types/dataInterfaces';
-import SET_GANG, { SetGangData, SetGangVars } from '../../../mutations/setGang';
+import SET_GANG, { getSetGangOR, SetGangData, SetGangVars } from '../../../mutations/setGang';
 import { GangInput } from '../../../@types';
 import { omit } from 'lodash';
 import DoubleRedBox from '../../DoubleRedBox';
@@ -192,8 +192,9 @@ const GangForm: FC<GangFormProps> = ({ existingGang }) => {
         tags,
       };
       try {
-        await setGang({
+        setGang({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, gang: gangInput },
+          optimisticResponse: getSetGangOR(character, gangInput) as SetGangData,
         });
 
         if (!character.hasCompletedCharacterCreation) {
