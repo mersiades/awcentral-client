@@ -324,14 +324,33 @@ const HoldingForm: FC = () => {
   // ------------------------------------------------------ Render -------------------------------------------------------- //
 
   return (
-    <Box data-testid="holding-form" width="80vw" direction="column" align="start" justify="between" overflow="auto">
-      <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
-        !!character?.name ? character.name?.toUpperCase() : '...'
-      }'S HOLDING`}</HeadingWS>
-      <Box fill="horizontal" direction="row" align="start" justify="between">
-        <Box fill="horizontal" pad="12px" gap="6px">
-          {!!holdingCreator && <StyledMarkdown>{holdingCreator.instructions}</StyledMarkdown>}
-          <ParagraphWS>Then, choose {!!holdingCreator ? holdingCreator?.strengthCount : 2}:</ParagraphWS>
+    <Box
+      data-testid="holding-form"
+      justify="start"
+      width="85vw"
+      align="start"
+      style={{ maxWidth: '742px' }}
+      margin={{ bottom: '24px' }}
+    >
+      <Box direction="row" fill="horizontal" align="center" justify="between">
+        <HeadingWS crustReady={crustReady} level={2} style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}>{`${
+          !!character?.name ? character.name?.toUpperCase() : '...'
+        }'S HOLDING`}</HeadingWS>
+        <ButtonWS
+          primary
+          label={settingHolding ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+          onClick={() => !settingHolding && handleSubmitHolding()}
+          disabled={
+            settingHolding ||
+            (!!holdingCreator && selectedStrengths.length < holdingCreator.strengthCount) ||
+            (!!holdingCreator && selectedWeaknesses.length < holdingCreator.weaknessCount)
+          }
+        />
+      </Box>
+      {!!holdingCreator && <StyledMarkdown>{holdingCreator.instructions}</StyledMarkdown>}
+      <ParagraphWS>Then, choose {!!holdingCreator ? holdingCreator?.strengthCount : 2}:</ParagraphWS>
+      <Box direction="row" fill="horizontal" gap="12px">
+        <Box>
           {!!holdingCreator &&
             holdingCreator.strengthOptions.map((option) => {
               return (
@@ -356,37 +375,18 @@ const HoldingForm: FC = () => {
               );
             })}
         </Box>
-        <Box flex="grow" width="150px" pad="12px" gap="12px">
-          <HeadingWS level={4} margin={{ vertical: '3px' }} alignSelf="center">
-            Holding
-          </HeadingWS>
-          <DoubleRedBox value={holdingSize} label="Size" />
-          <DoubleRedBox value={`+${surplus}barter`} label="Surplus" />
-          {wants.length > 0 && <RedTagsBox tags={wants} label="Wants" height="100%" />}
-          {gigs.length > 0 && <RedTagsBox tags={gigs} label="Gigs" height="100%" />}
-          <DoubleRedBox value={`+${gangDefenseArmorBonus}armor`} label="Defense bonus" />
-        </Box>
-        <Box flex="grow" width="150px" pad="12px" gap="12px">
-          <HeadingWS level={4} margin={{ vertical: '3px' }} alignSelf="center">
-            Gang
-          </HeadingWS>
-          <DoubleRedBox value={gangSize} label="Size" />
-          <Box fill="horizontal" direction="row" justify="between">
+        <Box align="center" width="200px" flex="grow" fill="vertical" style={{ maxWidth: '200px' }}>
+          <DoubleRedBox value={holdingSize} label="Holding Size" width="200px" height="90px" />
+          <DoubleRedBox value={`+${surplus}barter`} label="Surplus" width="200px" height="90px" />
+          <RedTagsBox tags={wants} label="Wants" width="200px" height="150px" />
+          <RedTagsBox tags={gigs} label="Gigs" width="200px" height="200px" />
+          <DoubleRedBox value={`+${gangDefenseArmorBonus}armor`} label="Defense bonus" width="200px" height="90px" />
+          <DoubleRedBox value={gangSize} label="Gang Size" width="200px" height="90px" />
+          <Box fill="horizontal" direction="row" justify="around" flex="grow">
             <SingleRedBox value={gangHarm} label="Harm" />
             <SingleRedBox value={gangArmor} label="Armor" />
           </Box>
-          {gangTags.length > 0 && <RedTagsBox tags={gangTags} label="Tags" height="100%" />}
-          <ButtonWS
-            primary
-            fill="horizontal"
-            label={settingHolding ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
-            onClick={() => !settingHolding && handleSubmitHolding()}
-            disabled={
-              settingHolding ||
-              (!!holdingCreator && selectedStrengths.length < holdingCreator.strengthCount) ||
-              (!!holdingCreator && selectedWeaknesses.length < holdingCreator.weaknessCount)
-            }
-          />
+          <RedTagsBox tags={gangTags} label="Tags" width="200px" height="90px" />
         </Box>
       </Box>
     </Box>

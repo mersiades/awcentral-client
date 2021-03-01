@@ -69,11 +69,10 @@ describe('Rendering HoldingForm', () => {
 
     await screen.findByTestId('holding-form');
     await screen.findByRole('heading', { name: `${mockCharacter2.name?.toUpperCase()}'S HOLDING` });
-    screen.getByRole('heading', { name: 'Holding' });
-    screen.getByRole('heading', { name: 'Gang' });
-    const sizeValues = screen.getAllByRole('heading', { name: 'size-value' });
-    expect(sizeValues[0].textContent).toEqual(mockHoldingCreator.defaultHoldingSize);
-    expect(sizeValues[1].textContent).toEqual(mockHoldingCreator.defaultGangSize);
+    const holdingSize = screen.getByRole('heading', { name: 'holding size-value' });
+    expect(holdingSize.textContent).toEqual(mockHoldingCreator.defaultHoldingSize);
+    const gangSize = screen.getByRole('heading', { name: 'gang size-value' });
+    expect(gangSize.textContent).toEqual(mockHoldingCreator.defaultGangSize);
     const surplusValue = screen.getByRole('heading', { name: 'surplus-value' });
     expect(surplusValue.textContent).toContain(mockHoldingCreator.defaultSurplus.toString());
     const defenseBonusValue = screen.getByRole('heading', { name: 'defense bonus-value' });
@@ -106,7 +105,7 @@ describe('Rendering HoldingForm', () => {
 
     // Select first strength
     userEvent.click(strength1);
-    const holdingSizeBox = screen.getAllByRole('heading', { name: 'size-value' })[0];
+    const holdingSizeBox = screen.getByRole('heading', { name: 'holding size-value' });
     expect(holdingSizeBox.textContent).toEqual(holdingOption1.newHoldingSize);
     const wantsBox = screen.getByTestId('wants-tags-box');
     expect(wantsBox.textContent).toContain('disease');
@@ -119,11 +118,10 @@ describe('Rendering HoldingForm', () => {
     const gigsBox = screen.getByTestId('gigs-tags-box');
     expect(gigsBox.textContent).toContain('market commons');
 
-    // Select thrid strength
+    // Select third strength
     userEvent.click(strength3);
-    // TODO: Persist tags box on screen even when empty
-    // const tagsBox = screen.getByTestId('tags-tags-box');
-    // expect(gigsBox.textContent).toEqual('');
+    const tagsBox = screen.getByTestId('tags-tags-box');
+    expect(tagsBox.textContent).toEqual('Tags');
 
     // Select fourth strength
     userEvent.click(strength4);
