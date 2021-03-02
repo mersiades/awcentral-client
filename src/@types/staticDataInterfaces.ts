@@ -336,6 +336,7 @@ export interface WeaponsCreator {
   bigFuckOffGuns: string[];
   seriousGuns: string[];
   backupWeapons: string[];
+  __typename?: 'WeaponsCreator';
 }
 
 export interface WorkspaceCreator {

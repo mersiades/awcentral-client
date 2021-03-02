@@ -229,7 +229,7 @@ const CharacterGearForm: FC = () => {
 
         <TextWS>Select an item to add, edit or delete it, or just type your own.</TextWS>
 
-        <Box direction="row">
+        <Box direction="row" fill="horizontal" justify="center">
           <Box
             ref={instructionsBoxRef}
             fill

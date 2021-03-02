@@ -1593,6 +1593,52 @@ export const mockFirearmBaseOption: TaggedItem = {
 
 // ------------------------------------------------------- Mock PlaybookCreators --------------------------------------------------- //
 
+export const mockUniqueCreatorDefault: PlaybookUniqueCreator = {
+  id: 'default-playbook-unique-creator-id',
+  type: UniqueTypes.brainerGear,
+  angelKitCreator: dummyAngelKitCreator,
+  brainerGearCreator: dummyBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: dummyEstablishmentCreator,
+  followersCreator: dummyFollowerCreator,
+  gangCreator: dummyGangCreator,
+  holdingCreator: dummyHoldingCreator,
+  skinnerGearCreator: dummySkinnerGearCreator,
+  weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
+};
+
+export const mockPlaybookCreatorDefault: PlaybookCreator = {
+  id: 'default-playbook-creator-id',
+  playbookType: PlaybookType.angel,
+  gearInstructions: mockgearInstructionsAngel,
+  improvementInstructions: 'Whenever you roll a highlighted stat...',
+  movesInstructions: 'You get all the basic moves. Choose 2 angel moves.  ',
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  names: [mockNameAngel1, mockNameAngel2],
+  looks: [
+    mockLookAngel1,
+    mockLookAngel2,
+    mockLookAngel3,
+    mockLookAngel4,
+    mockLookAngel5,
+    mockLookAngel6,
+    mockLookAngel7,
+    mockLookAngel8,
+    mockLookAngel9,
+    mockLookAngel10,
+  ],
+  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+  playbookUniqueCreator: mockUniqueCreatorAngel,
+  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  defaultMoves: [mockCharacterMoveAngel1],
+  defaultMoveCount: 1,
+  moveChoiceCount: 2,
+  defaultVehicleCount: 0,
+  __typename: 'PlaybookCreator',
+};
+
 export const mockFirearmOption: ItemCharacteristic = {
   id: 'mock-firearm-option-id',
   description: 'antique',
@@ -1638,31 +1684,12 @@ export const mockCustomWeaponsCreator: CustomWeaponsCreator = {
 };
 
 export const mockPlaybookCreatorDriver: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
   id: 'driver-playbook-creator-id',
   playbookType: PlaybookType.driver,
-  gearInstructions: mockgearInstructionsAngel,
-  improvementInstructions: 'Whenever you roll a highlighted stat...',
   movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
   hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
-  names: [mockNameAngel1, mockNameAngel2],
-  looks: [
-    mockLookAngel1,
-    mockLookAngel2,
-    mockLookAngel3,
-    mockLookAngel4,
-    mockLookAngel5,
-    mockLookAngel6,
-    mockLookAngel7,
-    mockLookAngel8,
-    mockLookAngel9,
-    mockLookAngel10,
-  ],
-  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
-  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
-  defaultMoves: [mockCharacterMoveAngel1],
-  defaultMoveCount: 1,
-  moveChoiceCount: 2,
-  defaultVehicleCount: 1,
+  playbookUniqueCreator: undefined,
 };
 
 // ##### -------------------------------------------------- Brainer/Brainer Gear ----------------------------------------------##### //
@@ -1676,19 +1703,10 @@ export const mockBrainerGearCreator: BrainerGearCreator = {
 };
 
 export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
   id: 'brainer-playbook-unique-creator-id',
   type: UniqueTypes.brainerGear,
-  angelKitCreator: dummyAngelKitCreator,
   brainerGearCreator: mockBrainerGearCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
-  establishmentCreator: dummyEstablishmentCreator,
-  followersCreator: dummyFollowerCreator,
-  gangCreator: dummyGangCreator,
-  holdingCreator: dummyHoldingCreator,
-  skinnerGearCreator: dummySkinnerGearCreator,
-  weaponsCreator: dummyWeaponsCreator,
-  workspaceCreator: dummyWorkspaceCreator,
-  __typename: 'PlaybookUniqueCreator',
 };
 
 // ##### -------------------------------------------------- Maestro D/Establishment ----------------------------------------------##### //
@@ -1730,49 +1748,19 @@ export const mockEstablishmentCreator: EstablishmentCreator = {
 };
 
 export const mockUniqueCreatorMaestroD: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
   id: 'maestro-d-playbook-unique-creator-id',
   type: UniqueTypes.establishment,
-  angelKitCreator: dummyAngelKitCreator,
-  brainerGearCreator: dummyBrainerGearCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
   establishmentCreator: mockEstablishmentCreator,
-  followersCreator: dummyFollowerCreator,
-  gangCreator: dummyGangCreator,
-  holdingCreator: dummyHoldingCreator,
-  skinnerGearCreator: dummySkinnerGearCreator,
-  weaponsCreator: dummyWeaponsCreator,
-  workspaceCreator: dummyWorkspaceCreator,
-  __typename: 'PlaybookUniqueCreator',
 };
 
 export const mockPlaybookCreatorMaestroD: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
   id: 'maestro-d-playbook-creator-id',
   playbookType: PlaybookType.maestroD,
-  gearInstructions: mockgearInstructionsAngel,
-  improvementInstructions: 'Whenever you roll a highlighted stat...',
   movesInstructions: "You get all the basic moves. Choose 2 maestro d' moves. ",
   hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
-  names: [mockNameAngel1, mockNameAngel2],
-  looks: [
-    mockLookAngel1,
-    mockLookAngel2,
-    mockLookAngel3,
-    mockLookAngel4,
-    mockLookAngel5,
-    mockLookAngel6,
-    mockLookAngel7,
-    mockLookAngel8,
-    mockLookAngel9,
-    mockLookAngel10,
-  ],
-  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
   playbookUniqueCreator: mockUniqueCreatorMaestroD,
-  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
-  defaultMoves: [mockCharacterMoveAngel1],
-  defaultMoveCount: 1,
-  moveChoiceCount: 2,
-  defaultVehicleCount: 0,
-  __typename: 'PlaybookCreator',
 };
 
 // ##### -------------------------------------------------- Hocus/Followers ----------------------------------------------##### //
@@ -1838,49 +1826,18 @@ export const mockFollowersCreator: FollowersCreator = {
 };
 
 export const mockUniqueCreatorHocus: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
   id: 'hocus-playbook-unique-creator-id',
   type: UniqueTypes.followers,
-  angelKitCreator: dummyAngelKitCreator,
-  brainerGearCreator: dummyBrainerGearCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
-  establishmentCreator: dummyEstablishmentCreator,
   followersCreator: mockFollowersCreator,
-  gangCreator: dummyGangCreator,
-  holdingCreator: dummyHoldingCreator,
-  skinnerGearCreator: dummySkinnerGearCreator,
-  weaponsCreator: dummyWeaponsCreator,
-  workspaceCreator: dummyWorkspaceCreator,
-  __typename: 'PlaybookUniqueCreator',
 };
 
 export const mockPlaybookCreatorHocus: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
   id: 'hocus-playbook-creator-id',
   playbookType: PlaybookType.hocus,
-  gearInstructions: mockgearInstructionsAngel,
-  improvementInstructions: 'Whenever you roll a highlighted stat...',
   movesInstructions: 'You get all the basic moves. You get fortunes, and the choose 2 more hocus moves.',
-  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
-  names: [mockNameAngel1, mockNameAngel2],
-  looks: [
-    mockLookAngel1,
-    mockLookAngel2,
-    mockLookAngel3,
-    mockLookAngel4,
-    mockLookAngel5,
-    mockLookAngel6,
-    mockLookAngel7,
-    mockLookAngel8,
-    mockLookAngel9,
-    mockLookAngel10,
-  ],
-  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
   playbookUniqueCreator: mockUniqueCreatorHocus,
-  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
-  defaultMoves: [mockCharacterMoveAngel1],
-  defaultMoveCount: 1,
-  moveChoiceCount: 2,
-  defaultVehicleCount: 0,
-  __typename: 'PlaybookCreator',
 };
 
 // ##### -------------------------------------------------- Chopper/Gang ----------------------------------------------##### //
@@ -1932,49 +1889,18 @@ export const mockGangCreator: GangCreator = {
 };
 
 export const mockUniqueCreatorChopper: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
   id: 'chopper-playbook-unique-creator-id',
   type: UniqueTypes.gang,
-  angelKitCreator: dummyAngelKitCreator,
-  brainerGearCreator: dummyBrainerGearCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
-  establishmentCreator: dummyEstablishmentCreator,
-  followersCreator: dummyFollowerCreator,
   gangCreator: mockGangCreator,
-  holdingCreator: dummyHoldingCreator,
-  skinnerGearCreator: dummySkinnerGearCreator,
-  weaponsCreator: dummyWeaponsCreator,
-  workspaceCreator: dummyWorkspaceCreator,
-  __typename: 'PlaybookUniqueCreator',
 };
 
 export const mockPlaybookCreatorChopper: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
   id: 'chopper-playbook-creator-id',
   playbookType: PlaybookType.chopper,
-  gearInstructions: mockgearInstructionsAngel,
-  improvementInstructions: 'Whenever you roll a highlighted stat...',
   movesInstructions: 'You get all the basic moves. You get both chopper moves. ',
-  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
-  names: [mockNameAngel1, mockNameAngel2],
-  looks: [
-    mockLookAngel1,
-    mockLookAngel2,
-    mockLookAngel3,
-    mockLookAngel4,
-    mockLookAngel5,
-    mockLookAngel6,
-    mockLookAngel7,
-    mockLookAngel8,
-    mockLookAngel9,
-    mockLookAngel10,
-  ],
-  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
   playbookUniqueCreator: mockUniqueCreatorChopper,
-  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
-  defaultMoves: [mockCharacterMoveAngel1],
-  defaultMoveCount: 1,
-  moveChoiceCount: 2,
-  defaultVehicleCount: 0,
-  __typename: 'PlaybookCreator',
 };
 
 // ##### -------------------------------------------------- Hardholder/Holding ----------------------------------------------##### //
@@ -2098,49 +2024,18 @@ export const mockHoldingCreator: HoldingCreator = {
 };
 
 export const mockUniqueCreatorHardHolder: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
   id: 'chopper-playbook-unique-creator-id',
   type: UniqueTypes.holding,
-  angelKitCreator: dummyAngelKitCreator,
-  brainerGearCreator: dummyBrainerGearCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
-  establishmentCreator: dummyEstablishmentCreator,
-  followersCreator: dummyFollowerCreator,
-  gangCreator: dummyGangCreator,
   holdingCreator: mockHoldingCreator,
-  skinnerGearCreator: dummySkinnerGearCreator,
-  weaponsCreator: dummyWeaponsCreator,
-  workspaceCreator: dummyWorkspaceCreator,
-  __typename: 'PlaybookUniqueCreator',
 };
 
 export const mockPlaybookCreatorHardHolder: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
   id: 'hardholder-playbook-creator-id',
   playbookType: PlaybookType.hardholder,
-  gearInstructions: mockgearInstructionsAngel,
-  improvementInstructions: 'Whenever you roll a highlighted stat...',
   movesInstructions: 'You get all the basic moves. You get both hardholder moves.  ',
-  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
-  names: [mockNameAngel1, mockNameAngel2],
-  looks: [
-    mockLookAngel1,
-    mockLookAngel2,
-    mockLookAngel3,
-    mockLookAngel4,
-    mockLookAngel5,
-    mockLookAngel6,
-    mockLookAngel7,
-    mockLookAngel8,
-    mockLookAngel9,
-    mockLookAngel10,
-  ],
-  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
   playbookUniqueCreator: mockUniqueCreatorHardHolder,
-  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
-  defaultMoves: [mockCharacterMoveAngel1],
-  defaultMoveCount: 1,
-  moveChoiceCount: 2,
-  defaultVehicleCount: 0,
-  __typename: 'PlaybookCreator',
 };
 
 // ##### -------------------------------------------------- Skinner/SkinnerGear ----------------------------------------------##### //
@@ -2181,49 +2076,46 @@ export const mockSkinnerGearCreator: SkinnerGearCreator = {
 };
 
 export const mockUniqueCreatorSkinner: PlaybookUniqueCreator = {
-  id: 'chopper-playbook-unique-creator-id',
+  ...mockUniqueCreatorDefault,
+  id: 'skinner-playbook-unique-creator-id',
   type: UniqueTypes.skinnerGear,
-  angelKitCreator: dummyAngelKitCreator,
-  brainerGearCreator: dummyBrainerGearCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
-  establishmentCreator: dummyEstablishmentCreator,
-  followersCreator: dummyFollowerCreator,
-  gangCreator: dummyGangCreator,
-  holdingCreator: dummyHoldingCreator,
   skinnerGearCreator: mockSkinnerGearCreator,
-  weaponsCreator: dummyWeaponsCreator,
-  workspaceCreator: dummyWorkspaceCreator,
-  __typename: 'PlaybookUniqueCreator',
 };
 
 export const mockPlaybookCreatorSkinner: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
   id: 'skinner-playbook-creator-id',
   playbookType: PlaybookType.skinner,
-  gearInstructions: mockgearInstructionsAngel,
-  improvementInstructions: 'Whenever you roll a highlighted stat...',
   movesInstructions: 'You get all the basic moves. Choose 2 skinner moves.  ',
-  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
-  names: [mockNameAngel1, mockNameAngel2],
-  looks: [
-    mockLookAngel1,
-    mockLookAngel2,
-    mockLookAngel3,
-    mockLookAngel4,
-    mockLookAngel5,
-    mockLookAngel6,
-    mockLookAngel7,
-    mockLookAngel8,
-    mockLookAngel9,
-    mockLookAngel10,
-  ],
-  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
   playbookUniqueCreator: mockUniqueCreatorSkinner,
-  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
-  defaultMoves: [mockCharacterMoveAngel1],
-  defaultMoveCount: 1,
-  moveChoiceCount: 2,
-  defaultVehicleCount: 0,
-  __typename: 'PlaybookCreator',
+};
+
+// ##### -------------------------------------------------- Gunlugger/Weapons ----------------------------------------------##### //
+
+export const mockWeaponsCreator: WeaponsCreator = {
+  id: 'weapon-creator-id',
+  bfoGunOptionCount: 1,
+  seriousGunOptionCount: 2,
+  backupWeaponsOptionCount: 1,
+  bigFuckOffGuns: ['silenced sniper rifle (3-harm far hi-tech)', 'mg (3-harm close/far area messy)'],
+  seriousGuns: ['hunting rifle (3-harm far loud)', 'shotgun (3-harm close messy)'],
+  backupWeapons: ['9mm (2-harm close loud)', 'big-ass knife (2-harm hand)'],
+  __typename: 'WeaponsCreator',
+};
+
+export const mockUniqueCreatorGunlugger: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
+  id: 'gunlugger-playbook-unique-creator-id',
+  type: UniqueTypes.weapons,
+  weaponsCreator: mockWeaponsCreator,
+};
+
+export const mockPlaybookCreatorGunlugger: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'gunlugger-playbook-creator-id',
+  playbookType: PlaybookType.gunlugger,
+  movesInstructions: 'You get all the basic moves. Choose 3 gunlugger moves. ',
+  playbookUniqueCreator: mockUniqueCreatorGunlugger,
 };
 
 // ------------------------------------------------------- Mock Playbooks --------------------------------------------------- //
