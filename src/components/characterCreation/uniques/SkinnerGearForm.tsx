@@ -7,7 +7,11 @@ import { Box, CheckBox } from 'grommet';
 import Spinner from '../../Spinner';
 import { ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import SET_SKINNER_GEAR, { SetSkinnerGearData, SetSkinnerGearVars } from '../../../mutations/setSkinnerGear';
+import SET_SKINNER_GEAR, {
+  getSetSkinnerGearOR,
+  SetSkinnerGearData,
+  SetSkinnerGearVars,
+} from '../../../mutations/setSkinnerGear';
 import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../../@types/enums';
 import { SkinnerGearInput } from '../../../@types';
 import { SkinnerGearItem } from '../../../@types/staticDataInterfaces';
@@ -31,7 +35,6 @@ const SkinnerGearForm: FC = () => {
     variables: { playbookType: PlaybookType.skinner },
   });
   const gearCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator?.skinnerGearCreator;
-
   const [setSkinnerGear, { loading: settingSkinnerGear }] = useMutation<SetSkinnerGearData, SetSkinnerGearVars>(
     SET_SKINNER_GEAR
   );
@@ -55,26 +58,14 @@ const SkinnerGearForm: FC = () => {
         luxeGear: selectedGear.map((item) => omit(item, ['__typename']) as SkinnerGearItem),
       };
       try {
-        await setSkinnerGear({
+        setSkinnerGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, skinnerGear },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            setSkinnerGear: {
-              __typename: 'Character',
-              ...character,
-              playbookUnique: {
-                id: character.playbookUnique ? character.playbookUnique.id : 'temporary-id',
-                type: character.playbookUnique ? character.playbookUnique.type : UniqueTypes.skinnerGear,
-                skinnerGear: {
-                  ...skinnerGear,
-                  id: character.playbookUnique?.skinnerGear ? character.playbookUnique.skinnerGear.id : 'temporary-id',
-                },
-              },
-            },
-          },
+          optimisticResponse: getSetSkinnerGearOR(character, skinnerGear) as SetSkinnerGearData,
         });
-        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
-        window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
+          window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+        }
       } catch (error) {
         console.error(error);
       }
@@ -94,74 +85,72 @@ const SkinnerGearForm: FC = () => {
   return (
     <Box
       data-testid="skinner-gear-form"
-      direction="column"
-      width="70vw"
-      align="center"
       justify="start"
-      overflow="auto"
-      flex="grow"
+      width="85vw"
+      align="start"
+      style={{ maxWidth: '742px' }}
+      margin={{ bottom: '24px' }}
     >
-      <HeadingWS crustReady={crustReady} level={2}>
-        {!!character && !!character.name ? `WHAT SPECIAL SKINNER GEAR DOES ${character.name.toUpperCase()} HAVE?` : '...'}
-      </HeadingWS>
-      <Box direction="row">
-        <Box direction="column" fill="horizontal" pad="12px">
-          <ParagraphWS size="large" margin={{ bottom: '6px' }}>
-            Gracious weapons (choose {gearCreator?.graciousWeaponCount})
-          </ParagraphWS>
-          <Box align="start" gap="12px">
-            {!!gearCreator &&
-              gearCreator.graciousWeaponChoices.map((item) => {
-                return (
-                  <CheckBox
-                    key={item.id}
-                    label={
-                      <div>
-                        <TextWS weight="bold">{item.item}</TextWS>
-                      </div>
-                    }
-                    checked={item.id === selectedWeapon?.id}
-                    onChange={() => setSelectedWeapon(item)}
-                  />
-                );
-              })}
-          </Box>
-          <ParagraphWS size="large" margin={{ bottom: '6px' }}>
-            Luxe gear (choose {gearCreator?.luxeGearCount})
-          </ParagraphWS>
-          <Box align="start" gap="12px">
-            {!!gearCreator &&
-              gearCreator.luxeGearChoices.map((item) => {
-                return (
-                  <CheckBox
-                    key={item.id}
-                    label={
-                      <div style={{ maxWidth: '500px' }}>
-                        <TextWS weight="bold">{item.item}</TextWS>
-                        {!!item.note && (
-                          <>
-                            <br />
-                            <TextWS>
-                              <em>{item.note}</em>
-                            </TextWS>
-                          </>
-                        )}
-                      </div>
-                    }
-                    checked={selectedGear.map((gear) => gear.id).includes(item.id)}
-                    onChange={() => handleSelectGear(item)}
-                  />
-                );
-              })}
-          </Box>
+      <Box direction="row" fill="horizontal" align="center" justify="between">
+        <HeadingWS crustReady={crustReady} level={2} style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}>
+          {!!character && !!character.name ? `WHAT SKINNER GEAR DOES ${character.name.toUpperCase()} HAVE?` : '...'}
+        </HeadingWS>
+        <ButtonWS
+          label={settingSkinnerGear ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+          primary
+          disabled={selectedGear.length !== 2 || !selectedWeapon}
+          onClick={() => !settingSkinnerGear && handleSubmitSkinnerGear()}
+        />
+      </Box>
+
+      <Box fill="horizontal">
+        <ParagraphWS size="large" margin={{ bottom: '6px' }}>
+          Gracious weapons (choose {gearCreator?.graciousWeaponCount})
+        </ParagraphWS>
+        <Box align="start" gap="12px">
+          {!!gearCreator &&
+            gearCreator.graciousWeaponChoices.map((item) => {
+              return (
+                <CheckBox
+                  key={item.id}
+                  label={
+                    <div>
+                      <TextWS weight="bold">{item.item}</TextWS>
+                    </div>
+                  }
+                  checked={item.id === selectedWeapon?.id}
+                  onChange={() => setSelectedWeapon(item)}
+                />
+              );
+            })}
         </Box>
-        <Box margin="12px" flex="grow">
-          <ButtonWS
-            label={settingSkinnerGear ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-            primary
-            disabled={selectedGear.length !== 2 || !selectedWeapon}
-            onClick={() => !settingSkinnerGear && handleSubmitSkinnerGear()}
-          />
+        <ParagraphWS size="large" margin={{ bottom: '6px' }}>
+          Luxe gear (choose {gearCreator?.luxeGearCount})
+        </ParagraphWS>
+        <Box align="start" gap="12px">
+          {!!gearCreator &&
+            gearCreator.luxeGearChoices.map((item) => {
+              return (
+                <CheckBox
+                  key={item.id}
+                  label={
+                    <div style={{ maxWidth: '500px' }}>
+                      <TextWS weight="bold">{item.item}</TextWS>
+                      {!!item.note && (
+                        <>
+                          <br />
+                          <TextWS>
+                            <em>{item.note}</em>
+                          </TextWS>
+                        </>
+                      )}
+                    </div>
+                  }
+                  checked={selectedGear.map((gear) => gear.id).includes(item.id)}
+                  onChange={() => handleSelectGear(item)}
+                />
+              );
+            })}
         </Box>
       </Box>
     </Box>

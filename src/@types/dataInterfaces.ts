@@ -232,6 +232,7 @@ export interface SkinnerGear {
   id: string;
   graciousWeapon: SkinnerGearItem;
   luxeGear: SkinnerGearItem[];
+  __typename?: 'SkinnerGear';
 }
 
 export interface Weapons {

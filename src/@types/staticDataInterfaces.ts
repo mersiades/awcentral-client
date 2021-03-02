@@ -316,6 +316,7 @@ export interface SkinnerGearItem {
   id: string;
   item: string;
   note?: string;
+  __typename?: 'SkinnerGearItem';
 }
 
 export interface SkinnerGearCreator {
@@ -324,6 +325,7 @@ export interface SkinnerGearCreator {
   luxeGearCount: number;
   graciousWeaponChoices: SkinnerGearItem[];
   luxeGearChoices: SkinnerGearItem[];
+  __typename?: 'SkinnerGearCreator';
 }
 
 export interface WeaponsCreator {

@@ -2143,6 +2143,89 @@ export const mockPlaybookCreatorHardHolder: PlaybookCreator = {
   __typename: 'PlaybookCreator',
 };
 
+// ##### -------------------------------------------------- Skinner/SkinnerGear ----------------------------------------------##### //
+
+export const mockGraciousWeapon1: SkinnerGearItem = {
+  id: 'skinner-gear-item-id-1',
+  item: 'sleeve pistol (2-harm close reload loud)',
+  note: '',
+  __typename: 'SkinnerGearItem',
+};
+
+export const mockGraciousWeapon2: SkinnerGearItem = {
+  id: 'skinner-gear-item-id-3',
+  item: 'ornate dagger (2-harm hand valuable)',
+  note: '',
+};
+
+export const mockLuxeItem1: SkinnerGearItem = {
+  id: 'skinner-gear-item-id-3',
+  item: 'antique coins (worn valuable)',
+  note: 'Drilled with holes for jewelry',
+};
+
+export const mockLuxeItem2: SkinnerGearItem = {
+  id: 'skinner-gear-item-id-4',
+  item: 'eyeglasses (worn valuable)',
+  note:
+    'You may use these for +1sharp when your eyesight matters, but if you do, without them you get -1sharp when your eyesight matters.',
+};
+
+export const mockSkinnerGearCreator: SkinnerGearCreator = {
+  id: 'skinner-gear-creator-id',
+  graciousWeaponCount: 1,
+  luxeGearCount: 2,
+  graciousWeaponChoices: [mockGraciousWeapon1, mockGraciousWeapon2],
+  luxeGearChoices: [mockLuxeItem1, mockLuxeItem2],
+  __typename: 'SkinnerGearCreator',
+};
+
+export const mockUniqueCreatorSkinner: PlaybookUniqueCreator = {
+  id: 'chopper-playbook-unique-creator-id',
+  type: UniqueTypes.skinnerGear,
+  angelKitCreator: dummyAngelKitCreator,
+  brainerGearCreator: dummyBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: dummyEstablishmentCreator,
+  followersCreator: dummyFollowerCreator,
+  gangCreator: dummyGangCreator,
+  holdingCreator: dummyHoldingCreator,
+  skinnerGearCreator: mockSkinnerGearCreator,
+  weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
+};
+
+export const mockPlaybookCreatorSkinner: PlaybookCreator = {
+  id: 'skinner-playbook-creator-id',
+  playbookType: PlaybookType.skinner,
+  gearInstructions: mockgearInstructionsAngel,
+  improvementInstructions: 'Whenever you roll a highlighted stat...',
+  movesInstructions: 'You get all the basic moves. Choose 2 skinner moves.  ',
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  names: [mockNameAngel1, mockNameAngel2],
+  looks: [
+    mockLookAngel1,
+    mockLookAngel2,
+    mockLookAngel3,
+    mockLookAngel4,
+    mockLookAngel5,
+    mockLookAngel6,
+    mockLookAngel7,
+    mockLookAngel8,
+    mockLookAngel9,
+    mockLookAngel10,
+  ],
+  statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+  playbookUniqueCreator: mockUniqueCreatorSkinner,
+  optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
+  defaultMoves: [mockCharacterMoveAngel1],
+  defaultMoveCount: 1,
+  moveChoiceCount: 2,
+  defaultVehicleCount: 0,
+  __typename: 'PlaybookCreator',
+};
+
 // ------------------------------------------------------- Mock Playbooks --------------------------------------------------- //
 
 export const mockPlaybooks: Playbook[] = [mockPlaybookAngel, mockPlaybookBattlbabe];
