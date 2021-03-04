@@ -9,7 +9,7 @@ import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../.
 import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../../@types/enums';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
-import SET_WORKSPACE, { SetWorkspaceData, SetWorkspaceVars } from '../../../mutations/setWorkspace';
+import SET_WORKSPACE, { getSetWorkspaceOR, SetWorkspaceData, SetWorkspaceVars } from '../../../mutations/setWorkspace';
 import Spinner from '../../Spinner';
 import { WorkspaceInput } from '../../../@types';
 
@@ -46,23 +46,10 @@ const WorkspaceForm: FC = () => {
         projects: character.playbookUnique?.workspace ? character.playbookUnique.workspace.projects : [],
       };
 
-      const optimisticPlaybookUnique = {
-        id: 'temporary-id',
-        type: UniqueTypes.workspace,
-        workspace: { ...workspaceInput, id: !workspaceInput.id ? 'temporary-id' : workspaceInput.id },
-      };
-
       try {
-        await setWorkspace({
+        setWorkspace({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, workspace: workspaceInput },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            setWorkspace: {
-              __typename: 'Character',
-              ...character,
-              playbookUnique: optimisticPlaybookUnique,
-            },
-          },
+          optimisticResponse: getSetWorkspaceOR(character, workspaceInput) as SetWorkspaceData,
         });
         if (!character.hasCompletedCharacterCreation) {
           history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
@@ -116,17 +103,17 @@ const WorkspaceForm: FC = () => {
   return (
     <Box
       data-testid="workspace-form"
-      width="60vw"
+      justify="start"
+      width="85vw"
       align="start"
-      justify="between"
-      overflow="auto"
-      gap="18px"
-      pad={{ bottom: '48px' }}
+      style={{ maxWidth: '742px' }}
+      margin={{ bottom: '24px' }}
+      gap="12px"
     >
       <Box direction="row" fill="horizontal" align="center" justify="between">
-        <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
+        <HeadingWS crustReady={crustReady} level={2} style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}>{`${
           !!character?.name ? character.name?.toUpperCase() : '...'
-        }'S WORKSHOP`}</HeadingWS>
+        }'S WORKSPACE`}</HeadingWS>
         <ButtonWS
           primary
           label={settingWorkspace ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}

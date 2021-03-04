@@ -84,6 +84,7 @@ import {
   mockPlaybookCreatorHardHolder,
   mockPlaybookCreatorSkinner,
   mockPlaybookCreatorGunlugger,
+  mockPlaybookCreatorSavvyhead,
 } from './mocks';
 
 export const mockGameRolesByUserId: MockedResponse = {
@@ -2534,6 +2535,22 @@ export const mockPlayBookCreatorQueryGunlugger: MockedResponse = {
       data: {
         __typename: 'Mutation',
         playbookCreator: mockPlaybookCreatorGunlugger,
+      },
+    };
+  },
+};
+
+export const mockPlayBookCreatorQuerySavvyhead: MockedResponse = {
+  request: {
+    query: PLAYBOOK_CREATOR,
+    variables: { playbookType: PlaybookType.savvyhead },
+  },
+  result: () => {
+    // console.log('mockPlayBookCreatorQuerySavvyhead');
+    return {
+      data: {
+        __typename: 'Mutation',
+        playbookCreator: mockPlaybookCreatorSavvyhead,
       },
     };
   },

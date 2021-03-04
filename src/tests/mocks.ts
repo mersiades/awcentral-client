@@ -2118,6 +2118,32 @@ export const mockPlaybookCreatorGunlugger: PlaybookCreator = {
   playbookUniqueCreator: mockUniqueCreatorGunlugger,
 };
 
+// ##### -------------------------------------------------- Savvyhead/Workspace ----------------------------------------------##### //
+
+export const mockWorkspaceCreator: WorkspaceCreator = {
+  id: 'workspace-creator-id',
+  itemsCount: 3,
+  workspaceInstructions: 'When you go into your workspace and dedicate yourself to making a thing, or ...',
+  projectInstructions: "During play, it's your job to have your character start and pursue projects...",
+  workspaceItems: ['a garage', 'a darkroom', 'a controlled growing environment', 'skilled labor (Carna, Thuy, Pamming eg)'],
+  __typename: 'WorkspaceCreator',
+};
+
+export const mockUniqueCreatorSavvyhead: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
+  id: 'savvyhead-playbook-unique-creator-id',
+  type: UniqueTypes.workspace,
+  workspaceCreator: mockWorkspaceCreator,
+};
+
+export const mockPlaybookCreatorSavvyhead: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'savvyhead-playbook-creator-id',
+  playbookType: PlaybookType.savvyhead,
+  movesInstructions: 'You get all the basic moves. Choose 3 savvyhead moves. ',
+  playbookUniqueCreator: mockUniqueCreatorSavvyhead,
+};
+
 // ------------------------------------------------------- Mock Playbooks --------------------------------------------------- //
 
 export const mockPlaybooks: Playbook[] = [mockPlaybookAngel, mockPlaybookBattlbabe];

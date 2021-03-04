@@ -12,9 +12,11 @@ import {
   mockGame5,
   mockKeycloakUserInfo1,
   mockSkinnerGearCreator,
+  mockWorkspaceCreator,
 } from '../../../../tests/mocks';
 import { renderWithRouter } from '../../../../tests/test-utils';
-import { mockPlayBookCreatorQuerySkinner } from '../../../../tests/mockQueries';
+import { mockPlayBookCreatorQuerySavvyhead, mockPlayBookCreatorQuerySkinner } from '../../../../tests/mockQueries';
+import WorkspaceForm from '../WorkspaceForm';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');
@@ -24,7 +26,7 @@ jest.mock('@react-keycloak/web', () => {
   };
 });
 
-describe('Rendering SkinnerGearForm', () => {
+describe('Rendering WorkspaceForm', () => {
   let cache = new InMemoryCache();
   const mockGame = {
     ...mockGame5,
@@ -55,55 +57,46 @@ describe('Rendering SkinnerGearForm', () => {
     cache = new InMemoryCache();
   });
 
-  test('should render SkinnerGearForm in initial state', async () => {
-    renderWithRouter(<SkinnerGearForm />, `/character-creation/${mockGame5.id}`, {
+  test('should render WorkspaceForm in initial state', async () => {
+    renderWithRouter(<WorkspaceForm />, `/character-creation/${mockGame5.id}`, {
       isAuthenticated: true,
-      apolloMocks: [mockPlayBookCreatorQuerySkinner],
+      apolloMocks: [mockPlayBookCreatorQuerySavvyhead],
       injectedGame: mockGame,
       injectedUserId: mockKeycloakUserInfo1.sub,
       cache,
     });
 
-    await screen.findByTestId('skinner-gear-form');
-    await screen.findByRole('heading', { name: `WHAT SKINNER GEAR DOES ${mockCharacter2.name?.toUpperCase()} HAVE?` });
-    const checkBoxes = screen.getAllByRole('checkbox');
-    expect(checkBoxes.length).toEqual(4);
-    screen.getByRole('button', { name: 'SET' });
+    await screen.findByTestId('workspace-form');
+    await screen.findByRole('heading', { name: `${mockCharacter2.name?.toUpperCase()}'S WORKSPACE` });
+    screen.getByRole('heading', { name: 'Projects' });
+    screen.getByRole;
   });
 
-  test('should enable SET button after completing form', async () => {
-    renderWithRouter(<SkinnerGearForm />, `/character-creation/${mockGame5.id}`, {
+  test('should enable SET button when form is completed', async () => {
+    renderWithRouter(<WorkspaceForm />, `/character-creation/${mockGame5.id}`, {
       isAuthenticated: true,
-      apolloMocks: [mockPlayBookCreatorQuerySkinner],
+      apolloMocks: [mockPlayBookCreatorQuerySavvyhead],
       injectedGame: mockGame,
       injectedUserId: mockKeycloakUserInfo1.sub,
       cache,
     });
 
-    await screen.findByTestId('skinner-gear-form');
-    await screen.findByRole('heading', { name: `WHAT SKINNER GEAR DOES ${mockCharacter2.name?.toUpperCase()} HAVE?` });
-    const weapon1 = screen.getByRole('checkbox', { name: mockSkinnerGearCreator.graciousWeaponChoices[0].item });
-    const luxeItem1 = screen.getByRole('checkbox', {
-      name: mockSkinnerGearCreator.luxeGearChoices[0].item + ' ' + mockSkinnerGearCreator.luxeGearChoices[0].note,
-    });
-    const luxeItem2 = screen.getByRole('checkbox', {
-      name: mockSkinnerGearCreator.luxeGearChoices[1].item + ' ' + mockSkinnerGearCreator.luxeGearChoices[1].note,
-    });
+    await screen.findByTestId('workspace-form');
+    let setButton = (await screen.findByRole('button', { name: 'SET' })) as HTMLButtonElement;
+    const item1 = screen.getByTestId(`${mockWorkspaceCreator.workspaceItems[0]}-pill`);
+    const item2 = screen.getByTestId(`${mockWorkspaceCreator.workspaceItems[1]}-pill`);
+    const item3 = screen.getByTestId(`${mockWorkspaceCreator.workspaceItems[2]}-pill`);
 
-    // Select gracious weapon
-    userEvent.click(weapon1);
-    let setButton = screen.getByRole('button', { name: 'SET' }) as HTMLButtonElement;
-    expect(setButton.disabled).toEqual(true);
+    // Select first workspace item
+    userEvent.click(item1);
 
-    // Select first luxe item
-    userEvent.click(luxeItem1);
+    // Select second workspace item
+    userEvent.click(item2);
     setButton = screen.getByRole('button', { name: 'SET' }) as HTMLButtonElement;
     expect(setButton.disabled).toEqual(true);
 
-    // Select second luxe item
-    userEvent.click(luxeItem2);
-
-    // Check SET button is enabled
+    // Select second workspace item
+    userEvent.click(item3);
     setButton = screen.getByRole('button', { name: 'SET' }) as HTMLButtonElement;
     expect(setButton.disabled).toEqual(false);
   });

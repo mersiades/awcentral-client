@@ -252,6 +252,7 @@ export interface Workspace {
   projectInstructions: string;
   workspaceItems: string[];
   projects: Project[];
+  __typename?: 'Workspace';
 }
 
 // --------------------------------------------------- Vehicle interfaces --------------------------------------------------- //

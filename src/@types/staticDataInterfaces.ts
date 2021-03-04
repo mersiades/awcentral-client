@@ -345,6 +345,7 @@ export interface WorkspaceCreator {
   workspaceInstructions: string;
   projectInstructions: string;
   workspaceItems: string[];
+  __typename?: 'WorkspaceCreator';
 }
 
 // --------------------------------------------- Vehicle interfaces --------------------------------------------- //
