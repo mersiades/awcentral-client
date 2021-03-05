@@ -1,8 +1,8 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
-// import wait from 'waait';
+import wait from 'waait';
 import { InMemoryCache } from '@apollo/client';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 
 import WorkspaceForm from '../WorkspaceForm';
 import { mockKeycloakStub } from '../../../../../__mocks__/@react-keycloak/web';
@@ -51,11 +51,8 @@ describe('Rendering WorkspaceForm', () => {
       },
     ],
   };
-  beforeEach(() => {
+  beforeEach(async () => {
     cache = new InMemoryCache();
-  });
-
-  test('should render WorkspaceForm in initial state', async () => {
     renderWithRouter(<WorkspaceForm />, `/character-creation/${mockGame5.id}`, {
       isAuthenticated: true,
       apolloMocks: [mockPlayBookCreatorQuerySavvyhead],
@@ -63,24 +60,19 @@ describe('Rendering WorkspaceForm', () => {
       injectedUserId: mockKeycloakUserInfo1.sub,
       cache,
     });
+    await act(async () => await wait());
+  });
 
+  test('should render WorkspaceForm in initial state', async () => {
     await screen.findByTestId('workspace-form');
-    await screen.findByRole('heading', { name: `${mockCharacter2.name?.toUpperCase()}'S WORKSPACE` });
+    screen.getByRole('heading', { name: `${mockCharacter2.name?.toUpperCase()}'S WORKSPACE` });
     screen.getByRole('heading', { name: 'Projects' });
     screen.getByRole;
   });
 
   test('should enable SET button when form is completed', async () => {
-    renderWithRouter(<WorkspaceForm />, `/character-creation/${mockGame5.id}`, {
-      isAuthenticated: true,
-      apolloMocks: [mockPlayBookCreatorQuerySavvyhead],
-      injectedGame: mockGame,
-      injectedUserId: mockKeycloakUserInfo1.sub,
-      cache,
-    });
-
     await screen.findByTestId('workspace-form');
-    let setButton = (await screen.findByRole('button', { name: 'SET' })) as HTMLButtonElement;
+    let setButton = screen.getByRole('button', { name: 'SET' }) as HTMLButtonElement;
     const item1 = screen.getByTestId(`${mockWorkspaceCreator.workspaceItems[0]}-pill`);
     const item2 = screen.getByTestId(`${mockWorkspaceCreator.workspaceItems[1]}-pill`);
     const item3 = screen.getByTestId(`${mockWorkspaceCreator.workspaceItems[2]}-pill`);
