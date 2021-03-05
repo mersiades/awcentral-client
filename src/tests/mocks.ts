@@ -503,13 +503,13 @@ export const mockStatsBlock1: StatsBlock = {
       id: 'mock-statsblock-stat-id-1',
       stat: StatType.cool,
       value: 1,
-      isHighlighted: false,
+      isHighlighted: true,
     },
     {
       id: 'mock-statsblock-stat-id-2',
       stat: StatType.hard,
       value: 1,
-      isHighlighted: false,
+      isHighlighted: true,
     },
     {
       id: 'mock-statsblock-stat-id-3',

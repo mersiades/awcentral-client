@@ -4,19 +4,17 @@ import userEvent from '@testing-library/user-event';
 import { InMemoryCache } from '@apollo/client';
 import { screen } from '@testing-library/react';
 
-import SkinnerGearForm from '../SkinnerGearForm';
+import WorkspaceForm from '../WorkspaceForm';
 import { mockKeycloakStub } from '../../../../../__mocks__/@react-keycloak/web';
 import {
   blankCharacter,
   mockCharacter2,
   mockGame5,
   mockKeycloakUserInfo1,
-  mockSkinnerGearCreator,
   mockWorkspaceCreator,
 } from '../../../../tests/mocks';
 import { renderWithRouter } from '../../../../tests/test-utils';
-import { mockPlayBookCreatorQuerySavvyhead, mockPlayBookCreatorQuerySkinner } from '../../../../tests/mockQueries';
-import WorkspaceForm from '../WorkspaceForm';
+import { mockPlayBookCreatorQuerySavvyhead } from '../../../../tests/mockQueries';
 
 jest.mock('@react-keycloak/web', () => {
   const originalModule = jest.requireActual('@react-keycloak/web');

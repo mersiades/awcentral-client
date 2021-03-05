@@ -29,20 +29,20 @@ const CharacterPreview: FC<CharacterPreviewProps> = ({ character, isMc }) => {
               margin={10}
             />
           </Box>
-          <Box>
+          <Box data-testid="character-preview-name">
             <Text style={{ width: '100%' }}>{`${character.name} the ${decapitalize(character.playbook)}`}</Text>
           </Box>
         </Box>
         <Box>
-          <Text>
+          <Text data-testid="character-preview-looks">
             <em>{character.looks.map((look) => look.look).join(', ')}</em>
           </Text>
         </Box>
       </Box>
       {isMc && (
         <Box justify="center" gap="12px">
-          <Text>Highlighted stats: {highlightedStats}</Text>
-          <Text>Barter: {character.barter}</Text>
+          <Text data-testid="character-preview-stats">Highlighted stats: {highlightedStats}</Text>
+          <Text data-testid="character-preview-barter">Barter: {character.barter}</Text>
         </Box>
       )}
     </Box>
