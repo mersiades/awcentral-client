@@ -2186,3 +2186,26 @@ export const blankCharacter: MockCharacter = {
   battleVehicles: [],
   __typename: 'Character',
 };
+
+export const mockHold1: Hold = {
+  id: 'mock-hold-id-1',
+  moveName: 'READ A PERSON',
+  moveDescription: 'When you _**read a person**_ in a charged interaction, roll+sharp.',
+  rollResult: 10,
+};
+
+export const mockHold2: Hold = {
+  id: 'mock-hold-id-2',
+  moveName: 'READ A PERSON',
+  moveDescription: 'When you _**read a person**_ in a charged interaction, roll+sharp.',
+  rollResult: 11,
+};
+
+export const mockHold3: Hold = {
+  id: 'mock-hold-id-3',
+  moveName: 'BONEFEEL',
+  moveDescription: '_**Bonefeel**_: at the beginning of the session, roll+weird.',
+  rollResult: 7,
+};
+
+export const mockHolds = [mockHold1, mockHold2, mockHold3];

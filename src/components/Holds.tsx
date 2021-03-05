@@ -81,6 +81,7 @@ const Holds: FC<HoldsProps> = ({ holds }) => {
         <Tip key={hold.id} content={renderTipContent(hold)}>
           <Box animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
             <StyledHold
+              data-testid="hold-circle"
               onClick={() => !spendingHold && handleHoldLeftClick(hold)}
               onContextMenu={(e) => {
                 e.preventDefault();
