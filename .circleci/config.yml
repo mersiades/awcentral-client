@@ -62,12 +62,12 @@ jobs:
           overwrite: true
 workflows:
   version: 2
-  build_and_deploy:
+  test:
     jobs:
       - test
+  build_and_deploy:
+    jobs:
       - deploy:
-          requires:
-            - test
           filters:
             branches:
               only:
