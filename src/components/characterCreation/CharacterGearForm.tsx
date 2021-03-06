@@ -1,17 +1,17 @@
 import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useMutation, useQuery } from '@apollo/client';
+import { useHistory } from 'react-router-dom';
 import { Box, TextArea } from 'grommet';
 
 import Spinner from '../Spinner';
 import { accentColors, ButtonWS, HeadingWS, ParagraphWS, TextWS } from '../../config/grommetConfig';
-import { CharacterCreationSteps, PlaybookType } from '../../@types/enums';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
-import { useFonts } from '../../contexts/fontContext';
-import { useGame } from '../../contexts/gameContext';
-import { useHistory } from 'react-router-dom';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../../mutations/setCharacterBarter';
 import SET_CHARACTER_GEAR, { SetCharacterGearData, SetCharacterGearVars } from '../../mutations/setCharacterGear';
+import { CharacterCreationSteps, PlaybookType } from '../../@types/enums';
+import { useFonts } from '../../contexts/fontContext';
+import { useGame } from '../../contexts/gameContext';
 
 const GearUL = styled.ul`
   margin: unset;
@@ -43,6 +43,7 @@ const CharacterGearForm: FC = () => {
     { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
   );
   const pbCreator = pbCreatorData?.playbookCreator;
+
   const [setCharacterGear, { loading: settingGear }] = useMutation<SetCharacterGearData, SetCharacterGearVars>(
     SET_CHARACTER_GEAR
   );
@@ -76,16 +77,36 @@ const CharacterGearForm: FC = () => {
   const handleSubmitGear = async (gear: string[], amount: number) => {
     if (!!userGameRole && !!character && !!game) {
       try {
-        await setCharacterGear({
+        setCharacterGear({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, gear },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setCharacterGear: {
+              ...character,
+              gear,
+              __typename: 'Character',
+            },
+          },
         });
-        await setCharacterBarter({
+        setCharacterBarter({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, amount },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setCharacterBarter: {
+              ...character,
+              barter: amount,
+              __typename: 'Character',
+            },
+          },
         });
         // Skip playbookUnique form if Driver
         const nextStep =
           character.playbook === PlaybookType.driver ? CharacterCreationSteps.selectMoves : CharacterCreationSteps.setUnique;
-        history.push(`/character-creation/${game.id}?step=${nextStep}`);
+
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${nextStep}`);
+        }
+
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
@@ -118,10 +139,11 @@ const CharacterGearForm: FC = () => {
   const renderYouGetItem = () => {
     if (!!pbCreator?.gearInstructions?.youGetItems && pbCreator.gearInstructions.youGetItems.length > 0) {
       return (
-        <GearUL>
+        <GearUL aria-label="items-you-get-list">
           {pbCreator.gearInstructions.youGetItems.map((item, index) => (
             <li
               data-testid={`${item}-listitem`}
+              aria-label={`you-get-item-${index}`}
               key={index}
               // @ts-ignore
               onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
@@ -148,10 +170,11 @@ const CharacterGearForm: FC = () => {
   const renderChooseableGear = () => {
     if (!!pbCreator?.gearInstructions.chooseableGear) {
       return (
-        <GearUL>
+        <GearUL aria-label="items-you-can-choose-list">
           {pbCreator.gearInstructions.chooseableGear.map((item, index) => (
             <li
               data-testid={`${item}-chooseable-listitem`}
+              aria-label={`chooseable-listitem-${index}`}
               key={index}
               // @ts-ignore
               onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
@@ -167,42 +190,46 @@ const CharacterGearForm: FC = () => {
     }
   };
 
-  const renderWithMC = () => {
-    if (!!pbCreator?.gearInstructions.withMC) {
-      return <ParagraphWS>{pbCreator.gearInstructions.withMC}</ParagraphWS>;
-    }
-  };
+  // Don't include this becaue it's confusing for the User
+  // const renderWithMC = () => {
+  //   if (!!pbCreator?.gearInstructions.withMC) {
+  //     return <ParagraphWS>{pbCreator.gearInstructions.withMC}</ParagraphWS>;
+  //   }
+  // };
 
   return (
     <Box
+      data-testid="character-gear-form"
       fill
-      direction="column"
-      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
-      pad="6px"
+      pad="12px"
       align="center"
       justify="start"
+      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box width="70vw" flex="grow" overflow="auto">
-        <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT IS ${
-          !!character?.name ? character.name.toUpperCase() : '...'
-        }'S GEAR?`}</HeadingWS>
-        <Box direction="row" align="center" fill="horizontal" justify="between">
-          <TextWS textAlign="center">Select an item to add, edit or delete it, or just type your own.</TextWS>
-          <Box direction="row" pad="6px" justify="end" align="center" style={{ minHeight: 52 }}>
-            <ButtonWS
-              primary
-              label={settingGear || settingBarter ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-              onClick={() =>
-                !settingBarter &&
-                !settingGear &&
-                !!pbCreator &&
-                handleSubmitGear(gear, pbCreator.gearInstructions.startingBarter)
-              }
-              disabled={gear.length < 1 || JSON.stringify(gear) === JSON.stringify(existingGear)}
-            />
-          </Box>
+      <Box width="85vw" align="start" style={{ maxWidth: '763px' }}>
+        <Box direction="row" fill="horizontal" justify="between" align="center">
+          <HeadingWS
+            level={2}
+            crustReady={crustReady}
+            textAlign="center"
+            style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+          >{`WHAT IS ${!!character?.name ? character.name.toUpperCase() : '...'}'S GEAR?`}</HeadingWS>
+          <ButtonWS
+            primary
+            label={settingGear || settingBarter ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+            onClick={() =>
+              !settingBarter &&
+              !settingGear &&
+              !!pbCreator &&
+              handleSubmitGear(gear, pbCreator.gearInstructions.startingBarter)
+            }
+            disabled={gear.length < 1 || JSON.stringify(gear) === JSON.stringify(existingGear)}
+          />
         </Box>
-        <Box direction="row">
+
+        <TextWS>Select an item to add, edit or delete it, or just type your own.</TextWS>
+
+        <Box direction="row" fill="horizontal" justify="center">
           <Box
             ref={instructionsBoxRef}
             fill
@@ -212,7 +239,7 @@ const CharacterGearForm: FC = () => {
             style={showScrollDown ? { boxShadow: `0px -10px 10px -8px ${accentColors[0]} inset` } : undefined}
             pad="6px"
           >
-            <HeadingWS level={4} alignSelf="center">
+            <HeadingWS level={4} alignSelf="center" margin={{ vertical: '6px' }}>
               Options
             </HeadingWS>
             {renderGearIntro()}
@@ -220,22 +247,22 @@ const CharacterGearForm: FC = () => {
             <br />
             {renderIntroduceChoice()}
             {renderChooseableGear()}
-            {renderWithMC()}
             {!!pbCreator && pbCreator.gearInstructions.startingBarter > 0 && (
               <ParagraphWS textAlign="start">{`... and you get oddments worth ${pbCreator.gearInstructions.startingBarter}-barter`}</ParagraphWS>
             )}
           </Box>
           <Box fill gridArea="gear-box" pad="6px">
             <Box fill="horizontal">
-              <HeadingWS level={4} alignSelf="center">
+              <HeadingWS level={4} alignSelf="center" margin={{ vertical: '6px' }}>
                 Gear
               </HeadingWS>
             </Box>
             <Box style={{ minHeight: '150px' }} margin={{ bottom: ' 6px' }}>
-              <GearUL data-testid="interim-gear-list">
+              <GearUL aria-label="interim-gear-list">
                 {gear.map((item, index) => (
                   <li
                     data-testid={`${item}-interim-listitem`}
+                    aria-label={`interim-list-item-${index}`}
                     key={index}
                     // @ts-ignore
                     onMouseOver={(e: React.MouseEvent<HTMLLIElement>) => (e.target.style.color = '#CD3F3E')}
@@ -250,6 +277,7 @@ const CharacterGearForm: FC = () => {
             </Box>
             <Box fill="horizontal">
               <TextArea
+                aria-label="item-input"
                 placeholder="Edit or type item"
                 fill
                 value={value}

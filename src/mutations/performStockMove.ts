@@ -7,7 +7,7 @@ export interface PerformStockMoveData {
 
 export interface PerformStockMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
   moveName: string;
   stockSpent: 0 | 1 | 2;
@@ -16,14 +16,14 @@ export interface PerformStockMoveVars {
 const PERFORM_STOCK_MOVE = gql`
   mutation PerformStockMove(
     $gameId: String!
-    $gameroleId: String!
+    $gameRoleId: String!
     $characterId: String!
     $moveName: String!
     $stockSpent: Int!
   ) {
     performStockMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       characterId: $characterId
       moveName: $moveName
       stockSpent: $stockSpent
@@ -32,7 +32,7 @@ const PERFORM_STOCK_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

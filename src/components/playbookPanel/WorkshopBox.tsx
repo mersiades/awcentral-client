@@ -1,16 +1,9 @@
 import React, { ChangeEvent, FC, useState } from 'react';
-import { Box, TextArea, Tip } from 'grommet';
+import { Box, TextArea } from 'grommet';
 
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
-import {
-  AtmosphereBox,
-  AttractionsBox,
-  InterestedPartiesBox,
-  RegularsBox,
-  SecurityBox,
-} from '../characterCreation/uniques/EstablishmentForm';
 import { ButtonWS, CustomUL, HeadingWS, RedBox, TextInputWS, TextWS } from '../../config/grommetConfig';
-import { CastCrew, Project } from '../../@types/dataInterfaces';
+import { Project } from '../../@types/dataInterfaces';
 import { useGame } from '../../contexts/gameContext';
 import { StyledMarkdown } from '../styledComponents';
 import { useFonts } from '../../contexts/fontContext';

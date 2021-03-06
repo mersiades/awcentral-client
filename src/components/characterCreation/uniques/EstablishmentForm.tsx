@@ -5,17 +5,21 @@ import { v4 as uuid } from 'uuid';
 import { useHistory } from 'react-router-dom';
 import { Box, CheckBox, Select, Text } from 'grommet';
 
+import Spinner from '../../Spinner';
 import { StyledMarkdown } from '../../styledComponents';
 import { ButtonWS, HeadingWS, ParagraphWS, RedBox, TextInputWS, TextWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import { CharacterCreationSteps, PlaybookType, UniqueTypes } from '../../../@types/enums';
+import SET_ESTABLISHMENT, {
+  getSetEstablishmentOR,
+  SetEstablishmentData,
+  SetEstablishmentVars,
+} from '../../../mutations/setEstablishment';
+import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
 import { EstablishmentInput } from '../../../@types';
 import { SecurityOption } from '../../../@types/staticDataInterfaces';
 import { useFonts } from '../../../contexts/fontContext';
 import { useGame } from '../../../contexts/gameContext';
 import { CastCrew } from '../../../@types/dataInterfaces';
-import SET_ESTABLISHMENT, { SetEstablishmentData, SetEstablishmentVars } from '../../../mutations/setEstablishment';
-import Spinner from '../../Spinner';
 
 const ATTRACTIONS_INSTRUCTIONS =
   'Your establishment features one main attraction supported by 2 side attractions (like a bar features drinks, supported by music and easy food). Choose one to be your main act and 2 for lube:';
@@ -39,7 +43,14 @@ interface EstablishmentBoxWrapperProps {
 }
 
 export const EstablishmentBoxWrapper: FC<EstablishmentBoxWrapperProps> = ({ children, title, width = '200px' }) => (
-  <Box align="center" width={width} flex="grow" fill="vertical" style={{ maxWidth: width }}>
+  <Box
+    data-testid={`${title.toLowerCase()}-box`}
+    align="center"
+    width={width}
+    flex="grow"
+    fill="vertical"
+    style={{ maxWidth: width }}
+  >
     <RedBox fill justify="center" pad="12px" gap="12px">
       {children}
     </RedBox>
@@ -305,7 +316,6 @@ const EstablishmentForm: FC = () => {
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(PLAYBOOK_CREATOR, {
     variables: { playbookType: PlaybookType.maestroD },
   });
-
   const establishmentCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator?.establishmentCreator;
   const [setEstablishment, { loading: settingEstablishment }] = useMutation<SetEstablishmentData, SetEstablishmentVars>(
     SET_ESTABLISHMENT
@@ -352,23 +362,10 @@ const EstablishmentForm: FC = () => {
         castAndCrew: crewNoTypename,
       };
 
-      const optimisticPlaybookUnique = {
-        id: 'temporary-id',
-        type: UniqueTypes.establishment,
-        establishment: { ...establishmentInput, id: !establishmentInput.id ? 'temporary-id' : establishmentInput.id },
-      };
-
       try {
-        await setEstablishment({
+        setEstablishment({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, establishment: establishmentInput },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            setEstablishment: {
-              __typename: 'Character',
-              ...character,
-              playbookUnique: optimisticPlaybookUnique,
-            },
-          },
+          optimisticResponse: getSetEstablishmentOR(character, establishmentInput) as SetEstablishmentData,
         });
         if (!character.hasCompletedCharacterCreation) {
           history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
@@ -488,11 +485,22 @@ const EstablishmentForm: FC = () => {
   );
 
   return (
-    <Box data-testid="followers-form" width="80vw" align="start" justify="between" overflow="auto" gap="18px">
+    <Box
+      data-testid="establishment-form"
+      justify="start"
+      width="85vw"
+      align="start"
+      pad="24px"
+      gap="18px"
+      style={{ maxWidth: '763px' }}
+    >
       <Box direction="row" fill="horizontal" align="center" justify="between">
-        <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
-          !!character?.name ? character.name?.toUpperCase() : '...'
-        }'S ESTABLISHMENT`}</HeadingWS>
+        <HeadingWS
+          crustReady={crustReady}
+          level={2}
+          alignSelf="center"
+          style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+        >{`${!!character?.name ? character.name?.toUpperCase() : '...'}'S ESTABLISHMENT`}</HeadingWS>
         <ButtonWS
           primary
           label={settingEstablishment ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
@@ -503,30 +511,30 @@ const EstablishmentForm: FC = () => {
       </Box>
       <Box fill="horizontal" direction="row" justify="between" gap="12px">
         <Box>
-          <Box direction="row" gap="12px">
-            <ParagraphWS style={{ maxWidth: '500px' }} margin={{ top: '0px' }}>
-              {ATTRACTIONS_INSTRUCTIONS}
-            </ParagraphWS>
-            <Select
-              id="main-attraction-input"
-              aria-label="main-attraction-input"
-              name="main-attraction"
-              value={mainAttraction}
-              placeholder="Main attraction"
-              options={establishmentCreator?.attractions || []}
-              onChange={(e) => handleMainAttractionSelect(e.value)}
-            />
-          </Box>
-          <ParagraphWS margin={{ top: '0px' }}>Select side attractions:</ParagraphWS>
+          <ParagraphWS style={{ maxWidth: '500px' }} margin={{ top: '0px', bottom: '3px' }}>
+            {ATTRACTIONS_INSTRUCTIONS}
+          </ParagraphWS>
+          <Select
+            id="main-attraction-input"
+            aria-label="main-attraction-input"
+            name="main-attraction"
+            value={mainAttraction}
+            placeholder="Main attraction"
+            options={establishmentCreator?.attractions || []}
+            onChange={(e) => handleMainAttractionSelect(e.value)}
+          />
+
+          <ParagraphWS margin={{ top: '12px', bottom: '3px' }}>Select side attractions:</ParagraphWS>
           <Box direction="row" wrap gap="6px">
             {workingAttractions.map((attr, index) => (
               <CheckBox
                 key={attr + index.toString()}
                 name={attr}
                 checked={sideAttractions.includes(attr)}
-                label={<TextWS style={{ minWidth: '90px' }}>{attr}</TextWS>}
+                label={<TextWS style={{ minWidth: '90px', height: '20px' }}>{attr}</TextWS>}
                 value={attr}
                 onChange={(e) => handleSelectSideAttraction(e.target.value)}
+                style={{ marginBottom: '3px' }}
               />
             ))}
           </Box>
@@ -548,11 +556,13 @@ const EstablishmentForm: FC = () => {
           <Box gap="12px">
             <Box direction="row" fill align="center" gap="12px">
               <TextInputWS
+                aria-label="additional-regular-input"
                 placeholder="Add regular (optional)"
                 value={regularName}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setRegularName(e.target.value)}
               />
               <ButtonWS
+                id="add-additional-regular-button"
                 secondary
                 label="ADD"
                 disabled={!regularName || regulars.includes(regularName)}
@@ -591,12 +601,14 @@ const EstablishmentForm: FC = () => {
           <Box gap="12px">
             <Box direction="row" fill align="center" gap="12px">
               <TextInputWS
+                aria-label="additional-interested-npc-input"
                 placeholder="Add interested NPC (optional)"
                 value={interestedNpcName}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setInterestedNpcName(e.target.value)}
               />
               <ButtonWS
                 secondary
+                id="add-additional-interest-npc-button"
                 label="ADD"
                 disabled={!interestedNpcName || interestedParties.includes(interestedNpcName)}
                 fill="horizontal"
@@ -670,11 +682,13 @@ const EstablishmentForm: FC = () => {
           <Box gap="12px" flex="grow">
             <Box direction="row" fill="horizontal" align="center" gap="12px">
               <TextInputWS
+                aria-label="crew-name-input"
                 placeholder="Name"
                 value={crewName}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => setCrewName(e.target.value)}
               />
               <ButtonWS
+                id="add-crew-member-button"
                 secondary
                 label="ADD"
                 disabled={!crewName}
@@ -684,6 +698,7 @@ const EstablishmentForm: FC = () => {
               />
             </Box>
             <TextInputWS
+              aria-label="crew-description-input"
               placeholder="Short description"
               value={crewDesc}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setCrewDesc(e.target.value)}

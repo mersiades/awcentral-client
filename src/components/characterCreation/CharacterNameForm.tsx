@@ -1,7 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
-import { Box, TextInput, Text, Form, FormField } from 'grommet';
+import { Box, TextInput, Text, FormField } from 'grommet';
 
 import Spinner from '../Spinner';
 import { ButtonWS, HeadingWS } from '../../config/grommetConfig';
@@ -20,7 +20,7 @@ const CharacterNameForm: FC = () => {
   // --------------------------------------------------3rd party hooks ----------------------------------------------------- //
   const history = useHistory();
 
-  const [value, setValue] = useState(!!character?.name ? { characterName: character.name } : { characterName: '' });
+  const [selectedName, setSelectedName] = useState('');
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: pbCreatorData } = useQuery<PlaybookCreatorData, PlaybookCreatorVars>(
@@ -28,25 +28,42 @@ const CharacterNameForm: FC = () => {
     // @ts-ignore
     { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
   );
+
   const names = pbCreatorData?.playbookCreator.names;
   const [setCharacterName, { loading: settingName }] = useMutation<SetCharacterNameData, SetCharacterNameVars>(
     SET_CHARACTER_NAME
   );
 
   // ---------------------------------------- Component functions and variables ------------------------------------------ //
-  const handleSubmitName = async (name: string) => {
+  const handleSubmitName = async () => {
     if (!!userGameRole && !!character && !!game) {
       try {
         await setCharacterName({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, name },
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, name: selectedName },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            setCharacterName: {
+              ...character,
+              name: selectedName,
+              __typename: 'Character',
+            },
+          },
         });
-        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectLooks}`);
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectLooks}`);
+        }
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
       }
     }
   };
+
+  // ------------------------------------------------------- Effects ------------------------------------------------------- //
+
+  useEffect(() => {
+    !!character?.name && setSelectedName(character.name);
+  }, [character]);
 
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
 
@@ -59,58 +76,59 @@ const CharacterNameForm: FC = () => {
   return (
     <Box
       fill
-      direction="column"
-      background="transparent"
+      data-testid="character-name-form"
       pad="24px"
       align="center"
       justify="start"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Form
-        value={value}
-        onChange={(nextValue: any) => setValue(nextValue)}
-        onReset={() => setValue({ characterName: '' })}
-        onSubmit={({ value }: any) => handleSubmitName(value.characterName)}
-      >
-        <Box width="50vw" flex="grow" align="center">
-          <HeadingWS crustReady={crustReady} level={2}>{`WHAT IS THE ${
+      <Box width="85vw" align="center" style={{ maxWidth: '763px' }}>
+        <Box direction="row" fill="horizontal" justify="between" align="center">
+          <HeadingWS
+            crustReady={crustReady}
+            level={2}
+            style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+          >{`WHAT IS THE ${
             !!character?.playbook ? decapitalize(character?.playbook).toUpperCase() : '...'
           } CALLED?`}</HeadingWS>
-          <Box direction="row" align="center" gap="12px">
-            <FormField name="characterName" width="100%">
-              <TextInput placeholder="Type or select name" name="characterName" size="xxlarge" />
-            </FormField>
-
-            <ButtonWS type="reset" label="CLEAR" />
-            <ButtonWS
-              type="submit"
-              primary
-              label={settingName ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-              disabled={value.characterName === ''}
-            />
-          </Box>
-          <Box direction="row" margin={{ top: '3px' }} wrap overflow="auto">
-            {!!names &&
-              names.map((name) => (
-                <Box
-                  data-testid={`${name.name}-pill`}
-                  key={name.id}
-                  background="#4C684C"
-                  round="medium"
-                  pad={{ top: '3px', bottom: '1px', horizontal: '12px' }}
-                  margin={{ vertical: '3px', horizontal: '3px' }}
-                  justify="center"
-                  onClick={() => setValue({ characterName: name.name })}
-                  hoverIndicator={{ color: '#698D70', dark: true }}
-                >
-                  <Text weight="bold" size="large">
-                    {name.name}
-                  </Text>
-                </Box>
-              ))}
-          </Box>
+          <ButtonWS
+            primary
+            label={settingName ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+            disabled={selectedName === '' || settingName}
+            onClick={() => !settingName && handleSubmitName()}
+          />
         </Box>
-      </Form>
+        <FormField width="100%">
+          <TextInput
+            placeholder="Type or select name"
+            aria-label="name-input"
+            size="xxlarge"
+            value={selectedName}
+            onChange={(e) => setSelectedName(e.target.value)}
+          />
+        </FormField>
+
+        <Box direction="row" margin={{ top: '6px' }} wrap overflow="auto">
+          {!!names &&
+            names.map((name) => (
+              <Box
+                data-testid={`${name.name}-pill`}
+                key={name.id}
+                background={name.name === selectedName ? { color: '#698D70', dark: true } : '#4C684C'}
+                round="medium"
+                pad={{ top: '3px', bottom: '1px', horizontal: '12px' }}
+                margin={{ vertical: '3px', horizontal: '3px' }}
+                justify="center"
+                onClick={() => setSelectedName(name.name)}
+                hoverIndicator={{ color: '#698D70', dark: true }}
+              >
+                <Text weight="bold" size="large">
+                  {name.name}
+                </Text>
+              </Box>
+            ))}
+        </Box>
+      </Box>
     </Box>
   );
 };

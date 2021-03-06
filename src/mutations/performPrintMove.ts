@@ -7,7 +7,7 @@ export interface PerformPrintMoveData {
 
 export interface PerformPrintMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
   moveId: string;
   isGangMove: boolean;
@@ -16,14 +16,14 @@ export interface PerformPrintMoveVars {
 const PERFORM_PRINT_MOVE = gql`
   mutation PerformPrintMove(
     $gameId: String!
-    $gameroleId: String!
+    $gameRoleId: String!
     $characterId: String!
     $moveId: String!
     $isGangMove: Boolean!
   ) {
     performPrintMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       characterId: $characterId
       moveId: $moveId
       isGangMove: $isGangMove
@@ -32,7 +32,7 @@ const PERFORM_PRINT_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

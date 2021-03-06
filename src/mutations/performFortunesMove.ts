@@ -7,18 +7,18 @@ export interface PerformFortunesMoveData {
 
 export interface PerformFortunesMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
 }
 
 const PERFORM_FORTUNES_MOVE = gql`
-  mutation PerformFortunesMove($gameId: String!, $gameroleId: String!, $characterId: String!) {
-    performFortunesMove(gameId: $gameId, gameroleId: $gameroleId, characterId: $characterId) {
+  mutation PerformFortunesMove($gameId: String!, $gameRoleId: String!, $characterId: String!) {
+    performFortunesMove(gameId: $gameId, gameRoleId: $gameRoleId, characterId: $characterId) {
       id
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

@@ -41,7 +41,11 @@ const StatsBox: FC<StatsBoxProps> = ({ stats, togglingHighlight, handleToggleHig
               style={statBoxStyle(stat.isHighlighted)}
               onClick={() => !togglingHighlight && handleToggleHighlight(stat.stat)}
             >
-              <Heading level="2" margin={{ left: '6px', right: '6px', bottom: '3px', top: '9px' }}>
+              <Heading
+                aria-label={`${stat.stat.toLowerCase()}-value`}
+                level="2"
+                margin={{ left: '6px', right: '6px', bottom: '3px', top: '9px' }}
+              >
                 {stat.value}
               </Heading>
               <Heading level="3" margin={{ left: '6px', right: '6px', bottom: '3px', top: '3px' }}>

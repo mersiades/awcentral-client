@@ -3,7 +3,7 @@ import { Character } from '../@types/dataInterfaces';
 
 export interface SetVehicleCountData {
   setVehicleCount: Character;
-  __typename: 'Mutation';
+  __typename?: 'Mutation';
 }
 
 export interface SetVehicleCountVars {

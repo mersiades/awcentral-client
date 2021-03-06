@@ -48,6 +48,7 @@ export interface Game {
   gameRoles: GameRole[];
   invitees: string[];
   gameMessages: GameMessage[];
+  __typename?: 'Game';
 }
 
 export interface GameRole {
@@ -68,7 +69,7 @@ export interface Character {
   hasCompletedCharacterCreation: boolean;
   hasPlusOneForward: boolean;
   holds: Hold[];
-  statsBlock: StatsBlock;
+  statsBlock?: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
   looks: Look[];
@@ -98,6 +99,7 @@ export interface StatsBlock {
   id: string;
   statsOptionId: string;
   stats: CharacterStat[];
+  __typename?: 'StatsBlock';
 }
 
 export interface CharacterStat {
@@ -105,9 +107,11 @@ export interface CharacterStat {
   stat: StatType;
   value: number;
   isHighlighted: boolean;
+  __typename?: 'CharacterStat';
 }
 
 export interface HxStat {
+  id: string;
   characterId: string;
   characterName: string;
   hxValue: number;
@@ -135,6 +139,7 @@ export interface PlaybookUnique {
   skinnerGear?: SkinnerGear;
   establishment?: Establishment;
   workspace?: Workspace;
+  __typename?: 'PlaybookUnique';
 }
 
 export interface AngelKit {
@@ -154,6 +159,7 @@ export interface BrainerGear {
 export interface CustomWeapons {
   id: string;
   weapons: string[];
+  __typename?: 'CustomWeapons';
 }
 
 export interface CastCrew {
@@ -191,6 +197,7 @@ export interface Followers {
   wants: string[];
   selectedStrengths: FollowersOption[];
   selectedWeaknesses: FollowersOption[];
+  __typename?: 'Followers';
 }
 
 export interface Gang {
@@ -201,6 +208,7 @@ export interface Gang {
   strengths: GangOption[];
   weaknesses: GangOption[];
   tags: string[];
+  __typename?: 'Gang';
 }
 
 export interface Holding {
@@ -224,6 +232,7 @@ export interface SkinnerGear {
   id: string;
   graciousWeapon: SkinnerGearItem;
   luxeGear: SkinnerGearItem[];
+  __typename?: 'SkinnerGear';
 }
 
 export interface Weapons {
@@ -243,6 +252,7 @@ export interface Workspace {
   projectInstructions: string;
   workspaceItems: string[];
   projects: Project[];
+  __typename?: 'Workspace';
 }
 
 // --------------------------------------------------- Vehicle interfaces --------------------------------------------------- //
@@ -301,7 +311,7 @@ export interface Threat {
 export interface GameMessage {
   id: string;
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   messageType: MessageType;
   title: string;
   content: string;

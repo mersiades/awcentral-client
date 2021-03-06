@@ -62,7 +62,7 @@ const DealTerrainDialog: FC<DealTerrainDialogProps> = ({ move, handleClose }) =>
         performSpeedRollMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             characterId: userGameRole.characters[0].id,
             moveId: move.id,
             modifier,

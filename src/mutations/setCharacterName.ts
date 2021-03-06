@@ -2,13 +2,14 @@ import { gql } from '@apollo/client';
 import { Character } from '../@types/dataInterfaces';
 
 export interface SetCharacterNameData {
-  setCharacterName: Character
+  setCharacterName: Character;
+  __typename: 'Mutation';
 }
 
 export interface SetCharacterNameVars {
-  gameRoleId: string
-  characterId: string
-  name: string
+  gameRoleId: string;
+  characterId: string;
+  name: string;
 }
 
 const SET_CHARACTER_NAME = gql`
@@ -24,6 +25,6 @@ const SET_CHARACTER_NAME = gql`
       }
     }
   }
-`
+`;
 
-export default SET_CHARACTER_NAME
+export default SET_CHARACTER_NAME;

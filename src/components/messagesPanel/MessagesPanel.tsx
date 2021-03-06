@@ -84,7 +84,7 @@ const MessagesPanel: FC = () => {
   return (
     <Box fill pad="12px" overflow="auto" gap="12px" style={{ maxWidth: '812px' }}>
       {limitMessages().map((message, index) => {
-        const isUserSender = userGameRole?.id === message.gameroleId;
+        const isUserSender = userGameRole?.id === message.gameRoleId;
         return (
           <Box
             key={index}

@@ -47,17 +47,20 @@ export interface PlaybookCreator {
   defaultMoves: Move[];
   gearInstructions: GearInstructions;
   playbookUniqueCreator?: PlaybookUniqueCreator; // Driver does not have a PlaybookUnique
+  __typename?: 'PlaybookCreator';
 }
 
 export interface Name {
   id: string;
   name: string;
+  __typename?: 'Name';
 }
 
 export interface Look {
   id: string;
   look: string;
   category: LookType;
+  playbookType: PlaybookType;
   __typename?: 'Look';
 }
 
@@ -70,6 +73,7 @@ export interface GearInstructions {
   chooseableGear: string[];
   withMC: string;
   startingBarter: number;
+  __typename?: 'GearInstructions';
 }
 
 export interface StatsOption {
@@ -79,6 +83,7 @@ export interface StatsOption {
   HOT: number;
   SHARP: number;
   WEIRD: number;
+  __typename?: 'StatsOption';
 }
 
 // -------------------------------------------------- Move interfaces -------------------------------------------------- //
@@ -105,6 +110,7 @@ export interface MoveAction {
   statToRollWith?: StatType;
   holdConditions?: HoldConditions;
   plusOneForwardConditions?: PlusOneForwardConditions;
+  __typename?: 'MoveAction';
 }
 
 export interface Move {
@@ -117,6 +123,7 @@ export interface Move {
   statModifier?: StatModifier;
   rollModifier?: RollModifier;
   moveAction?: MoveAction;
+  __typename?: 'Move';
 }
 
 export interface CharacterMove extends Move {
@@ -150,12 +157,14 @@ export interface PlaybookUniqueCreator {
   skinnerGearCreator?: SkinnerGearCreator;
   weaponsCreator?: WeaponsCreator;
   workspaceCreator?: WorkspaceCreator;
+  __typename?: 'PlaybookUniqueCreator';
 }
 
 export interface AngelKitCreator {
   id: string;
   angelKitInstructions: string;
   startingStock: number;
+  __typename?: 'AngelKitCreator';
 }
 
 export interface BrainerGearCreator {
@@ -181,6 +190,7 @@ export interface SecurityOption {
   id: string;
   description: string;
   value: number;
+  __typename?: 'SecurityOption';
 }
 
 export interface EstablishmentCreator {
@@ -195,6 +205,7 @@ export interface EstablishmentCreator {
   interestedPartyNames: string[];
   interestedPartyQuestions: string[];
   securityOptions: SecurityOption[];
+  __typename?: 'EstablishmentCreator';
 }
 
 export interface FollowersOption {
@@ -211,6 +222,7 @@ export interface FollowersOption {
   fortuneChange: number;
   surplusChange?: string;
   wantChange?: string[];
+  __typename?: 'FollowersOption';
 }
 
 export interface FollowersCreator {
@@ -226,6 +238,7 @@ export interface FollowersCreator {
   defaultWants: string[];
   strengthOptions: FollowersOption[];
   weaknessOptions: FollowersOption[];
+  __typename?: 'FollowersCreator';
 }
 
 export interface GangOption {
@@ -234,6 +247,7 @@ export interface GangOption {
   modifier?: string;
   // For example, +rich, -savage, +Vulnerable: disease
   tag?: string;
+  __typename?: 'GangOption';
 }
 
 export interface GangCreator {
@@ -247,6 +261,7 @@ export interface GangCreator {
   defaultTags: string[];
   strengths: GangOption[];
   weaknesses: GangOption[];
+  __typename?: 'GangCreator';
 }
 
 export interface HoldingOption {
@@ -273,6 +288,7 @@ export interface HoldingOption {
 
   // Ranges from 0 - 2, with -1 representing null
   newArmorBonus: number;
+  __typename?: 'HoldingOption';
 }
 
 export interface HoldingCreator {
@@ -293,12 +309,14 @@ export interface HoldingCreator {
   weaknessCount: number;
   strengthOptions: HoldingOption[];
   weaknessOptions: HoldingOption[];
+  __typename?: 'HoldingCreator';
 }
 
 export interface SkinnerGearItem {
   id: string;
   item: string;
   note?: string;
+  __typename?: 'SkinnerGearItem';
 }
 
 export interface SkinnerGearCreator {
@@ -307,6 +325,7 @@ export interface SkinnerGearCreator {
   luxeGearCount: number;
   graciousWeaponChoices: SkinnerGearItem[];
   luxeGearChoices: SkinnerGearItem[];
+  __typename?: 'SkinnerGearCreator';
 }
 
 export interface WeaponsCreator {
@@ -317,6 +336,7 @@ export interface WeaponsCreator {
   bigFuckOffGuns: string[];
   seriousGuns: string[];
   backupWeapons: string[];
+  __typename?: 'WeaponsCreator';
 }
 
 export interface WorkspaceCreator {
@@ -325,6 +345,7 @@ export interface WorkspaceCreator {
   workspaceInstructions: string;
   projectInstructions: string;
   workspaceItems: string[];
+  __typename?: 'WorkspaceCreator';
 }
 
 // --------------------------------------------- Vehicle interfaces --------------------------------------------- //
@@ -378,6 +399,7 @@ export interface VehicleCreator {
   carCreator: CarCreator;
   bikeCreator: BikeCreator;
   battleVehicleCreator: BattleVehicleCreator;
+  __typename?: 'VehicleCreator';
 }
 
 // --------------------------------------------- Threat interfaces --------------------------------------------- //

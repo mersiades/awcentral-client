@@ -7,7 +7,7 @@ export interface PerformStatRollMoveData {
 
 export interface PerformStatRollMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
   moveId: string;
   isGangMove: boolean;
@@ -16,14 +16,14 @@ export interface PerformStatRollMoveVars {
 const PERFORM_STAT_ROLL_MOVE = gql`
   mutation PerformStatRollMove(
     $gameId: String!
-    $gameroleId: String!
+    $gameRoleId: String!
     $characterId: String!
     $moveId: String!
     $isGangMove: Boolean!
   ) {
     performStatRollMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       characterId: $characterId
       moveId: $moveId
       isGangMove: $isGangMove
@@ -32,7 +32,7 @@ const PERFORM_STAT_ROLL_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

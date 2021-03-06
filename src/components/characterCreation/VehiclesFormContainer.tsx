@@ -6,11 +6,12 @@ import { AddCircle } from 'grommet-icons';
 
 import VehicleForm from './VehicleForm';
 import Spinner from '../Spinner';
-import { ButtonWS, ParagraphWS } from '../../config/grommetConfig';
+import { ButtonWS, HeadingWS, ParagraphWS } from '../../config/grommetConfig';
 import SET_VEHICLE_COUNT, { SetVehicleCountData, SetVehicleCountVars } from '../../mutations/setVehicleCount';
 import { CharacterCreationSteps } from '../../@types/enums';
 import { useGame } from '../../contexts/gameContext';
 import { decapitalize } from '../../helpers/decapitalize';
+import { useFonts } from '../../contexts/fontContext';
 
 const VehiclesFormContainer: FC = () => {
   // -------------------------------------------------- Component state ---------------------------------------------------- //
@@ -19,6 +20,7 @@ const VehiclesFormContainer: FC = () => {
 
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, character, userGameRole } = useGame();
+  const { crustReady } = useFonts();
 
   // -------------------------------------------------- 3rd party hooks ---------------------------------------------------- //
   const history = useHistory();
@@ -69,65 +71,71 @@ const VehiclesFormContainer: FC = () => {
   }
 
   if (character.vehicleCount === 0) {
-    // If a non-vehicle character makes it here accidentally, they can use the stepper to navigate away.
-    // In future, may give the ability to add vehicles outside the rules
     return (
       <Box
+        data-testid="no-default-vehicle-message"
         fill
-        direction="column"
-        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
         pad="12px"
         align="center"
         justify="start"
+        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       >
-        <ParagraphWS>By default, the {decapitalize(character.playbook)} has no vehicles.</ParagraphWS>
-        <ParagraphWS>If you’d like to start play with a vehicle, get with the MC.</ParagraphWS>
-        <Box direction="row" gap="12px">
-          <Box style={{ minHeight: 52 }}>
-            <ButtonWS label="ADD VEHICLE" secondary onClick={() => handleAddVehicle()} />
-          </Box>
-          <Box style={{ minHeight: 52 }}>
+        <Box width="85vw" align="center" style={{ maxWidth: '742px' }}>
+          <Box direction="row" fill="horizontal" justify="between" align="center">
+            <HeadingWS
+              level={2}
+              crustReady={crustReady}
+              textAlign="center"
+              style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+            >
+              VEHICLES
+            </HeadingWS>
             <ButtonWS
-              label="PASS"
               primary
+              label="PASS"
               onClick={() =>
                 !!game && history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setBattleVehicle}`)
               }
             />
           </Box>
+          <ParagraphWS>By default, the {decapitalize(character.playbook)} has no vehicles.</ParagraphWS>
+          <ParagraphWS>If you’d like to start play with a vehicle, get with the MC.</ParagraphWS>
+          <ButtonWS label="ADD VEHICLE" secondary onClick={() => handleAddVehicle()} />
         </Box>
       </Box>
     );
   } else {
     return (
       <Box
+        data-testid="vehicle-form-container"
         fill
-        direction="column"
-        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
         pad="12px"
         align="center"
         justify="start"
+        animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       >
-        <Tabs activeIndex={activeTab} onActive={(tab) => setActiveTab(tab)}>
-          {/*
-          // @ts-ignore */}
-          {[...Array(character.vehicleCount).keys()].map((number) => (
-            <Tab key={number} title={`Vehicle ${number + 1}`}>
-              <VehicleForm navigateOnSet={navigateOnSet} existingVehicle={character.vehicles[number]} />
-            </Tab>
-          ))}
-          {character.vehicleCount === character.vehicles.length && (
-            <Tip content="Add another vehicle">
-              <Box margin={{ horizontal: '24px' }} justify="center" align="center">
-                <AddCircle
-                  color="brand"
-                  style={{ cursor: 'pointer' }}
-                  onClick={() => !settingVehicleCount && handleAddVehicle()}
-                />
-              </Box>
-            </Tip>
-          )}
-        </Tabs>
+        <Box width="85vw" align="center" style={{ maxWidth: '741px' }}>
+          <Tabs activeIndex={activeTab} onActive={(tab) => setActiveTab(tab)}>
+            {/*
+            // @ts-ignore */}
+            {[...Array(character.vehicleCount).keys()].map((number) => (
+              <Tab key={number} title={`Vehicle ${number + 1}`}>
+                <VehicleForm navigateOnSet={navigateOnSet} existingVehicle={character.vehicles[number]} />
+              </Tab>
+            ))}
+            {character.vehicleCount === character.vehicles.length && (
+              <Tip content="Add another vehicle">
+                <Box margin={{ horizontal: '24px' }} justify="center" align="center">
+                  <AddCircle
+                    color="brand"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => !settingVehicleCount && handleAddVehicle()}
+                  />
+                </Box>
+              </Tip>
+            )}
+          </Tabs>
+        </Box>
       </Box>
     );
   }

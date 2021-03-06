@@ -36,9 +36,9 @@ const CharacterMovesForm: FC = () => {
     // @ts-ignore
     { variables: { playbookType: character?.playbook }, skip: !character?.playbook }
   );
-  const playbookMoves = pbCreatorData?.playbookCreator.optionalMoves;
+
+  const optionalMoves = pbCreatorData?.playbookCreator.optionalMoves;
   const defaultMoves = pbCreatorData?.playbookCreator.defaultMoves;
-  // const defaultMoveCount = pbCreatorData?.playbookCreator.defaultMoveCount;
   const moveChoiceCount = pbCreatorData?.playbookCreator.moveChoiceCount;
   const defaultMoveIds = defaultMoves?.map((move) => move.id) as string[]; // This will never be undefined; playbooks have at least one default move
   const [setCharacterMoves, { loading: settingMoves }] = useMutation<SetCharacterMovesData, SetCharacterMovesVars>(
@@ -62,7 +62,9 @@ const CharacterMovesForm: FC = () => {
         await setCharacterMoves({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, moveIds },
         });
-        history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setVehicle}`);
+        if (!character.hasCompletedCharacterCreation) {
+          history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.setVehicle}`);
+        }
         window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
       } catch (error) {
         console.error(error);
@@ -73,29 +75,30 @@ const CharacterMovesForm: FC = () => {
   // -------------------------------------------------- Render component  ---------------------------------------------------- //
   return (
     <Box
-      data-testid="moves-form"
+      data-testid="character-moves-form"
       fill
-      direction="column"
-      background="transparent"
       align="center"
       justify="start"
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box width="70vw" flex="grow" margin={{ bottom: '48px' }} gap="12px">
-        <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT ARE ${
-          !!character?.name ? character.name.toUpperCase() : '...'
-        }'S MOVES?`}</HeadingWS>
-        <Box direction="row" align="center" justify="between">
-          <StyledMarkdown>{pbCreatorData?.playbookCreator.movesInstructions}</StyledMarkdown>
+      <Box width="85vw" align="start" style={{ maxWidth: '763px' }} margin={{ bottom: '24px' }}>
+        <Box direction="row" fill="horizontal" justify="between" align="center">
+          <HeadingWS
+            level={2}
+            crustReady={crustReady}
+            textAlign="center"
+            style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+          >{`WHAT ARE ${!!character?.name ? character.name.toUpperCase() : '...'}'S MOVES?`}</HeadingWS>
           <ButtonWS
             primary
             label={settingMoves ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-            style={{ minHeight: '52px' }}
             disabled={selectedMoveIds.length !== moveChoiceCount}
             onClick={() => !settingMoves && handleSubmitCharacterMoves([...selectedMoveIds, ...defaultMoveIds])}
-            margin={{ left: '12px', bottom: '12px' }}
           />
         </Box>
+
+        <StyledMarkdown>{pbCreatorData?.playbookCreator.movesInstructions}</StyledMarkdown>
+
         <Text size="large" weight="bold" margin={{ vertical: '12px' }}>
           Default moves
         </Text>
@@ -109,8 +112,8 @@ const CharacterMovesForm: FC = () => {
           </Text>
         )}
         <Box align="start" gap="12px">
-          {!!playbookMoves &&
-            playbookMoves.map((move) => {
+          {!!optionalMoves &&
+            optionalMoves.map((move) => {
               return (
                 <CheckBox
                   key={move.id}

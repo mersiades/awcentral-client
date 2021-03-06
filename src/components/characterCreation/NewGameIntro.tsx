@@ -13,6 +13,7 @@ const NewGameIntro: FC<NewGameIntroProps> = ({ closeNewGameIntro }) => {
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game } = useGame();
   const { crustReady } = useFonts();
+  // console.log('game', game);
 
   // ------------------------------------------------------ Render -------------------------------------------------------- //
   const renderComms = () => {
@@ -52,28 +53,21 @@ const NewGameIntro: FC<NewGameIntroProps> = ({ closeNewGameIntro }) => {
     }
   };
   return (
-    <Box
-      fill
-      direction="column"
-      background="transparent"
-      align="center"
-      justify="center"
-      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
-    >
-      <Box width="60vw" flex="grow" align="center" justify="between">
-        <div>
+    <Box fill align="center" justify="start" animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
+      <Box width="85vw" align="center" style={{ maxWidth: '763px' }}>
+        <Box direction="row" fill="horizontal" justify="between" align="center">
           <HeadingWS crustReady={crustReady} textAlign="center" level={2} style={{ maxWidth: 'unset' }}>
             NEW GAME
           </HeadingWS>
-          <ParagraphWS textAlign="center" size="large">
-            Welcome to the jungle, baby.
-          </ParagraphWS>
-          {renderComms()}
-          <ParagraphWS textAlign="center" size="medium">
-            Once everyone's ready, punch NEXT to get started.
-          </ParagraphWS>
-        </div>
-        <ButtonWS label="NEXT" primary size="large" onClick={() => closeNewGameIntro()} margin="24px" alignSelf="end" />
+          <ButtonWS label="NEXT" primary size="large" onClick={() => closeNewGameIntro()} />
+        </Box>
+        <ParagraphWS textAlign="center" size="large">
+          Welcome to the jungle, baby.
+        </ParagraphWS>
+        {renderComms()}
+        <ParagraphWS textAlign="center" size="medium">
+          Once everyone's ready, punch NEXT to get started.
+        </ParagraphWS>
       </Box>
     </Box>
   );

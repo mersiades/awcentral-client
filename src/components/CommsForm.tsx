@@ -91,7 +91,7 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedCom
             <Box direction="column">
               <Box gap="small" direction="row" justify="between">
                 <Select
-                  id="app-input"
+                  aria-label="comms-app-input"
                   name="app"
                   size="large"
                   options={appOptions}
@@ -102,7 +102,7 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedCom
 
                 {!!game ? (
                   <ButtonWS
-                    data-testid="button-set-app"
+                    aria-label="set-app"
                     label={loadingCommsApp ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
                     secondary={!!game.commsApp}
                     primary={!game.commsApp}
@@ -132,14 +132,14 @@ const CommsForm: FC<CommsFormProps> = ({ game, setCreationStep, setHasSkippedCom
                 />
                 {!!game ? (
                   <ButtonWS
-                    data-testid="button-set-url"
+                    aria-label="set-url"
                     label={loadingCommsUrl ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
                     secondary={!!game.commsUrl}
                     primary={!game.commsUrl}
                     size="large"
                     alignSelf="center"
                     onClick={() => handleSetUrl()}
-                    disabled={!app}
+                    disabled={!url}
                   />
                 ) : (
                   <ButtonWS label="Set" primary disabled size="large" alignSelf="center" />

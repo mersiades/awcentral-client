@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client';
-import { Box, Heading, Markdown, Text, Tip } from 'grommet';
+import { Box, Markdown, Text, Tip } from 'grommet';
 import { omit } from 'lodash';
 import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
@@ -43,7 +43,7 @@ const Holds: FC<HoldsProps> = ({ holds }) => {
     if (!!gameId && !!userGameRole && !!character) {
       const holdNoTypename = omit(hold, ['__typename']) as HoldInput;
       try {
-        spendHold({ variables: { gameId, gameroleId: userGameRole.id, characterId: character.id, hold: holdNoTypename } });
+        spendHold({ variables: { gameId, gameRoleId: userGameRole.id, characterId: character.id, hold: holdNoTypename } });
       } catch (error) {
         console.error(error);
       }
@@ -54,7 +54,7 @@ const Holds: FC<HoldsProps> = ({ holds }) => {
     if (!!userGameRole && !!character) {
       const holdNoTypename = omit(hold, ['__typename']) as HoldInput;
       try {
-        removeHold({ variables: { gameroleId: userGameRole.id, characterId: character.id, hold: holdNoTypename } });
+        removeHold({ variables: { gameRoleId: userGameRole.id, characterId: character.id, hold: holdNoTypename } });
       } catch (error) {
         console.error(error);
       }
@@ -81,10 +81,11 @@ const Holds: FC<HoldsProps> = ({ holds }) => {
         <Tip key={hold.id} content={renderTipContent(hold)}>
           <Box animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}>
             <StyledHold
+              data-testid="hold-circle"
               onClick={() => !spendingHold && handleHoldLeftClick(hold)}
               onContextMenu={(e) => {
                 e.preventDefault();
-                handleHoldRightClick(hold);
+                !removingHold && handleHoldRightClick(hold);
                 return false;
               }}
             />

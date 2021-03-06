@@ -265,28 +265,191 @@ export const playbookCreatorFragments = {
       playbookUniqueCreator {
         id
         type
-        ...AngelKitCreator
-        ...BrainerGearCreator
-        ...CustomWeaponsCreator
-        ...EstablishmentCreator
-        ...FollowersCreator
-        ...GangCreator
-        ...HoldingCreator
-        ...SkinnerGearCreator
-        ...WeaponsCreator
-        ...WorkspaceCreator
+        angelKitCreator {
+          id
+          angelKitInstructions
+          startingStock
+        }
+        brainerGearCreator {
+          id
+          gear
+        }
+        customWeaponsCreator {
+          id
+          firearmsTitle
+          firearmsBaseInstructions
+          firearmsBaseOptions {
+            id
+            description
+            tags
+          }
+          firearmsOptionsInstructions
+          firearmsOptionsOptions {
+            id
+            description
+            tag
+          }
+          handTitle
+          handBaseInstructions
+          handBaseOptions {
+            id
+            description
+            tags
+          }
+          handOptionsInstructions
+          handOptionsOptions {
+            id
+            description
+            tag
+          }
+        }
+        establishmentCreator {
+          id
+          mainAttractionCount
+          sideAttractionCount
+          attractions
+          atmospheres
+          atmosphereCount
+          regularsNames
+          regularsQuestions
+          interestedPartyNames
+          interestedPartyQuestions
+          securityOptions {
+            id
+            description
+            value
+          }
+        }
+        followersCreator {
+          id
+          instructions
+          defaultNumberOfFollowers
+          defaultSurplusBarter
+          defaultFortune
+          strengthCount
+          weaknessCount
+          travelOptions
+          characterizationOptions
+          defaultWants
+          strengthOptions {
+            id
+            description
+            newNumberOfFollowers
+            surplusBarterChange
+            fortuneChange
+            surplusChange
+            wantChange
+          }
+          weaknessOptions {
+            id
+            description
+            newNumberOfFollowers
+            surplusBarterChange
+            fortuneChange
+            surplusChange
+            wantChange
+          }
+        }
+        gangCreator {
+          id
+          intro
+          defaultSize
+          defaultHarm
+          defaultArmor
+          strengthChoiceCount
+          weaknessChoiceCount
+          defaultTags
+          strengths {
+            id
+            description
+            modifier
+            tag
+          }
+          weaknesses {
+            id
+            description
+            modifier
+            tag
+          }
+        }
+        holdingCreator {
+          id
+          defaultHoldingSize
+          instructions
+          defaultSurplus
+          defaultGigs
+          defaultWant
+          defaultArmorBonus
+          defaultVehiclesCount
+          defaultBattleVehicleCount
+          defaultGangSize
+          defaultGangHarm
+          defaultGangArmor
+          defaultGangTag
+          strengthCount
+          weaknessCount
+          strengthOptions {
+            id
+            description
+            surplusChange
+            wantChange
+            newHoldingSize
+            gigChange
+            newGangSize
+            gangTagChange
+            gangHarmChange
+            newVehicleCount
+            newBattleVehicleCount
+            newArmorBonus
+          }
+          weaknessOptions {
+            id
+            description
+            surplusChange
+            wantChange
+            newHoldingSize
+            gigChange
+            newGangSize
+            gangTagChange
+            gangHarmChange
+            newVehicleCount
+            newBattleVehicleCount
+            newArmorBonus
+          }
+        }
+        skinnerGearCreator {
+          id
+          graciousWeaponCount
+          luxeGearCount
+          graciousWeaponChoices {
+            id
+            item
+            note
+          }
+          luxeGearChoices {
+            id
+            item
+            note
+          }
+        }
+        weaponsCreator {
+          id
+          bfoGunOptionCount
+          seriousGunOptionCount
+          backupWeaponsOptionCount
+          bigFuckOffGuns
+          seriousGuns
+          backupWeapons
+        }
+        workspaceCreator {
+          id
+          itemsCount
+          workspaceInstructions
+          projectInstructions
+          workspaceItems
+        }
       }
     }
-    ${playbookUniqueCreatorFragments.angelKitCreator}
-    ${playbookUniqueCreatorFragments.brainerGearCreator}
-    ${playbookUniqueCreatorFragments.customWeaponsCreator}
-    ${playbookUniqueCreatorFragments.establishmentCreator}
-    ${playbookUniqueCreatorFragments.followersCreator}
-    ${playbookUniqueCreatorFragments.gangCreator}
-    ${playbookUniqueCreatorFragments.holdingCreator}
-    ${playbookUniqueCreatorFragments.skinnerGearCreator}
-    ${playbookUniqueCreatorFragments.weaponsCreator}
-    ${playbookUniqueCreatorFragments.workspaceCreator}
   `,
   names: gql`
     fragment Names on PlaybookCreator {
@@ -374,22 +537,275 @@ const PLAYBOOK_CREATOR = gql`
       improvementInstructions
       movesInstructions
       hxInstructions
-      ...Names
-      ...CreatorLooks
-      ...StatsOptions
-      ...OptionalMoves
-      ...DefaultMoves
-      ...GearInstructions
-      ...PlaybookUniqueCreator
+      names {
+        id
+        name
+      }
+      looks {
+        id
+        look
+        category
+        playbookType
+      }
+      statsOptions {
+        id
+        COOL
+        HARD
+        HOT
+        SHARP
+        WEIRD
+      }
+      optionalMoves {
+        id
+        name
+        kind
+        description
+        playbook
+        stat
+        statModifier {
+          id
+          statToModify
+          modification
+        }
+        rollModifier {
+          id
+          movesToModify {
+            id
+          }
+          statToRollWith
+        }
+        moveAction {
+          id
+          actionType
+          rollType
+          statToRollWith
+        }
+      }
+      defaultMoves {
+        id
+        name
+        kind
+        description
+        playbook
+        stat
+        statModifier {
+          id
+          statToModify
+          modification
+        }
+        rollModifier {
+          id
+          movesToModify {
+            id
+          }
+          statToRollWith
+        }
+        moveAction {
+          id
+          actionType
+          rollType
+          statToRollWith
+        }
+      }
+      gearInstructions {
+        id
+        gearIntro
+        youGetItems
+        introduceChoice
+        numberCanChoose
+        chooseableGear
+        withMC
+        startingBarter
+      }
+      playbookUniqueCreator {
+        id
+        type
+        angelKitCreator {
+          id
+          angelKitInstructions
+          startingStock
+        }
+        brainerGearCreator {
+          id
+          gear
+        }
+        customWeaponsCreator {
+          id
+          firearmsTitle
+          firearmsBaseInstructions
+          firearmsBaseOptions {
+            id
+            description
+            tags
+          }
+          firearmsOptionsInstructions
+          firearmsOptionsOptions {
+            id
+            description
+            tag
+          }
+          handTitle
+          handBaseInstructions
+          handBaseOptions {
+            id
+            description
+            tags
+          }
+          handOptionsInstructions
+          handOptionsOptions {
+            id
+            description
+            tag
+          }
+        }
+        establishmentCreator {
+          id
+          mainAttractionCount
+          sideAttractionCount
+          attractions
+          atmospheres
+          atmosphereCount
+          regularsNames
+          regularsQuestions
+          interestedPartyNames
+          interestedPartyQuestions
+          securityOptions {
+            id
+            description
+            value
+          }
+        }
+        followersCreator {
+          id
+          instructions
+          defaultNumberOfFollowers
+          defaultSurplusBarter
+          defaultFortune
+          strengthCount
+          weaknessCount
+          travelOptions
+          characterizationOptions
+          defaultWants
+          strengthOptions {
+            id
+            description
+            newNumberOfFollowers
+            surplusBarterChange
+            fortuneChange
+            surplusChange
+            wantChange
+          }
+          weaknessOptions {
+            id
+            description
+            newNumberOfFollowers
+            surplusBarterChange
+            fortuneChange
+            surplusChange
+            wantChange
+          }
+        }
+        gangCreator {
+          id
+          intro
+          defaultSize
+          defaultHarm
+          defaultArmor
+          strengthChoiceCount
+          weaknessChoiceCount
+          defaultTags
+          strengths {
+            id
+            description
+            modifier
+            tag
+          }
+          weaknesses {
+            id
+            description
+            modifier
+            tag
+          }
+        }
+        holdingCreator {
+          id
+          defaultHoldingSize
+          instructions
+          defaultSurplus
+          defaultGigs
+          defaultWant
+          defaultArmorBonus
+          defaultVehiclesCount
+          defaultBattleVehicleCount
+          defaultGangSize
+          defaultGangHarm
+          defaultGangArmor
+          defaultGangTag
+          strengthCount
+          weaknessCount
+          strengthOptions {
+            id
+            description
+            surplusChange
+            wantChange
+            newHoldingSize
+            gigChange
+            newGangSize
+            gangTagChange
+            gangHarmChange
+            newVehicleCount
+            newBattleVehicleCount
+            newArmorBonus
+          }
+          weaknessOptions {
+            id
+            description
+            surplusChange
+            wantChange
+            newHoldingSize
+            gigChange
+            newGangSize
+            gangTagChange
+            gangHarmChange
+            newVehicleCount
+            newBattleVehicleCount
+            newArmorBonus
+          }
+        }
+        skinnerGearCreator {
+          id
+          graciousWeaponCount
+          luxeGearCount
+          graciousWeaponChoices {
+            id
+            item
+            note
+          }
+          luxeGearChoices {
+            id
+            item
+            note
+          }
+        }
+        weaponsCreator {
+          id
+          bfoGunOptionCount
+          seriousGunOptionCount
+          backupWeaponsOptionCount
+          bigFuckOffGuns
+          seriousGuns
+          backupWeapons
+        }
+        workspaceCreator {
+          id
+          itemsCount
+          workspaceInstructions
+          projectInstructions
+          workspaceItems
+        }
+      }
     }
   }
-  ${playbookCreatorFragments.names}
-  ${playbookCreatorFragments.looks}
-  ${playbookCreatorFragments.statsOptions}
-  ${playbookCreatorFragments.optionalMoves}
-  ${playbookCreatorFragments.defaultMoves}
-  ${playbookCreatorFragments.gearInstructions}
-  ${playbookCreatorFragments.playbookUniqueCreator}
 `;
 
 export default PLAYBOOK_CREATOR;

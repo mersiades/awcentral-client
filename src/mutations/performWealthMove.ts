@@ -7,18 +7,18 @@ export interface PerformWealthMoveData {
 
 export interface PerformWealthMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
 }
 
 const PERFORM_WEALTH_MOVE = gql`
-  mutation PerformWealthMove($gameId: String!, $gameroleId: String!, $characterId: String!) {
-    performWealthMove(gameId: $gameId, gameroleId: $gameroleId, characterId: $characterId) {
+  mutation PerformWealthMove($gameId: String!, $gameRoleId: String!, $characterId: String!) {
+    performWealthMove(gameId: $gameId, gameRoleId: $gameRoleId, characterId: $characterId) {
       id
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

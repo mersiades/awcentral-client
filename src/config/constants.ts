@@ -32,3 +32,5 @@ export const JUST_GIVE_MOTIVE_NAME = 'JUST GIVE ME A MOTIVE';
 
 export const gamePageTopNavbarHeight = 30;
 export const gamePageBottomNavbarHeight = 80;
+
+export const DEFAULT_VEHICLE_NAME = 'Unnamed vehicle';

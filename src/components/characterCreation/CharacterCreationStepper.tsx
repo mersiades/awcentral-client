@@ -175,12 +175,16 @@ const CharacterCreationStepper: FC = () => {
       <Text color="white" weight="bold">
         Stats
       </Text>
-      {!!character && character.statsBlock?.stats.length > 0 ? (
-        <CustomUL>
+      {!!character && !!character.statsBlock && character.statsBlock.stats.length > 0 ? (
+        <>
           {character.statsBlock.stats.map((stat) => (
-            <li key={stat.id}>{`${stat.stat} ${'--'.repeat(8 - stat.stat.length)} ${stat.value}`}</li>
+            <Box key={stat.id} direction="row" fill="horizontal" justify="between" align="center">
+              <Text>{stat.stat}</Text>
+              <Text>{`${'--'.repeat(9 - stat.stat.length)}`}</Text>
+              <Text>{stat.value}</Text>
+            </Box>
           ))}
-        </CustomUL>
+        </>
       ) : (
         <Text>...</Text>
       )}
@@ -509,9 +513,11 @@ const CharacterCreationStepper: FC = () => {
         <CustomUL>
           {character.hxBlock.map((hxStat) => {
             return (
-              <li key={hxStat.characterId}>{`${hxStat.characterName} ${'--'.repeat(
-                hxStat.characterName.length > 9 ? 1 : 10 - hxStat.characterName.length
-              )} ${hxStat.hxValue}`}</li>
+              <Box key={hxStat.characterId} direction="row" fill="horizontal" justify="between" align="center">
+                <Text>{hxStat.characterName}</Text>
+                <Text>{`${'--'.repeat(hxStat.characterName.length > 9 ? 1 : 10 - hxStat.characterName.length)}`}</Text>
+                <Text>{hxStat.hxValue}</Text>
+              </Box>
             );
           })}
         </CustomUL>
@@ -598,6 +604,15 @@ const CharacterCreationStepper: FC = () => {
           );
 
         case 9:
+          return (
+            <>
+              {boxesArray[5]}
+              {boxesArray[6]}
+              {boxesArray[7]}
+              {boxesArray[8]}
+            </>
+          );
+        case 10:
           return (
             <>
               {boxesArray[5]}

@@ -38,6 +38,7 @@ const CharacterPlaybookForm: FC = () => {
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: playbooksData } = useQuery<PlaybooksData>(PLAYBOOKS);
   const playbooks = playbooksData?.playbooks;
+
   const [createCharacter, { loading: creatingCharacter }] = useMutation<CreateCharacterData, CreateCharacterVars>(
     CREATE_CHARACTER
   );
@@ -131,10 +132,8 @@ const CharacterPlaybookForm: FC = () => {
   return (
     <Box
       fill
-      direction="column"
-      background="transparent"
       align="center"
-      justify="between"
+      justify="start"
       className={startFadeOut ? 'fadeOut' : ''}
       animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
@@ -148,10 +147,12 @@ const CharacterPlaybookForm: FC = () => {
         />
       )}
       {!selectedPlaybook && showIntro && (
-        <Box>
-          <HeadingWS crustReady={crustReady} level={2}>
-            Choose your playbook
-          </HeadingWS>
+        <Box width="85vw" align="center" style={{ maxWidth: '763px' }}>
+          <Box direction="row" fill="horizontal" justify="start" align="center">
+            <HeadingWS crustReady={crustReady} level={2}>
+              Choose your playbook
+            </HeadingWS>
+          </Box>
           <ParagraphWS>
             You should probably wait for your MC and the rest of your crew, tho. No headstarts for nobody in Apocalypse
             World.
@@ -159,7 +160,7 @@ const CharacterPlaybookForm: FC = () => {
         </Box>
       )}
       {!!selectedPlaybook && (
-        <Box direction="row" fill="horizontal" margin={{ bottom: '125px' }} justify="center">
+        <Box direction="row" fill="horizontal" margin={{ bottom: '125px' }} justify="center" align="start">
           <Box animation="fadeIn" justify="center">
             <img
               src={selectedPlaybook.playbookImageUrl}
@@ -168,32 +169,33 @@ const CharacterPlaybookForm: FC = () => {
             />
           </Box>
           <Box pad="12px" animation="fadeIn" justify="around" align="center">
-            <HeadingWS crustReady={crustReady} level={2} alignSelf="center" margin="0px">
-              {decapitalize(selectedPlaybook.playbookType)}
-            </HeadingWS>
+            <Box direction="row" fill="horizontal" justify="between" align="center" margin={{ bottom: '12px' }}>
+              <HeadingWS crustReady={crustReady} level={2} alignSelf="center" margin="0px">
+                {decapitalize(selectedPlaybook.playbookType)}
+              </HeadingWS>
+              <ButtonWS
+                label={
+                  settingPlaybook || creatingCharacter ? (
+                    <Spinner fillColor="#FFF" width="230px" height="36px" />
+                  ) : (
+                    `SELECT ${decapitalize(selectedPlaybook.playbookType)}`
+                  )
+                }
+                primary
+                size="large"
+                onClick={() => {
+                  setStartFadeOut(true);
+                  checkPlaybookReset(selectedPlaybook.playbookType);
+                }}
+                style={{ width: '295px' }}
+              />
+            </Box>
             <Box overflow="auto" style={{ maxWidth: '856px', maxHeight: '30vh' }}>
               <StyledMarkdown>{selectedPlaybook.intro}</StyledMarkdown>
               <em>
                 <StyledMarkdown>{selectedPlaybook.introComment}</StyledMarkdown>
               </em>
             </Box>
-
-            <ButtonWS
-              label={
-                settingPlaybook || creatingCharacter ? (
-                  <Spinner fillColor="#FFF" width="200px" height="36px" />
-                ) : (
-                  `SELECT ${decapitalize(selectedPlaybook.playbookType)}`
-                )
-              }
-              primary
-              size="large"
-              onClick={() => {
-                setStartFadeOut(true);
-                checkPlaybookReset(selectedPlaybook.playbookType);
-              }}
-              margin="12px"
-            />
           </Box>
         </Box>
       )}
@@ -216,6 +218,7 @@ const CharacterPlaybookForm: FC = () => {
                 height="95%"
                 justify="center"
                 align="center"
+                flex="grow"
               >
                 <img
                   src={playbook.playbookImageUrl}

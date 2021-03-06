@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
+import { omit } from 'lodash';
 import { useMutation, useQuery } from '@apollo/client';
 import { useHistory } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -6,23 +7,29 @@ import styled from 'styled-components';
 import { Box, FormField, TextInput } from 'grommet';
 
 import Spinner from '../Spinner';
+import StatsBox from '../playbookPanel/StatsBox';
 import { ButtonWS, HeadingWS, RedBox, TextWS } from '../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../queries/playbookCreator';
-import SET_CHARACTER_HX, { SetCharacterHxData, SetCharacterHxVars } from '../../mutations/setCharacterHx';
 import TOGGLE_STAT_HIGHLIGHT, {
+  getToggleStatHighlightOR,
   ToggleStatHighlightData,
   ToggleStatHighlightVars,
 } from '../../mutations/toggleStatHighlight';
 import FINISH_CHARACTER_CREATION, {
   FinishCharacterCreationData,
   FinishCharacterCreationVars,
+  getFinishCharacterCreationOR,
 } from '../../mutations/finishCharacterCreation';
+import ADJUST_CHARACTER_HX, {
+  AdjustCharacterHxData,
+  AdjustCharacterHxVars,
+  getAdjustCharacterHxOR,
+} from '../../mutations/adjustCharacterHx';
 import { StatType } from '../../@types/enums';
 import { HxInput } from '../../@types';
 import { Character } from '../../@types/dataInterfaces';
 import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
-import StatsBox from '../playbookPanel/StatsBox';
 import { decapitalize } from '../../helpers/decapitalize';
 
 const StyledMarkdown = styled(ReactMarkdown)`
@@ -35,10 +42,8 @@ const StyledMarkdown = styled(ReactMarkdown)`
 `;
 
 const CharacterHxForm: FC = () => {
-  // -------------------------------------------------- Component state ---------------------------------------------------- //
-  const [value, setValue] = useState<HxInput[]>([]);
-  const [hasSet, setHasSet] = useState(false);
-
+  // ------------------------------------------------------- State --------------------------------------------------------- //]
+  const [errorIds, setErrorIds] = useState<string[]>([]);
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { game, character, userGameRole, otherPlayerGameRoles } = useGame();
   const { crustReady } = useFonts();
@@ -57,7 +62,9 @@ const CharacterHxForm: FC = () => {
     ToggleStatHighlightData,
     ToggleStatHighlightVars
   >(TOGGLE_STAT_HIGHLIGHT);
-  const [setCharacterHx, { loading: settingHx }] = useMutation<SetCharacterHxData, SetCharacterHxVars>(SET_CHARACTER_HX);
+  const [adjustCharacterHx, { loading: adjustingHx }] = useMutation<AdjustCharacterHxData, AdjustCharacterHxVars>(
+    ADJUST_CHARACTER_HX
+  );
   const [finishCharacterCreation, { loading: finishingCreation }] = useMutation<
     FinishCharacterCreationData,
     FinishCharacterCreationVars
@@ -76,6 +83,7 @@ const CharacterHxForm: FC = () => {
       try {
         await toggleStatHighlight({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, stat },
+          optimisticResponse: getToggleStatHighlightOR(character, stat) as ToggleStatHighlightData,
         });
       } catch (error) {
         console.error(error);
@@ -83,11 +91,12 @@ const CharacterHxForm: FC = () => {
     }
   };
 
-  const handleSubmitCharacterHx = async (hxInputs: HxInput[]) => {
+  const handleAdjustHx = async (hxInput: HxInput) => {
     if (!!userGameRole && !!character) {
       try {
-        await setCharacterHx({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id, hxStats: hxInputs },
+        await adjustCharacterHx({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, hxStat: hxInput },
+          optimisticResponse: getAdjustCharacterHxOR(character, hxInput) as AdjustCharacterHxData,
         });
       } catch (error) {
         console.error(error);
@@ -98,9 +107,12 @@ const CharacterHxForm: FC = () => {
   const handleFinishCreation = async () => {
     if (!!userGameRole && !!character && !!game) {
       try {
-        await finishCharacterCreation({
-          variables: { gameRoleId: userGameRole.id, characterId: character.id },
-        });
+        if (!character.hasCompletedCharacterCreation) {
+          await finishCharacterCreation({
+            variables: { gameRoleId: userGameRole.id, characterId: character.id },
+            optimisticResponse: getFinishCharacterCreationOR(character) as FinishCharacterCreationData,
+          });
+        }
         history.push(`/pre-game/${game.id}`);
       } catch (error) {
         console.error(error);
@@ -108,43 +120,49 @@ const CharacterHxForm: FC = () => {
     }
   };
 
-  const filterSubmit = (hxInputs: HxInput[]) => {
-    characters.forEach((char) => {
-      const input = hxInputs.find((inp) => inp.characterId === char.id);
-      if (!input && !!char.name) {
-        hxInputs = [...hxInputs, { characterId: char.id, characterName: char.name, hxValue: 0 }];
-      }
-    });
-    handleSubmitCharacterHx(hxInputs);
-    setHasSet(true);
-  };
-
-  // Loads any existing HxStats into component state
-  useEffect(() => {
-    let initialValue: HxInput[] = [];
-    !!character?.hxBlock &&
-      character.hxBlock.forEach(({ characterId, characterName, hxValue }) => {
-        initialValue = [...initialValue, { characterId, characterName, hxValue }];
-      });
-    setValue(initialValue);
-  }, [character, setValue]);
-
   return (
     <Box
+      data-testid="character-hx-form"
       fill
-      direction="column"
-      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
       align="center"
       justify="start"
+      animation={{ type: 'fadeIn', delay: 0, duration: 500, size: 'xsmall' }}
     >
-      <Box width="60vw" flex="grow" align="center">
-        <HeadingWS level={2} crustReady={crustReady} textAlign="center" style={{ maxWidth: 'unset' }}>{`WHAT HISTORY DOES ${
-          !!character?.name ? character.name.toUpperCase() : '...'
-        } HAVE?`}</HeadingWS>
+      <Box width="85vw" align="start" style={{ maxWidth: '742px' }} margin={{ bottom: '24px' }}>
+        <Box direction="row" fill="horizontal" justify="between" align="center">
+          <HeadingWS
+            level={2}
+            crustReady={crustReady}
+            textAlign="center"
+            style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+          >{`WHAT HISTORY DOES ${!!character?.name ? character.name.toUpperCase() : '...'} HAVE?`}</HeadingWS>
+          <ButtonWS
+            primary
+            label={finishingCreation ? <Spinner fillColor="#FFF" width="138px" height="36px" /> : 'GO TO GAME'}
+            style={{ minHeight: '52px' }}
+            disabled={
+              character?.hxBlock.length !== otherPlayerGameRoles?.length ||
+              character?.statsBlock?.stats.filter((stat) => stat.isHighlighted === true).length !== 2
+            }
+            onClick={() => !finishingCreation && handleFinishCreation()}
+          />
+        </Box>
         <Box direction="row" wrap justify="around">
           {characters.map((char) => {
             const looks = char.looks?.map((look) => look.look);
-            const existingValue = character?.hxBlock.find((hxStat) => hxStat.characterId === char.id)?.hxValue;
+            let hxStat: HxInput;
+            const existingHxStat = character?.hxBlock.find((hxStat) => hxStat.characterId === char.id);
+            if (!!existingHxStat) {
+              hxStat = omit(existingHxStat, ['__typename']) as HxInput;
+            } else {
+              // Create new HxStat
+              hxStat = {
+                id: undefined,
+                characterId: char.id,
+                characterName: char.name as string,
+                hxValue: 0,
+              };
+            }
             return (
               !!char.name && (
                 <RedBox
@@ -154,43 +172,46 @@ const CharacterHxForm: FC = () => {
                   width="350px"
                   margin={{ right: '12px', bottom: '12px' }}
                 >
-                  <Box width="250px" pad="12px">
-                    <HeadingWS crustReady={crustReady} level={3} style={{ marginTop: '6px', marginBottom: '6px' }}>
+                  <Box pad="12px" fill="vertical" justify="center" width="100px" align="center">
+                    <HeadingWS level={4} style={{ marginTop: '6px', marginBottom: '6px' }}>
                       {char.name}
                     </HeadingWS>
-                    {!!char.playbook && (
-                      <TextWS weight="bold" size="medium">
-                        {decapitalize(char.playbook)}
-                      </TextWS>
-                    )}
-                    {!!looks && <TextWS size="small">{looks.join(', ')}</TextWS>}
-                  </Box>
-                  <Box pad="12px" fill="vertical" justify="center" width="100px">
-                    <FormField name={char.id} label="Hx">
+                    <FormField name={char.id}>
                       <TextInput
                         name={char.id}
-                        type="number"
+                        aria-label={`${char.name}-hx-input`}
                         size="xlarge"
                         textAlign="center"
-                        defaultValue={existingValue || 0}
+                        type="text"
+                        maxLength={2}
+                        defaultValue={existingHxStat?.hxValue.toString() || '0'}
                         onChange={(e) => {
-                          const existingInput = value.find((hxInput) => hxInput.characterId === char.id);
-                          if (!!existingInput) {
-                            const index = value.indexOf(existingInput);
-                            value.splice(index, 1);
+                          const match = e.target.value.match(/^-?[1-3]$/gm);
+                          if (!!match) {
+                            setErrorIds(errorIds.filter((id) => id !== char.id));
+                            match.length == 1 && !adjustingHx && handleAdjustHx({ ...hxStat, hxValue: parseInt(match[0]) });
+                          } else {
+                            e.preventDefault();
+                            if (!['', '-'].includes(e.target.value)) {
+                              setErrorIds([...errorIds, char.id]);
+                            } else {
+                              setErrorIds(errorIds.filter((id) => id !== char.id));
+                            }
                           }
-                          !!char.name &&
-                            setValue([
-                              ...value,
-                              {
-                                characterId: char.id,
-                                characterName: char.name,
-                                hxValue: parseInt(e.target.value),
-                              },
-                            ]);
                         }}
                       />
                     </FormField>
+                  </Box>
+                  <Box width="250px" pad="12px">
+                    <HeadingWS level={4} style={{ marginTop: '6px', marginBottom: '6px' }}>
+                      {!!char.playbook && 'the ' + decapitalize(char.playbook)}
+                    </HeadingWS>
+                    {!!looks && <TextWS size="small">{looks.join(', ')}</TextWS>}
+                    {errorIds.includes(char.id) && (
+                      <TextWS color="accent-3" size="small">
+                        Enter digits from -3 to 3
+                      </TextWS>
+                    )}
                   </Box>
                 </RedBox>
               )
@@ -207,26 +228,6 @@ const CharacterHxForm: FC = () => {
             handleToggleHighlight={handleToggleHighlight}
           />
         )}
-
-        <Box fill="horizontal" direction="row" justify="end" gap="12px" margin={{ vertical: '12px' }}>
-          <ButtonWS
-            primary={!hasSet}
-            secondary={hasSet}
-            label={settingHx ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
-            style={{ minHeight: '52px' }}
-            disabled={value.length === 0}
-            onClick={() => !settingHx && filterSubmit(value)}
-          />
-          {hasSet && (
-            <ButtonWS
-              primary
-              label={finishingCreation ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'GO TO GAME'}
-              style={{ minHeight: '52px' }}
-              disabled={value.length === 0}
-              onClick={() => !finishingCreation && handleFinishCreation()}
-            />
-          )}
-        </Box>
       </Box>
     </Box>
   );

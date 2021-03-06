@@ -41,11 +41,14 @@ import {
   CarCreator,
   CharacterMove,
   CustomWeaponsCreator,
+  EstablishmentCreator,
+  FollowersCreator,
   FollowersOption,
   GangCreator,
   GangOption,
   GearInstructions,
   HoldConditions,
+  HoldingCreator,
   HoldingOption,
   Look,
   Move,
@@ -56,6 +59,7 @@ import {
   PlaybookUniqueCreator,
   PlusOneForwardConditions,
   RollModifier,
+  SecurityOption,
   SkinnerGearCreator,
   SkinnerGearItem,
   StatModifier,
@@ -64,18 +68,19 @@ import {
   VehicleCreator,
   VehicleFrame,
   WeaponsCreator,
+  WorkspaceCreator,
 } from '../@types/staticDataInterfaces';
 import { ANGEL_SPECIAL_NAME, UNDER_FIRE_NAME } from '../config/constants';
 
 // Same as Character, but with no nullable fields
 interface MockCharacter {
   id: string;
-  statsBlock: StatsBlock;
+  statsBlock?: StatsBlock;
   hxBlock: HxStat[];
   gear: string[];
   looks: Look[]; // Does graphql return an empty array or undefined? // May need an id-less version of Look "EmbeddedLook"
-  name: string;
-  barter: number;
+  name?: string;
+  barter?: number;
   playbook: PlaybookType;
   harm: CharacterHarm;
   vehicleCount: number;
@@ -83,7 +88,7 @@ interface MockCharacter {
   hasCompletedCharacterCreation: boolean;
   hasPlusOneForward: boolean;
   holds: Hold[];
-  playbookUnique: PlaybookUnique;
+  playbookUnique?: PlaybookUnique;
   characterMoves: CharacterMove[];
   vehicles: Vehicle[];
   battleVehicles: BattleVehicle[];
@@ -112,9 +117,36 @@ export const dummyRollModifier: RollModifier = {
     {
       id: 'dummy',
       name: 'dummy',
-      description: 'dummy',
       kind: MoveType.basic,
+      description: 'dummy',
       playbook: PlaybookType.angel,
+      stat: StatType.hx,
+      statModifier: {
+        id: 'dummy',
+        statToModify: StatType.sharp,
+        modification: 0,
+      },
+      // rollModifier: {}, // Can't include RollModifier because recursive
+      moveAction: {
+        id: 'dummy',
+        actionType: MoveActionType.roll,
+        rollType: RollType.stat,
+        statToRollWith: StatType.hard,
+        holdConditions: {
+          id: 'dummy',
+          onTenPlus: 3,
+          onSevenToNine: 1,
+          onMiss: 0,
+        },
+        plusOneForwardConditions: {
+          id: 'dummy',
+          isManualGrant: false,
+          onTenPlus: false,
+          onSevenToNine: false,
+          onMiss: false,
+        },
+      },
+      __typename: 'Move',
     },
   ],
   statToRollWith: StatType.sharp,
@@ -155,7 +187,19 @@ export const dummyCustomWeaponsCreator: CustomWeaponsCreator = {
 
 // TODO: dummySecurityOption
 
-// TODO: dummyEstablishmentCreator
+export const dummyEstablishmentCreator: EstablishmentCreator = {
+  id: 'dummy',
+  mainAttractionCount: 1,
+  sideAttractionCount: 2,
+  attractions: [],
+  atmospheres: [],
+  atmosphereCount: [],
+  regularsNames: [],
+  regularsQuestions: [],
+  interestedPartyNames: [],
+  interestedPartyQuestions: [],
+  securityOptions: [],
+};
 
 export const dummyFollowersOption: FollowersOption = {
   id: 'dummy',
@@ -167,7 +211,20 @@ export const dummyFollowersOption: FollowersOption = {
   wantChange: ['dummy'],
 };
 
-// TODO: dummyFollowersCreator
+export const dummyFollowerCreator: FollowersCreator = {
+  id: 'dummy',
+  instructions: 'dummy',
+  defaultNumberOfFollowers: 0,
+  defaultSurplusBarter: 0,
+  defaultFortune: 0,
+  strengthCount: 0,
+  weaknessCount: 0,
+  travelOptions: [],
+  characterizationOptions: [],
+  defaultWants: [],
+  strengthOptions: [],
+  weaknessOptions: [],
+};
 
 export const dummyGangOption: GangOption = {
   id: 'dummy',
@@ -204,7 +261,25 @@ export const dummyHoldingOption: HoldingOption = {
   newArmorBonus: 0,
 };
 
-// TODO: dummyHoldingCreator
+export const dummyHoldingCreator: HoldingCreator = {
+  id: 'dummy',
+  defaultHoldingSize: HoldingSize.medium,
+  instructions: 'dummy',
+  defaultSurplus: 0,
+  defaultWant: 'dummy',
+  defaultGigs: [],
+  defaultArmorBonus: 0,
+  defaultVehiclesCount: 0,
+  defaultBattleVehicleCount: 0,
+  defaultGangSize: GangSize.medium,
+  defaultGangHarm: 0,
+  defaultGangArmor: 0,
+  defaultGangTag: 'dummy',
+  strengthCount: 0,
+  weaknessCount: 0,
+  strengthOptions: [],
+  weaknessOptions: [],
+};
 
 export const dummySkinnerGearItem: SkinnerGearItem = {
   id: 'dummy',
@@ -230,7 +305,13 @@ export const dummyWeaponsCreator: WeaponsCreator = {
   backupWeapons: ['dummy'],
 };
 
-// TODO: dummyWord=kspaceCreator
+export const dummyWorkspaceCreator: WorkspaceCreator = {
+  id: 'dummy',
+  itemsCount: 0,
+  workspaceInstructions: 'dummy',
+  projectInstructions: 'dummy',
+  workspaceItems: [],
+};
 
 export const dummyHolding: Holding = {
   id: 'dummy',
@@ -422,13 +503,13 @@ export const mockStatsBlock1: StatsBlock = {
       id: 'mock-statsblock-stat-id-1',
       stat: StatType.cool,
       value: 1,
-      isHighlighted: false,
+      isHighlighted: true,
     },
     {
       id: 'mock-statsblock-stat-id-2',
       stat: StatType.hard,
       value: 1,
-      isHighlighted: false,
+      isHighlighted: true,
     },
     {
       id: 'mock-statsblock-stat-id-3',
@@ -488,17 +569,31 @@ export const mockStatsBlockWithHighlight: StatsBlock = {
   ],
 };
 
+export const mockPlaybookCreatorMoveAngel1: Move = {
+  id: 'angel-move-id-1',
+  name: ANGEL_SPECIAL_NAME,
+  kind: MoveType.default,
+  description: 'If you and another character have sex,',
+  playbook: PlaybookType.angel,
+  stat: StatType.hx,
+  statModifier: dummyStatModifier,
+  rollModifier: dummyRollModifier,
+  moveAction: dummyMoveAction,
+  __typename: 'Move',
+};
+
 export const mockCharacterMoveAngel1: CharacterMove = {
   id: 'angel-move-id-1',
   name: ANGEL_SPECIAL_NAME,
-  description: 'If you and another character have sex,',
   kind: MoveType.default,
+  description: 'If you and another character have sex,',
   playbook: PlaybookType.angel,
   stat: StatType.hx,
-  rollModifier: dummyRollModifier,
   statModifier: dummyStatModifier,
+  rollModifier: dummyRollModifier,
   moveAction: dummyMoveAction,
   isSelected: true,
+  __typename: 'Move',
 };
 
 export const mockCharacterMoveAngel2: CharacterMove = {
@@ -512,6 +607,7 @@ export const mockCharacterMoveAngel2: CharacterMove = {
   statModifier: dummyStatModifier,
   moveAction: dummyMoveAction,
   isSelected: false,
+  __typename: 'Move',
 };
 
 export const mockCharacterMoveAngel3: CharacterMove = {
@@ -525,6 +621,7 @@ export const mockCharacterMoveAngel3: CharacterMove = {
   statModifier: dummyStatModifier,
   moveAction: dummyMoveAction,
   isSelected: false,
+  __typename: 'Move',
 };
 
 export const mockCharacterMoveAngel4: CharacterMove = {
@@ -538,82 +635,106 @@ export const mockCharacterMoveAngel4: CharacterMove = {
   statModifier: dummyStatModifier,
   moveAction: dummyMoveAction,
   isSelected: false,
+  __typename: 'Move',
 };
 
 export const mockNameAngel1: Name = {
   id: 'mock-angel-name-id-1',
   name: 'Jay',
+  __typename: 'Name',
 };
 
 export const mockNameAngel2: Name = {
   id: 'mock-angel-name-id-2',
   name: 'Boo',
+  __typename: 'Name',
 };
 
 export const mockLookAngel1: Look = {
   id: 'mock-angel-look-id-1',
   look: 'man',
   category: LookType.gender,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookAngel2: Look = {
   id: 'mock-angel-look-id-2',
   look: 'woman',
   category: LookType.gender,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookAngel3: Look = {
   id: 'mock-angel-look-id-3',
   look: 'utility wear',
   category: LookType.clothes,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookAngel4: Look = {
   id: 'mock-angel-look-id-4',
   look: 'casual wear plus utility',
   category: LookType.clothes,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookAngel5: Look = {
   id: 'mock-angel-look-id-5',
   look: 'kind face',
   category: LookType.face,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookAngel6: Look = {
   id: 'mock-angel-look-id-6',
   look: 'strong face',
   category: LookType.face,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookAngel7: Look = {
   id: 'mock-angel-look-id-7',
   look: 'hard eyes',
   category: LookType.eyes,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookAngel8: Look = {
   id: 'mock-angel-look-id-8',
   look: 'quick eyes',
   category: LookType.eyes,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookAngel9: Look = {
   id: 'mock-angel-look-id-9',
   look: 'compact body',
   category: LookType.body,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookAngel10: Look = {
   id: 'mock-angel-look-id-10',
   look: 'stout body',
   category: LookType.body,
+  playbookType: PlaybookType.angel,
+  __typename: 'Look',
 };
 
 export const mockLookBettleBabe1: Look = {
   id: 'mock-battlebabe-look-id-1',
   look: 'woman',
   category: LookType.gender,
+  playbookType: PlaybookType.battlebabe,
   __typename: 'Look',
 };
 
@@ -621,6 +742,7 @@ export const mockLookBattlebabe2: Look = {
   id: 'mock-battlebabe-look-id-2',
   look: 'formal wear',
   category: LookType.clothes,
+  playbookType: PlaybookType.battlebabe,
   __typename: 'Look',
 };
 
@@ -747,6 +869,7 @@ export const mockCharacter2: MockCharacter = {
   barter: 2,
   hxBlock: [
     {
+      id: 'hx-stat-id-1',
       characterId: mockCharacter1.id,
       characterName: mockCharacter1.name as string,
       hxValue: 1,
@@ -776,7 +899,7 @@ export const mockGame1: Game = {
   players: [{ displayName: 'mock-user-2', id: 'mock-keycloak-id-2' }],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-1',
+      id: 'mock-gameRole-id-1',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-1',
       characters: [],
@@ -784,7 +907,7 @@ export const mockGame1: Game = {
       threats: [],
     },
     {
-      id: 'mock-gamerole-id-3',
+      id: 'mock-gameRole-id-3',
       role: RoleType.player,
       userId: 'mock-keycloak-id-2',
       characters: [],
@@ -806,7 +929,7 @@ export const mockGame2: Game = {
   players: [{ displayName: 'mock-user-1', id: 'mock-keycloak-id-1' }],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-2',
+      id: 'mock-gameRole-id-2',
       role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       characters: [],
@@ -814,7 +937,7 @@ export const mockGame2: Game = {
       threats: [],
     },
     {
-      id: 'mock-gamerole-id-4',
+      id: 'mock-gameRole-id-4',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       characters: [],
@@ -836,7 +959,7 @@ export const mockGame3: Game = {
   players: [],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-5',
+      id: 'mock-gameRole-id-5',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-1',
       characters: [],
@@ -859,7 +982,7 @@ export const mockGame4: Game = {
   players: [{ id: 'mock-keycloak-id-3', displayName: 'mock-user-3' }],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-6',
+      id: 'mock-gameRole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       characters: [],
@@ -867,7 +990,7 @@ export const mockGame4: Game = {
       threats: [],
     },
     {
-      id: 'mock-gamerole-id-7',
+      id: 'mock-gameRole-id-7',
       role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       characters: [],
@@ -896,7 +1019,7 @@ export const mockGame5: Game = {
   gameRoles: [
     {
       __typename: 'GameRole',
-      id: 'mock-gamerole-id-6',
+      id: 'mock-gameRole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
@@ -905,7 +1028,7 @@ export const mockGame5: Game = {
     },
     {
       __typename: 'GameRole',
-      id: 'mock-gamerole-id-7',
+      id: 'mock-gameRole-id-7',
       role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       npcs: [],
@@ -914,7 +1037,7 @@ export const mockGame5: Game = {
     },
     {
       __typename: 'GameRole',
-      id: 'mock-gamerole-id-8',
+      id: 'mock-gameRole-id-8',
       role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       npcs: [],
@@ -938,7 +1061,7 @@ export const mockGame6: Game = {
   ],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-6',
+      id: 'mock-gameRole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
@@ -946,7 +1069,7 @@ export const mockGame6: Game = {
       characters: [],
     },
     // {
-    //   id: 'mock-gamerole-id-7',
+    //   id: 'mock-gameRole-id-7',
     //   role: RoleType.player,
     //   userId: 'mock-keycloak-id-3',
     //   npcs: [],
@@ -954,7 +1077,7 @@ export const mockGame6: Game = {
     //   characters: [{ ...mockCharacter1, hasCompletedCharacterCreation: true }],
     // },
     // {
-    //   id: 'mock-gamerole-id-8',
+    //   id: 'mock-gameRole-id-8',
     //   role: RoleType.player,
     //   userId: 'mock-keycloak-id-1',
     //   npcs: [],
@@ -982,7 +1105,7 @@ export const mockGame7: Game = {
   ],
   gameRoles: [
     {
-      id: 'mock-gamerole-id-6',
+      id: 'mock-gameRole-id-6',
       role: RoleType.mc,
       userId: 'mock-keycloak-id-2',
       npcs: [],
@@ -990,7 +1113,7 @@ export const mockGame7: Game = {
       characters: [],
     },
     {
-      id: 'mock-gamerole-id-7',
+      id: 'mock-gameRole-id-7',
       role: RoleType.player,
       userId: 'mock-keycloak-id-3',
       npcs: [],
@@ -998,7 +1121,7 @@ export const mockGame7: Game = {
       characters: [{ ...mockCharacter1, hasCompletedCharacterCreation: true }],
     },
     {
-      id: 'mock-gamerole-id-8',
+      id: 'mock-gameRole-id-8',
       role: RoleType.player,
       userId: 'mock-keycloak-id-1',
       npcs: [],
@@ -1009,7 +1132,7 @@ export const mockGame7: Game = {
 };
 
 export const mockGameRole1: GameRole = {
-  id: 'mock-gamerole-id-1',
+  id: 'mock-gameRole-id-1',
   role: RoleType.mc,
   userId: 'mock-keycloak-id-1',
   game: mockGame1,
@@ -1019,7 +1142,7 @@ export const mockGameRole1: GameRole = {
 };
 
 export const mockGameRole2: GameRole = {
-  id: 'mock-gamerole-id-2',
+  id: 'mock-gameRole-id-2',
   role: RoleType.player,
   userId: 'mock-keycloak-id-1',
   game: mockGame2,
@@ -1029,7 +1152,7 @@ export const mockGameRole2: GameRole = {
 };
 
 export const mockGameRole3: GameRole = {
-  id: 'mock-gamerole-id-3',
+  id: 'mock-gameRole-id-3',
   role: RoleType.player,
   userId: 'mock-keycloak-id-2',
   game: mockGame1,
@@ -1039,7 +1162,7 @@ export const mockGameRole3: GameRole = {
 };
 
 export const mockGameRole4: GameRole = {
-  id: 'mock-gamerole-id-4',
+  id: 'mock-gameRole-id-4',
   role: RoleType.mc,
   userId: 'mock-keycloak-id-2',
   game: mockGame2,
@@ -1239,6 +1362,7 @@ export const mockStatsOptionsAngel1: StatsOption = {
   HOT: 1,
   SHARP: 2,
   WEIRD: -1,
+  __typename: 'StatsOption',
 };
 
 export const mockStatsOptionsAngel2: StatsOption = {
@@ -1248,6 +1372,7 @@ export const mockStatsOptionsAngel2: StatsOption = {
   HOT: 0,
   SHARP: 2,
   WEIRD: -1,
+  __typename: 'StatsOption',
 };
 
 export const mockStatsOptionsAngel3: StatsOption = {
@@ -1257,6 +1382,7 @@ export const mockStatsOptionsAngel3: StatsOption = {
   HOT: 0,
   SHARP: 2,
   WEIRD: 1,
+  __typename: 'StatsOption',
 };
 
 export const mockgearInstructionsAngel: GearInstructions = {
@@ -1280,16 +1406,23 @@ export const mockAngelKitCreator: AngelKitCreator = {
   id: 'angel-kit-creator-id',
   angelKitInstructions: 'Your angel kit has all kinds of crap in it...',
   startingStock: 6,
+  __typename: 'AngelKitCreator',
 };
 
 export const mockUniqueCreatorAngel: PlaybookUniqueCreator = {
   id: 'angel-playbook-unique-creator-id',
   type: UniqueTypes.angelKit,
   angelKitCreator: mockAngelKitCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: dummyBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: dummyEstablishmentCreator,
+  followersCreator: dummyFollowerCreator,
   gangCreator: dummyGangCreator,
+  holdingCreator: dummyHoldingCreator,
+  skinnerGearCreator: dummySkinnerGearCreator,
   weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
 };
 
 export const mockPlaybookCreatorAngel: PlaybookCreator = {
@@ -1319,6 +1452,7 @@ export const mockPlaybookCreatorAngel: PlaybookCreator = {
   defaultMoveCount: 1,
   moveChoiceCount: 2,
   defaultVehicleCount: 0,
+  __typename: 'PlaybookCreator',
 };
 
 export const mockPlaybookAngel: Playbook = {
@@ -1328,6 +1462,15 @@ export const mockPlaybookAngel: Playbook = {
   intro: 'When you’re lying in the dust of Apocalypse World guts aspilled...',
   introComment: 'Angels are medics. If you want everybody to love you...',
   playbookImageUrl: 'https://awc-images.s3-ap-southeast-2.amazonaws.com/angel-white-transparent.png',
+};
+
+export const mockPlaybookBattlbabe: Playbook = {
+  id: 'mock-playbook-battlebabe-id',
+  playbookType: PlaybookType.battlebabe,
+  barterInstructions: 'At the beginning of the session, spend 1- or 2-barter for your lifestyle.',
+  intro: 'Even in a place as dangerous as Apocalypse World, battlebabes are, well.',
+  introComment: 'Battlebabes are good in battle, of course, but they’re wicked social too.',
+  playbookImageUrl: 'https://awc-images.s3-ap-southeast-2.amazonaws.com/battlebabe-white-transparent.png',
 };
 
 // ------------------------------------------------------- Mock Driver playbook --------------------------------------------------- //
@@ -1448,44 +1591,30 @@ export const mockFirearmBaseOption: TaggedItem = {
   tags: ['2-harm', 'close', 'reload', 'loud'],
 };
 
-export const mockFirearmOption: ItemCharacteristic = {
-  id: 'mock-firearm-option-id',
-  description: 'antique',
-  tag: '+valuable',
+// ------------------------------------------------------- Mock PlaybookCreators --------------------------------------------------- //
+
+export const mockUniqueCreatorDefault: PlaybookUniqueCreator = {
+  id: 'default-playbook-unique-creator-id',
+  type: UniqueTypes.brainerGear,
+  angelKitCreator: dummyAngelKitCreator,
+  brainerGearCreator: dummyBrainerGearCreator,
+  customWeaponsCreator: dummyCustomWeaponsCreator,
+  establishmentCreator: dummyEstablishmentCreator,
+  followersCreator: dummyFollowerCreator,
+  gangCreator: dummyGangCreator,
+  holdingCreator: dummyHoldingCreator,
+  skinnerGearCreator: dummySkinnerGearCreator,
+  weaponsCreator: dummyWeaponsCreator,
+  workspaceCreator: dummyWorkspaceCreator,
+  __typename: 'PlaybookUniqueCreator',
 };
 
-export const mockHandBaseOption: TaggedItem = {
-  id: 'mock-hand-base-option-id',
-  description: 'staff',
-  tags: ['1-harm', 'hand', 'area'],
-};
-
-export const mockHandOption: ItemCharacteristic = {
-  id: 'mock-hand-option-id',
-  description: 'ornate',
-  tag: '+valuable',
-};
-
-export const mockCustomWeaponsCreator: CustomWeaponsCreator = {
-  id: 'mock-custom-weapons-creator-id',
-  firearmsTitle: 'CUSTOM FIREARMS',
-  firearmsBaseInstructions: 'Base (choose 1):',
-  firearmsBaseOptions: [mockFirearmBaseOption],
-  firearmsOptionsInstructions: 'Options (choose 2):',
-  firearmsOptionsOptions: [mockFirearmOption],
-  handTitle: 'CUSTOM HAND WEAPONS',
-  handBaseInstructions: 'Base (choose 1):',
-  handBaseOptions: [mockHandBaseOption],
-  handOptionsInstructions: 'Options (choose 2, * counts as 2 options):',
-  handOptionsOptions: [mockHandOption],
-};
-
-export const mockPlaybookCreatorDriver: PlaybookCreator = {
-  id: 'driver-playbook-creator-id',
-  playbookType: PlaybookType.driver,
+export const mockPlaybookCreatorDefault: PlaybookCreator = {
+  id: 'default-playbook-creator-id',
+  playbookType: PlaybookType.angel,
   gearInstructions: mockgearInstructionsAngel,
   improvementInstructions: 'Whenever you roll a highlighted stat...',
-  movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
+  movesInstructions: 'You get all the basic moves. Choose 2 angel moves.  ',
   hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
   names: [mockNameAngel1, mockNameAngel2],
   looks: [
@@ -1501,14 +1630,69 @@ export const mockPlaybookCreatorDriver: PlaybookCreator = {
     mockLookAngel10,
   ],
   statsOptions: [mockStatsOptionsAngel1, mockStatsOptionsAngel2, mockStatsOptionsAngel3],
+  playbookUniqueCreator: mockUniqueCreatorAngel,
   optionalMoves: [mockCharacterMoveAngel2, mockCharacterMoveAngel3, mockCharacterMoveAngel4],
   defaultMoves: [mockCharacterMoveAngel1],
   defaultMoveCount: 1,
   moveChoiceCount: 2,
-  defaultVehicleCount: 1,
+  defaultVehicleCount: 0,
+  __typename: 'PlaybookCreator',
 };
 
-export const mockPlaybooks: Playbook[] = [mockPlaybookAngel];
+export const mockFirearmOption: ItemCharacteristic = {
+  id: 'mock-firearm-option-id',
+  description: 'antique',
+  tag: '+valuable',
+};
+
+export const mockFirearmOption2: ItemCharacteristic = {
+  id: 'mock-firearm-option-id-2',
+  description: 'semiautomatic',
+  tag: '-reload',
+};
+
+export const mockHandBaseOption: TaggedItem = {
+  id: 'mock-hand-base-option-id',
+  description: 'staff',
+  tags: ['1-harm', 'hand', 'area'],
+};
+
+export const mockHandOption: ItemCharacteristic = {
+  id: 'mock-hand-option-id',
+  description: 'ornate',
+  tag: '+valuable',
+};
+
+export const mockHandOption2: ItemCharacteristic = {
+  id: 'mock-hand-option-id-2',
+  description: 'head',
+  tag: '+1harm',
+};
+
+export const mockCustomWeaponsCreator: CustomWeaponsCreator = {
+  id: 'mock-custom-weapons-creator-id',
+  firearmsTitle: 'CUSTOM FIREARMS',
+  firearmsBaseInstructions: 'Base (choose 1):',
+  firearmsBaseOptions: [mockFirearmBaseOption],
+  firearmsOptionsInstructions: 'Options (choose 2):',
+  firearmsOptionsOptions: [mockFirearmOption, mockFirearmOption2],
+  handTitle: 'CUSTOM HAND WEAPONS',
+  handBaseInstructions: 'Base (choose 1):',
+  handBaseOptions: [mockHandBaseOption],
+  handOptionsInstructions: 'Options (choose 2, * counts as 2 options):',
+  handOptionsOptions: [mockHandOption, mockHandOption2],
+};
+
+export const mockPlaybookCreatorDriver: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'driver-playbook-creator-id',
+  playbookType: PlaybookType.driver,
+  movesInstructions: 'You get all the basic moves. Choose 2 driver moves.',
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  playbookUniqueCreator: undefined,
+};
+
+// ##### -------------------------------------------------- Brainer/Brainer Gear ----------------------------------------------##### //
 
 export const mockBrainerGearCreator: BrainerGearCreator = {
   id: 'mock-brainer-gear-creator-id',
@@ -1519,14 +1703,450 @@ export const mockBrainerGearCreator: BrainerGearCreator = {
 };
 
 export const mockUniqueCreatorBrainer: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
   id: 'brainer-playbook-unique-creator-id',
   type: UniqueTypes.brainerGear,
-  angelKitCreator: dummyAngelKitCreator,
-  customWeaponsCreator: dummyCustomWeaponsCreator,
   brainerGearCreator: mockBrainerGearCreator,
-  gangCreator: dummyGangCreator,
-  weaponsCreator: dummyWeaponsCreator,
 };
+
+// ##### -------------------------------------------------- Maestro D/Establishment ----------------------------------------------##### //
+
+export const mockSecurityOption1: SecurityOption = {
+  id: 'security-option-id-1',
+  description: 'a convenient shotgun',
+  value: 1,
+  __typename: 'SecurityOption',
+};
+
+export const mockSecurityOption2: SecurityOption = {
+  id: 'security-option-id-2',
+  description: 'a bouncer who knows his biz',
+  value: 1,
+  __typename: 'SecurityOption',
+};
+
+export const mockSecurityOption3: SecurityOption = {
+  id: 'security-option-id-3',
+  description: 'plywood & chickenwire',
+  value: 1,
+  __typename: 'SecurityOption',
+};
+
+export const mockEstablishmentCreator: EstablishmentCreator = {
+  id: 'mock-establishment-creator-id',
+  mainAttractionCount: 1,
+  sideAttractionCount: 2,
+  attractions: ['luxury food', 'music', 'fashion', 'lots of food', 'games'],
+  atmospheres: ['bustle', 'intimacy', 'smoke', 'shadows', 'slime'],
+  atmosphereCount: [3, 4],
+  regularsNames: ['Lamprey', 'Ba', 'Camo', 'Toyota', 'Lits'],
+  regularsQuestions: ["Who's your worst regular?", "Who's your best regular?"],
+  interestedPartyNames: ['Been', 'Rolfball', 'Gams'],
+  interestedPartyQuestions: ['Who wants in on it?', 'Who do you owe for it?', 'Who wants it gone?'],
+  securityOptions: [mockSecurityOption1, mockSecurityOption2, mockSecurityOption3],
+  __typename: 'EstablishmentCreator',
+};
+
+export const mockUniqueCreatorMaestroD: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
+  id: 'maestro-d-playbook-unique-creator-id',
+  type: UniqueTypes.establishment,
+  establishmentCreator: mockEstablishmentCreator,
+};
+
+export const mockPlaybookCreatorMaestroD: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'maestro-d-playbook-creator-id',
+  playbookType: PlaybookType.maestroD,
+  movesInstructions: "You get all the basic moves. Choose 2 maestro d' moves. ",
+  hxInstructions: 'Everyone introduces their characters by name, look and outlook...',
+  playbookUniqueCreator: mockUniqueCreatorMaestroD,
+};
+
+// ##### -------------------------------------------------- Hocus/Followers ----------------------------------------------##### //
+
+export const strengthOption1: FollowersOption = {
+  id: 'strength-option-id-1',
+  description: 'Your followers are dedicated to you. Surplus: +1barter, and replace want: desertion with want: hungry.',
+  newNumberOfFollowers: -1,
+  surplusBarterChange: 1,
+  fortuneChange: -1,
+  surplusChange: '',
+  wantChange: ['+hungry', '-desertion'],
+  __typename: 'FollowersOption',
+};
+
+export const strengthOption2: FollowersOption = {
+  id: 'strength-option-id-2',
+  description: 'Your followers are rigorous and argumentative. Surplus: +insight.',
+  newNumberOfFollowers: -1,
+  surplusBarterChange: -2,
+  fortuneChange: -1,
+  surplusChange: '+insight',
+  wantChange: [],
+  __typename: 'FollowersOption',
+};
+
+export const weaknessOption1: FollowersOption = {
+  id: 'weakness-option-id-1',
+  description: 'Your followers disdain law, peace, reason and society. Surplus: +violence.',
+  newNumberOfFollowers: -1,
+  surplusBarterChange: -2,
+  fortuneChange: -1,
+  surplusChange: '+violence',
+  wantChange: [],
+  __typename: 'FollowersOption',
+};
+
+export const weaknessOption2: FollowersOption = {
+  id: 'weakness-option-id-2',
+  description: 'You have few followers, 10 or fewer. Surplus: -1barter.',
+  newNumberOfFollowers: 10,
+  surplusBarterChange: -1,
+  fortuneChange: -1,
+  wantChange: [],
+  surplusChange: '',
+  __typename: 'FollowersOption',
+};
+
+export const mockFollowersCreator: FollowersCreator = {
+  id: 'followers-creator-id',
+  instructions: 'By default you have around 20 followers, loyal to you but not fanatical.',
+  defaultNumberOfFollowers: 20,
+  defaultSurplusBarter: 1,
+  defaultFortune: 1,
+  strengthCount: 2,
+  weaknessCount: 2,
+  travelOptions: ['travel with you', 'congregate'],
+  characterizationOptions: ['your cult', 'your scene', 'your family', 'your staff'],
+  defaultWants: ['desertion'],
+  strengthOptions: [strengthOption1, strengthOption2],
+  weaknessOptions: [weaknessOption1, weaknessOption2],
+  __typename: 'FollowersCreator',
+};
+
+export const mockUniqueCreatorHocus: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
+  id: 'hocus-playbook-unique-creator-id',
+  type: UniqueTypes.followers,
+  followersCreator: mockFollowersCreator,
+};
+
+export const mockPlaybookCreatorHocus: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'hocus-playbook-creator-id',
+  playbookType: PlaybookType.hocus,
+  movesInstructions: 'You get all the basic moves. You get fortunes, and the choose 2 more hocus moves.',
+  playbookUniqueCreator: mockUniqueCreatorHocus,
+};
+
+// ##### -------------------------------------------------- Chopper/Gang ----------------------------------------------##### //
+
+export const mockGangOption1: GangOption = {
+  id: 'mock-gang-option-id-1',
+  description: "your gang's well-armed. +1harm",
+  modifier: '+1harm',
+  tag: '',
+  __typename: 'GangOption',
+};
+
+export const mockGangOption2: GangOption = {
+  id: 'mock-gang-option-id-2',
+  description: "your gang's well-disciplined. Drop savage.",
+  modifier: '',
+  tag: '-savage',
+  __typename: 'GangOption',
+};
+
+export const mockGangOption3: GangOption = {
+  id: 'mock-gang-option-id-3',
+  description: 'your gang is in significant debt to someone powerful. Vulnerable: obligation.',
+  modifier: '',
+  tag: '+vulnerable: obligation',
+  __typename: 'GangOption',
+};
+
+export const mockGangOption4: GangOption = {
+  id: 'mock-gang-option-id-4',
+  description: 'your gang consists of 30 or so violent bastards. Medium instead of small.',
+  modifier: 'MEDIUM',
+  tag: '',
+  __typename: 'GangOption',
+};
+
+export const mockGangCreator: GangCreator = {
+  id: '',
+  intro: '',
+  defaultSize: GangSize.small,
+  defaultHarm: 2,
+  defaultArmor: 1,
+  strengthChoiceCount: 2,
+  weaknessChoiceCount: 1,
+  defaultTags: ['+savage'],
+  strengths: [mockGangOption1, mockGangOption2],
+  weaknesses: [mockGangOption3, mockGangOption4],
+  __typename: 'GangCreator',
+};
+
+export const mockUniqueCreatorChopper: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
+  id: 'chopper-playbook-unique-creator-id',
+  type: UniqueTypes.gang,
+  gangCreator: mockGangCreator,
+};
+
+export const mockPlaybookCreatorChopper: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'chopper-playbook-creator-id',
+  playbookType: PlaybookType.chopper,
+  movesInstructions: 'You get all the basic moves. You get both chopper moves. ',
+  playbookUniqueCreator: mockUniqueCreatorChopper,
+};
+
+// ##### -------------------------------------------------- Hardholder/Holding ----------------------------------------------##### //
+
+export const holdingOption1: HoldingOption = {
+  id: 'holding-option-id-1',
+  description: 'your population in large, 200-300 souls. Surplus: +1barter, want: +disease',
+  surplusChange: 1,
+  wantChange: ['+disease'],
+  newHoldingSize: HoldingSize.large,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: -2,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption2: HoldingOption = {
+  id: 'holding-option-id-2',
+  description: 'for gigs, add a bustling, widely-known market commons. Surplus: +1barter, want: +strangers',
+  surplusChange: 1,
+  wantChange: ['+strangers'],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '+market commons',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: -2,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption3: HoldingOption = {
+  id: 'holding-option-id-3',
+  description: 'your gang is well-disciplined. Drop unruly.',
+  surplusChange: -2,
+  wantChange: [],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '-unruly',
+  gangHarmChange: -2,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption4: HoldingOption = {
+  id: 'holding-option-id-4',
+  description: 'your armory is sophisticated and extensive. Your gang gets +1harm.',
+  surplusChange: -2,
+  wantChange: [],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: 1,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption5: HoldingOption = {
+  id: 'holding-option-id-5',
+  description: 'your population is decadent and perverse. Surplus: -1barter, want: +savagery.',
+  surplusChange: -1,
+  wantChange: ['+savagery'],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: -2,
+  newVehicleCount: -1,
+  newBattleVehicleCount: -1,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const holdingOption6: HoldingOption = {
+  id: 'holding-option-id-6',
+  description: 'your garage is for shit. It has only 4 vehicles, and only 2 of them are suitable for battle.',
+  surplusChange: -2,
+  wantChange: [],
+  newHoldingSize: '' as HoldingSize,
+  gigChange: '',
+  newGangSize: '' as GangSize,
+  gangTagChange: '',
+  gangHarmChange: -2,
+  newVehicleCount: 2,
+  newBattleVehicleCount: 2,
+  newArmorBonus: -1,
+  __typename: 'HoldingOption',
+};
+
+export const mockHoldingCreator: HoldingCreator = {
+  id: 'holding-creator-id',
+  defaultHoldingSize: HoldingSize.medium,
+  instructions:
+    'By default, your holding has:\n\n- 75-150 souls.\n- for gigs, a mix of hunting, crude farming, and scavenging.',
+  defaultSurplus: 1,
+  defaultWant: 'hungry',
+  defaultGigs: ['hunting', 'crude farming', 'scavenging'],
+  defaultArmorBonus: 1,
+  defaultVehiclesCount: 4,
+  defaultBattleVehicleCount: 4,
+  defaultGangSize: GangSize.medium,
+  defaultGangHarm: 2,
+  defaultGangArmor: 1,
+  defaultGangTag: 'unruly',
+  strengthCount: 4,
+  weaknessCount: 2,
+  strengthOptions: [holdingOption1, holdingOption2, holdingOption3, holdingOption4],
+  weaknessOptions: [holdingOption5, holdingOption6],
+  __typename: 'HoldingCreator',
+};
+
+export const mockUniqueCreatorHardHolder: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
+  id: 'chopper-playbook-unique-creator-id',
+  type: UniqueTypes.holding,
+  holdingCreator: mockHoldingCreator,
+};
+
+export const mockPlaybookCreatorHardHolder: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'hardholder-playbook-creator-id',
+  playbookType: PlaybookType.hardholder,
+  movesInstructions: 'You get all the basic moves. You get both hardholder moves.  ',
+  playbookUniqueCreator: mockUniqueCreatorHardHolder,
+};
+
+// ##### -------------------------------------------------- Skinner/SkinnerGear ----------------------------------------------##### //
+
+export const mockGraciousWeapon1: SkinnerGearItem = {
+  id: 'skinner-gear-item-id-1',
+  item: 'sleeve pistol (2-harm close reload loud)',
+  note: '',
+  __typename: 'SkinnerGearItem',
+};
+
+export const mockGraciousWeapon2: SkinnerGearItem = {
+  id: 'skinner-gear-item-id-3',
+  item: 'ornate dagger (2-harm hand valuable)',
+  note: '',
+};
+
+export const mockLuxeItem1: SkinnerGearItem = {
+  id: 'skinner-gear-item-id-3',
+  item: 'antique coins (worn valuable)',
+  note: 'Drilled with holes for jewelry',
+};
+
+export const mockLuxeItem2: SkinnerGearItem = {
+  id: 'skinner-gear-item-id-4',
+  item: 'eyeglasses (worn valuable)',
+  note:
+    'You may use these for +1sharp when your eyesight matters, but if you do, without them you get -1sharp when your eyesight matters.',
+};
+
+export const mockSkinnerGearCreator: SkinnerGearCreator = {
+  id: 'skinner-gear-creator-id',
+  graciousWeaponCount: 1,
+  luxeGearCount: 2,
+  graciousWeaponChoices: [mockGraciousWeapon1, mockGraciousWeapon2],
+  luxeGearChoices: [mockLuxeItem1, mockLuxeItem2],
+  __typename: 'SkinnerGearCreator',
+};
+
+export const mockUniqueCreatorSkinner: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
+  id: 'skinner-playbook-unique-creator-id',
+  type: UniqueTypes.skinnerGear,
+  skinnerGearCreator: mockSkinnerGearCreator,
+};
+
+export const mockPlaybookCreatorSkinner: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'skinner-playbook-creator-id',
+  playbookType: PlaybookType.skinner,
+  movesInstructions: 'You get all the basic moves. Choose 2 skinner moves.  ',
+  playbookUniqueCreator: mockUniqueCreatorSkinner,
+};
+
+// ##### -------------------------------------------------- Gunlugger/Weapons ----------------------------------------------##### //
+
+export const mockWeaponsCreator: WeaponsCreator = {
+  id: 'weapon-creator-id',
+  bfoGunOptionCount: 1,
+  seriousGunOptionCount: 2,
+  backupWeaponsOptionCount: 1,
+  bigFuckOffGuns: ['silenced sniper rifle (3-harm far hi-tech)', 'mg (3-harm close/far area messy)'],
+  seriousGuns: ['hunting rifle (3-harm far loud)', 'shotgun (3-harm close messy)'],
+  backupWeapons: ['9mm (2-harm close loud)', 'big-ass knife (2-harm hand)'],
+  __typename: 'WeaponsCreator',
+};
+
+export const mockUniqueCreatorGunlugger: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
+  id: 'gunlugger-playbook-unique-creator-id',
+  type: UniqueTypes.weapons,
+  weaponsCreator: mockWeaponsCreator,
+};
+
+export const mockPlaybookCreatorGunlugger: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'gunlugger-playbook-creator-id',
+  playbookType: PlaybookType.gunlugger,
+  movesInstructions: 'You get all the basic moves. Choose 3 gunlugger moves. ',
+  playbookUniqueCreator: mockUniqueCreatorGunlugger,
+};
+
+// ##### -------------------------------------------------- Savvyhead/Workspace ----------------------------------------------##### //
+
+export const mockWorkspaceCreator: WorkspaceCreator = {
+  id: 'workspace-creator-id',
+  itemsCount: 3,
+  workspaceInstructions: 'When you go into your workspace and dedicate yourself to making a thing, or ...',
+  projectInstructions: "During play, it's your job to have your character start and pursue projects...",
+  workspaceItems: ['a garage', 'a darkroom', 'a controlled growing environment', 'skilled labor (Carna, Thuy, Pamming eg)'],
+  __typename: 'WorkspaceCreator',
+};
+
+export const mockUniqueCreatorSavvyhead: PlaybookUniqueCreator = {
+  ...mockUniqueCreatorDefault,
+  id: 'savvyhead-playbook-unique-creator-id',
+  type: UniqueTypes.workspace,
+  workspaceCreator: mockWorkspaceCreator,
+};
+
+export const mockPlaybookCreatorSavvyhead: PlaybookCreator = {
+  ...mockPlaybookCreatorDefault,
+  id: 'savvyhead-playbook-creator-id',
+  playbookType: PlaybookType.savvyhead,
+  movesInstructions: 'You get all the basic moves. Choose 3 savvyhead moves. ',
+  playbookUniqueCreator: mockUniqueCreatorSavvyhead,
+};
+
+// ------------------------------------------------------- Mock Playbooks --------------------------------------------------- //
+
+export const mockPlaybooks: Playbook[] = [mockPlaybookAngel, mockPlaybookBattlbabe];
 
 // ---------------------------------------------- Mock user-generated data --------------------------------------------- //
 
@@ -1548,3 +2168,44 @@ export const mockVehicle2: Vehicle = {
   ...mockVehicleInput,
   id: 'mock-vehicle-id-2',
 };
+
+export const blankCharacter: MockCharacter = {
+  id: '',
+  playbook: PlaybookType.angel,
+  hxBlock: [],
+  gear: [],
+  looks: [],
+  harm: mockCharacterHarm,
+  vehicleCount: 0,
+  battleVehicleCount: 0,
+  hasCompletedCharacterCreation: false,
+  hasPlusOneForward: false,
+  holds: [],
+  characterMoves: [],
+  vehicles: [],
+  battleVehicles: [],
+  __typename: 'Character',
+};
+
+export const mockHold1: Hold = {
+  id: 'mock-hold-id-1',
+  moveName: 'READ A PERSON',
+  moveDescription: 'When you _**read a person**_ in a charged interaction, roll+sharp.',
+  rollResult: 10,
+};
+
+export const mockHold2: Hold = {
+  id: 'mock-hold-id-2',
+  moveName: 'READ A PERSON',
+  moveDescription: 'When you _**read a person**_ in a charged interaction, roll+sharp.',
+  rollResult: 11,
+};
+
+export const mockHold3: Hold = {
+  id: 'mock-hold-id-3',
+  moveName: 'BONEFEEL',
+  moveDescription: '_**Bonefeel**_: at the beginning of the session, roll+weird.',
+  rollResult: 7,
+};
+
+export const mockHolds = [mockHold1, mockHold2, mockHold3];

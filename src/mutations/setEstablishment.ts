@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 import { EstablishmentInput } from '../@types';
-import { Character } from '../@types/dataInterfaces';
+import { Character, PlaybookUnique } from '../@types/dataInterfaces';
+import { UniqueTypes } from '../@types/enums';
 
 export interface SetEstablishmentData {
   setEstablishment: Character;
@@ -12,6 +13,23 @@ export interface SetEstablishmentVars {
   characterId: string;
   establishment: EstablishmentInput;
 }
+
+export const getSetEstablishmentOR = (character: Character, establishmentInput: EstablishmentInput) => {
+  let optimisticPlaybookUnique: PlaybookUnique = {
+    id: !!character.playbookUnique?.id ? character.playbookUnique.id : 'temp-id-1',
+    type: UniqueTypes.establishment,
+    establishment: { ...establishmentInput, id: !establishmentInput.id ? 'temporary-id' : establishmentInput.id },
+    __typename: 'PlaybookUnique',
+  };
+  return {
+    setEstablishment: {
+      ...character,
+      playbookUnique: optimisticPlaybookUnique,
+      __typename: 'Character',
+    },
+    __typename: 'Mutation',
+  };
+};
 
 const SET_ESTABLISHMENT = gql`
   mutation SetEstablishment($gameRoleId: String!, $characterId: String!, $establishment: EstablishmentInput!) {

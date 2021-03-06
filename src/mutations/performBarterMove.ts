@@ -7,7 +7,7 @@ export interface PerformBarterMoveData {
 
 export interface PerformBarterMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
   moveId: string;
   barter: number;
@@ -16,14 +16,14 @@ export interface PerformBarterMoveVars {
 const PERFORM_BARTER_MOVE = gql`
   mutation PerformBarterMove(
     $gameId: String!
-    $gameroleId: String!
+    $gameRoleId: String!
     $characterId: String!
     $moveId: String!
     $barter: Int!
   ) {
     performBarterMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       characterId: $characterId
       moveId: $moveId
       barter: $barter
@@ -32,7 +32,7 @@ const PERFORM_BARTER_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

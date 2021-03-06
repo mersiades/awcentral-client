@@ -7,16 +7,16 @@ export interface PerformStabilizeAndHealMoveData {
 
 export interface PerformStabilizeAndHealMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   characterId: string;
   stockSpent: number;
 }
 
 const PERFORM_STABILIZE_AND_HEAL_MOVE = gql`
-  mutation PerformStabilizeAndHealMove($gameId: String!, $gameroleId: String!, $characterId: String!, $stockSpent: Int!) {
+  mutation PerformStabilizeAndHealMove($gameId: String!, $gameRoleId: String!, $characterId: String!, $stockSpent: Int!) {
     performStabilizeAndHealMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       characterId: $characterId
       stockSpent: $stockSpent
     ) {
@@ -24,7 +24,7 @@ const PERFORM_STABILIZE_AND_HEAL_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

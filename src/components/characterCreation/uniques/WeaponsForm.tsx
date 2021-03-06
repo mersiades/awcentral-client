@@ -91,7 +91,7 @@ const WeaponsForm: FC = () => {
     return (
       <Tip key={weapon} content={tags}>
         <Box
-          data-testid={`${weaponName}-pill`}
+          data-testid={`${weapon}-pill`}
           height="fit-content"
           background={isSelected ? { color: accentColors[0], dark: true } : neutralColors[0]}
           round="medium"
@@ -114,10 +114,11 @@ const WeaponsForm: FC = () => {
     const isSelected = seriousWeapons.includes(weapon);
     const tags = weapon.substring(weapon.indexOf('(') + 1, weapon.indexOf(')'));
     const weaponName = weapon.substring(0, weapon.indexOf(' ('));
+
     return (
       <Tip key={weapon} content={tags}>
         <Box
-          data-testid={`${weaponName}-pill`}
+          data-testid={`${weapon}-pill`}
           height="fit-content"
           background={isSelected ? { color: accentColors[0], dark: true } : neutralColors[0]}
           round="medium"
@@ -138,18 +139,25 @@ const WeaponsForm: FC = () => {
 
   return (
     <Box
-      data-testid="angel-kit-form"
-      width="60vw"
-      direction="column"
-      align="center"
-      justify="between"
-      overflow="auto"
-      // flex="grow"
+      data-testid="weapons-form"
+      justify="start"
+      width="85vw"
+      align="start"
+      style={{ maxWidth: '742px' }}
+      margin={{ bottom: '24px' }}
     >
-      <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
-        !!character?.name ? character.name?.toUpperCase() : '...'
-      }'S WEAPONS`}</HeadingWS>
-      <Box flex="grow" align="start" gap="24px">
+      <Box direction="row" fill="horizontal" align="center" justify="between">
+        <HeadingWS crustReady={crustReady} level={2} style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}>{`${
+          !!character?.name ? character.name?.toUpperCase() : '...'
+        }'S WEAPONS`}</HeadingWS>
+        <ButtonWS
+          primary
+          label={settingWeapons ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
+          onClick={() => !settingWeapons && handleSubmitWeapons()}
+          disabled={settingWeapons || seriousWeapons.length < 2 || !fobGun || !backupWeapon}
+        />
+      </Box>
+      <Box fill="horizontal" align="center" gap="24px">
         <Box>
           <TextWS>
             <em>
@@ -170,7 +178,7 @@ const WeaponsForm: FC = () => {
             <em>
               <strong>Serious guns</strong>
             </em>
-            s{` (choose ${seriousGunOptionCount})`}
+            {` (choose ${seriousGunOptionCount})`}
           </TextWS>
           <Box direction="row" wrap>
             {seriousGuns?.map((weapon) => renderSeriousWeaponPill(weapon))}
@@ -191,14 +199,6 @@ const WeaponsForm: FC = () => {
             })}
           </Box>
         </Box>
-      </Box>
-      <Box fill="horizontal" align="end" justify="start" margin="24px">
-        <ButtonWS
-          primary
-          label={settingWeapons ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
-          onClick={() => !settingWeapons && handleSubmitWeapons()}
-          disabled={settingWeapons || seriousWeapons.length < 2 || !fobGun || !backupWeapon}
-        />
       </Box>
     </Box>
   );

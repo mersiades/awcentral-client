@@ -60,7 +60,7 @@ const GunluggerSpecialDialog: FC<GunluggerSpecialDialogProps> = ({ move, handleC
         performGunluggerSpecialMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             otherGameroleId,
             characterId: userGameRole.characters[0].id,
             otherCharacterId,

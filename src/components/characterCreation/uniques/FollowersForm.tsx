@@ -10,7 +10,7 @@ import RedTagsBox from '../../RedTagsBox';
 import { StyledMarkdown } from '../../styledComponents';
 import { ButtonWS, HeadingWS, ParagraphWS } from '../../../config/grommetConfig';
 import PLAYBOOK_CREATOR, { PlaybookCreatorData, PlaybookCreatorVars } from '../../../queries/playbookCreator';
-import SET_FOLLOWERS, { SetFollowersData, SetFollowersVars } from '../../../mutations/setFollowers';
+import SET_FOLLOWERS, { getSetFollowerOR, SetFollowersData, SetFollowersVars } from '../../../mutations/setFollowers';
 import { CharacterCreationSteps, PlaybookType } from '../../../@types/enums';
 import { FollowersInput } from '../../../@types';
 import { FollowersOption } from '../../../@types/staticDataInterfaces';
@@ -129,6 +129,7 @@ const FollowersForm: FC = () => {
   });
 
   const followersCreator = pbCreatorData?.playbookCreator.playbookUniqueCreator?.followersCreator;
+
   const [setFollowers, { loading: settingFollowers }] = useMutation<SetFollowersData, SetFollowersVars>(SET_FOLLOWERS);
 
   // ------------------------------------------------- Component functions -------------------------------------------------- //
@@ -153,8 +154,9 @@ const FollowersForm: FC = () => {
         wants,
       };
       try {
-        await setFollowers({
+        setFollowers({
           variables: { gameRoleId: userGameRole.id, characterId: character.id, followers: followersInput },
+          optimisticResponse: getSetFollowerOR(character, followersInput) as SetFollowersData,
         });
         if (!character.hasCompletedCharacterCreation) {
           history.push(`/character-creation/${game.id}?step=${CharacterCreationSteps.selectMoves}`);
@@ -313,72 +315,92 @@ const FollowersForm: FC = () => {
   );
 
   return (
-    <Box data-testid="followers-form" width="80vw" direction="column" align="start" justify="between" overflow="auto">
-      <HeadingWS crustReady={crustReady} level={2} alignSelf="center">{`${
-        !!character?.name ? character.name?.toUpperCase() : '...'
-      }'S FOLLOWERS`}</HeadingWS>
-      <Box fill="horizontal" direction="row" align="start" justify="between">
-        <Box fill="horizontal" pad="12px" gap="6px">
-          {!!followersCreator && <StyledMarkdown>{followersCreator.instructions}</StyledMarkdown>}
-          <ParagraphWS margin={{ bottom: '0px' }}>Characterize them:</ParagraphWS>
-          {renderPills()}
-          <ParagraphWS margin={{ bottom: '0px' }}>If you travel, they:</ParagraphWS>
-          {!!followersCreator &&
-            followersCreator.travelOptions.map((option) => {
-              return (
-                <CheckBox
-                  key={option}
-                  checked={travelOption === option}
-                  label={option}
-                  onChange={() => handleTravelOptionSelect(option)}
-                />
-              );
-            })}
-          <ParagraphWS margin={{ bottom: '0px' }}>
-            Choose {!!followersCreator ? followersCreator?.strengthCount : 2}:
-          </ParagraphWS>
-          {!!followersCreator &&
-            followersCreator.strengthOptions.map((option) => {
-              return (
-                <CheckBox
-                  key={option.id}
-                  checked={selectedStrengths.map((str: FollowersOption) => str.id).includes(option.id)}
-                  label={option.description}
-                  onChange={() => handleStrengthSelect(option)}
-                />
-              );
-            })}
-          <ParagraphWS margin={{ bottom: '0px' }}>
-            Choose {!!followersCreator ? followersCreator?.weaknessCount : 2}:
-          </ParagraphWS>
-          {!!followersCreator &&
-            followersCreator.weaknessOptions.map((option) => {
-              return (
-                <CheckBox
-                  key={option.id}
-                  checked={selectedWeaknesses.map((wk: FollowersOption) => wk.id).includes(option.id)}
-                  label={option.description}
-                  onChange={() => handleWeaknessSelect(option)}
-                />
-              );
-            })}
+    <Box data-testid="followers-form" justify="start" width="85vw" align="start" style={{ maxWidth: '742px' }}>
+      <Box direction="row" fill="horizontal" align="center" justify="between">
+        <HeadingWS
+          crustReady={crustReady}
+          level={2}
+          alignSelf="center"
+          style={{ maxWidth: 'unset', height: '34px', lineHeight: '44px' }}
+        >{`${!!character?.name ? character.name?.toUpperCase() : '...'}'S FOLLOWERS`}</HeadingWS>
+        <ButtonWS
+          primary
+          label={settingFollowers ? <Spinner fillColor="#FFF" width="37px" height="36px" /> : 'SET'}
+          onClick={() => !settingFollowers && handleSubmitFollowers()}
+          disabled={
+            settingFollowers ||
+            (!!followersCreator && selectedStrengths.length < followersCreator.strengthCount) ||
+            (!!followersCreator && selectedWeaknesses.length < followersCreator.weaknessCount) ||
+            !characterization ||
+            !travelOption
+          }
+        />
+      </Box>
+      {!!followersCreator && <StyledMarkdown>{followersCreator.instructions}</StyledMarkdown>}
+
+      <Box fill="horizontal" justify="between" gap="12px" margin={{ top: '6px' }}>
+        <ParagraphWS margin={{ bottom: '0px' }}>Characterize them:</ParagraphWS>
+        <Box direction="row" fill="horizontal" justify="between" gap="12px">
+          <Box>
+            {renderPills()}
+            <ParagraphWS margin={{ bottom: '0px' }}>If you travel, they:</ParagraphWS>
+            {!!followersCreator &&
+              followersCreator.travelOptions.map((option) => {
+                return (
+                  <CheckBox
+                    key={option}
+                    checked={travelOption === option}
+                    label={option}
+                    onChange={() => handleTravelOptionSelect(option)}
+                    style={{ marginBottom: '3px' }}
+                  />
+                );
+              })}
+          </Box>
+          <Box align="center" width="200px" flex="grow" fill="vertical" style={{ maxWidth: '200px' }}>
+            <RedTagsBox tags={[description]} label="Description" height="100%" width="200px" />
+          </Box>
         </Box>
-        <Box flex="grow" width="150px" pad="12px" gap="12px">
-          <DoubleRedBox value={`+${fortune}fortune`} label="Fortune" />
-          {!!description && <RedTagsBox tags={[description]} label="Description" height="100%" />}
-          {surplus.length > 0 && <RedTagsBox tags={surplus} label="Surplus" height="100%" />}
-          {wants.length > 0 && <RedTagsBox tags={wants} label="Want" height="100%" />}
-          <ButtonWS
-            primary
-            fill="horizontal"
-            label={settingFollowers ? <Spinner fillColor="#FFF" width="36px" height="36px" /> : 'SET'}
-            onClick={() => !settingFollowers && handleSubmitFollowers()}
-            disabled={
-              settingFollowers ||
-              (!!followersCreator && selectedStrengths.length < followersCreator.strengthCount) ||
-              (!!followersCreator && selectedWeaknesses.length < followersCreator.weaknessCount)
-            }
-          />
+      </Box>
+      <Box fill="horizontal" justify="between" margin={{ top: '6px' }}>
+        <ParagraphWS margin={{ bottom: '0px' }}>
+          Choose {!!followersCreator ? followersCreator?.strengthCount : 2}:
+        </ParagraphWS>
+        <Box direction="row">
+          <Box>
+            {!!followersCreator &&
+              followersCreator.strengthOptions.map((option) => {
+                return (
+                  <CheckBox
+                    key={option.id}
+                    checked={selectedStrengths.map((str: FollowersOption) => str.id).includes(option.id)}
+                    label={option.description}
+                    onChange={() => handleStrengthSelect(option)}
+                    style={{ marginBottom: '3px' }}
+                  />
+                );
+              })}
+            <ParagraphWS margin={{ bottom: '0px' }}>
+              Choose {!!followersCreator ? followersCreator?.weaknessCount : 2}:
+            </ParagraphWS>
+            {!!followersCreator &&
+              followersCreator.weaknessOptions.map((option) => {
+                return (
+                  <CheckBox
+                    key={option.id}
+                    checked={selectedWeaknesses.map((wk: FollowersOption) => wk.id).includes(option.id)}
+                    label={option.description}
+                    onChange={() => handleWeaknessSelect(option)}
+                    style={{ marginBottom: '3px' }}
+                  />
+                );
+              })}
+          </Box>
+          <Box align="center" width="200px" flex="grow" fill="vertical" style={{ maxWidth: '200px' }}>
+            <DoubleRedBox value={`+${fortune}fortune`} label="Fortune" width="200px" height="100%" />
+            <RedTagsBox tags={surplus} label="Surplus" height="100%" width="200px" />
+            <RedTagsBox tags={wants} label="Want" height="100%" width="200px" />
+          </Box>
         </Box>
       </Box>
     </Box>

@@ -1,10 +1,9 @@
 import React, { FC, useEffect, useReducer } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { Box, TextInput, Text, Tip, CheckBox } from 'grommet';
+import { Box, TextInput, Text, Tip, CheckBox, FormField } from 'grommet';
 import { omit } from 'lodash';
 
 import DoubleRedBox from '../DoubleRedBox';
-import RedTagsBox from '../RedTagsBox';
 import SingleRedBox from '../SingleRedBox';
 import Spinner from '../Spinner';
 import { accentColors, ButtonWS, HeadingWS, neutralColors, TextWS } from '../../config/grommetConfig';
@@ -14,8 +13,8 @@ import { BattleOptionType, VehicleFrameType, VehicleType } from '../../@types/en
 import { BattleVehicleInput } from '../../@types';
 import { BattleVehicle } from '../../@types/dataInterfaces';
 import { VehicleBattleOption, VehicleFrame } from '../../@types/staticDataInterfaces';
-import { useFonts } from '../../contexts/fontContext';
 import { useGame } from '../../contexts/gameContext';
+import { VehicleTagsBox } from './VehicleForm';
 
 interface BattleVehicleFormProps {
   navigateOnSet: (numVehicles: number) => void;
@@ -116,7 +115,6 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   ] = useReducer(battleVehicleFormReducer, initialState);
   // ------------------------------------------------------- Hooks --------------------------------------------------------- //
   const { character, userGameRole } = useGame();
-  const { crustReady } = useFonts();
 
   // ------------------------------------------------------ graphQL -------------------------------------------------------- //
   const { data: vehicleCreatorData, loading } = useQuery<VehicleCreatorData, VehicleCreatorVars>(VEHICLE_CREATOR);
@@ -412,22 +410,13 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
   }
 
   return (
-    <Box data-testid="battle-vehicle-form" width="80vw" align="start" justify="start" flex="grow">
-      <Box
-        direction="row"
-        fill="horizontal"
-        flex="grow"
-        align="center"
-        gap="12px"
-        wrap
-        margin={{ bottom: '12px' }}
-        border={{ side: 'bottom' }}
-      >
-        <Box direction="column" align="start" height="96px" justify="between">
+    <Box data-testid="battle-vehicle-form" width="80vw" align="start" justify="start" gap="12px" flex="grow">
+      <Box fill="horizontal" justify="between" gap="12px">
+        <Box direction="row" justify="between" align="center" gap="12px">
+          <TextWS margin={{ bottom: '12px' }}>{introText}</TextWS>
           <ButtonWS
             primary
             alignSelf="start"
-            fill="horizontal"
             style={{ width: '100px' }}
             label={settingBattleVehicle ? <Spinner fillColor="#FFF" width="56px" height="36px" /> : 'SET'}
             onClick={() => !settingBattleVehicle && handleSetVehicle()}
@@ -437,102 +426,118 @@ const BattleVehicleForm: FC<BattleVehicleFormProps> = ({ navigateOnSet, existing
               battleVehicleOptions.length < 2
             }
           />
-          <HeadingWS aria-label="vehicle-name" level={3} crustReady={crustReady} margin={{ top: '0px', bottom: '3px' }}>
-            {name}
-          </HeadingWS>
         </Box>
-
-        <DoubleRedBox value={vehicleFrame?.frameType} label="Frame" />
-        <SingleRedBox value={speed} label="Speed" width="80px" />
-        <SingleRedBox value={handling} label="Handling" width="80px" />
-        <SingleRedBox value={armor} label="Armor" width="80px" />
-        <SingleRedBox value={massive} label="Massive" width="80px" />
-        {strengths.concat(looks).concat(weaknesses).length > 0 && (
-          <RedTagsBox tags={strengths.concat(looks).concat(weaknesses)} label="Tags" height="90px" maxWidth="350px" />
-        )}
-        {weapons.length > 0 && <RedTagsBox tags={weapons} label="Weapons" height="90px" maxWidth="650px" />}
-      </Box>
-      <Box fill="horizontal" gap="12px" overflow="auto" height="calc(100vh - 340px)">
-        <TextWS>{introText}</TextWS>
         <Box flex="grow">
           <TextWS>
             <strong>Give your vehicle a name</strong> (make/model, nickname, whatever):
           </TextWS>
-          <TextInput
-            aria-label="name-input"
-            name="name"
-            value={name}
-            onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
-          />
+          <FormField>
+            <TextInput
+              aria-label="name-input"
+              size="xlarge"
+              value={name}
+              onChange={(e) => dispatch({ type: 'SET_NAME', payload: e.target.value })}
+            />
+          </FormField>
         </Box>
-        <Box flex="grow">
-          <TextWS>Choose its frame (resets other settings):</TextWS>
+      </Box>
+
+      <Box fill="horizontal" justify="between" gap="12px" margin={{ top: '6px' }}>
+        <TextWS>Choose its frame (resets other settings):</TextWS>
+        <Box direction="row" fill="horizontal" justify="between" gap="12px">
           <Box direction="row" margin={{ top: '3px' }} wrap>
             {carCreator.frames.map((frame) => renderFramePill(frame))}
           </Box>
+          <DoubleRedBox value={vehicleFrame?.frameType} label="Frame" width="175px" />
         </Box>
-        <Box flex="grow">
-          <TextWS>
-            <strong>Strengths</strong> (choose 1 or 2):
-          </TextWS>
-          <Box direction="row" margin={{ top: '3px' }} wrap>
+      </Box>
+
+      <Box fill="horizontal" justify="between" margin={{ top: '6px' }}>
+        <TextWS>
+          <strong>Strengths</strong> (choose 1 or 2):
+        </TextWS>
+        <Box direction="row" gap="12px">
+          <Box direction="row" fill align="start" wrap>
             {strengthOptions?.map((strength) => {
               const isSelected = strengths.includes(strength);
               return renderPill(strength, isSelected, () => handleOptionSelect(strength, 'strength', isSelected));
             })}
           </Box>
+          <VehicleTagsBox tags={strengths} title="Strengths" width="175px" minHeight="90px" />
         </Box>
-        <Box flex="grow">
-          <TextWS>
-            <strong>Looks</strong> (choose 1 or 2):
-          </TextWS>
-          <Box direction="row" margin={{ top: '3px' }} wrap>
-            {lookOptions?.map((look) => {
-              const isSelected = looks.includes(look);
-              return renderPill(look, isSelected, () => handleOptionSelect(look, 'look', isSelected));
-            })}
-          </Box>
-        </Box>
-        <Box flex="grow">
-          <TextWS>
-            <strong>Weaknesses</strong> (choose 1 or 2):
-          </TextWS>
-          <Box direction="row" margin={{ top: '3px' }} wrap>
+      </Box>
+
+      <Box fill="horizontal" justify="between" margin={{ top: '6px' }}>
+        <TextWS>
+          <strong>Weaknesses</strong> (choose 1 or 2):
+        </TextWS>
+        <Box direction="row" gap="12px">
+          <Box direction="row" fill align="start" wrap>
             {weaknessOptions?.map((weakness) => {
               const isSelected = weaknesses.includes(weakness);
               return renderPill(weakness, isSelected, () => handleOptionSelect(weakness, 'weakness', isSelected));
             })}
           </Box>
+          <VehicleTagsBox tags={weaknesses} title="Weaknesses" width="175px" minHeight="90px" />
         </Box>
-        <Box flex="grow">
-          <TextWS>
-            <strong>Regular battle options</strong> (choose {vehicleFrame.battleOptionCount})
-          </TextWS>
-          <Box direction="row" margin={{ top: '3px' }} wrap>
-            {battleOptionOptions?.map((battleOption) => {
-              const isSelected = !!battleOptions.find((bo: VehicleBattleOption) => bo.id === battleOption.id);
-              return renderBattleOptionPill(battleOption, isSelected, () =>
-                handleOptionSelect(battleOption, 'battleOption', isSelected)
-              );
+      </Box>
+
+      <Box fill="horizontal" justify="between" margin={{ top: '6px' }}>
+        <TextWS>
+          <strong>Looks</strong> (choose 1 or 2):
+        </TextWS>
+        <Box direction="row" gap="12px">
+          <Box direction="row" fill align="start" wrap>
+            {lookOptions?.map((look) => {
+              const isSelected = looks.includes(look);
+              return renderPill(look, isSelected, () => handleOptionSelect(look, 'look', isSelected));
             })}
           </Box>
+          <VehicleTagsBox tags={looks} title="Looks" width="175px" minHeight="90px" />
         </Box>
-        <Box flex="grow">
-          <TextWS>
-            <strong>Battle Vehicle options</strong> (choose 2)
-          </TextWS>
-          <Box margin={{ top: '3px' }} gap="6px">
-            {battleVehicleOptionOptions?.map((battleOption) => {
-              const isSelected = !!battleVehicleOptions.find((bo: VehicleBattleOption) => bo.id === battleOption.id);
-              return (
-                <CheckBox
-                  key={battleOption.id}
-                  checked={isSelected}
-                  label={battleOption.name}
-                  onChange={() => handleOptionSelect(battleOption, 'battleVehicleOption', isSelected)}
-                />
-              );
-            })}
+      </Box>
+
+      <Box fill="horizontal" justify="between" margin={{ top: '6px' }}>
+        <TextWS>
+          <strong>Battle options</strong> (choose {vehicleFrame.battleOptionCount})
+        </TextWS>
+        <Box direction="row" justify="between" margin={{ top: '6px' }} gap="12px">
+          <Box>
+            <Box direction="row" align="start" wrap margin={{ bottom: '12px' }} flex="grow">
+              {battleOptionOptions?.map((battleOption) => {
+                const isSelected = !!battleOptions.find((bo: VehicleBattleOption) => bo.id === battleOption.id);
+                return renderBattleOptionPill(battleOption, isSelected, () =>
+                  handleOptionSelect(battleOption, 'battleOption', isSelected)
+                );
+              })}
+            </Box>
+            <TextWS>
+              <strong>Battle vehicle options</strong> (choose 2)
+            </TextWS>
+            <Box fill align="start" margin={{ top: '3px' }} gap="6px">
+              {battleVehicleOptionOptions?.map((battleOption) => {
+                const isSelected = !!battleVehicleOptions.find((bo: VehicleBattleOption) => bo.id === battleOption.id);
+                return (
+                  <CheckBox
+                    key={battleOption.id}
+                    checked={isSelected}
+                    label={battleOption.name}
+                    onChange={() => handleOptionSelect(battleOption, 'battleVehicleOption', isSelected)}
+                  />
+                );
+              })}
+            </Box>
+          </Box>
+          <Box align="center" width="175px" flex="grow" fill="vertical" style={{ maxWidth: '175px' }}>
+            <Box direction="row" justify="between">
+              <SingleRedBox value={speed} label="Speed" width="80px" />
+              <SingleRedBox value={handling} label="Handling" width="80px" />
+            </Box>
+            <Box direction="row" justify="between">
+              <SingleRedBox value={armor} label="Armor" width="80px" />
+              <SingleRedBox value={massive} label="Massive" width="80px" />
+            </Box>
+            <VehicleTagsBox tags={weapons} title="Weapons" width="175px" minHeight="90px" />
           </Box>
         </Box>
       </Box>

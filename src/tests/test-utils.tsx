@@ -13,6 +13,7 @@ import { theme } from '../config/grommetConfig';
 import { mockKeycloakUser1 } from './mocks';
 import { GameProvider } from '../contexts/gameContext';
 import { Character, Game } from '../@types/dataInterfaces';
+import { InMemoryCache } from '@apollo/client';
 
 interface CustomRenderOptions {
   isAuthenticated?: boolean;
@@ -23,6 +24,7 @@ interface CustomRenderOptions {
   injectedGame?: Game;
   injectedUserId?: string;
   injectedCharacter?: Character;
+  cache?: InMemoryCache;
 }
 
 // All the providers for unit tests
@@ -36,10 +38,11 @@ const ComponentProviders = ({
   injectedGame,
   injectedUserId,
   injectedCharacter,
+  cache,
 }: any) => {
   return (
     <BrowserRouter>
-      <MockedProvider mocks={apolloMocks} addTypename={false}>
+      <MockedProvider mocks={apolloMocks} addTypename={false} cache={cache}>
         <FontsProvider isVtksReady={vtksReady} isCrustReady={crustReady}>
           <Grommet theme={theme(vtksReady)} full>
             <ReactKeycloakProvider
@@ -77,7 +80,7 @@ const AppProviders = ({
 }: any) => {
   return (
     <BrowserRouter>
-      <MockedProvider mocks={apolloMocks} addTypename={false}>
+      <MockedProvider mocks={apolloMocks}>
         <FontsProvider isVtksReady={vtksReady} isCrustReady={crustReady}>
           <Grommet theme={theme(vtksReady)} full>
             <ReactKeycloakProvider

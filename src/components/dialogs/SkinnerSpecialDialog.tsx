@@ -59,7 +59,7 @@ const SkinnerSpecialDialog: FC<SkinnerSpecialDialogProps> = ({ move, handleClose
         performSkinnerSpecialMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             otherGameroleId,
             characterId: userGameRole.characters[0].id,
             otherCharacterId,

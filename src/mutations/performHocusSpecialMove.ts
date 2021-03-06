@@ -7,7 +7,7 @@ export interface PerformHocusSpecialMoveData {
 
 export interface PerformHocusSpecialMoveVars {
   gameId: string;
-  gameroleId: string;
+  gameRoleId: string;
   otherGameroleId: string;
   characterId: string;
   otherCharacterId: string;
@@ -16,14 +16,14 @@ export interface PerformHocusSpecialMoveVars {
 const PERFORM_HOCUS_SPECIAL_MOVE = gql`
   mutation PerformHocusSpecialMove(
     $gameId: String!
-    $gameroleId: String!
+    $gameRoleId: String!
     $otherGameroleId: String!
     $characterId: String!
     $otherCharacterId: String!
   ) {
     performHocusSpecialMove(
       gameId: $gameId
-      gameroleId: $gameroleId
+      gameRoleId: $gameRoleId
       otherGameroleId: $otherGameroleId
       characterId: $characterId
       otherCharacterId: $otherCharacterId
@@ -32,7 +32,7 @@ const PERFORM_HOCUS_SPECIAL_MOVE = gql`
       gameMessages {
         id
         gameId
-        gameroleId
+        gameRoleId
         messageType
         title
         content

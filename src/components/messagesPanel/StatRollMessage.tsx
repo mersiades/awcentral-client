@@ -39,7 +39,7 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
                     crustReady={crustReady}
                     level={2}
                     color="brand"
-                    margin={{ top: '32px', bottom: '0px', horizontal: '3px' }}
+                    margin={{ top: '32px', bottom: '3px', horizontal: '3px' }}
                   >
                     {message.rollModifier}
                   </HeadingWS>
@@ -57,7 +57,7 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
                     crustReady={crustReady}
                     level={2}
                     color="brand"
-                    margin={{ top: '32px', bottom: '0px', horizontal: '3px' }}
+                    margin={{ top: '32px', bottom: '3px', horizontal: '3px' }}
                   >
                     {message.additionalModifierValue}
                   </HeadingWS>
@@ -75,7 +75,7 @@ const StatRollMessage: FC<StatRollMessageProps> = ({ message, messagesLength, in
                     crustReady={crustReady}
                     level={2}
                     color="brand"
-                    margin={{ top: '32px', bottom: '0px', horizontal: '3px' }}
+                    margin={{ top: '32px', bottom: '3px', horizontal: '3px' }}
                   >
                     1
                   </HeadingWS>

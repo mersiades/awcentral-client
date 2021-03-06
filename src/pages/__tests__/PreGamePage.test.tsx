@@ -1,20 +1,21 @@
 import React from 'react';
-// import wait from 'waait';
-import { screen } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event';
+import wait from 'waait';
+import { act, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import App from '../../components/App';
 import { renderWithRouter } from '../../tests/test-utils';
 import { mockKeycloakStub } from '../../../__mocks__/@react-keycloak/web';
 import {
   mockCharacter1,
-  // mockCharacter2,
+  mockCharacter2,
   mockGame5,
-  // mockGame6,
+  mockGame6,
   mockKeycloakUser2,
+  mockKeycloakUserInfo1,
   mockKeycloakUserInfo2,
 } from '../../tests/mocks';
-import { mockGameForPreGame1 /*mockFinishPreGame,  mockGameForPreGame3*/ } from '../../tests/mockQueries';
+import { mockGameForPreGame1, mockFinishPreGame, mockGameForPreGame3 } from '../../tests/mockQueries';
 import { decapitalize } from '../../helpers/decapitalize';
 
 jest.mock('@react-keycloak/web', () => {
@@ -42,6 +43,7 @@ describe('Rendering PreGamePage', () => {
       keycloakUser: mockKeycloakUser2,
       apolloMocks: [mockGameForPreGame1],
     });
+    await act(async () => await wait());
     await screen.findByTestId('pre-game-page');
 
     // Check everything has been rendered properly initially
@@ -61,8 +63,11 @@ describe('Rendering PreGamePage', () => {
   //   renderWithRouter(<App />, `/pre-game/${mockGame6.id}`, {
   //     isAuthenticated: true,
   //     keycloakUser: mockKeycloakUser2,
+  //     injectedGame: mockGame6,
+  //     injectedUserId: mockKeycloakUserInfo1.sub,
   //     apolloMocks: [mockGameForPreGame3, mockFinishPreGame],
   //   });
+  //   await act(async () => await wait());
   //   await screen.findByTestId('pre-game-page');
 
   //   // Check everything has been rendered properly initially

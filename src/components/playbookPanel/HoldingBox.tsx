@@ -96,7 +96,7 @@ const HoldingBox: FC<HoldingBoxProps> = ({ navigateToCharacterCreation }) => {
         performStatRollMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             characterId: userGameRole.characters[0].id,
             moveId: move.id,
             isGangMove: true,
@@ -123,7 +123,7 @@ const HoldingBox: FC<HoldingBoxProps> = ({ navigateToCharacterCreation }) => {
         performPrintMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             characterId: userGameRole.characters[0].id,
             moveId: move.id,
             isGangMove: true,

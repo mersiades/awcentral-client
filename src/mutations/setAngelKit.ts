@@ -3,6 +3,7 @@ import { Character } from '../@types/dataInterfaces';
 
 export interface SetAngelKitData {
   setAngelKit: Character;
+  __typename?: 'Mutation';
 }
 
 export interface SetAngelKitVars {

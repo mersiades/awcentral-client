@@ -46,7 +46,7 @@ const JustGiveMotiveDialog: FC<JustGiveMotiveDialogProps> = ({ move, handleClose
         performJustGiveMotivationMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             characterId: userGameRole.characters[0].id,
             targetId,
           },

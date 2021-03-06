@@ -60,7 +60,7 @@ const InflictHarmDialog: FC<InflictHarmDialogProps> = ({ move, handleClose }) =>
         performInflictHarmMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             otherGameroleId,
             characterId: userGameRole.characters[0].id,
             otherCharacterId,

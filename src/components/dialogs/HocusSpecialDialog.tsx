@@ -53,7 +53,7 @@ const HocusSpecialDialog: FC<HocusSpecialDialogProps> = ({ move, handleClose }) 
         performHocusSpecialMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             otherGameroleId,
             characterId: userGameRole.characters[0].id,
             otherCharacterId,

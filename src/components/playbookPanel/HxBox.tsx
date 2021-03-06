@@ -4,25 +4,27 @@ import { Box } from 'grommet';
 import CollapsiblePanelBox from '../CollapsiblePanelBox';
 import SingleRedBox from '../SingleRedBox';
 import { HxStat } from '../../@types/dataInterfaces';
+import { HxInput } from '../../@types';
+import { omit } from 'lodash';
 
 interface HxBoxProps {
   hxStats: HxStat[];
   adjustingHx: boolean;
-  handleAdjustHx: (hxId: string, value: number) => void;
+  handleAdjustHx: (hxStat: HxInput) => void;
   navigateToCharacterCreation: (step: string) => void;
 }
 
 const HxBox: FC<HxBoxProps> = ({ hxStats, adjustingHx, handleAdjustHx, navigateToCharacterCreation }) => {
-  const increaseHx = (hxId: string, hxValue: number) => {
-    handleAdjustHx(hxId, hxValue + 1);
+  const increaseHx = (hxStat: HxInput) => {
+    handleAdjustHx({ ...hxStat, hxValue: hxStat.hxValue + 1 });
   };
 
-  const decreaseHx = (hxId: string, hxValue: number) => {
-    handleAdjustHx(hxId, hxValue - 1);
+  const decreaseHx = (hxStat: HxInput) => {
+    handleAdjustHx({ ...hxStat, hxValue: hxStat.hxValue - 1 });
   };
 
   return (
-    <CollapsiblePanelBox open title="Hx" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="8">
+    <CollapsiblePanelBox open title="Hx" navigateToCharacterCreation={navigateToCharacterCreation} targetCreationStep="10">
       <Box
         data-testid="hx-box"
         fill="horizontal"
@@ -36,8 +38,8 @@ const HxBox: FC<HxBoxProps> = ({ hxStats, adjustingHx, handleAdjustHx, navigateT
             value={stat.hxValue.toString()}
             label={stat.characterName}
             loading={adjustingHx}
-            onIncrease={() => increaseHx(stat.characterId, stat.hxValue)}
-            onDecrease={() => decreaseHx(stat.characterId, stat.hxValue)}
+            onIncrease={() => increaseHx(omit(stat, ['__typename']) as HxInput)}
+            onDecrease={() => decreaseHx(omit(stat, ['__typename']) as HxInput)}
           />
         ))}
       </Box>

@@ -17,11 +17,15 @@ import ChopperSpecialDialog from '../components/dialogs/ChopperSpecialDialog';
 import { Footer, MainContainer, SidePanel } from '../components/styledComponents';
 import ALL_MOVES from '../queries/allMoves';
 import SET_CHARACTER_BARTER, { SetCharacterBarterData, SetCharacterBarterVars } from '../mutations/setCharacterBarter';
-import ADJUST_CHARACTER_HX, { AdjustCharacterHxData, AdjustCharacterHxVars } from '../mutations/adjustCharacterHx';
+import ADJUST_CHARACTER_HX, {
+  AdjustCharacterHxData,
+  AdjustCharacterHxVars,
+  getAdjustCharacterHxOR,
+} from '../mutations/adjustCharacterHx';
 import SET_CHARACTER_HARM, { SetCharacterHarmData, SetCharacterHarmVars } from '../mutations/setCharacterHarm';
 import TOGGLE_STAT_HIGHLIGHT, { ToggleStatHighlightData, ToggleStatHighlightVars } from '../mutations/toggleStatHighlight';
 import { MoveActionType, RollType, StatType } from '../@types/enums';
-import { HarmInput } from '../@types';
+import { HarmInput, HxInput } from '../@types';
 import { CharacterMove, Move } from '../@types/staticDataInterfaces';
 import { Character } from '../@types/dataInterfaces';
 import { useKeycloakUser } from '../contexts/keycloakUserContext';
@@ -127,10 +131,13 @@ const PlayerPage: FC = () => {
     }
   };
 
-  const handleAdjustHx = async (hxId: string, value: number) => {
+  const handleAdjustHx = async (hxInput: HxInput) => {
     if (!!userGameRole && !!character) {
       try {
-        await adjustCharacterHx({ variables: { gameRoleId: userGameRole.id, characterId: character.id, hxId, value } });
+        await adjustCharacterHx({
+          variables: { gameRoleId: userGameRole.id, characterId: character.id, hxStat: hxInput },
+          optimisticResponse: getAdjustCharacterHxOR(character, hxInput) as AdjustCharacterHxData,
+        });
       } catch (error) {
         console.error(error);
       }

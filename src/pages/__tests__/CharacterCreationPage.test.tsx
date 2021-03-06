@@ -172,7 +172,7 @@ describe('Rendering CharacterCreationPage', () => {
       hxBlock: mockCharacter2.hxBlock,
       vehicles: [],
       hasPlusOneForward: false,
-      holds: 0,
+      holds: [],
       battleVehicleCount: 0,
       battleVehicles: [],
     };

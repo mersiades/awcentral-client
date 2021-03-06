@@ -60,7 +60,7 @@ const HealHarmDialog: FC<HealHarmDialogProps> = ({ move, handleClose }) => {
         performHealHarmMove({
           variables: {
             gameId,
-            gameroleId: userGameRole.id,
+            gameRoleId: userGameRole.id,
             otherGameroleId,
             characterId: userGameRole.characters[0].id,
             otherCharacterId,
