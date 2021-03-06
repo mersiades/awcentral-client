@@ -2,8 +2,10 @@
 # Unable to get jest-junit to work (for splitting tests based on timings)
 # because CRA won't allow jest reporters to be customised
 version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@1.0.11
 jobs:
-  build:
+  test:
     docker:
       - image: cimg/node:12.16.2
         auth:
@@ -29,8 +31,47 @@ jobs:
             yarn test $TEST
       - store_test_results:
           path: ./test-results/jest/
-
-workflow:
-  jobs:
-    build_and_test:
-      - build
+  deploy:
+    docker:
+      - image: cimg/node:12.16.2
+        auth:
+          username: qdfn3af9be
+          password: $DOCKERHUB_PASSWORD
+    parallelism: 1
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+            - v1-deps-
+      - run: yarn install
+      - save_cache:
+          key: v1-deps-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+            - ~/.npm
+            - ~/.cache
+      - run: yarn build
+      - aws-s3/sync:
+          from: deploy
+          to: 's3://app-staging-awcentral/'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
+  build_and_deploy:
+    jobs:
+      - test
+      - deploy:
+        requires:
+          - test
+        filters:
+          branches:
+            only:
+              - master
