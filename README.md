@@ -6,13 +6,18 @@
 
 To run this app locally, for development purposes, you'll need to take the following steps:
 
-- In the `.env` file, make sure that the variables for the development environment are UNcommented out, and the variables for the production environment ARE commented out.
-- Launch a Keycloak authorisation server locally // TODO: Bundle the Keycloak server in this app, add commands to run server
+- Launch a Keycloak authorisation server locally
 - Launch an instance of the graphql.aw-central.com server locally
-- Run `npm start` from the command line.
+- Run `yarn start:dev` from the command line.
 
 ### Running tests
 
 `yarn test --coverage --watchAll=false`
 
 ### Production deployment
+
+Builds for production, staging and demo environments can be built using:
+
+- `yarn run build:prod`
+- `yarn run build:staging`
+- `yarn run build:demo`

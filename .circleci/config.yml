@@ -1,6 +1,8 @@
 # https://circleci.com/blog/a-guide-to-test-splitting/
 # Unable to get jest-junit to work (for splitting tests based on timings)
 # because CRA won't allow jest reporters to be customised
+
+# https://github.com/CircleCI-Public/cimg-python
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.11
