@@ -79,6 +79,43 @@ jobs:
             --acl public-read \
             --cache-control "max-age=86400"
           overwrite: true
+  build_demo:
+    executor: my-node-docker
+    parallelism: 1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+            - v1-deps-
+      - run: yarn install
+      - save_cache:
+          key: v1-deps-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - run: yarn run build:demo
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  deploy_demo:
+    executor: my-python-docker
+    parallelism: 1
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+            - v1-deps-
+      - aws-s3/sync:
+          from: build
+          to: 's3://app-demo-awcentral/'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
 workflows:
   version: 2
   test:
@@ -87,20 +124,24 @@ workflows:
           filters:
             branches:
               ignore: master
-  build_and_deploy_staging:
+  build_and_deploy:
     jobs:
       - test
-      - build_staging:
-          requires:
-            - test
-      - hold:
-          type: approval
-          requires:
-            - build_staging
-      - deploy_staging:
-          requires:
-            - hold
       # filters:
       # branches:
       # only:
       # - master
+      - build_staging:
+          requires:
+            - test
+      - deploy_staging
+      - build_demo:
+          requires:
+            - deploy_staging
+      - hold:
+          type: approval
+          requires:
+            - build_demo
+      - deploy_demo:
+          requires:
+            - hold
