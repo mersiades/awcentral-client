@@ -118,12 +118,12 @@ jobs:
           overwrite: true
 workflows:
   version: 2
-  test:
-    jobs:
-      - test:
-          filters:
-            branches:
-              ignore: master
+  # test:
+  #   jobs:
+  #     - test:
+  #         filters:
+  #           branches:
+  #             ignore: master
   build_and_deploy:
     jobs:
       - test
@@ -134,7 +134,9 @@ workflows:
       - build_staging:
           requires:
             - test
-      - deploy_staging
+      - deploy_staging:
+          requires:
+            - build_staging
       - build_demo:
           requires:
             - deploy_staging
