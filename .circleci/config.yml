@@ -40,11 +40,8 @@ jobs:
           username: qdfn3af9be
           password: $DOCKERHUB_PASSWORD
     parallelism: 1
-    working_directory: ~/repo
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/repo
       - restore_cache:
           keys:
             - v1-deps-{{ checksum "yarn.lock" }}
@@ -55,9 +52,8 @@ jobs:
           paths:
             - node_modules
       - run: yarn run build:staging
-      - persist_to_workspace:
-          root:
-          paths: dist
+      - run: pwd
+      - run: ls
   deploy_staging:
     docker:
       - image: cimg/python:3.7-node
@@ -91,10 +87,10 @@ workflows:
       - build_staging:
           requires:
             - test
-      - deploy_staging:
-          requires:
-            - build_staging
-          # filters:
-          # branches:
-          # only:
-          # - master
+      # - deploy_staging:
+      #     requires:
+      #       - build_staging
+      # filters:
+      # branches:
+      # only:
+      # - master
