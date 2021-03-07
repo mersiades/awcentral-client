@@ -52,8 +52,11 @@ jobs:
           paths:
             - node_modules
       - run: yarn run build:staging
+      - run: ls .
+      - run: ls /
+      - run: ls ./
       - persist_to_workspace:
-          root: /project
+          root: .
           paths:
             - build
   deploy_staging:
