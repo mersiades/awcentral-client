@@ -6,13 +6,22 @@
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.11
-jobs:
-  test:
+executors:
+  my-node-docker:
     docker:
       - image: cimg/node:12.16.2
         auth:
           username: qdfn3af9be
           password: $DOCKERHUB_PASSWORD
+  my-python-docker:
+    docker:
+      - image: cimg/python:3.7-node
+        auth:
+          username: qdfn3af9be
+          password: $DOCKERHUB_PASSWORD
+jobs:
+  test:
+    executor: my-node-docker
     parallelism: 4
     steps:
       - checkout
@@ -33,14 +42,9 @@ jobs:
             yarn test $TEST
       - store_test_results:
           path: ./test-results/jest/
-  deploy:
-    docker:
-      - image: cimg/python:3.7-node
-        auth:
-          username: qdfn3af9be
-          password: $DOCKERHUB_PASSWORD
+  build_staging:
+    executor: my-node-docker
     parallelism: 1
-    working_directory: ~/repo
     steps:
       - checkout
       - restore_cache:
@@ -52,12 +56,87 @@ jobs:
           key: v1-deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
-            - ~/.npm
-            - ~/.cache
       - run: yarn run build:staging
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  deploy_staging:
+    executor: my-python-docker
+    parallelism: 1
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
       - aws-s3/sync:
-          from: deploy
+          from: build
           to: 's3://app-staging-awcentral/'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
+  build_demo:
+    executor: my-node-docker
+    parallelism: 1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+            - v1-deps-
+      - run: yarn install
+      - save_cache:
+          key: v1-deps-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - run: yarn run build:demo
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  deploy_demo:
+    executor: my-python-docker
+    parallelism: 1
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - aws-s3/sync:
+          from: build
+          to: 's3://app-demo-awcentral/'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
+  build_prod:
+    executor: my-node-docker
+    parallelism: 1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+            - v1-deps-
+      - run: yarn install
+      - save_cache:
+          key: v1-deps-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - run: yarn run build:prod
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  deploy_prod:
+    executor: my-python-docker
+    parallelism: 1
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - aws-s3/sync:
+          from: build
+          to: 's3://app-awcentral/'
           arguments: |
             --acl public-read \
             --cache-control "max-age=86400"
@@ -66,11 +145,35 @@ workflows:
   version: 2
   test:
     jobs:
-      - test
-  build_and_deploy:
-    jobs:
-      - deploy:
+      - test:
           filters:
             branches:
-              only:
-                - master
+              ignore: master
+  build_and_deploy:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: master
+      - build_staging:
+          requires:
+            - test
+      - deploy_staging:
+          requires:
+            - build_staging
+      - build_demo:
+          requires:
+            - deploy_staging
+      - hold:
+          type: approval
+          requires:
+            - build_demo
+      - deploy_demo:
+          requires:
+            - hold
+      - build_prod:
+          requires:
+            - deploy_demo
+      - deploy_prod:
+          requires:
+            - build_prod
