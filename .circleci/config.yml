@@ -52,8 +52,6 @@ jobs:
           paths:
             - node_modules
       - run: yarn run build:staging
-      - run: pwd
-      - run: ls
   deploy_staging:
     docker:
       - image: cimg/python:3.7-node
@@ -64,14 +62,14 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/repo
+      - run: pwd
+      - run: ls
       - restore_cache:
           keys:
             - v1-deps-{{ checksum "yarn.lock" }}
             - v1-deps-
       - aws-s3/sync:
-          from: dist
+          from: build
           to: 's3://app-staging-awcentral/'
           arguments: |
             --acl public-read \
@@ -84,12 +82,13 @@ workflows:
   #     - test
   build_and_deploy:
     jobs:
+      # - test
       - build_staging
         # requires:
         #   - test
-      # - deploy_staging:
-      #     requires:
-      #       - build_staging
+      - deploy_staging:
+          requires:
+            - build_staging
       # filters:
       # branches:
       # only:
