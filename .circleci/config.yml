@@ -6,13 +6,16 @@
 version: 2.1
 orbs:
   aws-s3: circleci/aws-s3@1.0.11
-jobs:
-  test:
+executors:
+  my-node-docker:
     docker:
       - image: cimg/node:12.16.2
         auth:
           username: qdfn3af9be
           password: $DOCKERHUB_PASSWORD
+jobs:
+  test:
+    executor: my-node-docker
     parallelism: 4
     steps:
       - checkout
@@ -34,11 +37,7 @@ jobs:
       - store_test_results:
           path: ./test-results/jest/
   build_staging:
-    docker:
-      - image: cimg/node:12.16.2
-        auth:
-          username: qdfn3af9be
-          password: $DOCKERHUB_PASSWORD
+    executor: my-node-docker
     parallelism: 1
     steps:
       - checkout
@@ -65,14 +64,8 @@ jobs:
     parallelism: 1
     steps:
       - checkout
-      - run: ls .
-      - run: ls ./
       - attach_workspace:
           at: .
-      - run: pwd
-      - run: ls
-      - run: ls .
-      - run: ls ./
       - restore_cache:
           keys:
             - v1-deps-{{ checksum "yarn.lock" }}
@@ -91,10 +84,10 @@ workflows:
   #     - test
   build_and_deploy:
     jobs:
-      # - test
-      - build_staging
-        # requires:
-        #   - test
+      - test
+      - build_staging:
+          requires:
+            - test
       - deploy_staging:
           requires:
             - build_staging
