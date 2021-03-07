@@ -52,9 +52,6 @@ jobs:
           paths:
             - node_modules
       - run: yarn run build:staging
-      - run: ls .
-      - run: ls /
-      - run: ls ./
       - persist_to_workspace:
           root: .
           paths:
@@ -68,10 +65,14 @@ jobs:
     parallelism: 1
     steps:
       - checkout
+      - run: ls .
+      - run: ls ./
       - attach_workspace:
-          at: /project
+          at: .
       - run: pwd
       - run: ls
+      - run: ls .
+      - run: ls ./
       - restore_cache:
           keys:
             - v1-deps-{{ checksum "yarn.lock" }}
