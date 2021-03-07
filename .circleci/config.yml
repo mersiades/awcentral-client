@@ -13,6 +13,12 @@ executors:
         auth:
           username: qdfn3af9be
           password: $DOCKERHUB_PASSWORD
+  my-python-docker:
+    docker:
+      - image: cimg/python:3.7-node
+        auth:
+          username: qdfn3af9be
+          password: $DOCKERHUB_PASSWORD
 jobs:
   test:
     executor: my-node-docker
@@ -56,11 +62,7 @@ jobs:
           paths:
             - build
   deploy_staging:
-    docker:
-      - image: cimg/python:3.7-node
-        auth:
-          username: qdfn3af9be
-          password: $DOCKERHUB_PASSWORD
+    executor: my-python-docker
     parallelism: 1
     steps:
       - checkout
