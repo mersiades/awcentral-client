@@ -51,6 +51,7 @@ jobs:
           key: v1-deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+      - run: mkdir -p workspace
       - run: yarn run build:staging
       - persist_to_workspace:
           root: workspace
