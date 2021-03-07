@@ -68,10 +68,6 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - restore_cache:
-          keys:
-            - v1-deps-{{ checksum "yarn.lock" }}
-            - v1-deps-
       - aws-s3/sync:
           from: build
           to: 's3://app-staging-awcentral/'
@@ -105,10 +101,6 @@ jobs:
       - checkout
       - attach_workspace:
           at: .
-      - restore_cache:
-          keys:
-            - v1-deps-{{ checksum "yarn.lock" }}
-            - v1-deps-
       - aws-s3/sync:
           from: build
           to: 's3://app-demo-awcentral/'
@@ -116,21 +108,53 @@ jobs:
             --acl public-read \
             --cache-control "max-age=86400"
           overwrite: true
+  build_prod:
+    executor: my-node-docker
+    parallelism: 1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+            - v1-deps-
+      - run: yarn install
+      - save_cache:
+          key: v1-deps-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - run: yarn run build:prod
+      - persist_to_workspace:
+          root: .
+          paths:
+            - build
+  deploy_prod:
+    executor: my-python-docker
+    parallelism: 1
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - aws-s3/sync:
+          from: build
+          to: 's3://app-awcentral/'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
 workflows:
   version: 2
-  # test:
-  #   jobs:
-  #     - test:
-  #         filters:
-  #           branches:
-  #             ignore: master
+  test:
+    jobs:
+      - test:
+          filters:
+            branches:
+              ignore: master
   build_and_deploy:
     jobs:
-      - test
-      # filters:
-      # branches:
-      # only:
-      # - master
+      - test:
+          filters:
+            branches:
+              only: master
       - build_staging:
           requires:
             - test
@@ -147,3 +171,9 @@ workflows:
       - deploy_demo:
           requires:
             - hold
+      - build_prod:
+          requires:
+            - deploy_demo
+      - deploy_prod:
+          requires:
+            - build_prod
