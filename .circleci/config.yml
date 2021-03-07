@@ -143,7 +143,7 @@ jobs:
           overwrite: true
 workflows:
   version: 2
-  test:
+  branch_test:
     jobs:
       - test:
           filters:
