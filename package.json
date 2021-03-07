@@ -31,7 +31,11 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jest-environment-jsdom-sixteen",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start:dev": "cross-env REACT_APP_ENV=dev REACT_APP_GRAPHQL_HTTP_ROOT=http://localhost:8080 REACT_APP_GRAPHQL_WS_ROOT=ws://localhost:8080 REACT_APP_KEYCLOAK_AUTH_SERVER=http://localhost:8180/auth REACT_APP_ROOT_URL=http://localhost:3000 yarn start",
+    "build:staging": "cross-env REACT_APP_ENV=staging REACT_APP_GRAPHQL_HTTP_ROOT=https://graphql-staging.aw-central.com REACT_APP_GRAPHQL_WS_ROOT=wss://graphql-staging.aw-central.com REACT_APP_KEYCLOAK_AUTH_SERVER=https://keycloak.aw-central.com/auth REACT_APP_ROOT_URL=https://app-staging.aw-central.com yarn run build",
+    "build:demo": "cross-env REACT_APP_ENV=demo REACT_APP_GRAPHQL_HTTP_ROOT=https://graphql-demo.aw-central.com REACT_APP_GRAPHQL_WS_ROOT=wss://graphql-demo.aw-central.com REACT_APP_KEYCLOAK_AUTH_SERVER=https://keycloak.aw-central.com/auth REACT_APP_ROOT_URL=https://app-demo.aw-central.com yarn run build",
+    "build:prod": "cross-env REACT_APP_ENV=prod REACT_APP_GRAPHQL_HTTP_ROOT=https://graphql.aw-central.com REACT_APP_GRAPHQL_WS_ROOT=wss://graphql.aw-central.com REACT_APP_KEYCLOAK_AUTH_SERVER=https://keycloak.aw-central.com/auth REACT_APP_ROOT_URL=https://app.aw-central.com yarn run build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -64,6 +68,7 @@
     "@types/sockjs-client": "^1.1.1",
     "@types/styled-components": "^5.1.7",
     "@types/uuid": "^8.3.0",
+    "cross-env": "^7.0.3",
     "jest-environment-jsdom-sixteen": "^1.0.3",
     "typescript": "^4.1.3",
     "waait": "^1.0.5"
