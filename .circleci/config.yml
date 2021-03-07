@@ -59,7 +59,6 @@ jobs:
           username: qdfn3af9be
           password: $DOCKERHUB_PASSWORD
     parallelism: 1
-    working_directory: ~/repo
     steps:
       - checkout
       - run: pwd
