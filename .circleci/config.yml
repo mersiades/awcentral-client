@@ -33,9 +33,9 @@ jobs:
             yarn test $TEST
       - store_test_results:
           path: ./test-results/jest/
-  deploy:
+  build_staging:
     docker:
-      - image: cimg/python:3.7-node
+      - image: cimg/node:12.16.2
         auth:
           username: qdfn3af9be
           password: $DOCKERHUB_PASSWORD
@@ -43,6 +43,8 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/repo
       - restore_cache:
           keys:
             - v1-deps-{{ checksum "yarn.lock" }}
@@ -52,11 +54,28 @@ jobs:
           key: v1-deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
-            - ~/.npm
-            - ~/.cache
       - run: yarn run build:staging
+      - persist_to_workspace:
+          root:
+          paths: dist
+  deploy_staging:
+    docker:
+      - image: cimg/python:3.7-node
+        auth:
+          username: qdfn3af9be
+          password: $DOCKERHUB_PASSWORD
+    parallelism: 1
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+            - v1-deps-
       - aws-s3/sync:
-          from: deploy
+          from: dist
           to: 's3://app-staging-awcentral/'
           arguments: |
             --acl public-read \
@@ -69,8 +88,13 @@ workflows:
       - test
   build_and_deploy:
     jobs:
-      - deploy:
-          filters:
-            branches:
-              only:
-                - master
+      - build_staging:
+          requires:
+            - test
+      - deploy_staging:
+          requires:
+            - build_staging
+          # filters:
+          # branches:
+          # only:
+          # - master
