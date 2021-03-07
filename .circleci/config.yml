@@ -85,16 +85,21 @@ workflows:
     jobs:
       - test:
           filters:
-            ignore: master
-  build_and_deploy:
+            branches:
+              ignore: master
+  build_and_deploy_staging:
     jobs:
       - test
       - build_staging:
           requires:
             - test
-      - deploy_staging:
+      - hold:
+          type: approval
           requires:
             - build_staging
+      - deploy_staging:
+          requires:
+            - hold
       # filters:
       # branches:
       # only:
