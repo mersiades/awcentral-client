@@ -52,6 +52,10 @@ jobs:
           paths:
             - node_modules
       - run: yarn run build:staging
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - staging-build
   deploy_staging:
     docker:
       - image: cimg/python:3.7-node
@@ -61,7 +65,11 @@ jobs:
     parallelism: 1
     steps:
       - checkout
+      - attach_workspace:
+          at: /project/workspace
       - run: pwd
+      - run: ls
+      - run: cd workspace
       - run: ls
       - restore_cache:
           keys:
