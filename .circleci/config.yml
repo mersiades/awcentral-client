@@ -20,7 +20,7 @@ executors:
           username: qdfn3af9be
           password: $DOCKERHUB_PASSWORD
 jobs:
-  test:
+  branch_test:
     executor: my-node-docker
     parallelism: 4
     steps:
@@ -42,6 +42,26 @@ jobs:
             yarn test $TEST
       - store_test_results:
           path: ./test-results/jest/
+  pre_deploy_test:
+    executor: my-node-docker
+    parallelism: 4
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+            - v1-deps-
+      - run: yarn install
+      - save_cache:
+          key: v1-deps-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - run: mkdir -p test-results/jest
+      - run:
+          name: 'Run Tests'
+          command: |
+            TEST=$(circleci tests glob **/*.test.tsx | circleci tests split)
+            yarn test $TEST
   build_staging:
     executor: my-node-docker
     parallelism: 1
@@ -145,19 +165,19 @@ workflows:
   version: 2
   branch_test:
     jobs:
-      - test:
+      - branch_test:
           filters:
             branches:
               ignore: master
   build_and_deploy:
     jobs:
-      - test:
+      - pre_deploy_test:
           filters:
             branches:
               only: master
       - build_staging:
           requires:
-            - test
+            - pre_deploy_test
       - deploy_staging:
           requires:
             - build_staging
